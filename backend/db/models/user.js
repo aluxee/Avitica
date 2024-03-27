@@ -20,11 +20,7 @@ module.exports = (sequelize, DataTypes) => {
       unique: true,
       validate: {
         len: [6, 20],
-        hasNoSymbols(value) {
-          if (value == '!@#$%^&*(){}_-+=[]{}:;"' || value == "<,>.?/'") {
-            throw new Error('Username cannot contain any symbols')
-          }
-        },
+        isAlphanumeric: true,
         isNotEmail(value) {
           Validator.isEmail(value) ? (function
             () {
@@ -38,7 +34,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       validate: {
         len: [6, 30],
-        isAlpha: true
+        // isNumeric: false,
       }
     },
     email: {

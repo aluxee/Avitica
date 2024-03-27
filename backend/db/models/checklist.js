@@ -28,6 +28,8 @@ module.exports = (sequelize, DataTypes) => {
     },
     checked: {
       type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: 0,
     }
   }, {
     sequelize,

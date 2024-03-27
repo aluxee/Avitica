@@ -11,42 +11,42 @@ module.exports = {
     await Checklist.bulkCreate([
       {
         taskId: 1,
-        checklistItem: '',
+        checklistItem: 'Completed two loads of clothing',
         checked: false,
       },
       {
         taskId: 1,
-        checklistItem: '',
+        checklistItem: 'Folded all loads',
         checked: false,
       },
       {
         taskId: 4,
-        checklistItem: '',
+        checklistItem: 'Started with dinner at 5pm',
         checked: false,
       },
       {
         taskId: 4,
-        checklistItem: '',
+        checklistItem: 'Got half of dish load done',
         checked: false,
       },
       {
         taskId: 7,
-        checklistItem: '',
+        checklistItem: 'Reviewed prologue',
         checked: false,
       },
       {
         taskId: 7,
-        checklistItem: '',
+        checklistItem: 'Introduced two characters within two chapters',
         checked: false,
       },
       {
         taskId: 8,
-        checklistItem: '',
+        checklistItem: 'Wrote down morning routine for all weekdays',
         checked: false,
       },
       {
-        taskId: 9,
-        checklistItem: '',
+        taskId: 2,
+        checklistItem: 'Included burpees',
         checked: false,
       },
     ], options, {validate: true})
@@ -58,7 +58,7 @@ module.exports = {
     const Op = Sequelize.Op;
     return queryInterface.bulkDelete(options, {
       taskId: {
-        [Op.in]: [1, 4, 7, 8, 9]
+        [Op.in]: [1, 4, 7, 8, 2]
       }
     }, {});
   }

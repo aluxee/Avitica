@@ -66,7 +66,7 @@ module.exports = {
         dueDate: new Date(),
       },
       {
-        title: 'Call best friend',
+        title: 'Call  best friend',
         notes: '',
         userId: 3,
         difficulty: 'Trivial',

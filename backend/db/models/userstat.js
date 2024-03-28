@@ -73,7 +73,6 @@ module.exports = (sequelize, DataTypes) => {
     },
     statId: {
       type: DataTypes.INTEGER,
-      // allowNull: false
     },
   }, {
     sequelize,

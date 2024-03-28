@@ -34,7 +34,6 @@ module.exports = {
       },
       statId: {
         type: Sequelize.INTEGER,
-        // allowNull: false,
         references: {
           model: 'Stats',
           key: 'id' //joins table associated

@@ -28,10 +28,14 @@ module.exports = (sequelize, DataTypes) => {
     },
     userId: {
       type: DataTypes.INTEGER,
-
+      allowNull: false,
     },
     difficulty: {
       type: DataTypes.STRING,
+      unique: true,
+      validate: {
+        isIn: [['Trivial', 'Easy', 'Medium', 'Hard']]
+      }
 
     },
     dueDate: {

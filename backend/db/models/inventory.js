@@ -9,6 +9,9 @@ module.exports = (sequelize, DataTypes) => {
       Inventory.belongsTo(models.User, {
         foreignKey: 'userId'
       })
+      Inventory.belongsToMany(models.Stat, {
+        through: 'InventoryStats'
+      })
     }
   }
   Inventory.init({

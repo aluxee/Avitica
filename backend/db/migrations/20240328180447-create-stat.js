@@ -1,44 +1,22 @@
 'use strict';
-
-const { query } = require('express');
-
+/** @type {import('sequelize-cli').Migration} */
 let options = {};
 if (process.env.NODE_ENV === 'production') {
   options.schema = process.env.SCHEMA;
 }
-/** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('Tasks', {
+    await queryInterface.createTable('Stats', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      title: {
-        type: Sequelize.STRING(50),
-        allowNull: false,
-      },
-      notes: {
-        type: Sequelize.TEXT
-      },
-      userId: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-        references: {
-          model: 'Users',
-          key: 'id',
-        },
-        onDelete: 'CASCADE'
-
-      },
-      difficulty: {
+      type: {
         type: Sequelize.STRING,
-        unique: true
-      },
-      dueDate: {
-        type: Sequelize.DATEONLY
+        allowNull: false,
+        unique: true,
       },
       createdAt: {
         allowNull: false,
@@ -53,7 +31,7 @@ module.exports = {
     }, options);
   },
   async down(queryInterface, Sequelize) {
-    options.tableName = 'Tasks';
-    return queryInterface.dropTable(options);
+    options.tableName = 'Stats'
+    return queryInterface.dropTable(options)
   }
 };

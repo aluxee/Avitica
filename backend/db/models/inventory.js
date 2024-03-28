@@ -23,6 +23,32 @@ module.exports = (sequelize, DataTypes) => {
         len: [3, 50]
       }
     },
+    itemType: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    healthBoost: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: 0
+    },
+    statBoost: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: 0
+    },
+    gear: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: 1
+    },
+    wep: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: 1
+    },
+    equipped: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: 0
+    },
     description: {
       type: DataTypes.STRING,
       allowNull: false,

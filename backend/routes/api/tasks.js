@@ -1,6 +1,5 @@
 const express = require('express')
 const { Task, Checklist } = require('../../db/models');
-const { check } = require('express-validator');
 const { requireAuth, authorization } = require('../../utils/auth');
 
 
@@ -9,6 +8,7 @@ router = express.Router();
 
 
 // edits a task
+//:taskId endpoint to handle this function in an editorial way to be rooted to
 router.put('/:taskId', requireAuth, authorization, async (req, res) => {
 	const { title, notes, difficulty, dueDate } = req.body;
 	const { taskId } = req.params;
@@ -121,6 +121,7 @@ router.post('/new', requireAuth, async (req, res) => {
 
 	// console.log("%c 🚀 ~ file: tasks.js:22 ~ router.post ~ stringDate: ", "color: red; font-size: 25px", stringDate)
 
+	// if the date entered occurs sooner than the current date itself => error
 	if (thisDateTime < currDateCheck) {
 		return res
 			.status(400)
@@ -148,6 +149,7 @@ router.post('/new', requireAuth, async (req, res) => {
 		taskArray.push(thisTask);
 
 		// if title doesn't exist in the object, add it
+		// loop thru objectCheck for any existent title keys, if there are we'll count them, if not we'll make the key
 		if (!objectCheck[thisTask.title]) {
 			objectCheck[thisTask.title] = 1
 		} else {
@@ -158,7 +160,7 @@ router.post('/new', requireAuth, async (req, res) => {
 	// console.log("POST TASKS: ", objectCheck)
 
 	for (let key in objectCheck) {
-		if (objectCheck[key] >= 3) {
+		if (objectCheck[key] >= 3) { // if there are three or more instances of this key => statusCode 403
 
 			return res
 				.status(403)
@@ -169,7 +171,7 @@ router.post('/new', requireAuth, async (req, res) => {
 	}
 
 	try {
-
+// create the task with needed key
 		const task = await Task.create({
 			userId: req.user.id,
 			title, notes,
@@ -211,6 +213,8 @@ router.get('/', requireAuth, async (req, res) => {
 
 
 	// console.log("Whats the task look like: ", tasks)
+
+	//handle that if there is no task, list it as such rather than just an empty array
 	if (tasks.length == 0) {
 		return res.json({
 			"Task": null

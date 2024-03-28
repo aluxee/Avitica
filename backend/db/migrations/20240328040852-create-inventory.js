@@ -22,9 +22,43 @@ module.exports = {
         },
         onDelete: 'CASCADE'
       },
+      statId: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+          model: 'userStats',
+        },
+        onDelete: 'CASCADE'
+      },
       itemName: {
         type: Sequelize.STRING(50),
         allowNull: false
+      },
+      itemType: {
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
+      healthBoost: {
+        type: Sequelize.BOOLEAN,
+        defaultValue: 0
+      },
+      statBoost: {
+        type: Sequelize.BOOLEAN,
+        defaultValue: 0
+      },
+      gear: {
+        type: Sequelize.BOOLEAN,
+        allowNull: false,
+        defaultValue: 1
+      },
+      wep: {
+        type: Sequelize.BOOLEAN,
+        allowNull: false,
+        defaultValue: 1
+      },
+      equipped: {
+        type: Sequelize.BOOLEAN,
+        defaultValue: 0
       },
       description: {
         type: Sequelize.STRING(250),

@@ -9,13 +9,20 @@ module.exports = (sequelize, DataTypes) => {
       Inventory.belongsTo(models.User, {
         foreignKey: 'userId'
       })
+
       Inventory.belongsToMany(models.Stat, {
-        through: 'InventoryStats'
+        through:  models.InventoryStat ,
+        foreignKey: 'inventoryId',
+        otherKey: 'statId'
       })
     }
   }
   Inventory.init({
     userId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+    statId: {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
@@ -27,8 +34,9 @@ module.exports = (sequelize, DataTypes) => {
       }
     },
     itemType: {
-      type: DataTypes.STRING,
-      allowNull: false
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: 0
     },
     healthBoost: {
       type: DataTypes.BOOLEAN,

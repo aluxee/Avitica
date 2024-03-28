@@ -16,8 +16,15 @@ module.exports = (sequelize, DataTypes) => {
       User.hasOne(models.Inventory, {
         foreignKey: 'userId'
       })
+
       User.belongsToMany(models.Stat, {
-        through: 'userStats'
+        through: models.userStat,
+        foreignKey: 'userId',
+        otherKey: 'statId'
+      })
+
+      User.hasMany(models.userStat, {
+        foreignKey: 'userId'
       })
     }
   }

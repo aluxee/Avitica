@@ -31,11 +31,9 @@ module.exports = {
           key: 'id',
         },
         onDelete: 'CASCADE'
-
       },
       difficulty: {
         type: Sequelize.STRING,
-        unique: true
       },
       dueDate: {
         type: Sequelize.DATEONLY

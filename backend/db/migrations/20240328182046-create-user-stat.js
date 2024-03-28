@@ -25,7 +25,7 @@ module.exports = {
       health: {
         type: Sequelize.FLOAT,
         allowNull: false,
-        defaultValue: 0
+        defaultValue: 50
       },
       experience: {
         type: Sequelize.FLOAT,
@@ -34,7 +34,7 @@ module.exports = {
       },
       statId: {
         type: Sequelize.INTEGER,
-        allowNull: false,
+        // allowNull: false,
         references: {
           model: 'Stats',
           key: 'id' //joins table associated

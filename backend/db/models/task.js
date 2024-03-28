@@ -32,7 +32,6 @@ module.exports = (sequelize, DataTypes) => {
     },
     difficulty: {
       type: DataTypes.STRING,
-      unique: true,
       validate: {
         isIn: [['Trivial', 'Easy', 'Medium', 'Hard']]
       }

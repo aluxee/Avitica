@@ -11,10 +11,16 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       Stat.belongsToMany(models.Inventory, {
-        through: 'InventoryStats'
+        through: models.InventoryStat,
+        foreignKey: 'statId',
+        otherKey: 'inventoryId'
       }); // a many to many relationship with Inventory
+
+
       Stat.belongsToMany(models.User, {
-        through: 'userStats'
+        through: models.userStat,
+        foreignKey: 'userId',
+        otherKey: 'statId'
       }); // a many to many relationship with Inventory
     }
   }

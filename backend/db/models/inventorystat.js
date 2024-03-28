@@ -10,8 +10,14 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   InventoryStat.init({
-    inventoryId: DataTypes.INTEGER,
-    statId: DataTypes.INTEGER
+    inventoryId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+    statId: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    }
   }, {
     sequelize,
     modelName: 'InventoryStat',

@@ -17,26 +17,27 @@ module.exports = {
       userId: {
         type: Sequelize.INTEGER,
         allowNull: false,
-        references: {
-          model: 'Users',
-        },
-        onDelete: 'CASCADE'
+      //   references: {
+      //     model: 'Users',
+      //   },
+      //   onDelete: 'CASCADE'
       },
       statId: {
         type: Sequelize.INTEGER,
         allowNull: false,
-        references: {
-          model: 'userStats',
-        },
-        onDelete: 'CASCADE'
+        // references: {
+        //   model: 'userStats',
+        // },
+        // onDelete: 'CASCADE'
       },
       itemName: {
         type: Sequelize.STRING(50),
         allowNull: false
       },
       itemType: {
-        type: Sequelize.STRING,
+        type: Sequelize.BOOLEAN,
         allowNull: false,
+        defaultValue: 0
       },
       healthBoost: {
         type: Sequelize.BOOLEAN,

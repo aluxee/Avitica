@@ -57,13 +57,8 @@ router.put('/:taskId', requireAuth, authorization, async (req, res) => {
 			|| null,
 			taskUpdate.dueDate = dueDate || stringDate,
 
-
-
 			await taskUpdate.save()
 
-		// res.json({
-		// 	"Task": taskUpdate
-		// })
 
 		res.json(taskUpdate)
 	} catch (error) {

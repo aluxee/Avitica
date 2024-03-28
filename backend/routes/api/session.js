@@ -8,7 +8,9 @@ const { setTokenCookie, restoreUser } = require('../../utils/auth');
 const { User } = require('../../db/models');
 
 const router = express.Router();
+const usersRouter = require('./users.js');
 
+router.use('/users', usersRouter);
 
 
 
@@ -66,11 +68,6 @@ router.post(
 );
 
 
-
-
-
-
-
 // Log out
 router.delete(
 	'/',
@@ -86,6 +83,7 @@ router.delete(
 // Restore session user
 router.get(
 	'/',
+	restoreUser,
 	(req, res) => {
 		const { user } = req;
 		if (user) {

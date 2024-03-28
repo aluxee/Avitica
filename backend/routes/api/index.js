@@ -6,7 +6,7 @@ const { requireAuth } = require('../../utils/auth.js');
 const sessionRouter = require('./session.js');
 const usersRouter = require('./users.js');
 const tasksRouter = require('./tasks.js');
-
+const inventoryRouter = require('./inventories.js')
 
 
 
@@ -58,6 +58,7 @@ router.use('/users', usersRouter);
 
 router.use('/tasks', tasksRouter);
 
+router.use('/inv', inventoryRouter);
 
 
 

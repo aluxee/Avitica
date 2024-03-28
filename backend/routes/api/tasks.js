@@ -1,8 +1,8 @@
 const express = require('express')
-const { Task, User, Checklist } = require('../../db/models');
+const { Task, Checklist } = require('../../db/models');
 const { check } = require('express-validator');
 const { requireAuth, authorization } = require('../../utils/auth');
-const { useParams } = require('react-router-dom');
+
 
 router = express.Router();
 

@@ -24,13 +24,20 @@ module.exports = {
         type: Sequelize.TEXT
       },
       userId: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+          model: 'Users',
+          key: 'id',
+        },
+        onDelete: 'CASCADE'
+
       },
       difficulty: {
         type: Sequelize.STRING
       },
       dueDate: {
-        type: Sequelize.DATE(6)
+        type: Sequelize.DATEONLY
       },
       createdAt: {
         allowNull: false,

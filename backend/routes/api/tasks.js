@@ -1,10 +1,108 @@
 const express = require('express')
 const { Task, User, Checklist } = require('../../db/models');
 const { check } = require('express-validator');
-const { requireAuth } = require('../../utils/auth');
+const { requireAuth, authorization } = require('../../utils/auth');
+const { useParams } = require('react-router-dom');
 
 router = express.Router();
 
+
+
+// edits a task
+router.put('/:taskId', requireAuth, authorization, async (req, res) => {
+	const { title, notes, difficulty, dueDate } = req.body;
+	const { taskId } = req.params;
+
+	console.log("%c 🚀 ~ file: tasks.js:17 ~ router.put ~ taskId: ", "color: red; font-size: 25px", taskId)
+
+
+	if (!title) {
+		return res
+			.status(400)
+			.json({
+				"message": "A title is required"
+			})
+	}
+	const taskUpdate = await Task.findByPk(taskId, {
+		attributes: {
+			exclude: []
+		},
+	});
+
+	const thisDate = Date.now();
+	let currentDate = new Date(thisDate);
+
+	currentDate.toISOString().split('T')[0];
+	const offset = currentDate.getTimezoneOffset();
+	currentDate = new Date(currentDate.getTime() - (offset * 60 * 1000));
+	const currDateCheck = currentDate.getTime();
+	const thisDateTime = () => dueDate ? dueDate.getTime() : '';
+	const stringDate = currentDate.toISOString().split('T')[0];
+
+	// console.log("%c 🚀 ~ file: tasks.js:22 ~ router.post ~ stringDate: ", "color: red; font-size: 25px", stringDate)
+
+	if (thisDateTime < currDateCheck) {
+		return res
+			.status(400)
+			.json({
+				"error": "The set due date cannot be in the past"
+			})
+	}
+
+	try {
+
+		taskUpdate.title = title
+		taskUpdate.notes = notes || null,
+			taskUpdate.difficulty = difficulty || "Trivial"
+			|| null,
+			taskUpdate.dueDate = dueDate || stringDate,
+
+
+
+			await taskUpdate.save()
+
+		// res.json({
+		// 	"Task": taskUpdate
+		// })
+
+		res.json(taskUpdate)
+	} catch (error) {
+		return res
+			.status(400)
+			.json({
+				"message": error
+			})
+	}
+
+})
+
+
+// deletes a task
+router.delete('/:taskId', authorization, requireAuth, async (req, res) => {
+	const { taskId } = req.params;
+
+	const task = await Task.findByPk(taskId, {
+		where: {
+			userId: req.user.id
+		}
+	})
+
+	if (!task) {
+		return res
+			.status(404)
+			.json({
+				"error": "Task could not be found"
+			})
+	}
+
+	await task.destroy()
+
+	res
+		.status(200)
+		.json({
+			message: "Successfully deleted"
+		})
+})
 
 
 // creates a new task
@@ -14,14 +112,14 @@ router.post('/new', requireAuth, async (req, res) => {
 	const thisDate = Date.now();
 	let currentDate = new Date(thisDate);
 
-	currentDate.toISOString().split('T')[0]
-	const offset = currentDate.getTimezoneOffset()
-	currentDate = new Date(currentDate.getTime() - (offset * 60 * 1000))
+	currentDate.toISOString().split('T')[0];
+	const offset = currentDate.getTimezoneOffset();
+	currentDate = new Date(currentDate.getTime() - (offset * 60 * 1000));
 	const currDateCheck = currentDate.getTime();
 	const thisDateTime = () => dueDate ? dueDate.getTime() : '';
-	const stringDate = currentDate.toISOString().split('T')[0]
+	const stringDate = currentDate.toISOString().split('T')[0];
 
-	console.log("%c 🚀 ~ file: tasks.js:22 ~ router.post ~ stringDate: ", "color: red; font-size: 25px", stringDate)
+	// console.log("%c 🚀 ~ file: tasks.js:22 ~ router.post ~ stringDate: ", "color: red; font-size: 25px", stringDate)
 
 	if (thisDateTime < currDateCheck) {
 		return res
@@ -45,7 +143,7 @@ router.post('/new', requireAuth, async (req, res) => {
 	postTasks.forEach(task => {
 		let thisTask = task.toJSON();
 
-		console.log("%c 🚀 ~ file: tasks.js:46 ~ router.post ~ thisTask: ", "color: red; font-size: 25px", thisTask, thisTask.title)
+		// console.log("%c 🚀 ~ file: tasks.js:46 ~ router.post ~ thisTask: ", "color: red; font-size: 25px", thisTask, thisTask.title)
 
 		taskArray.push(thisTask);
 
@@ -74,7 +172,8 @@ router.post('/new', requireAuth, async (req, res) => {
 
 		const task = await Task.create({
 			userId: req.user.id,
-			title, notes, difficulty,
+			title, notes,
+			difficulty: difficulty || "Trivial" || null,
 			dueDate: dueDate || stringDate
 		})
 		return res
@@ -86,7 +185,6 @@ router.post('/new', requireAuth, async (req, res) => {
 			.status(400)
 			.json(err)
 	}
-
 
 })
 
@@ -146,11 +244,5 @@ router.get('/', requireAuth, async (req, res) => {
 
 
 
-
-// edits a task
-
-
-
-// deletes a task
 
 module.exports = router;

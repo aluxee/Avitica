@@ -11,41 +11,49 @@ module.exports = {
     await Checklist.bulkCreate([
       {
         taskId: 1,
+        userId: 1,
         checklistItem: 'Completed two loads of clothing',
         checked: false,
       },
       {
         taskId: 1,
+        userId: 1,
         checklistItem: 'Folded all loads',
         checked: false,
       },
       {
         taskId: 4,
+        userId: 2,
         checklistItem: 'Started with dinner at 5pm',
         checked: false,
       },
       {
         taskId: 4,
+        userId: 2,
         checklistItem: 'Got half of dish load done',
         checked: false,
       },
       {
         taskId: 7,
+        userId: 2,
         checklistItem: 'Reviewed prologue',
         checked: false,
       },
       {
         taskId: 7,
+        userId: 3,
         checklistItem: 'Introduced two characters within two chapters',
         checked: false,
       },
       {
         taskId: 8,
+        userId: 3,
         checklistItem: 'Wrote down morning routine for all weekdays',
         checked: false,
       },
       {
         taskId: 2,
+        userId: 1,
         checklistItem: 'Included burpees',
         checked: false,
       },

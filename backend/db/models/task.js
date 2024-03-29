@@ -36,6 +36,7 @@ module.exports = (sequelize, DataTypes) => {
         isIn: [['Trivial', 'Easy', 'Medium', 'Hard']]
       }
 
+      
     },
     dueDate: {
       type: DataTypes.DATEONLY,

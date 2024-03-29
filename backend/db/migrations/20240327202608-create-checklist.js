@@ -17,9 +17,14 @@ module.exports = {
       taskId: {
         type: Sequelize.INTEGER
       },
+      userId: {
+        type: Sequelize.INTEGER,
+        allowNull: false
+      },
       checklistItem: {
         type: Sequelize.STRING(50),
         allowNull: false,
+        // unique: true
       },
       checked: {
         type: Sequelize.BOOLEAN,

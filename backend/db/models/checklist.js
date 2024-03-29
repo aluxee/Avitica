@@ -13,15 +13,23 @@ module.exports = (sequelize, DataTypes) => {
       Checklist.belongsTo(models.Task, {
         foreignKey: 'taskId'
       })
+      Checklist.belongsTo(models.User, {
+        foreignKey: 'userId'
+      })
     }
   }
   Checklist.init({
     taskId: {
       type: DataTypes.INTEGER
     },
+    userId: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    },
     checklistItem: {
       type: DataTypes.STRING,
       allowNull: false,
+      // unique: true,
       validate: {
         len: [3, 50]
       }

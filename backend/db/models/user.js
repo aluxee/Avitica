@@ -13,6 +13,9 @@ module.exports = (sequelize, DataTypes) => {
       User.hasMany(models.Task, {
         foreignKey: 'userId'
       })
+      User.hasMany(models.Checklist, {
+        foreignKey: 'userId'
+      })
       User.hasOne(models.Inventory, {
         foreignKey: 'userId'
       })

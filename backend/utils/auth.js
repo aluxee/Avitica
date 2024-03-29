@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
 const { jwtConfig } = require('../config');
 const { User, Task } = require('../db/models');
+const { check } = require('express-validator');
 
 const { secret, expiresIn } = jwtConfig;
 
@@ -75,7 +76,7 @@ const requireAuth = function (req, _res, next) {
 
 
 const authorization = async function (req, res, next) {
-	const { taskId, userId } = req.params;
+	const { taskId, userId, checklistId } = req.params;
 
 
 	if (taskId) {
@@ -88,8 +89,14 @@ const authorization = async function (req, res, next) {
 					message: null || "Task could not be found"
 				})
 		}
+		if (!checklistId) {
+			return res
+				.status(404)
+				.json({
+					message: null || "Checklist could not be found"
+				})
+		}
 		if (req.user.id !== task.userId) handleNotAuthorized(res)
-
 	}
 	next()
 };

@@ -5,11 +5,12 @@ const cors = require('cors');
 const csurf = require('csurf');
 const helmet = require('helmet');
 const cookieParser = require('cookie-parser');
-const routes = require('./routes');
+
 const { environment } = require('./config');
 const isProduction = environment === 'production';
 
 const app = express();
+const routes = require('./routes');
 
 app.use(morgan('dev'));
 app.use(cookieParser());
@@ -39,6 +40,7 @@ app.use(
 		}
 	})
 );
+
 app.use(routes); // Connect all the routes
 
 
@@ -53,8 +55,6 @@ app.use((_req, _res, next) => {
 
 
 const { ValidationError } = require('sequelize');
-
-// ...
 
 // Process sequelize errors
 app.use((err, _req, _res, next) => {
@@ -76,10 +76,10 @@ app.use((err, _req, res, _next) => {
 	res.status(err.status || 500);
 	console.error(err);
 	res.json({
-		title: err.title || 'Server Error',
+		// title: err.title || 'Server Error',
 		message: err.message,
 		errors: err.errors,
-		stack: isProduction ? null : err.stack
+		// stack: isProduction ? null : err.stack
 	});
 });
 

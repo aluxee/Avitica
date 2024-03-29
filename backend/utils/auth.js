@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
 const { jwtConfig } = require('../config');
-const { User } = require('../db/models');
+const { User, Task } = require('../db/models');
+const { check } = require('express-validator');
 
 const { secret, expiresIn } = jwtConfig;
 
@@ -73,4 +74,67 @@ const requireAuth = function (req, _res, next) {
 	return next(err);
 };
 
-module.exports = { setTokenCookie, restoreUser, requireAuth };
+
+const authorization = async function (req, res, next) {
+	const { taskId, userId, checklistId } = req.params;
+
+
+	if (taskId) {
+		const task = await Task.findByPk(taskId);
+
+		if (!task) {
+			return res
+				.status(404)
+				.json({
+					message: null || "Task could not be found"
+				})
+		}
+		if (!checklistId) {
+			return res
+				.status(404)
+				.json({
+					message: null || "Checklist could not be found"
+				})
+		}
+		if (req.user.id !== task.userId) handleNotAuthorized(res)
+	}
+	next()
+};
+
+
+function handleNotAuthenticated(res) {
+	const err = new Error('Forbidden');
+	if (process.env.NODE_ENV !== 'production') {
+		err.title = 'Authentication required';
+		err.errors = {
+			message: 'Authentication required',
+		};
+	}
+	err.status = 403
+	return res
+		.status(403)
+		.json({
+			message: "Permission denied"
+		})
+}
+
+function handleNotAuthorized(res) {
+	const err = new Error('Forbidden');
+	if (process.env.NODE_ENV !== 'production') {
+		err.title = 'Authorization required'
+		err.errors = {
+			message: 'Authorization required'
+		}
+	}
+	err.status = 401
+	return res
+		.status(401)
+		.json({
+			message: 'Permission denied'
+		})
+}
+
+
+
+
+module.exports = { setTokenCookie, restoreUser, requireAuth, authorization };

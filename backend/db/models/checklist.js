@@ -29,7 +29,6 @@ module.exports = (sequelize, DataTypes) => {
     checklistItem: {
       type: DataTypes.STRING,
       allowNull: false,
-      // unique: true,
       validate: {
         len: [3, 50]
       }

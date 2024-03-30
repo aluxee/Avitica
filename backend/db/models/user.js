@@ -22,7 +22,7 @@ module.exports = (sequelize, DataTypes) => {
 
       User.belongsToMany(models.Stat, {
         through: models.userStat,
-        foreignKey: 'userId',
+        foreignKey: 'id',
         otherKey: 'userId'
       })
 

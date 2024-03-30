@@ -24,7 +24,6 @@ module.exports = {
       checklistItem: {
         type: Sequelize.STRING(50),
         allowNull: false,
-        // unique: true
       },
       checked: {
         type: Sequelize.BOOLEAN,

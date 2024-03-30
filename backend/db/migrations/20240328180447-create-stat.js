@@ -20,27 +20,27 @@ module.exports = {
       strength: {
         type: Sequelize.FLOAT,
         allowNull: false,
-        defaultValue: 0,
+        defaultValue: false,
       },
       magic: {
         type: Sequelize.FLOAT,
         allowNull: false,
-        defaultValue: 0,
+        defaultValue: false,
       },
       physicalDefense: {
         type: Sequelize.FLOAT,
         allowNull: false,
-        defaultValue: 0,
+        defaultValue: false,
       },
       magicDefense: {
         type: Sequelize.FLOAT,
         allowNull: false,
-        defaultValue: 0,
+        defaultValue: false,
       },
       luck: {
         type: Sequelize.FLOAT,
         allowNull: false,
-        defaultValue: 0,
+        defaultValue: false,
       },
       createdAt: {
         allowNull: false,

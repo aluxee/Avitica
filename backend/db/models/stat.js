@@ -22,7 +22,7 @@ module.exports = (sequelize, DataTypes) => {
       Stat.belongsToMany(models.User, {
         through: models.userStat,
         otherKey: 'userId',
-        foreignKey: 'userId'
+        foreignKey: 'id'
       }); // a many to many relationship with Inventory
     }
   }

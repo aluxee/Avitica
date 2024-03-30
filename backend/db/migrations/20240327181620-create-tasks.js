@@ -30,12 +30,12 @@ module.exports = {
         },
         onDelete: 'CASCADE'
       },
-      difficulty: {
-        type: Sequelize.STRING,
-      },
       completed: {
         type: Sequelize.BOOLEAN,
         defaultValue: false
+      },
+      difficulty: {
+        type: Sequelize.STRING,
       },
       dueDate: {
         type: Sequelize.DATEONLY

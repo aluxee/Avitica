@@ -39,7 +39,7 @@ module.exports = (sequelize, DataTypes) => {
     magic: {
       type: DataTypes.FLOAT,
       allowNull: false,
-      defaultValue: false0
+      defaultValue: 0
     },
     physicalDefense: {
       type: DataTypes.FLOAT,

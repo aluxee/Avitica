@@ -7,7 +7,7 @@ if (process.env.NODE_ENV === 'production') {
 }
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
-  async up (queryInterface, Sequelize) {
+  async up(queryInterface, Sequelize) {
     await Checklist.bulkCreate([
       {
         taskId: 1,
@@ -57,16 +57,16 @@ module.exports = {
         checklistItem: 'Included burpees',
         checked: false,
       },
-    ], options, {validate: true})
+    ], options, { validate: true })
 
   },
 
-  async down (queryInterface, Sequelize) {
+  async down(queryInterface, Sequelize) {
     options.tableName = 'Checklists';
     const Op = Sequelize.Op;
     return queryInterface.bulkDelete(options, {
-      taskId: {
-        [Op.in]: [1, 4, 7, 8, 2]
+      userId: {
+        [Op.in]: [1, 2, 3]
       }
     }, {});
   }

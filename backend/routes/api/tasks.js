@@ -105,7 +105,7 @@ router.post('/:taskId/checklist/new', requireAuth, async (req, res) => {
 		}
 	})
 
-	if (listAmount <= 5) {
+	if (listAmount >= 5) {
 		return res
 			.status(400)
 			.json({

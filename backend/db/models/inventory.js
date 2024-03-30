@@ -23,10 +23,6 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
-    // statId: {
-    //   type: DataTypes.INTEGER,
-    //   allowNull: false,
-    // },
     itemName: {
       type: DataTypes.STRING,
       allowNull: false,

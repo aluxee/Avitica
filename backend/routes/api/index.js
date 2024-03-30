@@ -59,7 +59,7 @@ router.use('/tasks', tasksRouter);
 
 router.use('/inv', inventoryRouter);
 
-router.use('/my-stats', userStatRouter);
+router.use('/stats', userStatRouter);
 
 
 

@@ -10,28 +10,51 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      Stat.belongsToMany(models.Inventory, {
-        through: models.InventoryStat,
-        foreignKey: 'statId',
-        otherKey: 'inventoryId'
-      }); // a many to many relationship with Inventory
-
+      // Stat.belongsToMany(models.Inventory, {
+      //   through: models.InventoryStat,
+      //   foreignKey: 'id',
+      //   otherKey: 'inventoryId'
+      // }); // a many to many relationship with Inventory
+      Stat.belongsTo(models.Inventory, {
+        foreignKey: 'id'
+      })
 
       Stat.belongsToMany(models.User, {
         through: models.userStat,
-        foreignKey: 'userId',
-        otherKey: 'statId'
+        otherKey: 'userId',
+        foreignKey: 'userId'
       }); // a many to many relationship with Inventory
     }
   }
   Stat.init({
-    type: {
-      type: DataTypes.STRING,
+    userId: {
+      type: DataTypes.INTEGER,
       allowNull: false,
-      unique: true,
-      validate: {
-        isIn: [['LUCK', 'STR', 'MAGIC', 'PDEF', 'MDEF', 'HP']]
-      }
+    },
+    strength: {
+      type: DataTypes.FLOAT,
+      allowNull: false,
+      defaultValue: 0
+    },
+    magic: {
+      type: DataTypes.FLOAT,
+      allowNull: false,
+      defaultValue: 0
+    },
+    physicalDefense: {
+      type: DataTypes.FLOAT,
+      allowNull: false,
+      defaultValue: 0
+    },
+    magicDefense: {
+      type: DataTypes.FLOAT,
+      allowNull: false,
+      defaultValue: 0
+    },
+    luck: {
+      type: DataTypes.FLOAT,
+      allowNull: false,
+      defaultValue: 0
     }
   }, {
     sequelize,

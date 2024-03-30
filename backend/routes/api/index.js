@@ -7,7 +7,7 @@ const sessionRouter = require('./session.js');
 const usersRouter = require('./users.js');
 const tasksRouter = require('./tasks.js');
 const inventoryRouter = require('./inventories.js');
-
+const userStatRouter = require('./user-stats.js')
 
 router.use(restoreUser);
 
@@ -59,8 +59,7 @@ router.use('/tasks', tasksRouter);
 
 router.use('/inv', inventoryRouter);
 
-
-
+router.use('/my-stats', userStatRouter);
 
 
 

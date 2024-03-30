@@ -12,6 +12,59 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // a joins table hybrid with seeded columns thus no ref will be involved in the model
     }
+
+    static async setDefWar(userId, level) {
+      const warStats = this.heroType === 'Warrior'
+      if (!warStats) {
+        throw new Error('Default stats for Warrior not found')
+      }
+
+      // Calculate default stats for warriors based on level
+      const defHP = level === 1 ? 50 : Math.max(Math.round(50 * (level - 1) * 2.5));
+      const defSTR = 100 + (level - 1) * 75; // Core stat (STR) increases by 75 per level
+      const defPDEF = 100 + (level - 1) * 100;
+      // Other stats increase by 50 per level
+      const defMagic = 50 + (level - 1) * 50;
+      const defLuck = 50 + (level - 1) * 50;
+      const defMDef = 50 + (level - 1) * 50;
+      //update those stats
+      await userStat.upsert({
+        userId,
+        health: defHP,
+        strength: defSTR,
+        physicalDefense: defPDEF,
+        magic: defMagic,
+        magicDefense: defMDef,
+        luck: defLuck,
+        heroClass: 'Warrior'
+      });
+    }
+
+    static async setDefMage(userId, level) {
+      const mageStats = this.heroType === 'Mage'
+      if (!mageStats) {
+        throw new Error('Default stats for Mage not found')
+      }
+
+      // Calculate default stats for mages based on level
+      const defHP = level === 1 ? 50 : Math.max(Math.round(50 * (level - 1) * 2.5));
+      const defSTR = 50 + (level - 1) * 50;
+      const defPDEF = 50 + (level - 1) * 50;
+      const defMagic = 100 + (level - 1) * 100;
+      const defLuck = 50 + (level - 1) * 50;
+      const defMDef = 100 + (level - 1) * 75;
+      //update those stats
+      await userStat.upsert({
+        userId,
+        health: defHP,
+        strength: defSTR,
+        physicalDefense: defPDEF,
+        magic: defMagic,
+        magicDefense: defMDef,
+        luck: defLuck,
+        heroClass: 'Mage'
+      });
+    }
     async calcHpAndExp(taskCompleted) {
       const currLevel = this.getLevel();
       let expGain;
@@ -71,9 +124,10 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       defaultValue: 0 // default experience value, but code ensures it starts at 100
     },
-    statId: {
-      type: DataTypes.INTEGER,
-    },
+    heroClass: {
+      type: DataTypes.STRING,
+      allowNull: false
+    }
   }, {
     sequelize,
     modelName: 'userStat',

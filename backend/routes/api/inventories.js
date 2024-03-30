@@ -6,7 +6,7 @@ router = express.Router();
 
 
 
-
+// get route : items in the inventory (includes gear)
 
 
 

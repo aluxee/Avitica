@@ -25,29 +25,29 @@ module.exports = {
       itemType: {
         type: Sequelize.BOOLEAN,
         allowNull: false,
-        defaultValue: 0
+        defaultValue: false
       },
       healthBoost: {
         type: Sequelize.BOOLEAN,
-        defaultValue: 0
+        defaultValue: false
       },
       statBoost: {
         type: Sequelize.BOOLEAN,
-        defaultValue: 0
+        defaultValue: false
       },
       gear: {
         type: Sequelize.BOOLEAN,
         allowNull: false,
-        defaultValue: 1
+        defaultValue: true
       },
       wep: {
         type: Sequelize.BOOLEAN,
         allowNull: false,
-        defaultValue: 1
+        defaultValue: true
       },
       equipped: {
         type: Sequelize.BOOLEAN,
-        defaultValue: 0
+        defaultValue: false
       },
       description: {
         type: Sequelize.STRING(250),

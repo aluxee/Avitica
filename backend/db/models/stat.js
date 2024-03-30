@@ -34,27 +34,27 @@ module.exports = (sequelize, DataTypes) => {
     strength: {
       type: DataTypes.FLOAT,
       allowNull: false,
-      defaultValue: 0
+      defaultValue: false
     },
     magic: {
       type: DataTypes.FLOAT,
       allowNull: false,
-      defaultValue: 0
+      defaultValue: false
     },
     physicalDefense: {
       type: DataTypes.FLOAT,
       allowNull: false,
-      defaultValue: 0
+      defaultValue: false
     },
     magicDefense: {
       type: DataTypes.FLOAT,
       allowNull: false,
-      defaultValue: 0
+      defaultValue: false
     },
     luck: {
       type: DataTypes.FLOAT,
       allowNull: false,
-      defaultValue: 0
+      defaultValue: false
     }
   }, {
     sequelize,

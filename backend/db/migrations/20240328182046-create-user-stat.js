@@ -16,7 +16,8 @@ module.exports = {
       userId: {
         type: Sequelize.INTEGER,
         allowNull: false,
-        references: {
+        references:
+          {
           model: 'Users',
           key: 'id' //joins table associated
         },
@@ -32,13 +33,9 @@ module.exports = {
         allowNull: false,
         defaultValue: 0
       },
-      statId: {
-        type: Sequelize.INTEGER,
-        references: {
-          model: 'Stats',
-          key: 'id' //joins table associated
-        },
-        onDelete: 'CASCADE'
+      heroClass: {
+        type: Sequelize.STRING,
+        allowNull: false
       },
       createdAt: {
         allowNull: false,

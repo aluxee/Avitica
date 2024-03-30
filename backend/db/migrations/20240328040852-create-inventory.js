@@ -17,18 +17,6 @@ module.exports = {
       userId: {
         type: Sequelize.INTEGER,
         allowNull: false,
-      //   references: {
-      //     model: 'Users',
-      //   },
-      //   onDelete: 'CASCADE'
-      },
-      statId: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-        // references: {
-        //   model: 'userStats',
-        // },
-        // onDelete: 'CASCADE'
       },
       itemName: {
         type: Sequelize.STRING(50),

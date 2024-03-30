@@ -4,7 +4,7 @@ const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
 
 const { setTokenCookie, requireAuth } = require('../../utils/auth');
-const { User } = require('../../db/models');
+const { User, userStat } = require('../../db/models');
 
 
 
@@ -47,23 +47,30 @@ const validateSignup = [
 	handleValidationErrors
 ];
 
+
 // Sign up
 router.post(
 	'/',
 	validateSignup,
 	async (req, res) => {
-		const { email, password, username, displayName } = req.body;
+		const { email, password, username, displayName, heroClass = 'Warrior' || 'Mage'} = req.body;
 		const hashedPassword = bcrypt.hashSync(password);
 		const user = await User.create({
 			email, username, password: hashedPassword
 			, displayName
 		});
 
+		// prompt the user to choose between warrior or mage
+		const heroType = await userStat.create({
+			heroClass,
+			userId: user.id
+		})
 		const safeUser = {
 			id: user.id,
 			username: user.username,
 			displayName: user.displayName,
 			email: user.email,
+			heroClass: heroType.heroClass
 		};
 
 		await setTokenCookie(res, safeUser);

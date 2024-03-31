@@ -136,7 +136,7 @@ router.post('/:taskId/checklist/new', requireAuth, async (req, res) => {
 
 
 //* update task as completed OR incomplete
-router.put('/:taskId/completed', requireAuth, async (req, res) => {
+router.put('/:taskId', requireAuth, async (req, res) => {
 	//* May need testing with front end
 
 	const { taskId } = req.params;

@@ -31,8 +31,7 @@ module.exports = {
         onDelete: 'CASCADE'
       },
       completed: {
-        type: Sequelize.BOOLEAN,
-        defaultValue: false
+        type: Sequelize.BOOLEAN
       },
       difficulty: {
         type: Sequelize.STRING,
@@ -54,6 +53,6 @@ module.exports = {
   },
   async down(queryInterface, Sequelize) {
     options.tableName = 'Tasks';
-    return queryInterface.dropTable(options);
+    await queryInterface.dropTable(options);
   }
 };

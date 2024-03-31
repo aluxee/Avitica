@@ -19,7 +19,7 @@ module.exports = {
         allowNull: false,
       },
       notes: {
-        type: Sequelize.TEXT
+        type: Sequelize.STRING
       },
       userId: {
         type: Sequelize.INTEGER,
@@ -31,8 +31,7 @@ module.exports = {
         onDelete: 'CASCADE'
       },
       completed: {
-        type: Sequelize.BOOLEAN,
-        defaultValue: false
+        type: Sequelize.BOOLEAN
       },
       difficulty: {
         type: Sequelize.STRING,

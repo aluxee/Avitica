@@ -28,17 +28,13 @@ module.exports = (sequelize, DataTypes) => {
       }
     },
     notes: {
-      type: DataTypes.TEXT,
-
+      type: DataTypes.STRING,
     },
     userId: {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
-    completed: {
-      type: DataTypes.BOOLEAN,
-      defaultValue: false
-    },
+    completed: DataTypes.BOOLEAN,
     difficulty: {
       type: DataTypes.STRING,
       validate: {

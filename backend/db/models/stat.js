@@ -10,20 +10,10 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // Stat.belongsToMany(models.Inventory, {
-      //   through: models.InventoryStat,
-      //   foreignKey: 'id',
-      //   otherKey: 'inventoryId'
-      // }); // a many to many relationship with Inventory
-      Stat.belongsTo(models.Inventory, {
-        foreignKey: 'id'
-      })
-
-      Stat.belongsToMany(models.User, {
-        through: models.userStat,
-        otherKey: 'userId',
-        foreignKey: 'id'
-      }); // a many to many relationship with Inventory
+      Stat.belongsTo(models.User, {
+        foreignKey: 'userId'
+      });
+      Stat.hasOne(models.Inventory);
     }
   }
   Stat.init({

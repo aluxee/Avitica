@@ -39,7 +39,7 @@ router.delete('/:userId/unequip/:itemId', requireAuth, async (req, res) => {
 		const statBooster = description.match(/Grants a (\d+)% increase in (.+):/);
 		if (statBooster) {
 
-			console.log("%c 🚀 ~ file: user-stats.js:1967 ~ router.get ~ statBooster: ", "color: red; font-size: 25px", statBooster)
+
 
 			const percentageApplicator = parseInt(statBooster[1]);
 			const statName = statBooster[2];
@@ -81,7 +81,7 @@ router.get('/:userId/equipped', requireAuth, async (req, res) => {
 		}
 	})
 
-	console.log("%c 🚀 ~ file: user-stats.js:101 ~ router.get ~ equippedItems: ", "color: red; font-size: 25px", equippedItems)
+
 
 	if (!equippedItems || equippedItems.equipped === false && (equippedItems.gear === false && equippedItems.wep === false || equippedItems.length === 0)) {
 		return res
@@ -96,7 +96,7 @@ router.get('/:userId/equipped', requireAuth, async (req, res) => {
 		const statBooster = description.match(/Grants a (\d+)% increase in (.+):/);
 		if (statBooster) {
 
-			console.log("%c 🚀 ~ file: user-stats.js:111 ~ router.get ~ statBooster: ", "color: red; font-size: 25px", statBooster)
+
 
 			const percentageApplicator = parseInt(statBooster[1]);
 			const statName = statBooster[2];
@@ -146,15 +146,13 @@ router.get('/:userId/potion', requireAuth, async (req, res) => {
 				error: "No health potions available"
 			})
 	}
-	console.log("%c 🚀 ~ file: inventories.js:45 ~ potionItem: ", "color: red; font-size: 25px", potionItem)
 
 
 	const userStatus = await userStat.findByPk(userId)
 
-	console.log("%c 🚀 ~ file: inventories.js:46 ~ userStatus: ", "color: red; font-size: 25px", userStatus)
 
 	const currHealth = userStatus.health;
-	console.log("%c 🚀 ~ file: user-stats.js:157 ~ router.get ~ currHealth: ", "color: red; font-size: 25px", currHealth)
+
 	//if currHealth is less than 100%
 	if (currHealth < 100) {
 		// use available health potions
@@ -202,7 +200,7 @@ router.get('/:userId', async (req, res) => {
 			where: { userId }
 		});
 
-		console.log("%c 🚀 ~ file: user-stats.js:60 ~ router.get ~ userExp: ", "color: red; font-size: 25px", userExp)
+
 
 
 		// Determine current level
@@ -245,8 +243,6 @@ router.get('/', requireAuth, async (req, res) => {
 		}
 	});
 
-	console.log("%c 🚀 ~ file: user-stats.js:25 ~ router.get ~ statsUser: ", "color: red; font-size: 25px", statsUser)
-
 	// Check if the user's stats exist
 	if (statsUser.health === 0 || statsUser.length === 0) {
 		// if not, create the userStat with their default values
@@ -264,10 +260,6 @@ router.get('/', requireAuth, async (req, res) => {
 			.json(statsUser)
 	}
 });
-
-
-
-
 
 
 

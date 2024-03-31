@@ -465,7 +465,6 @@ router.post('/new', requireAuth, async (req, res) => {
 router.get('/', requireAuth, authorization, async (req, res) => {
 
 	const { user } = req;
-	console.log("USER: ", user);
 	const tasks = await Task.findAll({
 		where: {
 			userId: req.user.id

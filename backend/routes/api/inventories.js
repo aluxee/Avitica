@@ -7,6 +7,7 @@ router = express.Router();
 
 
 // get route : items in the inventory (includes gear)
+// * to be continued with receiving more inventory data
 router.get('/', requireAuth, async (req, res) => {
 
 	const inventory = await Inventory.findAll(

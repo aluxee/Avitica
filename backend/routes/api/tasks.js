@@ -1,4 +1,4 @@
-const express = require('express')
+const express = require('express');
 const { Task, Checklist, userStat } = require('../../db/models');
 const { requireAuth, authorization } = require('../../utils/auth');
 
@@ -134,13 +134,49 @@ router.post('/:taskId/checklist/new', requireAuth, async (req, res) => {
 });
 
 
+// get the entire checklist inside of a task (there is no need to collectively have all checklists)
+router.get('/:taskId/checklist', requireAuth, async (req, res) => {
+	const { taskId } = req.params;
+
+	const task = await Task.findByPk(taskId, {
+		include: [
+			{
+				model: Checklist
+			}
+		],
+		where: {
+			userId: req.user.id
+		}
+	});
+
+	const taskPayload = task.toJSON();
+
+	const allCheckLists = await Checklist.findAll({
+		where: {
+			taskId,
+			userId: req.user.id
+		}
+	});
+
+	if (allCheckLists.length === 0) {
+		return res
+			.json({
+				message: "No checklist has been made yet for this task"
+			});
+	}
+	taskPayload.Checklist = allCheckLists
+
+	return res.json(allCheckLists)
+});
+
+
 
 //* update task as completed OR incomplete
 router.put('/:taskId', requireAuth, async (req, res) => {
 	//* May need testing with front end
 
 	const { taskId } = req.params;
-	const { taskCompleted } = req.body; // this portion must come from the frontend where the task is marked as complete by boolean of check to indicate that the task is or is not complete
+	const { completed } = req.body; // this portion must come from the frontend where the task is marked as complete by boolean of check to indicate that the task is or is not complete
 
 	try {
 		// update task in db based on completion
@@ -159,7 +195,7 @@ router.put('/:taskId', requireAuth, async (req, res) => {
 		}
 
 		// utilize the task completion (boolean) attribute prior to the point changes
-		updatedTask.completed = taskCompleted;
+		updatedTask.completed = completed;
 
 		//find userStat information
 		const userStatus = await userStat.findOne({
@@ -172,7 +208,7 @@ router.put('/:taskId', requireAuth, async (req, res) => {
 		const currLevel = userStatus.getLevel();
 		// initialize experience gain to start at 0
 		let expGain = 0;
-		if (taskCompleted) {
+		if (updatedTask.completed) {
 			expGain = Math.max(10, 50 - (currLevel - 1) * 5);
 			userStatus.experience += expGain;
 
@@ -202,9 +238,7 @@ router.put('/:taskId', requireAuth, async (req, res) => {
 
 		//save updatedTask status
 		await updatedTask.save();
-
 		// confirm such actions w/ model fxn implementation
-
 		return res
 			.status(200)
 			.json({
@@ -220,42 +254,6 @@ router.put('/:taskId', requireAuth, async (req, res) => {
 	}
 });
 
-
-
-// get the entire checklist inside of a task (there is no need to collectively have all checklists)
-router.get('/:taskId/checklist', requireAuth, async (req, res) => {
-	const { taskId } = req.params;
-
-	const task = await Task.findByPk(taskId, {
-		include: [
-			{
-				model: Checklist
-			}
-		],
-		where: {
-			userId: req.user.id
-		}
-	})
-
-	const taskPayload = task.toJSON();
-
-	const allCheckLists = await Checklist.findAll({
-		where: {
-			taskId,
-			userId: req.user.id
-		}
-	})
-
-	if (allCheckLists.length === 0) {
-		return res
-			.json({
-				message: "No checklist has been made yet for this task"
-			})
-	}
-	taskPayload.Checklist = allCheckLists
-
-	return res.json(allCheckLists)
-})
 
 
 

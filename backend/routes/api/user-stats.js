@@ -9,12 +9,12 @@ router = express.Router();
 
 
 // remove user stat w/ gear (removal of gear to see stats)
-router.delete('/:userId/unequip/:itemId', requireAuth, async (req, res) => {
+router.delete('/:userId/unequip/:statId', requireAuth, async (req, res) => {
 
-	const { userId, itemId } = req.params;
+	const { userId, statId } = req.params;
 
 	try {
-		const itemToRemove = await Inventory.findByPk(itemId, {
+		const itemToRemove = await Inventory.findByPk(statId, {
 			where: {
 				userId
 			}
@@ -104,7 +104,7 @@ router.get('/:userId/equipped', requireAuth, async (req, res) => {
 			// update the users stats based on above info extrapolated
 			const userStatUpdate = userStat.findAll({
 				where: {
-
+					userId
 				}
 			}) // cannot personally await
 
@@ -184,12 +184,12 @@ router.get('/:userId/potion', requireAuth, async (req, res) => {
 
 
 // Get userStats for a user upon task completion
-// see the route of: /:taskId/completed for the put request of task update
+// see the put route for the put request of task
 router.get('/:userId', async (req, res) => {
 	//! this may end up hanging, do not test solely on the backend
 
 	const { userId } = req.params;
-	const { taskCompleted } = req.body;
+	const { completed } = req.body;
 	const taskMark = await Task.findAll({
 		where: {
 			userId
@@ -206,9 +206,9 @@ router.get('/:userId', async (req, res) => {
 		// Determine current level
 		const level = userExp.getLevel();
 		// Calculating exp gain and updating health upon task completion (or failure to complete)
-		if (taskCompleted) {
-			taskMark.completed = taskCompleted
-			userExp.calcHpAndExp(taskCompleted);
+		if (completed) {
+			taskMark.completed = completed
+			userExp.calcHpAndExp(completed);
 			// Save changes to userStats
 			await userExp.save();
 			res

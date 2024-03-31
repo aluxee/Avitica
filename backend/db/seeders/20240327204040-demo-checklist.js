@@ -12,7 +12,7 @@ module.exports = {
       {
         taskId: 1,
         userId: 1,
-        checklistItem: 'Completed two loads of clothing',
+        checklistItem: 'Finished two loads of clothing',
         checked: false,
       },
       {

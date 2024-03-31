@@ -8,20 +8,16 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       Inventory.belongsTo(models.User, {
         foreignKey: 'userId'
-      })
-
-      // Inventory.belongsToMany(models.Stat, {
-      //   through:  models.InventoryStat ,
-      //   foreignKey: 'id',
-      //   otherKey: 'inventoryId'
-      // })
-      Inventory.hasMany(models.Stat)
+      });
+      Inventory.belongsTo(models.Stat, {
+        foreignKey: 'statId'
+      });
     }
   }
   Inventory.init({
     userId: {
       type: DataTypes.INTEGER,
-      allowNull: false,
+      allowNull: false
     },
     itemName: {
       type: DataTypes.STRING,
@@ -29,6 +25,14 @@ module.exports = (sequelize, DataTypes) => {
       validate: {
         len: [3, 50]
       }
+    },
+    statId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: 'Stats',
+        key: 'id'
+      },
     },
     itemType: {
       type: DataTypes.BOOLEAN,

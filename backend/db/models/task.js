@@ -13,7 +13,7 @@ module.exports = (sequelize, DataTypes) => {
       Task.belongsTo(models.User, {
         foreignKey: 'userId'
       })
-      Task.hasOne(models.Checklist, {
+      Task.hasMany(models.Checklist, {
         foreignKey: 'taskId'
       })
     }

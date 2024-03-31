@@ -17,9 +17,8 @@ module.exports = {
         type: Sequelize.INTEGER,
         allowNull: false,
         references:
-          {
-          model: 'Users',
-          key: 'id' //joins table associated
+        {
+          model: 'Users'
         },
         onDelete: 'CASCADE'
       },
@@ -49,6 +48,6 @@ module.exports = {
   },
   async down(queryInterface, Sequelize) {
     options.tableName = 'userStats'
-    return queryInterface.dropTable(options)
+    await queryInterface.dropTable(options)
   }
 };

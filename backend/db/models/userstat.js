@@ -65,12 +65,12 @@ module.exports = (sequelize, DataTypes) => {
         heroClass: 'Mage'
       });
     }
-    async calcHpAndExp(taskCompleted) {
+    async calcHpAndExp(completed) {
       const currLevel = this.getLevel();
       let expGain;
 
       //increase gained exp points per task per level
-      if (taskCompleted) {
+      if (completed) {
         expGain = Math.max(10, 50 - (currLevel - 1) * 5);
         /* 1: 50 exp, 2: 45 exp, 3: 40 exp, 4: 35 exp, 5: 30 exp
         */

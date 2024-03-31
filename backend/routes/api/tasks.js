@@ -140,7 +140,7 @@ router.put('/:taskId', requireAuth, async (req, res) => {
 	//* May need testing with front end
 
 	const { taskId } = req.params;
-	const { taskCompleted } = req.body; // this portion must come from the frontend where the task is marked as complete by boolean of check to indicate that the task is or is not complete
+	const { completed } = req.body; // this portion must come from the frontend where the task is marked as complete by boolean of check to indicate that the task is or is not complete
 
 	try {
 		// update task in db based on completion
@@ -159,7 +159,7 @@ router.put('/:taskId', requireAuth, async (req, res) => {
 		}
 
 		// utilize the task completion (boolean) attribute prior to the point changes
-		updatedTask.completed = taskCompleted;
+		updatedTask.completed = completed;
 
 		//find userStat information
 		const userStatus = await userStat.findOne({
@@ -172,7 +172,7 @@ router.put('/:taskId', requireAuth, async (req, res) => {
 		const currLevel = userStatus.getLevel();
 		// initialize experience gain to start at 0
 		let expGain = 0;
-		if (taskCompleted) {
+		if (completed) {
 			expGain = Math.max(10, 50 - (currLevel - 1) * 5);
 			userStatus.experience += expGain;
 

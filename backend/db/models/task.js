@@ -1,4 +1,4 @@
-  'use strict';
+'use strict';
 const {
   Model
 } = require('sequelize');
@@ -11,8 +11,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       Task.belongsTo(models.User, {
-        foreignKey: 'userId',
-        constraints: false
+        foreignKey: 'userId'
       })
       Task.hasOne(models.Checklist, {
         foreignKey: 'taskId'
@@ -34,7 +33,10 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
-    completed: DataTypes.BOOLEAN,
+    completed: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false
+    },
     difficulty: {
       type: DataTypes.STRING
     },

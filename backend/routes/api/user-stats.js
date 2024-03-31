@@ -9,12 +9,12 @@ router = express.Router();
 
 
 // remove user stat w/ gear (removal of gear to see stats)
-router.delete('/:userId/unequip/:itemId', requireAuth, async (req, res) => {
+router.delete('/:userId/unequip/:statId', requireAuth, async (req, res) => {
 
-	const { userId, itemId } = req.params;
+	const { userId, statId } = req.params;
 
 	try {
-		const itemToRemove = await Inventory.findByPk(itemId, {
+		const itemToRemove = await Inventory.findByPk(statId, {
 			where: {
 				userId
 			}
@@ -104,7 +104,7 @@ router.get('/:userId/equipped', requireAuth, async (req, res) => {
 			// update the users stats based on above info extrapolated
 			const userStatUpdate = userStat.findAll({
 				where: {
-
+					userId
 				}
 			}) // cannot personally await
 

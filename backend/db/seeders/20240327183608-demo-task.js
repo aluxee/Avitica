@@ -15,7 +15,7 @@ module.exports = {
         userId: 1,
         difficulty: 'Trivial',
         dueDate: new Date("2024-03-30"),
-        completed: false
+        completed: true
       },
       {
         title: 'Exercise for 10 minutes',
@@ -23,7 +23,7 @@ module.exports = {
         userId: 1,
         difficulty: 'Trivial',
         dueDate: new Date("2024-03-30"),
-        completed: false
+        completed: true
       },
       {
         title: 'Study for 1 hour',
@@ -31,7 +31,7 @@ module.exports = {
         userId: 1,
         difficulty: 'Trivial',
         dueDate: new Date("2024-03-30"),
-        completed: false
+        completed: true
       },
       {
         title: 'Do dishes between cooking',
@@ -39,7 +39,7 @@ module.exports = {
         userId: 2,
         difficulty: 'Trivial',
         dueDate: new Date("2024-03-31"),
-        completed: false
+        completed: true
       },
       {
         title: 'Read for 1 hour',
@@ -47,7 +47,7 @@ module.exports = {
         userId: 2,
         difficulty: 'Trivial',
         dueDate: new Date("2024-03-31"),
-        completed: false
+        completed: true
       },
       {
         title: 'Write down achievements for the day',
@@ -55,7 +55,7 @@ module.exports = {
         userId: 2,
         difficulty: 'Trivial',
         dueDate: new Date("2024-03-30"),
-        completed: false
+        completed: true
       },
       {
         title: 'Write two chapters of novel',
@@ -63,7 +63,7 @@ module.exports = {
         userId: 3,
         difficulty: 'Trivial',
         dueDate: new Date("2024-04-05"),
-        completed: false
+        completed: true
       },
       {
         title: 'Organize work assignments for the week',
@@ -71,7 +71,7 @@ module.exports = {
         userId: 3,
         difficulty: 'Trivial',
         dueDate: new Date("2024-04-08"),
-        completed: false
+        completed: true
       },
       {
         title: 'Call best friend',
@@ -79,7 +79,7 @@ module.exports = {
         userId: 3,
         difficulty: 'Trivial',
         dueDate: new Date("2024-03-31"),
-        completed: false
+        completed: true
       },
     ], { validate: true });
   },

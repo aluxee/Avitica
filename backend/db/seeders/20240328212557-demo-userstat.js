@@ -8,7 +8,7 @@ if (process.env.NODE_ENV === 'production') {
 module.exports = {
 
   async up(queryInterface, Sequelize) {
-  
+
     await userStat.bulkCreate([
       {
         userId: 1,
@@ -34,7 +34,7 @@ module.exports = {
   async down(queryInterface, Sequelize) {
     options.tableName = 'userStats';
     const Op = Sequelize.Op;
-    return queryInterface.bulkDelete(options, {
+    await queryInterface.bulkDelete(options, {
       userId: {
         [Op.in]: [1, 2, 3]
       }

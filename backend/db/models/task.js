@@ -36,10 +36,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     completed: DataTypes.BOOLEAN,
     difficulty: {
-      type: DataTypes.STRING,
-      validate: {
-        isIn: [['Trivial', 'Easy', 'Medium', 'Hard']]
-      }
+      type: DataTypes.STRING
     },
     dueDate: {
       type: DataTypes.DATEONLY,

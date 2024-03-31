@@ -81,16 +81,14 @@ module.exports = {
         dueDate: new Date("2024-03-31"),
         completed: false
       },
-    ], options, { validate: true });
+    ], { validate: true });
   },
 
   async down(queryInterface, Sequelize) {
     options.tableName = 'Tasks';
     const Op = Sequelize.Op;
-    return queryInterface.bulkDelete(options, {
-      userId: {
-        [Op.in]: [1, 2, 3]
-      }
+    await queryInterface.bulkDelete(options, {
+      userId: { [Op.in]: [1, 2, 3] }
     }, {});
   }
 };

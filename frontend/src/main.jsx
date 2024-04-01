@@ -4,16 +4,22 @@ import { Provider } from 'react-redux';
 import App from './App';
 import configureStore from './store';
 import './index.css';
+import { restoreCSRF, csrfFetch } from './store/csrf';
 
 
 
 const store = configureStore();
 
-if (process.env.NODE_ENV !== 'production') {
+if (import.meta.env.MODE !== 'production') {
+  restoreCSRF();
+
+  window.csrfFetch = csrfFetch;
   window.store = store;
 }
 
-
+if (process.env.NODE_ENV !== 'production') {
+  window.store = store;
+}
 
 
 

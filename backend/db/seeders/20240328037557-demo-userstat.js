@@ -14,19 +14,16 @@ module.exports = {
         userId: 1,
         health: 50,
         experience: 100,
-        heroClass: 'Warrior'
       },
       {
         userId: 2,
         health: 125,
         experience: 187,
-        heroClass: 'Mage'
       },
       {
         userId: 3,
         health: 210,
         experience: 500,
-        heroClass: 'Warrior'
       },
     ], options, { validate: true });
   },

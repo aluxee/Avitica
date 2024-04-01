@@ -19,7 +19,7 @@ const validateSignup = [
 		.withMessage('Please provide a valid email.'),
 	check('username')
 		.exists({ checkFalsy: true })
-		.isLength({ min: 6})
+		.isLength({ min: 6 })
 		.withMessage('Please provide a username with at least 6 characters.'),
 	check('username')
 		.exists({ checkFalsy: true })
@@ -44,6 +44,10 @@ const validateSignup = [
 		.exists({ checkFalsy: true })
 		.isLength({ min: 6 })
 		.withMessage('Password must be 6 characters or more.'),
+	check('heroClass')
+		.exists({ checkFalsy: true })
+		.isIn(['Mage', 'Warrior'])
+		.withMessage('Must choose one of the two hero classes'),
 	handleValidationErrors
 ];
 
@@ -53,24 +57,19 @@ router.post(
 	'/',
 	validateSignup,
 	async (req, res) => {
-		const { email, password, username, displayName, heroClass = 'Warrior' || 'Mage'} = req.body;
+		const { email, password, username, displayName, heroClass } = req.body;
 		const hashedPassword = bcrypt.hashSync(password);
+
 		const user = await User.create({
-			email, username, password: hashedPassword
-			, displayName
+			email, username, password: hashedPassword, displayName, heroClass
 		});
 
-		// prompt the user to choose between warrior or mage
-		const heroType = await userStat.create({
-			heroClass,
-			userId: user.id
-		})
 		const safeUser = {
 			id: user.id,
 			username: user.username,
 			displayName: user.displayName,
 			email: user.email,
-			heroClass: heroType.heroClass
+			heroClass: user.heroClass
 		};
 
 		await setTokenCookie(res, safeUser);

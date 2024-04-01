@@ -13,11 +13,10 @@ module.exports = (sequelize, DataTypes) => {
       // a joins table hybrid with seeded columns thus no ref will be involved in the model
     }
 
-    static async setDefWar(userId, level) {
-      const warStats = this.heroType === 'Warrior'
-      if (!warStats) {
-        throw new Error('Default stats for Warrior not found')
-      }
+    static async setDefWar(heroClass, level) {
+      if (heroClass !== 'Warrior') {
+      throw new Error('Must be Warrior class')
+    }
 
       // Calculate default stats for warriors based on level
       const defHP = level === 1 ? 50 : Math.max(Math.round(50 * (level - 1) * 2.5));
@@ -29,22 +28,20 @@ module.exports = (sequelize, DataTypes) => {
       const defMDef = 50 + (level - 1) * 50;
       //update those stats
       await userStat.upsert({
-        userId,
         health: defHP,
         strength: defSTR,
         physicalDefense: defPDEF,
         magic: defMagic,
         magicDefense: defMDef,
         luck: defLuck,
-        heroClass: 'Warrior'
       });
     }
 
-    static async setDefMage(userId, level) {
-      const mageStats = this.heroType === 'Mage'
-      if (!mageStats) {
-        throw new Error('Default stats for Mage not found')
+    static async setDefMage(heroClass) {
+      if (heroClass !== 'Mage') {
+        throw new Error('Must be Mage class')
       }
+      const level = this.getLevel()
 
       // Calculate default stats for mages based on level
       const defHP = level === 1 ? 50 : Math.max(Math.round(50 * (level - 1) * 2.5));
@@ -55,14 +52,12 @@ module.exports = (sequelize, DataTypes) => {
       const defMDef = 100 + (level - 1) * 75;
       //update those stats
       await userStat.upsert({
-        userId,
         health: defHP,
         strength: defSTR,
         physicalDefense: defPDEF,
         magic: defMagic,
         magicDefense: defMDef,
         luck: defLuck,
-        heroClass: 'Mage'
       });
     }
     async calcHpAndExp(completed) {
@@ -100,6 +95,10 @@ module.exports = (sequelize, DataTypes) => {
     getLevel() {
       // Calculate level based on total experience
       let level = 1;
+      if (level === null) {
+        level = 1
+        return level
+      }
       let totalExp = this.experience;
       while (totalExp >= Math.round(Math.max(((level - 1) * 25)) * ((level - 1) * 1.25)) && level < 5) {
         level++;
@@ -123,10 +122,6 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.FLOAT,
       allowNull: false,
       defaultValue: 0 // default experience value, but code ensures it starts at 100
-    },
-    heroClass: {
-      type: DataTypes.STRING,
-      allowNull: false
     }
   }, {
     sequelize,

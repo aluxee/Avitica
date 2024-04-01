@@ -1,7 +1,6 @@
 const express = require('express')
-const { userStat, Inventory, Stat, Task } = require('../../db/models');
+const { userStat, Inventory, Stat, Task, User } = require('../../db/models');
 const { requireAuth, authorization } = require('../../utils/auth');
-const stat = require('../../db/models/stat');
 
 router = express.Router();
 
@@ -225,63 +224,91 @@ router.get('/:userId', async (req, res) => {
 
 
 
-//get all user stat (without gear or skill additions [from userStats])
+// //get all user stat (without gear or skill additions [from userStats])
 
-router.get('/', requireAuth, async (req, res) => {
-	// without a user stat we need to create one as a default, though this is still ultimately a "GET"
-	const { user } = req;
+// router.get('/', requireAuth, async (req, res) => {
+// 	try {
+// 		// without a user stat we need to create one as a default, though this is still ultimately a "GET"
+// 		const { user } = req;
 
-	// all the stats of a user
-	const allStats = await Stat.findByPk(user.id);
-
-	// all the userStats of a user (health, exp)
-	const statsUser = await userStat.findByPk(user.id, {
-		attributes: {
-			exclude: [
-				'createdAt', 'updatedAt'
-			]
-		}
-	});
-
-	console.log("%c 🚀 ~ file: userStats.js:246 ~ router.get ~ statsUser: ", "color: red; font-size: 25px", statsUser)
-
-	// const userStats = statsUser.toJSON();
+// 		console.log("%c 🚀 ~ file: userStats.js:234 ~ router.get ~ user: ", "color: red; font-size: 25px", user, user.heroClass)
 
 
+// 		// all the userStats of a user (health, exp)
+// 		let userStats = await userStat.findOne({
+// 			where: {
+// 				userId: user.id
+// 			},
+// 			attributes: {
+// 				exclude: [
+// 					'createdAt', 'updatedAt'
+// 				]
+// 			}
+// 		});
 
-	if (!statsUser) {
-		if (statsUser.heroClass === 'Warrior') {
-			statsUser.setDefWar(user.id, )
-		} else if (statsUser.heroClass === 'Mage') {
+// 		if (!userStats || userStats === null) {
 
-		}
-	}
-	console.log("%c 🚀 ~ file: user-stats.js:245 ~ router.get ~ allStats: ", "color: red; font-size: 25px", allStats)
+// 			// create def vals for user's stats
+// 			if (user.heroClass === 'Warrior') {
+// 				await userStat.setDefWar(user.heroClass)
+// 			} else if (user.heroClass === 'Mage') {
+// 				await userStat.setDefMage(user.heroClass)
+// 			} else {
+// 				throw new Error("Invalid hero class type")
+// 			}
+// 			//	fetch the stats after making the default
+// 			userStats = await userStat.findOne({
+// 				where: {
+// 					userId: user.id
+// 				},
+// 				attributes: {
+// 					exclude: [
+// 						'createdAt', 'updatedAt'
+// 					]
+// 				}
+// 			})
+// 			console.log("%c 🚀 ~ file: userStats.js:304 ~ router.get ~ userStats: ", "color: red; font-size: 25px", userStats)
 
-	const stats = allStats.toJSON();
 
-	userStats.Stats = stats
-	// Check if the user's stats exist
-	if (!statsUser) {
-		// if not, create the userStat with their default values
-		const statsForUser = await userStat.create({ userId: user.id });
-
-		const stats = allStats.toJSON();
-		statsForUser.Stats = stats
+// 			const level = userStats ? userStats.getLevel() : 1;
 
 
-		// send res that the userStat has been successfully created
-		return res
-			.status(201)
-			.json(statsForUser)
+// 			// combine results for response
+// 			const response = {
+// 				Stats: {
+// 					hp: userStats.health,
+// 					strength: userStats.strength,
+// 					magic: userStats.magic,
+// 					physicalDefense: userStats.physicalDefense,
+// 					magicDefense: userStats.magicDefense,
+// 					luck: userStats.luck
+// 				},
+// 				userStat: {
+// 					userId: user.id,
+// 					health: userStats.health || 50,
+// 					experience: userStats.experience || 0,
+// 					level: level
+// 				}
+// 			}
+// 			return res
+// 				.json(response)
+// 		}
 
-	} else {
-		// if they already exist show them
-		return res
-			.status(200)
-			.json(userStats)
-	}
-});
+// 	} catch (err) {
+
+// 		return res
+// 			.status(400)
+// 			.json({
+// 				error: `Error fetching user stats: ${err}`
+// 			})
+// 	}
+// });
+
+
+
+
+
+
 
 
 

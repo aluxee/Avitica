@@ -105,7 +105,7 @@ router.post('/:taskId/checklist/new', requireAuth, async (req, res) => {
 		}
 	})
 
-	if (listAmount >= 5) {
+	if (listAmount > 1) {
 		return res
 			.status(400)
 			.json({
@@ -415,6 +415,20 @@ router.post('/new', requireAuth, async (req, res) => {
 		}
 	});
 
+	const taskCounter = await Task.count({
+		where: {
+			userId: req.user.id,
+			title
+		}
+	})
+	if (taskCounter > 1) {
+		return res
+			.status(400)
+			.json({
+				"error": "You've reached the maximum amount of tasks with the same title name",
+				"message": "You can only have five tasks running at a time"
+			})
+	}
 	const taskArray = []
 	const objectCheck = {}
 	postTasks.forEach(task => {

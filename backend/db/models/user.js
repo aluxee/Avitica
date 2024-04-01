@@ -48,7 +48,6 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       validate: {
         len: [6, 30],
-        // isNumeric: false,
       }
     },
     email: {
@@ -59,7 +58,13 @@ module.exports = (sequelize, DataTypes) => {
         len: [5, 250],
         isEmail: true
       }
-
+    },
+    heroClass: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        isIn: [['Mage', 'Warrior']]
+      }
     },
     password: {
       type: DataTypes.STRING,

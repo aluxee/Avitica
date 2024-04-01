@@ -9,11 +9,11 @@ if (process.env.NODE_ENV === 'production') {
 }
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
-  async up (queryInterface, Sequelize) {
+  async up(queryInterface, Sequelize) {
     await User.bulkCreate([
       {
         email: 'demo@user.io',
-        username: 'Demo-lition',
+        username: 'Demolition',
         displayName: 'Demo LieShun',
         password: bcrypt.hashSync('password')
       },
@@ -38,11 +38,11 @@ module.exports = {
     ], options, { validate: true });
   },
 
-  async down (queryInterface, Sequelize) {
+  async down(queryInterface, Sequelize) {
     options.tableName = 'Users';
     const Op = Sequelize.Op;
     return queryInterface.bulkDelete(options, {
-      username: { [Op.in]: ['applesalad', 'infinity', 'bestmage'] }
+      username: { [Op.in]: ['Demolition', 'applesalad', 'infinity', 'bestmage'] }
     }, {});
   }
 };

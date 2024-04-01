@@ -10,6 +10,7 @@ module.exports = {
     await Stat.bulkCreate([
       {
         userId: 1,
+        hp: 50,
         strength: 100,
         magic: 50,
         physicalDefense: 100,
@@ -18,6 +19,7 @@ module.exports = {
       },
       {
         userId: 2,
+        hp: 125,
         strength: 50,
         magic: 100,
         physicalDefense: 50,
@@ -26,6 +28,7 @@ module.exports = {
       },
       {
         userId: 3,
+        hp: 210,
         strength: 100,
         magic: 50,
         physicalDefense: 100,

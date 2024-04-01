@@ -22,6 +22,11 @@ module.exports = {
         },
         onDelete: 'CASCADE'
       },
+      hp: {
+        type: Sequelize.FLOAT,
+        allowNull: false,
+        defaultValue: 0,
+      },
       strength: {
         type: Sequelize.FLOAT,
         allowNull: false,

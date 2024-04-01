@@ -201,8 +201,6 @@ router.get('/:userId', async (req, res) => {
 		});
 
 
-
-
 		// Determine current level
 		const level = userExp.getLevel();
 		// Calculating exp gain and updating health upon task completion (or failure to complete)
@@ -231,11 +229,13 @@ router.get('/:userId', async (req, res) => {
 
 router.get('/', requireAuth, async (req, res) => {
 	// without a user stat we need to create one as a default, though this is still ultimately a "GET"
+	const { user } = req;
 
-	const statsUser = await userStat.findAll({
-		where: {
-			userId: req.user.id
-		},
+	// all the stats of a user
+	const allStats = await Stat.findByPk(user.id);
+
+	// all the userStats of a user (health, exp)
+	const statsUser = await userStat.findByPk(user.id, {
 		attributes: {
 			exclude: [
 				'createdAt', 'updatedAt'
@@ -243,10 +243,32 @@ router.get('/', requireAuth, async (req, res) => {
 		}
 	});
 
+	console.log("%c 🚀 ~ file: userStats.js:246 ~ router.get ~ statsUser: ", "color: red; font-size: 25px", statsUser)
+
+	// const userStats = statsUser.toJSON();
+
+
+
+	if (!statsUser) {
+		if (statsUser.heroClass === 'Warrior') {
+			statsUser.setDefWar(user.id, )
+		} else if (statsUser.heroClass === 'Mage') {
+
+		}
+	}
+	console.log("%c 🚀 ~ file: user-stats.js:245 ~ router.get ~ allStats: ", "color: red; font-size: 25px", allStats)
+
+	const stats = allStats.toJSON();
+
+	userStats.Stats = stats
 	// Check if the user's stats exist
-	if (statsUser.health === 0 || statsUser.length === 0) {
+	if (!statsUser) {
 		// if not, create the userStat with their default values
-		const statsForUser = await userStat.create({ userId: req.user.id });
+		const statsForUser = await userStat.create({ userId: user.id });
+
+		const stats = allStats.toJSON();
+		statsForUser.Stats = stats
+
 
 		// send res that the userStat has been successfully created
 		return res
@@ -257,7 +279,7 @@ router.get('/', requireAuth, async (req, res) => {
 		// if they already exist show them
 		return res
 			.status(200)
-			.json(statsUser)
+			.json(userStats)
 	}
 });
 

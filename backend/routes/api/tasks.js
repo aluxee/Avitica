@@ -170,6 +170,7 @@ router.get('/:taskId/checklist', requireAuth, async (req, res) => {
 });
 
 
+// * Keep in mind there are two types of task edits: one will edit the task itself, the other updates the task when a task is marked as complete or incomplete -- this one is the latter
 
 //* update task as completed OR incomplete
 router.put('/:taskId', requireAuth, async (req, res) => {
@@ -242,7 +243,9 @@ router.put('/:taskId', requireAuth, async (req, res) => {
 		return res
 			.status(200)
 			.json({
-				message: 'Task updated successfully'
+				message: 'Task updated successfully',
+				Task: updatedTask,
+				LevelStats: userStatus
 			});
 
 	} catch (err) {
@@ -289,7 +292,8 @@ router.get('/:taskId', requireAuth, async (req, res) => {
 
 // edits a task
 //:taskId endpoint to handle this function in an editorial way to be rooted to
-router.put('/:taskId', requireAuth, async (req, res) => {
+// * Keep in mind there are two types of task edits: one will edit the task itself, the other updates the task when a task is marked as complete or incomplete -- this one is the prior
+router.put('/:taskId/edit', requireAuth, async (req, res) => {
 	const { title, notes, difficulty, dueDate } = req.body;
 	const { taskId } = req.params;
 
@@ -335,7 +339,10 @@ router.put('/:taskId', requireAuth, async (req, res) => {
 			await taskUpdate.save()
 
 
-		res.json(taskUpdate)
+		res.json({
+			message: "Task updated successfully",
+			Task: { taskUpdate }
+		})
 	} catch (error) {
 		return res
 			.status(400)
@@ -465,7 +472,7 @@ router.get('/', requireAuth, authorization, async (req, res) => {
 	const { user } = req;
 	const tasks = await Task.findAll({
 		where: {
-			userId: req.user.id
+			userId: user.id
 		}
 	}); // findAll method is always going to return an array of promises
 
@@ -478,7 +485,7 @@ router.get('/', requireAuth, authorization, async (req, res) => {
 
 	const allCheckLists = await Checklist.findAll({
 		where: {
-			userId: req.user.id
+			userId: user.id
 		}
 	});
 	const collectList = [];

@@ -11,19 +11,19 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       User.hasMany(models.Task, {
-        foreignKey: 'userId'
+        foreignKey: 'userId',
       })
       User.hasMany(models.Checklist, {
-        foreignKey: 'userId'
+        foreignKey: 'userId',
       })
       User.hasOne(models.Inventory, {
         foreignKey: 'userId'
       })
       User.hasMany(models.Stat, {
-        foreignKey: 'userId'
+        foreignKey: 'userId',
       })
       User.hasMany(models.userStat, {
-        foreignKey: 'userId'
+        foreignKey: 'userId',
       })
     }
   }

@@ -11,19 +11,19 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       User.hasMany(models.Task, {
-        foreignKey: 'userId'
+        foreignKey: 'userId',
       })
       User.hasMany(models.Checklist, {
-        foreignKey: 'userId'
+        foreignKey: 'userId',
       })
       User.hasOne(models.Inventory, {
         foreignKey: 'userId'
       })
       User.hasMany(models.Stat, {
-        foreignKey: 'userId'
+        foreignKey: 'userId',
       })
       User.hasMany(models.userStat, {
-        foreignKey: 'userId'
+        foreignKey: 'userId',
       })
     }
   }
@@ -48,7 +48,6 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       validate: {
         len: [6, 30],
-        // isNumeric: false,
       }
     },
     email: {
@@ -59,7 +58,13 @@ module.exports = (sequelize, DataTypes) => {
         len: [5, 250],
         isEmail: true
       }
-
+    },
+    heroClass: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        isIn: [['Mage', 'Warrior']]
+      }
     },
     password: {
       type: DataTypes.STRING,

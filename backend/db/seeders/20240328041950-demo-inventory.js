@@ -56,7 +56,7 @@ module.exports = {
       },
       {
         userId: 1,
-        statId: 4,
+        statId: 2,
         itemName: 'Plad Armor',
         description: 'Grants a 20% increase in physical defense (PDEF): Shiny rich armor of steel',
         statBoost: true,
@@ -76,7 +76,7 @@ module.exports = {
       },
       {
         userId: 2,
-        statId: 6,
+        statId: 3,
         itemName: `Lucky Farms: ${dataOtherPotion.name}`,
         description: 'Grants a 10% increase in luck (LUCK)',
         statBoost: true,
@@ -85,7 +85,7 @@ module.exports = {
       },
       {
         userId: 2,
-        statId: 5,
+        statId: 1,
         itemName: 'Magic Robe',
         description: 'Grants a 20% increase in magic defense (MDEF): A magical silk threaded robe',
         statBoost: true,
@@ -132,7 +132,7 @@ module.exports = {
       },
       {
         userId: 3,
-        statId: 4,
+        statId: 2,
         itemName: 'Plad Armor',
         description: 'Grants a 20% increase in physical defense (PDEF): Shiny rich armor of steel',
         statBoost: true,
@@ -151,7 +151,7 @@ module.exports = {
       },
       {
         userId: 3,
-        statId: 4,
+        statId: 1,
         itemName: `${dataSoulShield.name}`,
         description: `Grants a 10% increase in physical defense (PDEF): Pure diamonds that capture the blink of the noon sun`,
         statBoost: true,
@@ -161,7 +161,7 @@ module.exports = {
       },
       {
         userId: 3,
-        statId: 5,
+        statId: 2,
         itemName: `${dataFirstShield.name}`,
         description: `Grants a 10% increase in magical defense (MDEF): Collected by the magic of elves deep within the magic forest`,
         statBoost: true,
@@ -171,7 +171,7 @@ module.exports = {
       },
       {
         userId: 1,
-        statId: 5,
+        statId: 3,
         itemName: `${dataFirstShield.name}`,
         description: `Grants a 10% increase in magical defense (MDEF): Collected by the magic of elves deep within the magic forest`,
         statBoost: true,

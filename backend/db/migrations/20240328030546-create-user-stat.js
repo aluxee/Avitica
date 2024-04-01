@@ -6,7 +6,7 @@ if (process.env.NODE_ENV === 'production') {
 }
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('Stats', {
+    await queryInterface.createTable('userStats', {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -16,51 +16,34 @@ module.exports = {
       userId: {
         type: Sequelize.INTEGER,
         allowNull: false,
-        references: {
-          model: 'Users',
-          key: 'id'
+        references:
+        {
+          model: 'Users'
         },
         onDelete: 'CASCADE'
       },
-      strength: {
+      health: {
         type: Sequelize.FLOAT,
         allowNull: false,
-        defaultValue: 0,
+        defaultValue: 50
       },
-      magic: {
+      experience: {
         type: Sequelize.FLOAT,
         allowNull: false,
-        defaultValue: 0,
-      },
-      physicalDefense: {
-        type: Sequelize.FLOAT,
-        allowNull: false,
-        defaultValue: 0,
-      },
-      magicDefense: {
-        type: Sequelize.FLOAT,
-        allowNull: false,
-        defaultValue: 0,
-      },
-      luck: {
-        type: Sequelize.FLOAT,
-        allowNull: false,
-        defaultValue: 0,
+        defaultValue: 0
       },
       createdAt: {
         allowNull: false,
-        type: Sequelize.DATE,
-        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
+        type: Sequelize.DATE
       },
       updatedAt: {
         allowNull: false,
-        type: Sequelize.DATE,
-        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
+        type: Sequelize.DATE
       }
     }, options);
   },
   async down(queryInterface, Sequelize) {
-    options.tableName = 'Stats'
-    return queryInterface.dropTable(options)
+    options.tableName = 'userStats'
+    await queryInterface.dropTable(options)
   }
 };

@@ -29,6 +29,10 @@ module.exports = {
         allowNull: false,
         unique: true
       },
+      heroClass: {
+        type: Sequelize.STRING,
+        allowNull: false
+      },
       password: {
         type: Sequelize.STRING.BINARY,
         allowNull: false

@@ -1,5 +1,4 @@
 'use strict';
-
 /** @type {import('sequelize-cli').Migration} */
 let options = {};
 if (process.env.NODE_ENV === 'production') {
@@ -7,7 +6,7 @@ if (process.env.NODE_ENV === 'production') {
 }
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('Inventories', {
+    await queryInterface.createTable('Stats', {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -23,48 +22,35 @@ module.exports = {
         },
         onDelete: 'CASCADE'
       },
-      statId: {
-        type: Sequelize.INTEGER,
+      hp: {
+        type: Sequelize.FLOAT,
         allowNull: false,
-        references: {
-          model: 'Stats',
-          key: 'id'
-        },
+        defaultValue: 0,
       },
-      itemName: {
-        type: Sequelize.STRING(50),
-        allowNull: false
-      },
-      itemType: {
-        type: Sequelize.BOOLEAN,
+      strength: {
+        type: Sequelize.FLOAT,
         allowNull: false,
-        defaultValue: false
+        defaultValue: 0,
       },
-      healthBoost: {
-        type: Sequelize.BOOLEAN,
-        defaultValue: false
-      },
-      statBoost: {
-        type: Sequelize.BOOLEAN,
-        defaultValue: false
-      },
-      gear: {
-        type: Sequelize.BOOLEAN,
+      magic: {
+        type: Sequelize.FLOAT,
         allowNull: false,
-        defaultValue: true
+        defaultValue: 0,
       },
-      wep: {
-        type: Sequelize.BOOLEAN,
+      physicalDefense: {
+        type: Sequelize.FLOAT,
         allowNull: false,
-        defaultValue: true
+        defaultValue: 0,
       },
-      equipped: {
-        type: Sequelize.BOOLEAN,
-        defaultValue: false
+      magicDefense: {
+        type: Sequelize.FLOAT,
+        allowNull: false,
+        defaultValue: 0,
       },
-      description: {
-        type: Sequelize.STRING(250),
-        allowNull: false
+      luck: {
+        type: Sequelize.FLOAT,
+        allowNull: false,
+        defaultValue: 0,
       },
       createdAt: {
         allowNull: false,
@@ -79,7 +65,7 @@ module.exports = {
     }, options);
   },
   async down(queryInterface, Sequelize) {
-    options.tableName = 'Inventories'
-    return queryInterface.dropTable(options);
+    options.tableName = 'Stats'
+    return queryInterface.dropTable(options)
   }
 };

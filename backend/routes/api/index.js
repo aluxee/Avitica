@@ -7,7 +7,7 @@ const sessionRouter = require('./session.js');
 const usersRouter = require('./users.js');
 const tasksRouter = require('./tasks.js');
 const inventoryRouter = require('./inventories.js');
-const userStatRouter = require('./user-stats.js')
+const userStatRouter = require('./userStats.js')
 
 router.use(restoreUser);
 

@@ -5,6 +5,7 @@ import App from './App';
 import configureStore from './store';
 import './index.css';
 import { restoreCSRF, csrfFetch } from './store/csrf';
+import { Modal, ModalProvider } from './context/Modal';
 
 
 
@@ -15,6 +16,7 @@ if (import.meta.env.MODE !== 'production') {
 
   window.csrfFetch = csrfFetch;
   window.store = store;
+  // window.sessionActions = sessionActions;
 }
 
 if (process.env.NODE_ENV !== 'production') {
@@ -28,8 +30,11 @@ if (process.env.NODE_ENV !== 'production') {
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <Provider store={store}>
-      <App />
-    </Provider>
+    <ModalProvider>
+      <Provider store={store}>
+        <App />
+        <Modal />
+      </Provider>
+    </ModalProvider>
   </React.StrictMode>
 );

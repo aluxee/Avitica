@@ -4,9 +4,9 @@ import { useState, useEffect, useRef } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import * as sessionActions from "../../store/session";
-// import OpenModalMenuItem from './OpenModalMenuItem';
-// import LoginFormModal from '../LoginFormModal';
-// import SignupFormModal from '../SignupFormModal';
+import OpenModalMenuItem from './OpenModalMenuItem';
+import LoginFormModal from '../LoginFormModal';
+import SignupFormModal from '../SignupFormModal';
 import './ProfileButton.css';
 
 
@@ -18,7 +18,6 @@ function ProfileButton({ user }) {
 	const [showMenu, setShowMenu] = useState(false);
 	const [hover, setHover] = useState("");
 	// const { showMenu, setShowMenu, closeMenu, ulRef } = useContext(ButtonContext)
-
 
 
 	const onHover = () => {
@@ -44,14 +43,16 @@ function ProfileButton({ user }) {
 
 		return () => document.removeEventListener("click", closeMenu);
 
-	})
+	}, [showMenu])
 
+	const closeMenu = () => {
+	setShowMenu(false)
+}
 
 	const logout = (e) => {
 		e.preventDefault();
 
 		dispatch(sessionActions.logout());
-		closeMenu();
 		navigate('/')
 		alert("You have logged out.")
 	}
@@ -64,11 +65,6 @@ function ProfileButton({ user }) {
 	// 	closeMenu();
 	// }
 
-	const closeMenu = (e) => {
-		if (ulRef.current && !ulRef.current.contains(e.target)) {
-			setShowMenu(false);
-		}
-	};
 
 	const ulClassName = "profile-dropdown" + (showMenu ? "" : "hidden");
 	const hoverClassName = "caption" + (hover === "profile" ? "" : "hidden")
@@ -114,7 +110,7 @@ function ProfileButton({ user }) {
 							</>
 						) : (
 							<>
-								{/* <OpenModalMenuItem itemText="Log In"
+								<OpenModalMenuItem itemText="Log In"
 									onItemClick={closeMenu}
 									modalComponent={<LoginFormModal />}
 								/>
@@ -122,7 +118,7 @@ function ProfileButton({ user }) {
 									itemText="Sign Up"
 									onItemClick={closeMenu}
 									modalComponent={<SignupFormModal />}
-								/> */}
+								/>
 							</>
 						)}
 					</ul>

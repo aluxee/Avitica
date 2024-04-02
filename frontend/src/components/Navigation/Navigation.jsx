@@ -1,62 +1,57 @@
-
 import { NavLink } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
+import { useNavigate } from "react-router-dom";
 import ProfileButton from './ProfileButton';
-import * as sessionActions from '../../store/session';
+import OpenModalButton from '../OpenModalButton';
+import LoginFormModal from '../LoginFormModal';
 import './Navigation.css';
 
 function Navigation({ isLoaded }) {
-	const sessionUser = useSelector(state => state.session.user);
-	const dispatch = useDispatch();
+	const sessionUser = useSelector((state) => state.session.user);
+	const navigate = useNavigate();
 
-	const logout = (e) => {
-		e.preventDefault();
-		dispatch(sessionActions.logout());
-	};
-
-	const sessionLinks = sessionUser ? (
-		<>
-			<div className='session-outer-container'>
-				<div className='session-inner-container'>
-
-
-					<li>
-						<ProfileButton user={sessionUser} />
-					</li>
-					<li>
-						<button onClick={logout}>Log Out</button>
-					</li>
-				</div>
+	sessionUser ? (
+		<div className="yes-session-outer-container">
+			<div className="yes-session-inner-container">
+				<li>
+					<ProfileButton user={sessionUser} />
+				</li>
 			</div>
-		</>
+		</div>
 	) : (
 		<>
-			<div className='so-outer-container'>
-				<div className='so-inner-container'>
+				<div className="no-session-outer-container">
+					<div className="no-session-inner-container">
 					<li>
-						<NavLink to="/login">Log In</NavLink>
+						<OpenModalButton
+							buttonText="Log In"
+							modalComponent={<LoginFormModal />}
+						/>
 					</li>
 					<li>
 						<NavLink to="/signup">Sign Up</NavLink>
 					</li>
 				</div>
-			</div >
+			</div>
 		</>
 	);
 
 	return (
-		<div className='outer-nav-container'>
-			<div className='inner-nav-container'>
-				<ul className='nav-ul'>
-					<li className='nav-li'>
+		<div>
+			<div>
+				<ul>
+					<li>
 						<NavLink to="/">Home</NavLink>
 					</li>
-					{isLoaded && sessionLinks}
+					{isLoaded && (
+						<li className='nav_list' id='nav_profile'>
+							<ProfileButton user={sessionUser} />
+						</li>)}
 				</ul>
 			</div>
 		</div>
-
 	);
 }
+
 
 export default Navigation;

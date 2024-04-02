@@ -1,0 +1,52 @@
+/* general */
+
+
+
+/* skeleton */
+.yes-session-outer-container {
+	display: flex;
+}
+
+.yes-session-inner-container {
+	display: flex;
+}
+
+.no-session-outer-container {}
+
+.no-session-inner-container {}
+
+
+.nav-main-outer {
+	display: flex;
+	width: 100%;
+	background-color: #1b7cac;
+	position: fixed
+}
+
+.nav-main-inner {
+	display: flex;
+	width: 100%;
+	margin: 0.5rem;
+	flex-wrap: wrap;
+	padding: 4px;
+}
+
+.nav-main-list {
+	width: 100%;
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.nav-main-list>li {
+	list-style: none
+}
+
+.nav-home {
+	list-style: none;
+}
+
+
+/* button */

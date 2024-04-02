@@ -95,7 +95,7 @@ function SignupFormModal() {
 									placeholder='Enter your display name'
 									type="text"
 									value={displayName}
-									onChange={(e) => displayName(e.target.value)}
+									onChange={(e) => setDisplayName(e.target.value)}
 									required
 								/>
 							</label>

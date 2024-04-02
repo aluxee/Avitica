@@ -8,12 +8,11 @@ import './Navigation.css';
 
 function Navigation({ isLoaded }) {
 	const sessionUser = useSelector((state) => state.session.user);
-	const navigate = useNavigate();
 
 	sessionUser ? (
 		<div className="yes-session-outer-container">
 			<div className="yes-session-inner-container">
-				<li>
+				<li className='nav-profile'>
 					<ProfileButton user={sessionUser} />
 				</li>
 			</div>
@@ -37,10 +36,10 @@ function Navigation({ isLoaded }) {
 	);
 
 	return (
-		<div>
-			<div>
-				<ul>
-					<li>
+		<div className='nav-main-outer'>
+			<div className='nav-main-inner'>
+				<ul className='nav-main-list'>
+					<li className='nav-home'>
 						<NavLink to="/">Home</NavLink>
 					</li>
 					{isLoaded && (

@@ -3,8 +3,8 @@ import { useDispatch } from 'react-redux';
 import { createBrowserRouter, RouterProvider, Outlet } from 'react-router-dom';
 import Navigation from './components/Navigation';
 import * as sessionActions from './store/session';
-
-
+import Home from './components/Home/Home';
+import Task from './components/Task/Task';
 
 function Layout() {
   const dispatch = useDispatch();
@@ -38,9 +38,18 @@ const router = createBrowserRouter([
     children: [
       {
         path: '/',
-        element: <h1>Welcome!</h1>
+        element:
+          <>
+            <Home />
+          </>
       },
       {
+        path: '/tasks',
+        element:
+          <>
+            {/* <Task />
+            <Outlet /> */}
+          </>
       },
     ]
   }
@@ -50,9 +59,9 @@ const router = createBrowserRouter([
 function App() {
 
   return (
-    <div>
-      < RouterProvider router={router} />
-    </div>
+    <>
+      <RouterProvider router={router} />
+    </>
   )
 }
 

@@ -1,0 +1,29 @@
+.home-hold {
+	top: 4rem;
+	position: absolute;
+	padding: 10px;
+	margin: 10px;
+	width: 100%;
+	display: flex;
+	flex-wrap: wrap;
+	flex-direction: column;
+	align-content: stretch;
+	align-items: stretch;
+}
+
+.space-ator {
+	position: relative;
+}
+
+
+
+
+
+.outer-home {
+	/* background-image: ('../../images/animetreeriv.jpeg');
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: cover; */
+}
+
+.inner-home {}

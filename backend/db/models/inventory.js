@@ -71,8 +71,12 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       validate: {
         len: [10, 250]
-      }
-    }
+      },
+    },
+    price: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
   }, {
     sequelize,
     modelName: 'Inventory',

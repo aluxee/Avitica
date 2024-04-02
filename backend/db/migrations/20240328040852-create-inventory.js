@@ -66,6 +66,10 @@ module.exports = {
         type: Sequelize.STRING(250),
         allowNull: false
       },
+      price: {
+        type: Sequelize.INTEGER,
+        allowNull: false
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,

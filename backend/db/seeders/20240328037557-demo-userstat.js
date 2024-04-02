@@ -14,16 +14,19 @@ module.exports = {
         userId: 1,
         health: 50,
         experience: 100,
+        gold: 1000
       },
       {
         userId: 2,
         health: 125,
         experience: 187,
+        gold: 3000
       },
       {
         userId: 3,
         health: 210,
         experience: 500,
+        gold: 5000
       },
     ], options, { validate: true });
   },

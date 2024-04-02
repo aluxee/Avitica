@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 // import { useContext } from "react";
 // // import { ButtonContext } from "../../context/ButtonContext";
 import { useDispatch } from "react-redux";
@@ -14,6 +14,7 @@ import './ProfileButton.css';
 function ProfileButton({ user }) {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
+	const ulRef = useRef();
 	const [showMenu, setShowMenu] = useState(false);
 	const [hover, setHover] = useState("");
 	// const { showMenu, setShowMenu, closeMenu, ulRef } = useContext(ButtonContext)
@@ -32,7 +33,18 @@ function ProfileButton({ user }) {
 		e.stopPropagation();// Keep click from bubbling up to document and triggering closeMenu
 		setShowMenu(!showMenu)
 	}
+	useEffect(() => {
+		if (!showMenu) return;
 
+		const closeMenu = () => {
+			setShowMenu(false);
+		};
+
+		document.addEventListener('click', closeMenu);
+
+		return () => document.removeEventListener("click", closeMenu);
+
+	})
 
 
 	const logout = (e) => {
@@ -44,15 +56,19 @@ function ProfileButton({ user }) {
 		alert("You have logged out.")
 	}
 
-	const manageSpots = (e) => {
-		e.preventDefault();
+	// const manageSpots = (e) => {
+	// 	e.preventDefault();
 
 
-		navigate('/spots/current');
-		closeMenu();
-	}
+	// 	navigate('/spots/current');
+	// 	closeMenu();
+	// }
 
-
+	const closeMenu = (e) => {
+		if (ulRef.current && !ulRef.current.contains(e.target)) {
+			setShowMenu(false);
+		}
+	};
 
 	const ulClassName = "profile-dropdown" + (showMenu ? "" : "hidden");
 	const hoverClassName = "caption" + (hover === "profile" ? "" : "hidden")

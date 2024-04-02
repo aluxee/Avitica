@@ -1,6 +1,5 @@
 import { NavLink } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { useNavigate } from "react-router-dom";
 import ProfileButton from './ProfileButton';
 import OpenModalButton from '../OpenModalButton';
 import LoginFormModal from '../LoginFormModal';
@@ -19,8 +18,8 @@ function Navigation({ isLoaded }) {
 		</div>
 	) : (
 		<>
-				<div className="no-session-outer-container">
-					<div className="no-session-inner-container">
+			<div className="no-session-outer-container">
+				<div className="no-session-inner-container">
 					<li>
 						<OpenModalButton
 							buttonText="Log In"

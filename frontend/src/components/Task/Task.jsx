@@ -1,8 +1,6 @@
-import { mainImg } from '../../images';
 import { thunkLoadTasks } from '../../store/task';
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
 import './Task.css';
 
 
@@ -13,10 +11,10 @@ function Task() {
 	const dispatch = useDispatch();
 	const tasks = useSelector(state => state.task)
 
-	console.log("%c 🚀 ~ file: Task.jsx:15 ~ Task ~ tasks: ", "color: orange; font-size: 25px", tasks, tasks.title)
+	// console.log("%c 🚀 ~ file: Task.jsx:15 ~ Task ~ tasks: ", "color: orange; font-size: 25px", tasks, tasks.title)
 	const allTasks = Object.values(tasks)
 
-	console.log("%c 🚀 ~ file: Task.jsx:19 ~ Task ~ allTasks: ", "color: orange; font-size: 25px", allTasks)
+	// console.log("%c 🚀 ~ file: Task.jsx:19 ~ Task ~ allTasks: ", "color: orange; font-size: 25px", allTasks)
 
 
 	useEffect(() => {

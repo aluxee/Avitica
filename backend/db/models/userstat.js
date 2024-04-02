@@ -15,8 +15,8 @@ module.exports = (sequelize, DataTypes) => {
 
     static async setDefWar(heroClass, level) {
       if (heroClass !== 'Warrior') {
-      throw new Error('Must be Warrior class')
-    }
+        throw new Error('Must be Warrior class')
+      }
 
       // Calculate default stats for warriors based on level
       const defHP = level === 1 ? 50 : Math.max(Math.round(50 * (level - 1) * 2.5));
@@ -63,13 +63,15 @@ module.exports = (sequelize, DataTypes) => {
     async calcHpAndExp(completed) {
       const currLevel = this.getLevel();
       let expGain;
-
+      let goldGain;
       //increase gained exp points per task per level
       if (completed) {
         expGain = Math.max(10, 50 - (currLevel - 1) * 5);
         /* 1: 50 exp, 2: 45 exp, 3: 40 exp, 4: 35 exp, 5: 30 exp
         */
+        goldGain = Math.max(10, 85 + (currLevel - 1) * 12)
         this.experience += expGain;
+        this.gold += goldGain;
       } else {
         const healthLoss = Math.ceil(12 * (currLevel * 0.75))
         this.health -= healthLoss;
@@ -122,7 +124,12 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.FLOAT,
       allowNull: false,
       defaultValue: 0 // default experience value, but code ensures it starts at 100
-    }
+    },
+    gold: {
+      type: DataTypes.FLOAT,
+      allowNull: false,
+      defaultValue: 0
+    },
   }, {
     sequelize,
     modelName: 'userStat',

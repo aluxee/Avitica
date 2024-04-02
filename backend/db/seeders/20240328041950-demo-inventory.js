@@ -10,21 +10,22 @@ module.exports = {
   async up(queryInterface, Sequelize) {
     const resHpPotion = await fetch('https://api.maplestory.net/item/2000000')
     const dataHpPotion = await resHpPotion.json()
-    const resDrgRg = await fetch('https://api.maplestory.net/item/1232010')
+    const resDrgRg = await fetch('https://api.maplestory.net/item/1232010'); // Dragon Rage
     const dataDrgRg = await resDrgRg.json()
-    const resCrim = await fetch('https://api.maplestory.net/item/1232034')
+    const resCrim = await fetch('https://api.maplestory.net/item/1232034'); //Imperial Crimson Zodiac
     const dataCrim = await resCrim.json()
     const otherPotion = await fetch('https://api.maplestory.net/item/2000030')
     const dataOtherPotion = await otherPotion.json()
-    const resMeiRod = await fetch('https://api.maplestory.net/item/1212077')
+    const resMeiRod = await fetch('https://api.maplestory.net/item/1212077'); //Meister Thanatos
     const dataMeiRod = await resMeiRod.json()
-    const resAmeRod = await fetch('https://api.maplestory.net/item/1232034')
+    const resAmeRod = await fetch('https://api.maplestory.net/item/1232034'); //Ame-no-Uzume's Shining Rod
     const dataAmeRod = await resAmeRod.json()
-    const resFirstShield = await fetch('https://api.maplestory.net/item/1092070')
+    const resFirstShield = await fetch('https://api.maplestory.net/item/1092070'); //1st Unwelcome Guest Magician Shield
     const dataFirstShield = await resFirstShield.json()
-    const resSoulShield = await fetch('https://api.maplestory.net/item/1098000')
+    const resSoulShield = await fetch('https://api.maplestory.net/item/1098000'); //Soul Shield of Protection
     const dataSoulShield = await resSoulShield.json()
-
+    //magic robe: Count Dracula Cape, Black Split Piece, Blue Lolico Pants, White Fingerless Gloves, Black Santa Boots
+    //plad armor: Transparent Cape, Silver Master Sergeant, Shine Rider Pants, Skull Gloves, Black Shoes of Death
     await Inventory.bulkCreate([
       {
         userId: 1,
@@ -34,7 +35,8 @@ module.exports = {
         description: `Restores 40 points of health (HP): ${dataHpPotion.description}`,
         healthBoost: true,
         gear: false,
-        wep: false
+        wep: false,
+        price: 20
       },
       {
         userId: 1,
@@ -43,7 +45,8 @@ module.exports = {
         description: `Grants a 10% boost in strength (STR)`,
         statBoost: true,
         gear: false,
-        wep: false
+        wep: false,
+        price: 30
       },
       {
         userId: 1,
@@ -52,7 +55,8 @@ module.exports = {
         description: 'Grants a 10% boost in magic (MAGIC)',
         statBoost: true,
         gear: false,
-        wep: false
+        wep: false,
+        price: 30
       },
       {
         userId: 1,
@@ -62,7 +66,8 @@ module.exports = {
         statBoost: true,
         gear: true,
         wep: false,
-        equipped: true
+        equipped: true,
+        price: 200
       },
       {
         userId: 1,
@@ -72,7 +77,8 @@ module.exports = {
         statBoost: true,
         gear: false,
         wep: true,
-        equipped: true
+        equipped: true,
+        price: 250
       },
       {
         userId: 2,
@@ -81,7 +87,8 @@ module.exports = {
         description: 'Grants a 10% increase in luck (LUCK)',
         statBoost: true,
         gear: false,
-        wep: false
+        wep: false,
+        price: 30
       },
       {
         userId: 2,
@@ -90,7 +97,8 @@ module.exports = {
         description: 'Grants a 20% increase in magic defense (MDEF): A magical silk threaded robe',
         statBoost: true,
         gear: true,
-        wep: false
+        wep: false,
+        price: 200
       },
       {
         userId: 2,
@@ -99,7 +107,8 @@ module.exports = {
         description: `Restores 40 points of health (HP): ${dataHpPotion.description}`,
         healthBoost: true,
         gear: false,
-        wep: false
+        wep: false,
+        price: 20
       },
       {
         userId: 2,
@@ -109,7 +118,8 @@ module.exports = {
         statBoost: true,
         gear: false,
         wep: true,
-        equipped: true
+        equipped: true,
+        price: 250
       },
       {
         userId: 2,
@@ -119,7 +129,8 @@ module.exports = {
         statBoost: true,
         gear: false,
         wep: true,
-        equipped: false
+        equipped: false,
+        price: 250
       },
       {
         userId: 3,
@@ -128,7 +139,8 @@ module.exports = {
         description: `Restores 40 points of health (HP): ${dataHpPotion.description}`,
         healthBoost: true,
         gear: false,
-        wep: false
+        wep: false,
+        price: 20
       },
       {
         userId: 3,
@@ -137,7 +149,8 @@ module.exports = {
         description: 'Grants a 20% increase in physical defense (PDEF): Shiny rich armor of steel',
         statBoost: true,
         gear: true,
-        wep: false
+        wep: false,
+        price: 250
       },
       {
         userId: 3,
@@ -147,7 +160,8 @@ module.exports = {
         statBoost: true,
         gear: false,
         wep: true,
-        equipped: true
+        equipped: true,
+        price: 250
       },
       {
         userId: 3,
@@ -157,7 +171,8 @@ module.exports = {
         statBoost: true,
         gear: false,
         wep: true,
-        equipped: false
+        equipped: false,
+        price: 250
       },
       {
         userId: 3,
@@ -167,7 +182,19 @@ module.exports = {
         statBoost: true,
         gear: false,
         wep: true,
-        equipped: true
+        equipped: true,
+        price: 250
+      },
+      {
+        userId: 2,
+        statId: 2,
+        itemName: `${dataFirstShield.name}`,
+        description: `Grants a 10% increase in magical defense (MDEF): Collected by the magic of elves deep within the magic forest`,
+        statBoost: true,
+        gear: false,
+        wep: true,
+        equipped: true,
+        price: 250
       },
       {
         userId: 1,
@@ -177,7 +204,8 @@ module.exports = {
         statBoost: true,
         gear: false,
         wep: true,
-        equipped: false
+        equipped: false,
+        price: 250
       },
     ], options, { validate: true })
   },

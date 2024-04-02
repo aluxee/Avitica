@@ -5,7 +5,14 @@ const { requireAuth, authorization } = require('../../utils/auth');
 router = express.Router();
 
 
+// get avatar
 
+
+
+
+
+
+// post avatar
 
 
 

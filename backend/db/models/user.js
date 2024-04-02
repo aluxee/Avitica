@@ -25,6 +25,9 @@ module.exports = (sequelize, DataTypes) => {
       User.hasMany(models.userStat, {
         foreignKey: 'userId',
       })
+      User.hasOne(models.Avatar, {
+        foreignKey: 'userId'
+      })
     }
   }
   User.init({

@@ -209,10 +209,13 @@ router.put('/:taskId', requireAuth, async (req, res) => {
 		const currLevel = userStatus.getLevel();
 		// initialize experience gain to start at 0
 		let expGain = 0;
+		//initialize gold gain variable
+		let goldGain;
 		if (updatedTask.completed) {
 			expGain = Math.max(10, 50 - (currLevel - 1) * 5);
 			userStatus.experience += expGain;
-
+			goldGain = Math.max(10, 85 + (currLevel - 1) * 12)
+			userStatus.gold += goldGain;
 			// also must consider level increase
 			const newLevel = userStatus.getLevel();
 

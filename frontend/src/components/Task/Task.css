@@ -18,7 +18,7 @@
 	height: 100%;
 	color: white;
 	flex-direction: column;
-	flex-wrap: wrap;
+	flex-wrap: nowrap;
 	align-content: center;
 	justify-content: flex-start;
 
@@ -27,11 +27,45 @@
 
 .all-task-ul {
 	display: flex;
-	flex-wrap: wrap;
-	/* flex-direction: column; */
 	list-style: none;
-	align-content: space-between;
-	justify-content: space-around;
+	gap: 25px;
+	align-items: flex-start;
+	flex-wrap: nowrap;
 }
 
-.all-task-li {}
+.all-task-li {
+	border: 1px solid black;
+	padding: 5px;
+}
+
+/* task details */
+.at-tasks {
+	border: 2px solid black;
+	max-height: min-content;
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	flex-wrap: nowrap;
+	background-color: teal;
+}
+
+.all-task-label {
+	font-weight: 600;
+	color: pink;
+}
+
+.all-task-fill {}
+
+.all-task-checklist {
+	display: flex;
+}
+
+.all-task-yes-cl {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+}
+
+.all-task-fill.at-cl-li {
+	display: flex;
+}

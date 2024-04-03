@@ -31,6 +31,14 @@ module.exports = {
           key: 'id'
         },
       },
+      shopId: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        // references: {
+        //   model: 'Shops',
+        //   key: 'id'
+        // },
+      },
       itemName: {
         type: Sequelize.STRING(50),
         allowNull: false
@@ -61,14 +69,6 @@ module.exports = {
       equipped: {
         type: Sequelize.BOOLEAN,
         defaultValue: false
-      },
-      description: {
-        type: Sequelize.STRING(250),
-        allowNull: false
-      },
-      price: {
-        type: Sequelize.INTEGER,
-        allowNull: false
       },
       createdAt: {
         allowNull: false,

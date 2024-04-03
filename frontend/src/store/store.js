@@ -4,7 +4,7 @@ import sessionReducer from "./session";
 import taskReducer from "./task";
 import listReducer from "./checklist";
 import userReducer from "./user";
-
+import shopReducer from "./shop";
 
 
 const rootReducer = combineReducers({

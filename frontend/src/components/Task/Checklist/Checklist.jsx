@@ -1,25 +1,40 @@
 import { useDispatch, useSelector } from "react-redux";
-import { thunkEditChecklist, thunkLoadChecklist } from "../../../store/task";
-import { useEffect } from "react";
+import { thunkEditChecklist, thunkLoadChecklist } from "../../../store/checklist";
+import { useEffect, useState } from "react";
 import './Checklist.css'
 
 
 function Checklist({ taskId, checklist, setChecklist }) {
+
+	console.log("%c 🚀 ~ file: Checklist.jsx:9 ~ Checklist ~ checklist: ", "color: red; font-size: 25px", checklist)
+
+	const initialCheck = checklist.reduce((obj, item) => obj[item.id] = item.checked, {})
+	const [checkItem, setCheckItem] = useState(initialCheck || {});
+
+
+
 	const dispatch = useDispatch();
-	const checklistObj = useSelector(state => state.task)
+	const checklistObj = useSelector(state => {
+		const task = state.task[taskId]
+		if (task) {
+			return task.Checklist
+		}
+	})
 
 	const theList = Object.values(checklistObj);
 
 	useEffect(() => {
-		dispatch(thunkLoadChecklist(taskId))
+		dispatch(thunkLoadChecklist(checklist))
 
-	}, [dispatch, taskId])
+	}, [dispatch, checklist])
 
-	const handleCheckboxChanges = async (checklistId, checked) => {
+	const handleCheckboxChanges = async (id) => {
 		// Update the local checklist state
+		const previousCheck = checkItem[id];
+		setCheckItem({...checkItem, [id]:!previousCheck})
 		const updatedChecklist = checklist.map(item => {
-			if (item.id === checklistId) {
-				return { ...item, checked: checked };
+			if (item.id === id) {
+				return { ...item, checked:!previousCheck};
 			}
 			return item;
 		});
@@ -28,25 +43,26 @@ function Checklist({ taskId, checklist, setChecklist }) {
 		setChecklist(updatedChecklist);
 
 		// Dispatch the thunk to update the checklist item in the database
-		await dispatch(thunkEditChecklist(taskId, checklistId, checked));
+		await dispatch(thunkEditChecklist(taskId, id, !previousCheck));
 	};
 
-
+	if (!checkItem) {
+	return <h1>Loading</h1>
+}
 	return (
 		<>
 			<div className="cl-outer">
 				<div className="cl-inner">
 					<div className="theList-form-not-form">
 
-						{theList.map(item => (
+						{theList.length && theList.map(item => (
 
 							<div key={item.id} className="checklist-ind">
 								<input
 									type="checkbox"
-									id={item.id}
-									name={item.checklistItem}
-									checked={item.checked}
-									onChange={(e) => handleCheckboxChanges(item.id, e.target.checked)}
+									value={item.id}
+									checked={checkItem[item.id]}
+									onChange={(e) => handleCheckboxChanges(e.target.value)}
 								/>
 								<label
 									htmlFor={item.id}>

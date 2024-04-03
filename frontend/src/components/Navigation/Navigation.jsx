@@ -4,6 +4,7 @@ import ProfileButton from './ProfileButton';
 import OpenModalButton from '../OpenModalButton';
 import LoginFormModal from '../LoginFormModal';
 import './Navigation.css';
+import UserProfile from '../UserProfile/UserProfile';
 
 function Navigation({ isLoaded }) {
 	const sessionUser = useSelector((state) => state.session.user);
@@ -21,7 +22,9 @@ function Navigation({ isLoaded }) {
 					<ProfileButton user={sessionUser} />
 				</li>
 			</div>
-			[Insert container for user info]
+			<div className='yes-session user-stats'>
+				<UserProfile user={sessionUser}/>
+			</div>
 		</div>
 	) : (
 		<>

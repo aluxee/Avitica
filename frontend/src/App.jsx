@@ -4,6 +4,7 @@ import { createBrowserRouter, RouterProvider, Outlet } from 'react-router-dom';
 import Navigation from './components/Navigation';
 import * as sessionActions from './store/session';
 import Home from './components/Home/Home';
+import ShopDetails from './components/Market/ShopDetails';
 
 function Layout() {
   const dispatch = useDispatch();
@@ -50,6 +51,10 @@ const router = createBrowserRouter([
             <Outlet /> */}
           </>
       },
+      {
+        path: '/shop',
+        element: <ShopDetails />
+      }
     ]
   }
 ]);

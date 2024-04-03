@@ -59,10 +59,10 @@ function AllTasks() {
 					<div className='all-task-container'
 						key={tasks.id}
 					>
-						{allTasks.length && allTasks?.map((task) => (
+						{allTasks.length && allTasks?.map((task, index) => (
 							<div className='at-tasks'
-								key={task.id}
-								//getting unique key issue may be preventing edit from submitting, but delete works
+								key={index}
+							//getting unique key issue may be preventing edit from submitting, but delete works
 							>
 								<OpenModalButton
 									className="task-modal"

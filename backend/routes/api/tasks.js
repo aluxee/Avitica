@@ -173,28 +173,53 @@ router.get('/:taskId/checklist', requireAuth, async (req, res) => {
 //* update task as completed OR incomplete
 router.put('/:taskId', requireAuth, async (req, res) => {
 	//* May need testing with front end
-
+	// this portion must come from the frontend where the task is marked as complete by boolean of check to indicate that the task is or is not complete
+	const { title, notes, difficulty, dueDate, completed } = req.body;
 	const { taskId } = req.params;
-	const { completed } = req.body; // this portion must come from the frontend where the task is marked as complete by boolean of check to indicate that the task is or is not complete
+
 
 	try {
-		// update task in db based on completion
-
-		const updatedTask = await Task.findByPk(taskId, {
-			where: {
-				userId: req.user.id
-			}
-		})
-		if (!updatedTask) {
+		if (!title) {
 			return res
-				.status(404)
+				.status(400)
 				.json({
-					message: "Task not found"
+					"message": "A title is required"
 				})
 		}
 
+		const taskUpdate = await Task.findByPk(taskId, {
+			where: {
+				userId: req.user.id
+			}
+		});
+
+		const thisDate = Date.now();
+		let currentDate = new Date(thisDate);
+
+		currentDate.toISOString().split('T')[0];
+		const offset = currentDate.getTimezoneOffset();
+		currentDate = new Date(currentDate.getTime() - (offset * 60 * 1000));
+		const currDateCheck = currentDate.getTime();
+		const thisDateTime = () => dueDate ? dueDate.getTime() : '';
+		const stringDate = currentDate.toISOString().split('T')[0];
+
+		if (thisDateTime < currDateCheck) {
+			return res
+				.status(400)
+				.json({
+					"error": "The set due date cannot be in the past"
+				})
+		}
+
+		taskUpdate.title = title
+		taskUpdate.notes = notes || null
+		taskUpdate.difficulty = difficulty || "Trivial" || null
+		taskUpdate.dueDate = dueDate || stringDate
 		// utilize the task completion (boolean) attribute prior to the point changes
-		updatedTask.completed = completed;
+		taskUpdate.completed = completed
+
+		//save taskUpdate status
+		await taskUpdate.save();
 
 		//find userStat information
 		const userStatus = await userStat.findOne({
@@ -209,7 +234,7 @@ router.put('/:taskId', requireAuth, async (req, res) => {
 		let expGain = 0;
 		//initialize gold gain variable
 		let goldGain;
-		if (updatedTask.completed) {
+		if (taskUpdate.completed) {
 			expGain = Math.max(10, 50 - (currLevel - 1) * 5);
 			userStatus.experience += expGain;
 			goldGain = Math.max(10, 85 + (currLevel - 1) * 12)
@@ -230,22 +255,22 @@ router.put('/:taskId', requireAuth, async (req, res) => {
 			userStatus.health -= healthLoss;
 
 			if (userStatus.health <= 0) {
-				res.json({
-					message: `Oh no! Your health has been completely depleted! Your experience and health will now reset.`
-				})
 				userStatus.health = userStatus.calcDefaultHealth(currLevel)
 				userStatus.experience = 0
+				return res
+					.json({
+						message: `Oh no! Your health has been completely depleted! Your experience and health will now reset.`
+					})
 			}
 		}
 
-		//save updatedTask status
-		await updatedTask.save();
+
 		// confirm such actions w/ model fxn implementation
 		return res
 			.status(200)
 			.json({
 				message: 'Task updated successfully',
-				Task: updatedTask,
+				Task: taskUpdate,
 				LevelStats: userStatus
 			});
 
@@ -294,65 +319,9 @@ router.get('/:taskId', requireAuth, async (req, res) => {
 // edits a task
 //:taskId endpoint to handle this function in an editorial way to be rooted to
 // * Keep in mind there are two types of task edits: one will edit the task itself, the other updates the task when a task is marked as complete or incomplete -- this one is the prior
-router.put('/:taskId/edit', requireAuth, async (req, res) => {
-	const { title, notes, difficulty, dueDate } = req.body;
-	const { taskId } = req.params;
+// router.put('/:taskId/edit', requireAuth, async (req, res) => {
 
-	if (!title) {
-		return res
-			.status(400)
-			.json({
-				"message": "A title is required"
-			})
-	}
-	const taskUpdate = await Task.findByPk(taskId, {
-		where: {
-			userId: req.user.id
-		}
-	});
-
-	const thisDate = Date.now();
-	let currentDate = new Date(thisDate);
-
-	currentDate.toISOString().split('T')[0];
-	const offset = currentDate.getTimezoneOffset();
-	currentDate = new Date(currentDate.getTime() - (offset * 60 * 1000));
-	const currDateCheck = currentDate.getTime();
-	const thisDateTime = () => dueDate ? dueDate.getTime() : '';
-	const stringDate = currentDate.toISOString().split('T')[0];
-
-	if (thisDateTime < currDateCheck) {
-		return res
-			.status(400)
-			.json({
-				"error": "The set due date cannot be in the past"
-			})
-	}
-
-	try {
-
-		taskUpdate.title = title
-		taskUpdate.notes = notes || null,
-			taskUpdate.difficulty = difficulty || "Trivial"
-			|| null,
-			taskUpdate.dueDate = dueDate || stringDate,
-
-			await taskUpdate.save()
-
-
-		res.json({
-			message: "Task updated successfully",
-			Task: { taskUpdate }
-		})
-	} catch (error) {
-		return res
-			.status(400)
-			.json({
-				"message": error
-			})
-	}
-
-})
+// })
 
 
 // deletes a task

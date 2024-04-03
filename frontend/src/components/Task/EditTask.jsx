@@ -5,7 +5,7 @@ import { useModal } from '../../context/Modal';
 import { thunkEditTask, thunkLoadTasks } from '../../store/task';
 import './EditTask.css';
 
-// import Checklist from './Checklist/Checklist';
+import Checklist from './Checklist/Checklist';
 
 
 function EditTask({ task }) {
@@ -15,10 +15,10 @@ function EditTask({ task }) {
 	const [description, setDescription] = useState(task.description || '');
 	const [difficulty, setDifficulty] = useState(task.difficulty || '');
 	const [dueDate, setDueDate] = useState(task.dueDate || '');
-	// const [checklist, setChecklist] = useState(task.Checklist || []);
+	const [checklist, setChecklist] = useState(task.Checklist || []);
 
 	const [errors, setErrors] = useState({});
-	const [showMenu, setShowMenu] = useState(false);
+	// const [showMenu, setShowMenu] = useState(false);
 
 	const taskId = task.id;
 
@@ -37,7 +37,7 @@ function EditTask({ task }) {
 		let editUserTask = {
 			title,
 			description,
-			// checklist,
+			checklist,
 			difficulty,
 			dueDate,
 		};
@@ -48,11 +48,13 @@ function EditTask({ task }) {
 			return setErrors(submissionResults.errors)
 		}
 
-		await dispatch(thunkLoadTasks());
-
 		closeModal();
 
-	};
+
+		await dispatch(thunkLoadTasks())
+
+
+	}
 
 	// const toggleMenu = (e) => {
 	// 	e.stopPropagation();
@@ -125,21 +127,21 @@ function EditTask({ task }) {
 					)}
 				</label>
 
-				{/* <label htmlFor="checklist"
-								className='et-checklist'
-							>
-								<h4>
-									Checklist
-								</h4>
-								{task.Checklist.length > 0 && task?.Checklist ?
-									// BROKEN CHECKLIST CANNOT USE DUE TO Q OF CTRL INPUT
-									<Checklist taskId={taskId} checklist={checklist} setChecklist={setChecklist} />
-									:
-									<>
-										Create a checklist!
-									</>
-								}
-							</label> */}
+				<label htmlFor="checklist"
+					className='et-checklist'
+				>
+					<h4>
+						Checklist
+					</h4>
+					{task.Checklist.length > 0 && task?.Checklist ?
+						// BROKEN CHECKLIST CANNOT USE DUE TO Q OF CTRL INPUT
+						<Checklist taskId={taskId} checklist={checklist} setChecklist={setChecklist} />
+						:
+						<>
+							Create a checklist!
+						</>
+					}
+				</label>
 				<button
 					type='submit'
 					className='et-task-submit-button submit'>

@@ -184,33 +184,38 @@ router.get('/:userId/potion', requireAuth, async (req, res) => {
 
 // Get userStats for a user upon task completion
 // see the put route for the put request of task
-router.get('/:userId', async (req, res) => {
+router.get('/current', async (req, res) => {
 	//! this may end up hanging, do not test solely on the backend
 
-	const { userId } = req.params;
 	const { completed } = req.body;
 	const taskMark = await Task.findAll({
 		where: {
-			userId
+			userId: req.user.id
 		}
 	})
 	try {
-		const userExp = await userStat.findOne({
-			where: { userId }
-		});
+		const userInfo = await userStat.findByPk(req.user.id);
+
+		console.log("%c 🚀 ~ file: userStats.js:201 ~ router.get ~ userInfo: ", "color: red; font-size: 25px", userInfo)
+
 
 
 		// Determine current level
-		const level = userExp.getLevel();
+		const level = userInfo?.getLevel();
+
+		console.log("%c 🚀 ~ file: userStats.js:205 ~ router.get ~ level: ", "color: red; font-size: 25px", level)
+
+
 		// Calculating exp gain and updating health upon task completion (or failure to complete)
 		if (completed) {
 			taskMark.completed = completed
-			userExp.calcHpAndExp(completed);
+			userInfo.calcHpAndExp(completed);
 			// Save changes to userStats
-			await userExp.save();
+			await userInfo.save();
+
 			res
 				.status(200)
-				.json({ userExp, level });
+				.json({ userInfo, level });
 		}
 
 	} catch (error) {
@@ -224,85 +229,85 @@ router.get('/:userId', async (req, res) => {
 
 
 
-// //get all user stat (without gear or skill additions [from userStats])
+//get all user stat (without gear or skill additions [from userStats])
 
-// router.get('/', requireAuth, async (req, res) => {
-// 	try {
-// 		// without a user stat we need to create one as a default, though this is still ultimately a "GET"
-// 		const { user } = req;
+router.get('/', requireAuth, async (req, res) => {
+	try {
+		// without a user stat we need to create one as a default, though this is still ultimately a "GET"
+		const { user } = req;
 
-// 		console.log("%c 🚀 ~ file: userStats.js:234 ~ router.get ~ user: ", "color: red; font-size: 25px", user, user.heroClass)
-
-
-// 		// all the userStats of a user (health, exp)
-// 		let userStats = await userStat.findOne({
-// 			where: {
-// 				userId: user.id
-// 			},
-// 			attributes: {
-// 				exclude: [
-// 					'createdAt', 'updatedAt'
-// 				]
-// 			}
-// 		});
-
-// 		if (!userStats || userStats === null) {
-
-// 			// create def vals for user's stats
-// 			if (user.heroClass === 'Warrior') {
-// 				await userStat.setDefWar(user.heroClass)
-// 			} else if (user.heroClass === 'Mage') {
-// 				await userStat.setDefMage(user.heroClass)
-// 			} else {
-// 				throw new Error("Invalid hero class type")
-// 			}
-// 			//	fetch the stats after making the default
-// 			userStats = await userStat.findOne({
-// 				where: {
-// 					userId: user.id
-// 				},
-// 				attributes: {
-// 					exclude: [
-// 						'createdAt', 'updatedAt'
-// 					]
-// 				}
-// 			})
-// 			console.log("%c 🚀 ~ file: userStats.js:304 ~ router.get ~ userStats: ", "color: red; font-size: 25px", userStats)
+		console.log("%c 🚀 ~ file: userStats.js:234 ~ router.get ~ user: ", "color: red; font-size: 25px", user, user.heroClass)
 
 
-// 			const level = userStats ? userStats.getLevel() : 1;
+		// all the userStats of a user (health, exp)
+		let userStats = await userStat.findOne({
+			where: {
+				userId: user.id
+			},
+			attributes: {
+				exclude: [
+					'createdAt', 'updatedAt'
+				]
+			}
+		});
+
+		if (!userStats || userStats === null || userStats) {
+
+			// create def vals for user's stats
+			if (user.heroClass === 'Warrior') {
+				await userStat.setDefWar(user.heroClass)
+			} else if (user.heroClass === 'Mage') {
+				await userStat.setDefMage(user.heroClass)
+			} else {
+				throw new Error("Invalid hero class type")
+			}
+			//	fetch the stats after making the default
+			userStats = await userStat.findOne({
+				where: {
+					userId: user.id
+				},
+				attributes: {
+					exclude: [
+						'createdAt', 'updatedAt'
+					]
+				}
+			})
+			console.log("%c 🚀 ~ file: userStats.js:304 ~ router.get ~ userStats: ", "color: red; font-size: 25px", userStats)
 
 
-// 			// combine results for response
-// 			const response = {
-// 				Stats: {
-// 					hp: userStats.health,
-// 					strength: userStats.strength,
-// 					magic: userStats.magic,
-// 					physicalDefense: userStats.physicalDefense,
-// 					magicDefense: userStats.magicDefense,
-// 					luck: userStats.luck
-// 				},
-// 				userStat: {
-// 					userId: user.id,
-// 					health: userStats.health || 50,
-// 					experience: userStats.experience || 0,
-// 					level: level
-// 				}
-// 			}
-// 			return res
-// 				.json(response)
-// 		}
+			const level = userStats ? userStats.getLevel() : 1;
 
-// 	} catch (err) {
 
-// 		return res
-// 			.status(400)
-// 			.json({
-// 				error: `Error fetching user stats: ${err}`
-// 			})
-// 	}
-// });
+			// combine results for response
+			const response = {
+				Stats: {
+					hp: userStats.health,
+					strength: userStats.strength,
+					magic: userStats.magic,
+					physicalDefense: userStats.physicalDefense,
+					magicDefense: userStats.magicDefense,
+					luck: userStats.luck
+				},
+				userStat: {
+					userId: user.id,
+					health: userStats.health || 50,
+					experience: userStats.experience || 0,
+					level: level
+				}
+			}
+			return res
+				.json(response)
+		}
+
+	} catch (err) {
+
+		return res
+			.status(400)
+			.json({
+				error: `Error fetching user stats: ${err}`
+			})
+	}
+});
 
 
 

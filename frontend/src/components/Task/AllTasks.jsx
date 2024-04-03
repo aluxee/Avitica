@@ -1,9 +1,14 @@
 import { thunkLoadTasks } from '../../store/task';
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
+import { useNavigate, useParams } from 'react-router-dom';
 import './AllTasks.css';
 import EditTask from './EditTask';
 import OpenModalMenuItem from '../Navigation/OpenModalMenuItem';
+import OpenModalButton from '../Navigation/OpenModalMenuItem';
+import CreateTask from './CreateTask';
+import DeleteTask from './DeleteTask';
+
 
 
 
@@ -11,37 +16,40 @@ import OpenModalMenuItem from '../Navigation/OpenModalMenuItem';
 
 function AllTasks() {
 	const dispatch = useDispatch();
+	const { taskId } = useParams();
+
+	console.log("%c 🚀 ~ file: AllTasks.jsx:18 ~ AllTasks ~ taskId: ", "color: red; font-size: 25px", taskId)
+
+	// console.log("%c 🚀 ~ file: AllTasks.jsx:17 ~ AllTasks ~ tasks: ", "color: red; font-size: 25px", tasks)
+	// const [hover, setHover] = useState(null);
+	const [showMenu, setShowMenu] = useState(false);
+	// const navigate = useNavigate();
+	// const ulRef = useRef(null);
+
 	const tasks = useSelector(state => state.task);
-	const [hover, setHover] = useState(null);
-	const [showMenu, setShowMenu] = useState([]);
-	const allTasks = Object.values(tasks);
+	const allTasks = Object.values(tasks)
+	console.log("%c 🚀 ~ file: AllTasks.jsx:23 ~ AllTasks ~ allTasks: ", "color: red; font-size: 25px", allTasks)
 
-	const ulRef = useRef(null);
+	const toggleMenu = () => {
+		// e.stopPropagation();
 
-	const toggleMenu = (index) => {
-		const newShowMenu = [...showMenu];
-		newShowMenu[index] = !newShowMenu[index];
-		setShowMenu(newShowMenu);
+		setShowMenu(!showMenu)
 	};
-	const closeMenu = () => setShowMenu(false);
+	// const closeMenu = () => setShowMenu(false);
 
 
-	const onHover = (index) => {
-		setHover(index)
-	};
+	// const onHover = (index) => {
+	// 	setHover(index)
+	// };
 
-	const hovering = () => {
-		setHover(null);
-	}
+	// const hovering = () => {
+	// 	setHover(null);
+	// }
 
 	useEffect(() => {
 		dispatch(thunkLoadTasks())
 
 	}, [dispatch])
-
-
-	const ulClassName = "profile-dropdown" + (showMenu ? "" : "hidden");
-	const hoverClassName = "menu-caption caption" + (hover !== null ? "" : "hidden");
 
 	return (
 		<>
@@ -50,141 +58,38 @@ function AllTasks() {
 					<div className='avatar-nav'>
 						[INSERT AVATAR STATS HERE]
 					</div>
-
-					<ul className='all-task-ul'
+					<div className='task-add-task'>
+						<OpenModalButton
+							itemText={"Add a new Task"}
+							onItemClick={toggleMenu}
+							modalComponent={<CreateTask
+								allTasks={allTasks} />}
+						/>
+					</div>
+					<div className='all-task-container'
+						key={tasks.Title}
 					>
-						{allTasks.length && allTasks.map((task, index) => (
+						{allTasks.length && allTasks?.map((task, index) => (
+							<>
 
-							<div key={task.id} className='at-tasks'>
-								<div className='at-menu'>
-
-									<button className={`menu-icon`}
-										onClick={() => toggleMenu(index)}>
-
-
-										<i className="fa-solid fa-ellipsis-vertical"
-											onMouseOver={() => onHover(index)}
-											onMouseOut={hovering}
-											role='button'
-										/>
-										{
-											hover === index && !showMenu[index] &&
-											<p className={hoverClassName + (showMenu[index] ? " " : "hidden")}
-											>Menu</p>
+								<div className='at-tasks' key={task.id}>
+									<OpenModalMenuItem
+										className="task-modal"
+										itemText={task.title}
+										onItemClick={toggleMenu}
+										modalComponent={
+											<EditTask task={task} />
 										}
-
-									</button>
-									<ul className={ulClassName + (showMenu[index] ? '' : 'hidden')}
-										ref={ulRef}
-									>
-										<li className='single-task-modal-container'>
-
-											<OpenModalMenuItem
-												itemText={"View Task Details"}
-												onItemClick={closeMenu}
-												modalComponent={<EditTask task={task} taskId={task.id} />}
-											/>
-											{/* [allow edit, delete, post on modal]
-										[allow, edit, delete on menu button] */}
-
-											<OpenModalMenuItem
-												itemText={"Delete this Task"}
-												onItemClick={closeMenu}
-											// modalComponent={<DeleteTask tasks={tasks} />}
-											/>
-										</li>
-									</ul>
-
+									/>
+									<OpenModalButton
+										itemText={<i className="fa-solid fa-trash" />}
+										onItemClick={toggleMenu}
+										modalComponent={<DeleteTask taskId={task.id} />}
+									/>
 								</div>
-
-								<h2 className='all-task-li'>
-									{task.title}
-								</h2>
-								<div className='at-notes'>
-									{task.notes ?
-										<>
-											<div className='all-task-yes-notes'>
-												<div className='all-task-label'>
-													Notes:
-												</div>
-												<div className='all-task-fill'>
-													{task.notes}
-												</div>
-											</div>
-
-										</>
-										:
-										<>
-											<div className='all-task-no-notes'>
-												[Create notes for your task!]</div>
-										</>
-									}
-								</div>
-								<div className='all-task-diff'>
-									<div className='all-task-label'>
-										Difficulty:
-									</div>
-									<div className='all-task-fill'>
-										{task.difficulty}
-									</div>
-								</div>
-								<div className='all-task-checklist'>
-									{
-										task.Checklist ?
-											<>
-												<div className='all-task-yes-cl'>
-													<div className='all-task-label'>
-														Checklist:
-													</div>
-													<div className='all-task-fill at-cl-li'>
-														{task.Checklist.map(list => (
-															list.checklistItem
-														))}
-													</div>
-												</div>
-											</>
-											:
-											<>
-												<div className='all-task-no-cl'>
-													[Create a checklist here!]
-												</div>
-											</>
-									}
-								</div>
-								<div className='all-task-complete'>
-									{
-										task.completed ?
-											<>
-												<div className='all-task-label'>
-													Completed [insert sign]:
-												</div>
-												<div className='all-task-fill'>
-													[select yes option]
-												</div>
-											</>
-											:
-											<>
-												<div className='all-task-label'>
-													Not Completed [insert sign]:
-												</div>
-												<div className='all-task-fill'>
-													[select no option]
-												</div>
-											</>
-									}
-								</div>
-								<div className='at-due-date'>
-									<div className='all-task-label'>
-										Due Date:
-									</div>
-									<div className='all-task-fill'>
-										{task.dueDate}
-									</div>
-
-								</div>
-							</div>
+							</>
 						))}
-					</ul>
+					</div>
 				</div>
 			</section >
 		</>

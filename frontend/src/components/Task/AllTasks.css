@@ -11,17 +11,57 @@
 	padding: 10px;
 	margin: 10px;
 	color: white;
-	flex-direction: row;
+	flex-direction: column;
 	flex-wrap: wrap;
-	align-content: center;
-	justify-content: flex-start;
-	align-items: flex-start;
+	align-content: stretch;
+	align-items: center;
+	justify-content: space-evenly;
 
 }
 
 .avatar-nav {}
 
-/* *BUTTON */
+
+.task-add-task>li.modal-menu-item {
+	border: 2px solid black;
+	padding: 8px 4px;
+	background-color: teal;
+}
+
+.task-add-task>li.modal-menu-item:hover {
+	cursor: pointer;
+}
+
+.all-task-container {
+	display: flex;
+	max-height: 400px;
+	justify-content: center;
+	flex-direction: column;
+}
+
+.task-add-task {
+	align-self: flex-end;
+	max-width: 100%;
+	width: fit-content;
+}
+
+.at-tasks {
+	border: 2px solid black;
+	max-height: min-content;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	flex-wrap: nowrap;
+	background-color: teal;
+	width: 200px;
+	height: 100px;
+}
+
+.at-tasks>li:hover {
+	cursor: pointer;
+}
+
+/*
 button.menu-icon {
 	display: flex;
 	width: 10px;
@@ -33,7 +73,7 @@ button.menu-icon {
 	align-content: space-between;
 }
 
-/* *HIDDEN ELEMENTS*/
+
 p.menu-caption.captionhidden {
 	position: relative;
 	width: max-content;
@@ -55,8 +95,18 @@ p.menu-caption.captionhidden {
 	flex-wrap: wrap;
 }
 
-single-task-modal-container>ul.profile-dropdown {
+div.at-menu>ul.profile-dropdown {
+	display: flex;
+	flex-direction: column;
+	flex-wrap: wrap;
+	background-color: cornflowerblue;
+	height: fit-content;
+	width: fit-content;
+	justify-content: center;
 	position: relative;
+	top: -1rem;
+	font-size: 14px;
+	left: 0rem;
 }
 
 li.single-task-modal-container {
@@ -72,15 +122,13 @@ ul.profile-dropdown {
 	top: 1rem;
 	flex-direction: column;
 	height: 45px;
-	/* width: 55%; */
 	padding-left: 0px;
 	flex-wrap: wrap;
-	/* background-color: skyblue; */
 	align-items: center;
 	z-index: 1;
 }
 
-/* * MODAL */
+
 .single-task-modal-container>button {
 	padding: 6px;
 	border: 2px solid black;
@@ -91,16 +139,7 @@ ul.profile-dropdown {
 	display: flex;
 }
 
-/* *TASK DETAILS */
-.at-tasks {
-	border: 2px solid black;
-	max-height: min-content;
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	flex-wrap: nowrap;
-	background-color: teal;
-}
+
 
 .all-task-label {
 	font-weight: 600;
@@ -135,4 +174,4 @@ ul.profile-dropdown {
 .all-task-li {
 	border: 1px solid black;
 	padding: 5px;
-}
+} */

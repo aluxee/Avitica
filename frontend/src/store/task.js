@@ -6,6 +6,10 @@ export const LOAD_CURRENT_TASK = 'tasks/LOAD_CURRENT_TASK';
 export const POST_TASK = 'tasks/POST_TASK';
 export const UPDATE_TASK = 'tasks/UPDATE_TASK';
 export const REMOVE_TASK = 'tasks/REMOVE_TASK';
+export const LOAD_CHECKLIST = 'checklist/LOAD_CHECKLIST';
+export const POST_CHECKLIST = 'checklist/POST_CHECKLIST';
+export const UPDATE_CHECKLIST = 'checklist/UPDATE_CHECKLIST';
+export const REMOVE_CHECKLIST = 'checklist/REMOVE_CHECKLIST';
 
 // /**  Action Creators: */
 
@@ -30,9 +34,9 @@ export const createTask = (task) => ({
 });
 
 
-export const editTask = (task) => ({
+export const editTask = (taskId) => ({
 	type: UPDATE_TASK,
-	task
+	taskId
 });
 
 
@@ -44,6 +48,33 @@ export const removeTask = (taskId) => {
 };
 
 
+//? checklist:
+
+export const loadChecklist = (taskId) => ({
+	type: LOAD_CHECKLIST,
+	taskId
+});
+
+
+export const createChecklist = (listItem) => ({
+	type: POST_CHECKLIST,
+	listItem
+});
+
+
+
+export const editChecklist = (taskId, checklistId) => ({
+	type: UPDATE_CHECKLIST,
+	taskId, checklistId, checked
+});
+
+
+export const removeChecklist = (checklistId) => {
+	return {
+		type: REMOVE_CHECKLIST,
+		checklistId
+	}
+};
 
 // /** Thunk Action Creators: */
 
@@ -87,26 +118,25 @@ export const thunkLoadCurrentTask = (taskId) => async dispatch => {
 }
 
 // //* create / post a task
-// export const thunkCreateTask = (task) => async (dispatch) => {
+export const thunkCreateTask = (task) => async (dispatch) => {
 
-// 	const response = await csrfFetch('/api/tasks', {
-// 		method: 'POST',
-// 		headers: {
-// 			"Content-Type": "application/json",
-// 		},
-// 		body: JSON.stringify(spotData.task)
-// 	})
+	const response = await csrfFetch('/api/tasks/new', {
+		method: 'POST',
+		headers: {
+			"Content-Type": "application/json",
+		},
+		body: JSON.stringify(task)
+	})
 
-// 	if (response.ok) {
-
-// 		await dispatch(createTask(task))
-// 		return task
-
-// 	} else {
-// 		const errorResponse = await response.json()
-// 		return errorResponse
-// 	}
-// }
+	const data = await response.json();
+	if (data.errors) {
+		const errorResponse = await response.json()
+		return errorResponse
+	} else {
+		const taskData = await dispatch(createTask(data))
+		return taskData
+	}
+}
 
 // edit a task
 export const thunkEditTask = (task, taskId) => async (dispatch) => {
@@ -139,23 +169,112 @@ export const thunkEditTask = (task, taskId) => async (dispatch) => {
 
 
 // //* delete/remove a task
-// export const thunkRemoveTask = (task) => async dispatch => {
+export const thunkRemoveTask = (taskId) => async dispatch => {
 
-// 	const response = await csrfFetch(`/api/tasks/${task.id}`, {
-// 		method: 'DELETE',
+	console.log("%c 🚀 ~ file: task.js:174 ~ thunkRemoveTask ~ taskId: ", "color: cyan; font-size: 25px", taskId)
+
+
+	const response = await csrfFetch(`/api/tasks/${taskId}`, {
+		method: 'DELETE',
+		headers: {
+			"Content-Type": "application/json"
+		}
+	});
+
+	if (response.ok) { // removed data and replaced it with id
+
+		dispatch(removeTask(taskId))
+		return taskId
+	}
+}
+
+
+
+
+
+//!____________________CL_______________________
+
+
+
+
+// /** Thunk Action Creators: */
+
+//* load checklist for specific task
+export const thunkLoadChecklist = (taskId) => async dispatch => {
+
+	console.log("%c 🚀 ~ file: checklist.js:44 ~ thunkLoadChecklist ~ taskId: ", "color: red; font-size: 25px", taskId)
+
+
+
+	const response = await csrfFetch(`/api/tasks/${taskId}/checklist`);
+
+
+	if (response.ok) {
+		const checklist = await response.json();
+
+
+		dispatch(loadChecklist(checklist))
+	} else {
+		const errorResponse = await response.json()
+		return errorResponse
+	}
+}
+
+
+// //* create / post a listItem
+// export const thunkCreateChecklist = (listItem) => async (dispatch) => {
+
+// 	const response = await csrfFetch('/api/checklist', {
+// 		method: 'POST',
 // 		headers: {
-// 			"Content-Type": "application/json"
-// 		}
-// 	});
+// 			"Content-Type": "application/json",
+// 		},
+// 		body: JSON.stringify(checklist.listItem)
+// 	})
 
-// 	if (response.ok) { // removed data and replaced it with id
+// 	if (response.ok) {
 
-// 		dispatch(removeTask(task.id))
+// 		await dispatch(createChecklist(listItem))
+// 		return listItem
 
-// 		return task.id
+// 	} else {
+// 		const errorResponse = await response.json()
+// 		return errorResponse
 // 	}
 // }
-//  __________________________________________reducer________________________________________
+
+// edit a listItem
+export const thunkEditChecklist = (taskId, checklistId, checked) => async (dispatch) => {
+
+	const id = Number(checklistId);
+
+
+	// see sc for mdn times and sorts
+	const response = await csrfFetch(`/api/tasks/${taskId}/checklist/${checklistId}`, {
+		method: 'PUT',
+		headers: {
+			"Content-Type": "application/json",
+		},
+		body: JSON.stringify({ checked })
+	})
+
+
+	if (response.ok) {
+		// const updateList = await response.json();
+
+		dispatch(editChecklist(id))
+
+		// return updateList
+
+	} else {
+		const errorResponse = await response.json();
+
+		return errorResponse
+	}
+}
+
+// __________________________________________reducer________________________________________
+
 const initialState = {}
 const taskReducer = (state = initialState, action) => {
 
@@ -194,7 +313,7 @@ const taskReducer = (state = initialState, action) => {
 		case POST_TASK: {
 			const newTaskState = { ...state }
 
-			const newTask = { ...action.task}
+			const newTask = { ...action.task }
 
 			newTaskState[action.task.id] = {
 				...newTask
@@ -217,6 +336,37 @@ const taskReducer = (state = initialState, action) => {
 		}
 
 		case REMOVE_TASK: {
+			const removeState = { ...state };
+
+			delete removeState[action.id];
+			return removeState;
+		}
+
+			
+		case LOAD_CHECKLIST: {
+			const newState = { ...state };
+
+			action.taskId.forEach(checklist => {
+				newState[checklist.id] = { ...checklist };
+			});
+			return newState;
+		}
+
+		case POST_CHECKLIST: {
+			return {
+				...state,
+				[action.listItem.id]: { ...action.listItem }
+			};
+		}
+
+		case UPDATE_CHECKLIST: {
+			return {
+				...state,
+				[action.listItem.id]: { ...state[action.listItem.id], ...action.listItem }
+			};
+		}
+
+		case REMOVE_CHECKLIST: {
 			const removeState = { ...state };
 
 			delete removeState[action.id];

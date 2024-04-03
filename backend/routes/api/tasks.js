@@ -9,15 +9,14 @@ router = express.Router();
 router.put('/:taskId/checklist/:checklistId', requireAuth, authorization, async (req, res) => {
 	//* may require frontend testing
 	const { checklistId } = req.params;
-	const { checklistItem, checked } = req.body;
-
-	const editCheckList = await Checklist.findByPk(checklistId, {
-		where: {
-			userId: req.user.id
-		}
-	})
+	const { checked } = req.body;
 
 	try {
+		const editCheckList = await Checklist.findByPk(checklistId, {
+			where: {
+				userId: req.user.id
+			}
+		})
 		if (!editCheckList) {
 			return res
 				.status(404)
@@ -25,12 +24,11 @@ router.put('/:taskId/checklist/:checklistId', requireAuth, authorization, async 
 					message: "Checklist not found"
 				})
 		}
-		editCheckList.checklistItem = checklistItem;
-		// utilize the checklist checked boolean attribute
+		//update checklist item's checked status and utilize the checklist checked boolean attribute
 		editCheckList.checked = checked;
 
-		await editCheckList.save()
-		res.json(editCheckList)
+		await editCheckList.save();
+		res.json(editCheckList);
 	} catch (err) {
 
 		return res
@@ -45,7 +43,7 @@ router.put('/:taskId/checklist/:checklistId', requireAuth, authorization, async 
 });
 
 
-// delete specific task made by user
+// delete specific checklist made by user
 router.delete('/:taskId/checklist/:checklistId', requireAuth, authorization, async (req, res) => {
 	const { taskId, checklistId } = req.params;
 
@@ -358,7 +356,7 @@ router.put('/:taskId/edit', requireAuth, async (req, res) => {
 
 
 // deletes a task
-router.delete('/:taskId', authorization, requireAuth, async (req, res) => {
+router.delete('/:taskId', requireAuth, async (req, res) => {
 	const { taskId } = req.params;
 
 	const task = await Task.findByPk(taskId, {
@@ -367,7 +365,7 @@ router.delete('/:taskId', authorization, requireAuth, async (req, res) => {
 		}
 	})
 
-	if (!task) {
+	if (!taskId) {
 		return res
 			.status(404)
 			.json({

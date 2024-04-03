@@ -35,6 +35,15 @@
 }
 
 /* *MAIN */
+html {
+	background-image: url('./images/animetreeriv.jpeg');
+	background-attachment: scroll;
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: cover;
+	height: max-content;
+}
+
 body {
 	margin: 0 auto;
 	width: 100%;
@@ -56,12 +65,7 @@ body {
 	height: 100%;
 }
 
-html {
-	background-image: url('./images/animetreeriv.jpeg');
-	background-position: center;
-	background-repeat: no-repeat;
-	background-size: cover;
-}
+
 
 /*
 .outlet-wrapper {

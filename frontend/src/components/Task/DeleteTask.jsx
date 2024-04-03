@@ -9,8 +9,6 @@ function DeleteTask({ taskId }) {
 
 	const { closeModal } = useModal();
 
-	//! NOTE: deletes successfully, just needs to reload; does not work with useEffect
-
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 
@@ -18,6 +16,7 @@ function DeleteTask({ taskId }) {
 		if (res && res.errors) {
 			return res.errors;
 		}
+		await dispatch(thunkLoadTasks())
 		// navigate('/')
 		closeModal()
 		// return res;
@@ -26,7 +25,6 @@ function DeleteTask({ taskId }) {
 
 
 	// useEffect(() => {
-	// 	dispatch(thunkLoadTasks())
 	// }, [dispatch])
 
 	return (

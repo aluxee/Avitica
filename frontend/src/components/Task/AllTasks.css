@@ -34,9 +34,12 @@
 
 .all-task-container {
 	display: flex;
-	max-height: 400px;
+	/* max-height: 400px; */
 	justify-content: center;
 	flex-direction: column;
+	padding: 5px;
+	margin: 15px 5px;
+	width: fit-content;
 }
 
 .task-add-task {

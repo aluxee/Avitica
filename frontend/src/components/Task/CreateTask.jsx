@@ -1,12 +1,13 @@
 import { useState } from 'react';
-import { useParams } from 'react-router-dom';
 import { useDispatch } from "react-redux";
 import { useModal } from '../../context/Modal';
 import './CreateTask.css';
 import { thunkCreateTask, thunkLoadTasks } from '../../store/task';
 
 
-function CreateTask({ allTasks }) {
+function CreateTask() {
+
+
 	const dispatch = useDispatch();
 	const [title, setTitle] = useState('');
 	const [description, setDescription] = useState('');
@@ -14,9 +15,6 @@ function CreateTask({ allTasks }) {
 	const [dueDate, setDueDate] = useState('');
 	const { closeModal } = useModal();
 	// const [checklist, setChecklist] = useState(task.Checklist || []);
-	const { taskId } = useParams();
-
-	console.log("%c 🚀 ~ file: CreateTask.jsx:22 ~ CreateTask ~ taskId: ", "color: red; font-size: 25px", taskId)
 
 	const [errors, setErrors] = useState({});
 	// const [showMenu, setShowMenu] = useState(false);
@@ -24,6 +22,7 @@ function CreateTask({ allTasks }) {
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
+
 		if (title.length <= 3) {
 			setErrors({ title: "Title's name is required" });
 			return;
@@ -32,7 +31,8 @@ function CreateTask({ allTasks }) {
 			return;
 		}
 
-		const newTask = {
+		let newTask = {
+
 			title,
 			description,
 			// checklist,
@@ -40,18 +40,24 @@ function CreateTask({ allTasks }) {
 			dueDate,
 		};
 
-		const res = await dispatch(thunkCreateTask(newTask));
 
-		if (res && res.errors) {
-			return setErrors(res.errors);
+		const submissionResults = await dispatch(thunkCreateTask(newTask));
+
+		// console.log("%c 🚀 ~ file: CreateTask.jsx:52 ~ handleSubmit ~ submissionResults: ", "color: red; font-size: 25px", submissionResults)
+
+
+		if (!submissionResults?.errors) {
+			console.log("SUBMISSION ID: ", submissionResults.id)
+
+		} else {
+			return submissionResults.errors
 		}
+
+		await dispatch(thunkLoadTasks());
+
 		closeModal();
 
-		// setEditing(false);
-		dispatch(thunkLoadTasks());
 	};
-
-	// const hoverClassName = "hover" + (hoverCaption !== null ? "" : "hidden");
 
 
 	return (
@@ -60,17 +66,16 @@ function CreateTask({ allTasks }) {
 				// ref={ufRef}
 				className="post-task-modal"
 			>
-				<label className="pl-task-label" htmlFor="title">
+				<label className="pt-task-label" htmlFor="title">
 					<h4>
 						Title
 					</h4>
 					<input
-						className="pl-task-input"
+						className="pt-task-input"
 						type="text"
 						value={title}
 						onChange={(e) => setTitle(e.target.value)}
 						placeholder="Enter Title for Task"
-					// onClick={(e) => e.stopPropagation()}
 					/>
 					{errors?.title && <p className="p-error">{errors.title} </p>}
 				</label>
@@ -119,7 +124,7 @@ function CreateTask({ allTasks }) {
 						<p className="p-error">{errors.dueDate} </p>
 					)}
 				</label>
-				<button type="submit" className="pl-task-submit-button">
+				<button type="submit" className="pt-task-submit-button submit">
 					Save
 				</button>
 			</form>

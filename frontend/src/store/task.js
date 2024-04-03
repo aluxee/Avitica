@@ -20,7 +20,6 @@ export const loadTasks = (tasks) => ({
 
 export const loadCurrentTask = (taskId) => {
 
-	console.log("%c 🚀 ~ file: task.js:19 ~ loadCurrentTasks ~ tasks: ", "color: red; font-size: 25px", task)
 	return {
 
 		type: LOAD_CURRENT_TASK,
@@ -34,9 +33,9 @@ export const createTask = (task) => ({
 });
 
 
-export const editTask = (taskId) => ({
+export const editTask = (task) => ({
 	type: UPDATE_TASK,
-	taskId
+	task
 });
 
 
@@ -63,7 +62,7 @@ export const createChecklist = (listItem) => ({
 
 
 
-export const editChecklist = (taskId, checklistId) => ({
+export const editChecklist = (taskId, checklistId, checked) => ({
 	type: UPDATE_CHECKLIST,
 	taskId, checklistId, checked
 });
@@ -120,6 +119,9 @@ export const thunkLoadCurrentTask = (taskId) => async dispatch => {
 // //* create / post a task
 export const thunkCreateTask = (task) => async (dispatch) => {
 
+	console.log("%c 🚀 ~ file: task.js:123 ~ thunkCreateTask ~ task: ", "color: blue; font-size: 25px", " FIRST PART OF THE CREATE TASK THUNK ", task)
+
+
 	const response = await csrfFetch('/api/tasks/new', {
 		method: 'POST',
 		headers: {
@@ -141,30 +143,45 @@ export const thunkCreateTask = (task) => async (dispatch) => {
 // edit a task
 export const thunkEditTask = (task, taskId) => async (dispatch) => {
 
-	const taskId = Number(taskId);
 
-
-	// see sc for mdn times and sorts
 	const response = await csrfFetch(`/api/tasks/${taskId}`, {
 		method: 'PUT',
 		headers: {
 			"Content-Type": "application/json",
 		},
-		body: JSON.stringify(task)
+		body: JSON.stringify(task[taskId])
 	})
 
 
-	if (response.ok) {
-		const updatedTask = await response.json();
+	const data = response.json();
 
-		dispatch(editTask(updatedTask))
-		return updatedTask
+	console.log("%c 🚀 ~ file: task.js:164 ~ thunkEditTask ~ data: ", "color: blue; font-size: 25px", data)
 
+	if (data.errors) {
+		const errorResponse = await response.json()
+		return errorResponse;
 	} else {
-		const errorResponse = await response.json();
-
-		return errorResponse
+		await dispatch(editTask(data))
+		return data;
 	}
+	// if (data.) {
+	// 	const updatedTask = await response.json();
+
+	// 	console.log("%c 🚀 ~ file: task.js:166 ~ thunkEditTask ~ updatedTask: ", "color: cyan; font-size: 25px", "BEFORE", updatedTask)
+
+
+	// 	dispatch(editTask(updatedTask))
+	// 	console.log("%c 🚀 ~ file: task.js:179 ~ thunkEditTask ~ updatedTask: ", "color: cyan; font-size: 25px", "AFTER", updatedTask)
+
+	// 	return updatedTask
+
+	// } else {
+	// 	const errorResponse = await response.json();
+
+	// 	return errorResponse
+	// }
+
+
 }
 
 
@@ -282,24 +299,16 @@ const taskReducer = (state = initialState, action) => {
 
 	switch (action.type) {
 		case LOAD_TASKS: {
-			const allTasksState = { ...state };
-
-			console.log("%c 🚀 ~ file: task.js:190 ~ taskReducer ~ allTasksState: ", "color: red; font-size: 25px", allTasksState)
-
-
+			const allTasksState = {};
 			action.tasks.Task.forEach(task => {
-				let newTaskState = { ...task }
-				allTasksState[task.id] = newTaskState;
+				allTasksState[task.id] = task;
 			});
 			return allTasksState;
-		};
+		}
 
 
 		case LOAD_CURRENT_TASK: {
 			const currentTaskState = { ...state };
-
-			// console.log("%c 🚀 ~ file: task.js:182 ~ taskReducer ~ currentTaskState: ", "color: red; font-size: 25px", currentTaskState)
-
 
 			action.tasks.Task.forEach(task => {
 				const newTaskState = { ...task }
@@ -311,28 +320,11 @@ const taskReducer = (state = initialState, action) => {
 		}
 
 		case POST_TASK: {
-			const newTaskState = { ...state }
-
-			const newTask = { ...action.task }
-
-			newTaskState[action.task.id] = {
-				...newTask
-			}
-
-			return newTaskState;
-
+			return { ...state, [action.task.id]: action.task };
 		}
 
 		case UPDATE_TASK: {
-			const updatedState = { ...state }
-
-			const newTask = { ...action.task }
-
-			updatedState[newTask.id] = {
-				...state[action.task.id], ...newTask
-			}
-
-			return updatedState;
+			return { ...state, [action.task.id]: action.task };
 		}
 
 		case REMOVE_TASK: {
@@ -342,7 +334,8 @@ const taskReducer = (state = initialState, action) => {
 			return removeState;
 		}
 
-			
+
+
 		case LOAD_CHECKLIST: {
 			const newState = { ...state };
 

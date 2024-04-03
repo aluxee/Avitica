@@ -1,5 +1,6 @@
+import AllTasks from "./Task";
+import CreateTask from "./CreateTask";
 import Task from "./Task";
+import EditTask from "./EditTask";
 
-
-
-export default Task;
+export { AllTasks, CreateTask, Task, EditTask };

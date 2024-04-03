@@ -6,7 +6,8 @@ import taskReducer from "./task";
 
 const rootReducer = combineReducers({
 	session: sessionReducer,
-	task: taskReducer
+	task: taskReducer,
+	checklist: listReducer
 });
 
 let enhancer;

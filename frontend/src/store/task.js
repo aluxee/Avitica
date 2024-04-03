@@ -14,13 +14,13 @@ export const loadTasks = (tasks) => ({
 	tasks
 });
 
-export const loadCurrentTasks = (tasks) => {
+export const loadCurrentTask = (taskId) => {
 
-	console.log("%c 🚀 ~ file: task.js:19 ~ loadCurrentTasks ~ tasks: ", "color: red; font-size: 25px", tasks)
+	console.log("%c 🚀 ~ file: task.js:19 ~ loadCurrentTasks ~ tasks: ", "color: red; font-size: 25px", task)
 	return {
 
 		type: LOAD_CURRENT_TASK,
-		tasks
+		taskId
 	}
 };
 
@@ -65,23 +65,26 @@ export const thunkLoadTasks = () => async dispatch => {
 	}
 }
 
-// //* load current tasks
-// export const thunkLoadCurrentTasks = () => async dispatch => {
+// //* load current task
+export const thunkLoadCurrentTask = (taskId) => async dispatch => {
 
-// 	const response = await csrfFetch('/api/tasks/current');
+	const response = await csrfFetch(`/api/tasks/${taskId}`);
 
-// 	if (response.ok) {
-// 		const tasksCurrentData = await response.json();
+	if (response.ok) {
+		const tasksCurrentData = await response.json();
 
-// 		dispatch(loadCurrentTasks(tasksCurrentData))
-// 		return tasksCurrentData;
+		console.log("%c 🚀 ~ file: task.js:76 ~ thunkLoadCurrentTasks ~ tasksCurrentData: ", "color: red; font-size: 25px", tasksCurrentData)
 
-// 	} else {
-// 		const errorResponse = await response.json();
-// 		return errorResponse;
-// 	}
 
-// }
+		dispatch(loadCurrentTask(tasksCurrentData))
+		return tasksCurrentData;
+
+	} else {
+		const errorResponse = await response.json();
+		return errorResponse;
+	}
+
+}
 
 // //* create / post a task
 // export const thunkCreateTask = (task) => async (dispatch) => {
@@ -105,34 +108,34 @@ export const thunkLoadTasks = () => async dispatch => {
 // 	}
 // }
 
-// // edit a task
-// export const thunkEditTask = (taskId, task) => async (dispatch) => {
+// edit a task
+export const thunkEditTask = (task, taskId) => async (dispatch) => {
 
-// 	const taskId = Number(taskId);
-
-
-// 	// see sc for mdn times and sorts
-// 	const response = await csrfFetch(`/api/tasks/${taskId}`, {
-// 		method: 'PUT',
-// 		headers: {
-// 			"Content-Type": "application/json",
-// 		},
-// 		body: JSON.stringify(task)
-// 	})
+	const taskId = Number(taskId);
 
 
-// 	if (response.ok) {
-// 		const updatedTask = await response.json();
+	// see sc for mdn times and sorts
+	const response = await csrfFetch(`/api/tasks/${taskId}`, {
+		method: 'PUT',
+		headers: {
+			"Content-Type": "application/json",
+		},
+		body: JSON.stringify(task)
+	})
 
-// 		dispatch(editTask(updatedTask))
-// 		return updatedTask
 
-// 	} else {
-// 		const errorResponse = await response.json();
+	if (response.ok) {
+		const updatedTask = await response.json();
 
-// 		return errorResponse
-// 	}
-// }
+		dispatch(editTask(updatedTask))
+		return updatedTask
+
+	} else {
+		const errorResponse = await response.json();
+
+		return errorResponse
+	}
+}
 
 
 // //* delete/remove a task
@@ -168,55 +171,57 @@ const taskReducer = (state = initialState, action) => {
 			action.tasks.Task.forEach(task => {
 				let newTaskState = { ...task }
 				allTasksState[task.id] = newTaskState;
-			})
+			});
 			return allTasksState;
+		};
+
+
+		case LOAD_CURRENT_TASK: {
+			const currentTaskState = { ...state };
+
+			// console.log("%c 🚀 ~ file: task.js:182 ~ taskReducer ~ currentTaskState: ", "color: red; font-size: 25px", currentTaskState)
+
+
+			action.tasks.Task.forEach(task => {
+				const newTaskState = { ...task }
+
+				currentTaskState[task.id] = { ...state[task.id], ...newTaskState };
+
+			})
+			return currentTaskState;
 		}
 
+		case POST_TASK: {
+			const newTaskState = { ...state }
 
-		// case LOAD_CURRENT_TASK: {
-		// 	const currentTasksState = { ...state };
+			const newTask = { ...action.task}
 
-		// 	action.tasks.Tasks.forEach(task => {
-		// 		const newTaskState = { ...task }
+			newTaskState[action.task.id] = {
+				...newTask
+			}
 
-		// 		currentTasksState[task.id] = { ...state[task.id], ...newTaskState };
+			return newTaskState;
 
-		// 	}
-		// 	)
-		// 	return currentTasksState;
-		// }
+		}
 
-		// case POST_TASK: {
-		// 	const newTaskState = { ...state }
+		case UPDATE_TASK: {
+			const updatedState = { ...state }
 
-		// 	const newTask = { ...action.task}
+			const newTask = { ...action.task }
 
-		// 	newTaskState[action.task.id] = {
-		// 		...newTask
-		// 	}
+			updatedState[newTask.id] = {
+				...state[action.task.id], ...newTask
+			}
 
-		// 	return newTaskState;
+			return updatedState;
+		}
 
-		// }
+		case REMOVE_TASK: {
+			const removeState = { ...state };
 
-		// case UPDATE_TASK: {
-		// 	const updatedState = { ...state }
-
-		// 	const newTask = { ...action.task, TaskImages: [], Owner: {} }
-
-		// 	updatedState[newTask.id] = {
-		// 		...state[action.task.id], ...newTask
-		// 	}
-
-		// 	return updatedState;
-		// }
-
-		// case REMOVE_TASK: {
-		// 	const removeState = { ...state };
-
-		// 	delete removeState[action.id];
-		// 	return removeState;
-		// }
+			delete removeState[action.id];
+			return removeState;
+		}
 
 		default:
 			return state;

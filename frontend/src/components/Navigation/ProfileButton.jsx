@@ -67,7 +67,7 @@ function ProfileButton({ user }) {
 
 
 	const ulClassName = "profile-dropdown" + (showMenu ? "" : "hidden");
-	const hoverClassName = "caption" + (hover === "profile" ? "" : "hidden")
+	const hoverClassName = "caption" + (hover === "profile" ? "" : "hidden");
 
 
 	return (

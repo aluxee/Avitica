@@ -96,10 +96,10 @@ export const thunkEditChecklist = (listItem, checklistId) => async (dispatch) =>
 
 
 	if (response.ok) {
-		const updatedTask = await response.json();
+		const updateList = await response.json();
 
-		dispatch(editTask(updatedTask))
-		return updatedTask
+		dispatch(editChecklist(updateList))
+		return updateList
 
 	} else {
 		const errorResponse = await response.json();

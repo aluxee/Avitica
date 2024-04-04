@@ -44,8 +44,8 @@ function AllTasks() {
 
 	return (
 		<>
-			<section className='outer-task-container'>
-				<div className='inner-task-container'>
+			<section className='ext outer-task-container'>
+				<div className='int inner-task-container'>
 					<div className='avatar-nav'>
 						[INSERT AVATAR STATS HERE]
 					</div>

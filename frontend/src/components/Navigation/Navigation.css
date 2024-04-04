@@ -33,6 +33,14 @@
 	z-index: 5;
 }
 
+ul.nav-avatar-list {
+	width: 100%;
+	background-color: green;
+	height: 100px;
+	margin-bottom: 0px;
+	margin-inline-end: -10px;
+}
+
 .nav-main-list {
 	width: 100%;
 	display: flex;

@@ -12,13 +12,7 @@ function Navigation({ isLoaded }) {
 	sessionUser ? (
 		<div className="yes-session-outer-container">
 			<div className="yes-session-inner-container">
-				<ul className='nav-left' style={{ listStyle: "none" }}>
-					<NavLink to='/inv'>Inventory</NavLink>
-					<NavLink to='/shop'>Shop</NavLink>
-					<NavLink to='/battle'>Battle</NavLink>
-				</ul>
 				<li className='nav-profile'>
-					[Mesos]
 					<ProfileButton user={sessionUser} />
 				</li>
 			</div>
@@ -72,6 +66,9 @@ function Navigation({ isLoaded }) {
 						<li className='nav_list' id='nav_profile'>
 							<ProfileButton user={sessionUser} />
 						</li>)}
+				</ul>
+				<ul className='nav-avatar-list'>
+						<UserProfile user={sessionUser}/>
 				</ul>
 			</div>
 		</div>

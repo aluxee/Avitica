@@ -1,15 +1,15 @@
 import { useSelector } from 'react-redux';
+import './UserProfile.css';
 
 
 
 
 
 
-
-function UserProfile() {
+function UserProfile({user}) {
 
 	const userInfo = useSelector(state => {
-	
+
 })
 	// useEffect(() => {
 	// 	// fill out form

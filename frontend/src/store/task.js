@@ -124,7 +124,7 @@ export const thunkEditTask = (task, taskId) => async (dispatch) => {
 
 	const data = await response.json();
 
-	console.log("%c 🚀 ~ file: task.js:164 ~ thunkEditTask ~ data: ", "color: blue; font-size: 25px", data)
+	// console.log("%c 🚀 ~ file: task.js:164 ~ thunkEditTask ~ data: ", "color: blue; font-size: 25px", data)
 
 	if (data.errors) {
 		const errorResponse = await response.json()

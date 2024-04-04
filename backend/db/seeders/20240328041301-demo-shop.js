@@ -31,75 +31,75 @@ module.exports = {
     await Shop.bulkCreate([
       {
         itemName: `${dataHpPotion.name}`,
-        description: `Restores 40 points of health (HP): ${dataHpPotion.description}`,
+        description: `${dataHpPotion.description}`,
         gold: 50,
         itemIcon: 'https://api.maplestory.net/item/2000000/icon',
       },
       {
         itemName: `Power Muffin's ${dataOtherPotion.name}`,
-        description: `Grants a 10% boost in strength (STR)`,
+        description: `Grants a 10% boost in strength (STR).`,
         gold: 75,
         itemIcon: 'https://api.maplestory.net/item/2002004/icon',
       },
       {
-        itemName: `'Magic Jello's ${dataOtherPotion.name}`,
-        description: `Grants a 10% boost in magic (MAGIC)`,
+        itemName: `Magic Jello's ${dataOtherPotion.name}`,
+        description: `Grants a 10% boost in magic (MAGIC).`,
         gold: 75,
         itemIcon: 'https://api.maplestory.net/item/2002003/icon',
       },
       {
         itemName: `Lucky Farms: ${dataOtherPotion.name}`,
-        description: 'Grants a 10% increase in luck (LUCK)',
+        description: 'Grants a 10% increase in luck (LUCK).',
         gold: 85,
         itemIcon: 'https://api.maplestory.net/item/2000054/icon',
       },
       {
         itemName: 'Plad Armor',
-        description: 'Grants a 20% increase in physical defense (PDEF): Shiny rich armor of steel',
+        description: 'Grants a 20% increase in physical defense (PDEF): Shiny rich armor of steel.',
         gold: 200,
-        itemIcon: ''
+        itemIcon: 'https://api.maplestory.net/item/1052075/icon'
       },
       {
         itemName: 'Magic Robe',
-        description: 'Grants a 20% increase in magic defense (MDEF): A magical silk threaded robe',
+        description: 'Grants a 20% increase in magic defense (MDEF): A magical silk threaded robe.',
         gold: 200,
-        itemIcon: ''
+        itemIcon: 'https://api.maplestory.net/item/1052315/icon'
       },
       {
         itemName: 'Dragon`s Fury',
-        description: `Grants 20% increase in overall strength (STR): ${dataDrgRg.description}`,
+        description: `Grants 20% increase in overall strength (STR): ${dataDrgRg.description}.`,
         gold: 250,
-        itemIcon: ''
+        itemIcon: 'https://api.maplestory.net/item/1232010/icon'
       },
       {
         itemName: `${dataCrim.name}`,
-        description: 'Grants a 20% increase in strength (STR): Carved from the cave walls of the Deep',
+        description: 'Grants a 20% increase in strength (STR): Carved from the cave walls of the Deep.',
         gold: 250,
-        itemIcon: ''
+        itemIcon: 'https://api.maplestory.net/item/1232034/icon'
       },
       {
         itemName: `${dataSoulShield.name}`,
-        description: `Grants a 10% increase in physical defense (PDEF): Pure diamonds that capture the blink of the noon sun`,
+        description: `Grants a 10% increase in physical defense (PDEF): Pure diamonds that capture the blink of the noon sun.`,
         gold: 275,
-        itemIcon: ''
+        itemIcon: 'https://api.maplestory.net/item/1098000/icon'
       },
       {
         itemName: `${dataFirstShield.name}`,
-        description: `Grants a 10% increase in magical defense (MDEF): Collected by the magic of elves deep within the magic forest`,
+        description: `Grants a 10% increase in magical defense (MDEF): Collected by the magic of elves deep within the magic forest.`,
         gold: 275,
-        itemIcon: ''
+        itemIcon: 'https://api.maplestory.net/item/1092070/icon'
       },
       {
         itemName: `${dataAmeRod.name}`,
-        description: 'Grants a 20% increase in magic (MAGIC): Exquisite fashionable  gold and diamond embedded rod from the deep of Fairy Kingdoms',
+        description: 'Grants a 20% increase in magic (MAGIC): Exquisite fashionable  gold and diamond embedded rod from the deep of Fairy Kingdoms.',
         gold: 250,
-        itemIcon: ''
+        itemIcon: 'https://api.maplestory.net/item/1212057/icon'
       },
       {
         itemName: `${dataMeiRod.name}`,
-        description: 'Grants a 20% increase in magic (MAGIC): Exquisite stylish embedded platinum rod',
+        description: 'Grants a 20% increase in magic (MAGIC): Exquisite stylish embedded platinum rod.',
         gold: 250,
-        itemIcon: ''
+        itemIcon: 'https://api.maplestory.net/item/1212077/icon'
       },
     ], options, { validate: true })
   },

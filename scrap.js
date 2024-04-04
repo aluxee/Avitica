@@ -27,7 +27,7 @@ responsePost.then(response => (response.blob())).then(res => console.log(res)).c
 
 
 
-const response = fetch('https://api.maplestory.net/items', {
+const rep = fetch('https://api.maplestory.net/items', {
 	headers: {
 		"Content-Type": "application/json",
 
@@ -42,6 +42,22 @@ const response = fetch('https://api.maplestory.net/items', {
 })
 response.then(response => (response.json())).then(res => console.log(res))
 
+
+
+const response = fetch('https://api.maplestory.net/items', {
+	headers: {
+		"Content-Type": "application/json",
+
+	},
+	body: JSON.stringify(
+		{
+			"version": 220,
+			"subversion": 3,
+			"locale": 2
+		}
+	)
+})
+response.then(response => (response.json())).then(res => console.log(res))
 
 fetch('https://api.maplestory.net/item/2070006/iconRaw')
 	.then(res => { return res.blob() })

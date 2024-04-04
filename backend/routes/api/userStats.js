@@ -158,7 +158,7 @@ router.get('/:userId/potion', requireAuth, async (req, res) => {
 		const potionItem = potionItems[0]
 
 		//add the 40 since this is the only potion available
-		userStatus.health = Math.min(currHealth + 40, 100) // the 100 is to ensure that the health does not exceed 100%
+		userStatus.health = Math.min(currHealth + 50, 100) // the 100 is to ensure that the health does not exceed 100%
 
 		await userStatus.save();
 		//potion must be destroyed

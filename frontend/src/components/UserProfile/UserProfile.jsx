@@ -1,16 +1,15 @@
-import { useSelector } from 'react-redux';
-import './UserProfile.css';
+// import { useSelector } from 'react-redux';
 
 
 
 
 
 
-function UserProfile({user}) {
+function UserProfile({ user }) {
 
-	const userInfo = useSelector(state => {
+	// const userInfo = useSelector(state => {
 
-})
+	// })
 	// useEffect(() => {
 	// 	// fill out form
 	// 	// button to test look: generate avatar
@@ -21,9 +20,7 @@ function UserProfile({user}) {
 	return (
 		<>
 			<div className="user-container">
-				<div className="user-gold">
 
-				</div>
 				<div className="user-info">
 
 					<div className="user-avatar">
@@ -40,6 +37,12 @@ function UserProfile({user}) {
 
 						</div>
 					</div>
+				</div>
+				<div className="currency">
+					<div className="user-gold">
+
+					</div>
+
 				</div>
 			</div>
 		</>

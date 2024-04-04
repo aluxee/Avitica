@@ -2,15 +2,21 @@ import { csrfFetch } from "./csrf";
 
 /** Action Type Constants: */
 export const LOAD_SHOP = 'shop/LOAD_SHOP';
+export const LOAD_CURRENT = 'shop/LOAD_CURRENT';
 
-// /**  Action Creators: */
+
 export const loadShop = (shop) => ({
 	type: LOAD_SHOP,
 	shop
 });
+export const loadCurrentItem = (item) => ({
+	type: LOAD_CURRENT,
+	item
+
+});
 
 // /** Thunk Action Creators: */
-//* load all tasks
+//* load all items
 export const thunkLoadShop = () => async dispatch => {
 
 	const response = await csrfFetch('/api/shop');
@@ -19,7 +25,7 @@ export const thunkLoadShop = () => async dispatch => {
 
 		const data = await response.json();
 
-		dispatch(loadShop(data))
+		await dispatch(loadShop(data))
 		return data
 
 	} else {
@@ -27,6 +33,32 @@ export const thunkLoadShop = () => async dispatch => {
 		return errorResponse;
 	}
 }
+
+
+//* load current items
+export const thunkLoadCurrentItem = (id) => async dispatch => {
+
+	const response = await csrfFetch(`/api/shop/details/${id}`);
+
+	console.log("%c 🚀 ~ file: shop.js:43 ~ thunkLoadCurrentItem ~ response: ", "color: magenta; font-size: 25px", response)
+
+	const itemData = await response.json();
+
+	console.log("%c 🚀 ~ file: shop.js:44 ~ thunkLoadCurrentItem ~ itemData: ", "color: magenta; font-size: 25px", itemData)
+
+
+	if (!itemData.errors) {
+		await dispatch(loadCurrentItem(itemData))
+		// console.log("🚀 ~ file: spot.js:131 ~ thunkLoadCurrentSpots ~ spotsCurrentData:", spotsCurrentData)
+		return itemData;
+
+	} else {
+		const errorResponse = await response.json();
+		return errorResponse;
+	}
+
+}
+
 
 // __________________________________________reducer________________________________________
 
@@ -38,9 +70,17 @@ const shopReducer = (state = initialState, action) => {
 			console.log("%c 🚀 ~ file: shop.js:29 ~ shopReducer ~ action: ", "color: red; font-size: 25px", action, "then state", state,)
 
 			const shopState = {}
-
-			// const shopData = { ...action }
+			action.shop.Shop.forEach(item => {
+				shopState[item.id] = item;
+			})
 			return shopState;
+		}
+
+		case LOAD_CURRENT: {
+
+			const itemState = { ...state, [action.item.itemDetails.id]: action.item.itemDetails }
+
+			return itemState;
 		}
 
 		default:

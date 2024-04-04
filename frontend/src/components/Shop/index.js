@@ -1,4 +1,7 @@
 import ShopDetails from "./ShopDetails";
+import ItemDetails from "./ItemDetails";
+import ItemViewAndBuy from "./ItemViewAndBuy";
+import ItemCart from "./ItemCart";
 
 
-export default ShopDetails;
+export { ShopDetails, ItemDetails, ItemViewAndBuy, ItemCart };

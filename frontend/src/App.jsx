@@ -4,7 +4,7 @@ import { createBrowserRouter, RouterProvider, Outlet } from 'react-router-dom';
 import Navigation from './components/Navigation';
 import * as sessionActions from './store/session';
 import Home from './components/Home/Home';
-import ShopDetails from './components/Shop';
+import ShopDetails from './components/Shop/ShopDetails';
 
 function Layout() {
   const dispatch = useDispatch();

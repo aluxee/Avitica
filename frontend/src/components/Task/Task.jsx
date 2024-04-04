@@ -1,40 +1,38 @@
-import { useSelector, useDispatch } from 'react-redux';
-import { useParams } from 'react-router-dom';
-import { useState } from 'react';
-
+import { useDispatch } from 'react-redux';
+import { useState, useRef } from 'react';
 import './Task.css';
-import { thunkLoadCurrentTask } from '../../store/task';
+// import { thunkLoadCurrentTask } from '../../store/task';
 
 function Task({ task, taskId }) {
-	const dispatch = useDispatch();
-	const tasks = useSelector(state => state.task);
+	// const dispatch = useDispatch();
+	// const tasks = useSelector(state => state.task);
 
 	// console.log("%c 🚀 ~ file: AllTasks.jsx:17 ~ AllTasks ~ tasks: ", "color: red; font-size: 25px", tasks)
 
-	const [hover, setHover] = useState(null);
-	const [showMenu, setShowMenu] = useState([]);
-	const allTasks = Object.values(tasks);
+	// const [hover, setHover] = useState(null);
+	// const [showMenu, setShowMenu] = useState([]);
+	// const allTasks = Object.values(tasks);
 
 	// console.log("%c 🚀 ~ file: AllTasks.jsx:23 ~ AllTasks ~ allTasks: ", "color: red; font-size: 25px", allTasks)
 
 
-	const ulRef = useRef(null);
+	// const ulRef = useRef(null);
 
-	const toggleMenu = (index) => {
-		const newShowMenu = [...showMenu];
-		newShowMenu[index] = !newShowMenu[index];
-		setShowMenu(newShowMenu);
-	};
-	const closeMenu = () => setShowMenu(false);
+	// const toggleMenu = (index) => {
+	// 	const newShowMenu = [...showMenu];
+	// 	newShowMenu[index] = !newShowMenu[index];
+	// 	setShowMenu(newShowMenu);
+	// };
+	// const closeMenu = () => setShowMenu(false);
 
 
-	const onHover = (index) => {
-		setHover(index)
-	};
+	// const onHover = (index) => {
+	// 	setHover(index)
+	// };
 
-	const hovering = () => {
-		setHover(null);
-	}
+	// const hovering = () => {
+	// 	setHover(null);
+	// }
 
 	// useEffect(() => {
 	// 	dispatch(thunkLoadTasks())
@@ -42,8 +40,8 @@ function Task({ task, taskId }) {
 	// }, [dispatch])
 
 
-	const ulClassName = "profile-dropdown" + (showMenu ? "" : "hidden");
-	const hoverClassName = "menu-caption caption" + (hover !== null ? "" : "hidden");
+	// const ulClassName = "profile-dropdown" + (showMenu ? "" : "hidden");
+	// const hoverClassName = "menu-caption caption" + (hover !== null ? "" : "hidden");
 
 
 	return (
@@ -51,7 +49,7 @@ function Task({ task, taskId }) {
 			<div className='task-container'>
 				<div className='at-menu'>
 
-					<button className={`menu-icon`}
+					{/* <button className={`menu-icon`}
 						onClick={() => toggleMenu(index)}>
 
 
@@ -79,24 +77,24 @@ function Task({ task, taskId }) {
 							modalComponent={
 								<EditTask
 									task={task}
-									// taskId={task.id}
+									taskId={task.id}
 									key={task.id}
 								/>}
-						/>
+						/> */}
 						{/* [allow edit, delete, post on modal]
 										[allow, edit, delete on menu button] */}
 
-						<OpenModalMenuItem
+						{/* <OpenModalMenuItem
 							itemText={"Delete this Task"}
 							onItemClick={closeMenu}
 							key={task.id}
 						// modalComponent={<DeleteTask tasks={tasks} />}
-						/>
-					</ul>
+						/> */}
+					{/* </ul> */}
 
-				</div>
+				{/* </div> */}
 
-				<h2 className='all-task-li'>
+				{/* <h2 className='all-task-li'>
 					{task.title}
 				</h2>
 				<div className='at-notes'>
@@ -126,7 +124,7 @@ function Task({ task, taskId }) {
 					<div className='all-task-fill'>
 						{task.difficulty}
 					</div>
-				</div>
+				</div> */}
 				{/* <div className='all-task-checklist'>
 									{
 										task.Checklist ?
@@ -149,7 +147,7 @@ function Task({ task, taskId }) {
 											</>
 									}
 								</div> */}
-				<div className='all-task-complete'>
+				{/* <div className='all-task-complete'>
 					{
 						task.completed ?
 							<>
@@ -177,7 +175,7 @@ function Task({ task, taskId }) {
 					</div>
 					<div className='all-task-fill'>
 						{task.dueDate}
-					</div>
+					</div> */}
 
 				</div>
 			</div>

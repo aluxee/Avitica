@@ -1,6 +1,6 @@
 import { useDispatch } from 'react-redux';
 import { useEffect, useState } from 'react';
-import OpenModalButton from '../OpenModalButton/OpenModalButton';
+// import OpenModalButton from '../OpenModalButton/OpenModalButton';
 // import ItemCart from './ItemCart';
 // import ItemViewAndBuy from './ItemViewAndBuy';
 import './ItemDetails.css';

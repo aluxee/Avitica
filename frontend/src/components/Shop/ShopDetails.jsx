@@ -12,7 +12,7 @@ function ShopDetails() {
 	const { closeModal } = useModal();
 	const marketObj = useSelector(state => state.shop)
 	const market = Object.values(marketObj)
-	const [showMenu, setShowMenu] = useState(false);
+	// const [showMenu, setShowMenu] = useState(false);
 	const [cart, setCart] = useState([]);
 
 	useEffect(() => {
@@ -25,7 +25,16 @@ function ShopDetails() {
 
 		console.log('Cart after adding item:', cart);
 
+		console.log("%c 🚀 ~ file: ShopDetails.jsx:30 ~ addToCart ~ cart: ", "color: coral; font-size: 25px", cart)
+		console.log("%c 🚀 ~ file: ShopDetails.jsx:30 ~ addToCart ~ setCart: ", "color: coral; font-size: 25px", setCart)
 	}
+
+	// const removeFromCart = (item) => {
+
+	// }
+
+
+
 
 	return (
 
@@ -43,7 +52,7 @@ function ShopDetails() {
 							modalComponent={
 								<ItemCart
 									cart={cart}
-								// key={index}
+									key={cart.map(item => item.id).join()}
 								// item={item} itemId={item.id}
 
 								// isSelected={item.id === selectedItem.id}

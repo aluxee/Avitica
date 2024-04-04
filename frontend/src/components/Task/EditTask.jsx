@@ -12,7 +12,7 @@ function EditTask({ task }) {
 	const dispatch = useDispatch();
 	const { closeModal } = useModal();
 	const [title, setTitle] = useState(task.title || '');
-	const [description, setDescription] = useState(task.description || '');
+	const [description, setDescription] = useState(task.description);
 	const [difficulty, setDifficulty] = useState(task.difficulty || '');
 	const [dueDate, setDueDate] = useState(task.dueDate || '');
 	const [checklist, setChecklist] = useState(task.Checklist || []);
@@ -77,7 +77,7 @@ function EditTask({ task }) {
 					<input
 						value={title}
 						onChange={(e) => setTitle(e.target.value)}
-						placeholder="Enter  Title for Task"
+						placeholder="Enter Title for Task"
 					/>
 					{errors?.title && <p className="p-error">{errors.title} </p>}
 				</label>

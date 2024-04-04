@@ -8,7 +8,20 @@ function Checklist({ taskId, checklist, setChecklist }) {
 
 	console.log("%c 🚀 ~ file: Checklist.jsx:9 ~ Checklist ~ checklist: ", "color: red; font-size: 25px", checklist)
 
-	const initialCheck = checklist.reduce((obj, item) => obj[item.id] = item.checked, {})
+	const initialCheck = checklist.reduce((obj, item) => {
+
+		console.log("%c 🚀 ~ file: Checklist.jsx:13 ~ initialCheck ~ item: ", "color: green; font-size: 25px", item)
+
+
+		console.log("%c 🚀 ~ file: Checklist.jsx:13 ~ initialCheck ~ obj: ", "color: green; font-size: 25px", obj)
+		if (obj) {
+			obj[item.id] = item.checked, {}
+		}
+
+	})
+
+
+
 	const [checkItem, setCheckItem] = useState(initialCheck || {});
 
 
@@ -31,10 +44,10 @@ function Checklist({ taskId, checklist, setChecklist }) {
 	const handleCheckboxChanges = async (id) => {
 		// Update the local checklist state
 		const previousCheck = checkItem[id];
-		setCheckItem({...checkItem, [id]:!previousCheck})
+		setCheckItem({ ...checkItem, [id]: !previousCheck })
 		const updatedChecklist = checklist.map(item => {
 			if (item.id === id) {
-				return { ...item, checked:!previousCheck};
+				return { ...item, checked: !previousCheck };
 			}
 			return item;
 		});
@@ -47,8 +60,8 @@ function Checklist({ taskId, checklist, setChecklist }) {
 	};
 
 	if (!checkItem) {
-	return <h1>Loading</h1>
-}
+		return <h1>Loading</h1>
+	}
 	return (
 		<>
 			<div className="cl-outer">

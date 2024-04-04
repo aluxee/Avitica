@@ -45,23 +45,23 @@ export const loadUserInfo = () => ({
 
 // /** Thunk Action Creators: */
 // LOAD USER GOLD
-//* load all user info
-export const thunkLoadTasks = () => async dispatch => {
+// //* load all user info
+// export const thunkLoadUserInfo = () => async dispatch => {
 
 
-	const response = await csrfFetch('/api/stats');
+// 	const response = await csrfFetch('/api/stats');
 
 
-	if (response.ok) {
-		const tasks = await response.json();
+// 	if (response.ok) {
+// 		const tasks = await response.json();
 
 
-		dispatch(loadTasks(tasks))
-	} else {
-		const errorResponse = await response.json()
-		return errorResponse
-	}
-}
+// 		dispatch(loadUserInfo(tasks))
+// 	} else {
+// 		const errorResponse = await response.json()
+// 		return errorResponse
+// 	}
+// }
 
 // // //* load current task
 // export const thunkLoadCurrentTask = (taskId) => async dispatch => {

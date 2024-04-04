@@ -1,22 +1,64 @@
 // import { useModal } from '../../context/Modal';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import './ItemCart.css';
 
 
 
 function ItemCart({ cart }) {
 	// const { closeModal } = useModal();
-	const [cartBasket, setCartBasket] = useState([]);
+	// const [cartBasket, setCartBasket] = useState([]);
+	const [cartBasket, setCartBasket] = useState(() => {
+		const cartSaved = localStorage.getItem("cart")
+		return cartSaved ? JSON.parse(cartSaved) : [];
+	});
 
-
+	//useRef works with objects, an array of objects but not just an array
+	//store cart in useRef to use overtime, and keep mutable value in the .current property
+	const cartRef = useRef(cart);
 
 	useEffect(() => {
-		countCartItems(cart)
-	}, [cart, cartBasket])
-	//! need to add localStorage logic above but it keeps either changing state structure to not fit to array or break page!
+		// update the cart whenever the cartRef changes
+		cartRef.current = cart
+	}, [cart])
 
-	const countCartItems = (cart) => {
-		const updatedCartBasket = cart.reduce((acc, item) => {
+	//do not change this useEffect, if this is changed, then we can no longer quantify whats inside the cart nor can we see the items in the cart
+	useEffect(() => {
+		//count items in the cart and update the basket
+		countCartItems(cartRef.current)
+	}, [cart])
+
+	useEffect(() => {
+		localStorage.setItem("cart", JSON.stringify(cartBasket))
+	})
+	// a useEffect for grabbing the item and cart to localStorage
+	useEffect(() => {
+		//save the cart items to local storage
+		cartRef.current = cartBasket.map(item => {
+			console.log("%c 🚀 ~ file: ItemCart.jsx:20 ~ current cartRef ~ item: ", "color: lightblue; font-size: 25px", item)
+			// save the items added to the cart in local storage
+			localStorage.getItem("item")
+			// if (storedItem) {
+			// 	setCartBasket(JSON.parse(storedItem))
+			// }
+			return cartRef.current
+		})
+
+		// const cartSaved = localStorage.getItem("cart");
+
+		//! how do you ensure upon refresh, the cart and their items are saved?
+
+	}, [cartBasket, cart])
+
+	//how can i save the current cart in the cartBasket with the value as item?
+	useEffect(() => {
+		localStorage.setItem(`${cartRef.current}`, "item")
+	})
+
+	console.log("%c 🚀 ~ file: ItemCart.jsx:57 ~ useEffect ~ cartRef: ", "color: goldenrod; font-size: 25px", cartRef, "and the current status: ", cartRef.current)
+
+	//changed cart to cartRef
+	const countCartItems = (cartRef) => {
+		const updatedCartBasket = cartRef.reduce((acc, item) => {
 			const existingItem = acc.find((cartItem) => cartItem.id === item.id);
 			if (existingItem) {
 				existingItem.quantity += 1; // Increment quantity if item already exists in cartBasket
@@ -28,8 +70,7 @@ function ItemCart({ cart }) {
 		setCartBasket(updatedCartBasket);
 	};
 
-	//! do not change logic below
-
+//! saved to localStorage but disappears upon refresh
 	return (
 		<>
 			<div className="outer-cart">

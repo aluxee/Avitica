@@ -1,21 +1,28 @@
-// import { useSelector } from 'react-redux';
-
-
+import { useSelector, useDispatch } from 'react-redux';
+import { useEffect } from 'react';
+import { thunkLoadStats } from '../../store/stats';
 
 
 
 
 function UserProfile({ user }) {
 
-	// const userInfo = useSelector(state => {
+	console.log("%c 🚀 ~ file: UserProfile.jsx:11 ~ UserProfile ~ user: ", "color: red; font-size: 25px", user)
 
-	// })
-	// useEffect(() => {
-	// 	// fill out form
-	// 	// button to test look: generate avatar
-	// 	// finalize look: submit avatar
+	const dispatch = useDispatch();
+	const userInfo = useSelector(state => {
+		console.log("STATE FOR USER: ", state)
+	})
 
-	// })
+	console.log("%c 🚀 ~ file: UserProfile.jsx:15 ~ userInfo ~ userInfo: ", "color: magenta; font-size: 25px", userInfo)
+
+	useEffect(() => {
+		// fill out form
+		// button to test look: generate avatar
+		// finalize look: submit avatar
+		dispatch(thunkLoadStats())
+	})
+
 
 	return (
 		<>

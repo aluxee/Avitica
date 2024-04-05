@@ -3,13 +3,13 @@ import thunk from "redux-thunk";
 import sessionReducer from "./session";
 import taskReducer from "./task";
 import listReducer from "./checklist";
-import userReducer from "./user";
+import statsReducer from "./stats";
 import shopReducer from "./shop";
 import invReducer from "./inventory";
 
 const rootReducer = combineReducers({
 	session: sessionReducer,
-	user: userReducer,
+	stats: statsReducer,
 	task: taskReducer,
 	checklist: listReducer,
 	shop: shopReducer,

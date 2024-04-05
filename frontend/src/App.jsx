@@ -6,7 +6,7 @@ import * as sessionActions from './store/session';
 import Home from './components/Home/Home';
 import ShopDetails from './components/Shop/ShopDetails';
 import Inventory from './components/Inventory/Inventory';
-
+// import 
 
 
 
@@ -46,6 +46,12 @@ const router = createBrowserRouter([
           <>
             <Home />
           </>
+      },
+      {
+        path: '/stats',
+        element: <>
+
+        </>
       },
       {
         path: '/tasks',

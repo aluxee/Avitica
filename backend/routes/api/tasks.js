@@ -9,15 +9,14 @@ router = express.Router();
 router.put('/:taskId/checklist/:checklistId', requireAuth, authorization, async (req, res) => {
 	//* may require frontend testing
 	const { checklistId } = req.params;
-	const { checklistItem, checked } = req.body;
-
-	const editCheckList = await Checklist.findByPk(checklistId, {
-		where: {
-			userId: req.user.id
-		}
-	})
+	const { checked } = req.body;
 
 	try {
+		const editCheckList = await Checklist.findByPk(checklistId, {
+			where: {
+				userId: req.user.id
+			}
+		})
 		if (!editCheckList) {
 			return res
 				.status(404)
@@ -25,12 +24,11 @@ router.put('/:taskId/checklist/:checklistId', requireAuth, authorization, async 
 					message: "Checklist not found"
 				})
 		}
-		editCheckList.checklistItem = checklistItem;
-		// utilize the checklist checked boolean attribute
+		//update checklist item's checked status and utilize the checklist checked boolean attribute
 		editCheckList.checked = checked;
 
-		await editCheckList.save()
-		res.json(editCheckList)
+		await editCheckList.save();
+		res.json(editCheckList);
 	} catch (err) {
 
 		return res
@@ -45,7 +43,7 @@ router.put('/:taskId/checklist/:checklistId', requireAuth, authorization, async 
 });
 
 
-// delete specific task made by user
+// delete specific checklist made by user
 router.delete('/:taskId/checklist/:checklistId', requireAuth, authorization, async (req, res) => {
 	const { taskId, checklistId } = req.params;
 
@@ -138,19 +136,6 @@ router.post('/:taskId/checklist/new', requireAuth, async (req, res) => {
 router.get('/:taskId/checklist', requireAuth, async (req, res) => {
 	const { taskId } = req.params;
 
-	const task = await Task.findByPk(taskId, {
-		include: [
-			{
-				model: Checklist
-			}
-		],
-		where: {
-			userId: req.user.id
-		}
-	});
-
-	const taskPayload = task.toJSON();
-
 	const allCheckLists = await Checklist.findAll({
 		where: {
 			taskId,
@@ -158,16 +143,54 @@ router.get('/:taskId/checklist', requireAuth, async (req, res) => {
 		}
 	});
 
+	let checklists = [];
+	allCheckLists.forEach(list => {
+		const checkListBox = list.toJSON();
+
+		// console.log("%c 🚀 ~ file: tasks.js:149 ~ router.get ~ checkListBox: ", "color: red; font-size: 25px", checkListBox)
+
+		checklists.push(checkListBox)
+
+	})
+
+	// console.log("%c 🚀 ~ file: tasks.js:155 ~ router.get ~ checklists: ", "color: red; font-size: 25px", checklists)
+
+
+	// console.log("%c 🚀 ~ file: tasks.js:158 ~ router.get ~ checklists: ", "color: cyan; font-size: 25px", checklists)
+
+	const tasks = await Task.findAll({
+		where: {
+			userId: req.user.id,
+			id: taskId
+		}
+	});
+
+	const tasksList = [];
+	tasks.forEach(task => {
+		const viewTask = task.toJSON();
+
+		viewTask.Checklist = checklists;
+		tasksList.push(viewTask)
+	});
+
 	if (allCheckLists.length === 0) {
 		return res
 			.json({
 				message: "No checklist has been made yet for this task"
 			});
-	}
-	taskPayload.Checklist = allCheckLists
+	};
+	console.log("%c 🚀 ~ file: tasks.js:191 ~ router.get ~ tasksList: ", "color: red; font-size: 25px", tasksList, tasksList.Checklist)
 
-	return res.json(allCheckLists)
+	const checklistsArray = tasksList.map(task => task.Checklist).flat();
+
+	console.log("%c 🚀 ~ file: tasks.js:186 ~ router.get ~ checklistsArray: ", "color: red; font-size: 25px", checklistsArray)
+
+
+
+	return res.json(checklistsArray)
 });
+
+
 
 
 // * Keep in mind there are two types of task edits: one will edit the task itself, the other updates the task when a task is marked as complete or incomplete -- this one is the latter
@@ -175,35 +198,62 @@ router.get('/:taskId/checklist', requireAuth, async (req, res) => {
 //* update task as completed OR incomplete
 router.put('/:taskId', requireAuth, async (req, res) => {
 	//* May need testing with front end
-
+	// this portion must come from the frontend where the task is marked as complete by boolean of check to indicate that the task is or is not complete
+	const { title, notes, difficulty, dueDate, completed } = req.body;
 	const { taskId } = req.params;
-	const { completed } = req.body; // this portion must come from the frontend where the task is marked as complete by boolean of check to indicate that the task is or is not complete
+
 
 	try {
-		// update task in db based on completion
-
-		const updatedTask = await Task.findByPk(taskId, {
-			where: {
-				userId: req.user.id
-			}
-		})
-		if (!updatedTask) {
+		if (!title) {
 			return res
-				.status(404)
+				.status(400)
 				.json({
-					message: "Task not found"
+					"message": "A title is required"
 				})
 		}
 
-		// utilize the task completion (boolean) attribute prior to the point changes
-		updatedTask.completed = completed;
+		const taskUpdate = await Task.findByPk(taskId, {
+			where: {
+				userId: req.user.id
+			},
+		});
 
-		//find userStat information
+		const thisDate = Date.now();
+		let currentDate = new Date(thisDate);
+
+		currentDate.toISOString().split('T')[0];
+		const offset = currentDate.getTimezoneOffset();
+		currentDate = new Date(currentDate.getTime() - (offset * 60 * 1000));
+		const currDateCheck = currentDate.getTime();
+		const thisDateTime = () => dueDate ? dueDate.getTime() : '';
+		const stringDate = currentDate.toISOString().split('T')[0];
+
+		if (thisDateTime < currDateCheck) {
+			return res
+				.status(400)
+				.json({
+					"error": "The set due date cannot be in the past"
+				})
+		}
+
+		taskUpdate.title = title
+		taskUpdate.notes = notes || null
+		taskUpdate.difficulty = difficulty || "Trivial" || null
+		taskUpdate.dueDate = dueDate || stringDate
+		// utilize the task completion (boolean) attribute prior to the point changes
+		taskUpdate.completed = completed
+
 		const userStatus = await userStat.findOne({
 			where: {
 				userId: req.user.id
 			}
 		})
+
+		// LevelStats: userStatus
+		//save taskUpdate status
+		await taskUpdate.save();
+
+		//find userStat information
 
 		// retrieve user's current level
 		const currLevel = userStatus.getLevel();
@@ -211,7 +261,7 @@ router.put('/:taskId', requireAuth, async (req, res) => {
 		let expGain = 0;
 		//initialize gold gain variable
 		let goldGain;
-		if (updatedTask.completed) {
+		if (taskUpdate.completed) {
 			expGain = Math.max(10, 50 - (currLevel - 1) * 5);
 			userStatus.experience += expGain;
 			goldGain = Math.max(10, 85 + (currLevel - 1) * 12)
@@ -232,24 +282,20 @@ router.put('/:taskId', requireAuth, async (req, res) => {
 			userStatus.health -= healthLoss;
 
 			if (userStatus.health <= 0) {
-				res.json({
-					message: `Oh no! Your health has been completely depleted! Your experience and health will now reset.`
-				})
 				userStatus.health = userStatus.calcDefaultHealth(currLevel)
 				userStatus.experience = 0
+				return res
+					.json({
+						message: `Oh no! Your health has been completely depleted! Your experience and health will now reset.`
+					})
 			}
 		}
 
-		//save updatedTask status
-		await updatedTask.save();
+
 		// confirm such actions w/ model fxn implementation
 		return res
 			.status(200)
-			.json({
-				message: 'Task updated successfully',
-				Task: updatedTask,
-				LevelStats: userStatus
-			});
+			.json(taskUpdate);
 
 	} catch (err) {
 		return res
@@ -286,9 +332,9 @@ router.get('/:taskId', requireAuth, async (req, res) => {
 	taskPayLoad.Checklist = allCheckLists
 
 	return res
-		.json({
-			Task: taskPayLoad
-		});
+		.json(
+			taskPayLoad
+		);
 });
 
 
@@ -296,69 +342,13 @@ router.get('/:taskId', requireAuth, async (req, res) => {
 // edits a task
 //:taskId endpoint to handle this function in an editorial way to be rooted to
 // * Keep in mind there are two types of task edits: one will edit the task itself, the other updates the task when a task is marked as complete or incomplete -- this one is the prior
-router.put('/:taskId/edit', requireAuth, async (req, res) => {
-	const { title, notes, difficulty, dueDate } = req.body;
-	const { taskId } = req.params;
+// router.put('/:taskId/edit', requireAuth, async (req, res) => {
 
-	if (!title) {
-		return res
-			.status(400)
-			.json({
-				"message": "A title is required"
-			})
-	}
-	const taskUpdate = await Task.findByPk(taskId, {
-		where: {
-			userId: req.user.id
-		}
-	});
-
-	const thisDate = Date.now();
-	let currentDate = new Date(thisDate);
-
-	currentDate.toISOString().split('T')[0];
-	const offset = currentDate.getTimezoneOffset();
-	currentDate = new Date(currentDate.getTime() - (offset * 60 * 1000));
-	const currDateCheck = currentDate.getTime();
-	const thisDateTime = () => dueDate ? dueDate.getTime() : '';
-	const stringDate = currentDate.toISOString().split('T')[0];
-
-	if (thisDateTime < currDateCheck) {
-		return res
-			.status(400)
-			.json({
-				"error": "The set due date cannot be in the past"
-			})
-	}
-
-	try {
-
-		taskUpdate.title = title
-		taskUpdate.notes = notes || null,
-			taskUpdate.difficulty = difficulty || "Trivial"
-			|| null,
-			taskUpdate.dueDate = dueDate || stringDate,
-
-			await taskUpdate.save()
-
-
-		res.json({
-			message: "Task updated successfully",
-			Task: { taskUpdate }
-		})
-	} catch (error) {
-		return res
-			.status(400)
-			.json({
-				"message": error
-			})
-	}
-
-})
+// })
 
 
 // deletes a task
-router.delete('/:taskId', authorization, requireAuth, async (req, res) => {
+router.delete('/:taskId', requireAuth, async (req, res) => {
 	const { taskId } = req.params;
 
 	const task = await Task.findByPk(taskId, {
@@ -367,7 +357,7 @@ router.delete('/:taskId', authorization, requireAuth, async (req, res) => {
 		}
 	})
 
-	if (!task) {
+	if (!taskId) {
 		return res
 			.status(404)
 			.json({
@@ -500,35 +490,23 @@ router.get('/', requireAuth, authorization, async (req, res) => {
 		});
 	}
 
-	const allCheckLists = await Checklist.findAll({
-		where: {
-			userId: user.id
-		}
-	});
-	const collectList = [];
-
-
-	allCheckLists.forEach(list => {
-		const userCheckList = list.toJSON();
-		collectList.push(userCheckList)
-	});
-
 	let tasksList = [];
 
-	tasks.forEach(task => {
-		let tasksData = task.toJSON();
-		tasksData.Checklist = collectList
-
-		if (!tasksList.some(item => item.id === tasksData.id)) {
-
-			tasksList.push(tasksData)
-		}
-		return tasksList
-	})
+	for (const task of tasks) {
+		const tasksData = task.toJSON();
+		const checklists = await Checklist.findAll({
+			where: {
+				userId: req.user.id,
+				taskId: task.id
+			}
+		});
+		tasksData.Checklist = checklists.map(list => list.toJSON())
+		tasksList.push(tasksData)
+	}
 
 	return res.json({
 		Task: tasksList
-	});
+	})
 });
 
 module.exports = router;

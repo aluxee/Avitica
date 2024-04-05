@@ -4,6 +4,7 @@ import ProfileButton from './ProfileButton';
 import OpenModalButton from '../OpenModalButton';
 import LoginFormModal from '../LoginFormModal';
 import './Navigation.css';
+import UserProfile from '../UserProfile/UserProfile';
 
 function Navigation({ isLoaded }) {
 	const sessionUser = useSelector((state) => state.session.user);
@@ -14,6 +15,9 @@ function Navigation({ isLoaded }) {
 				<li className='nav-profile'>
 					<ProfileButton user={sessionUser} />
 				</li>
+			</div>
+			<div className='yes-session user-stats'>
+				<UserProfile user={sessionUser}/>
 			</div>
 		</div>
 	) : (
@@ -39,12 +43,32 @@ function Navigation({ isLoaded }) {
 			<div className='nav-main-inner'>
 				<ul className='nav-main-list'>
 					<li className='nav-home'>
-						<NavLink to="/">Home</NavLink>
+						{
+							sessionUser ?
+								<div className='nav-left'>
+
+									<NavLink to="/" className="yes-user-nav">To-Do&apos;s</NavLink>
+									<NavLink to='/inv'>Inventory</NavLink>
+									<NavLink to='/shop'>Shop</NavLink>
+									<NavLink to='/battle'>Battle</NavLink>
+								</div>
+								:
+								<>
+									<NavLink to="/" className="no-user-nav">Home</NavLink>
+								</>
+						}
+
+					</li>
+					<li className='nav-avatar'>
+
 					</li>
 					{isLoaded && (
 						<li className='nav_list' id='nav_profile'>
 							<ProfileButton user={sessionUser} />
 						</li>)}
+				</ul>
+				<ul className='nav-avatar-list'>
+						<UserProfile user={sessionUser}/>
 				</ul>
 			</div>
 		</div>

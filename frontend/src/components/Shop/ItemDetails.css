@@ -1,0 +1,68 @@
+.outer-shop-item-container {}
+
+.inner-shop-item-container {
+	display: flex;
+	flex-direction: column;
+	flex-wrap: wrap;
+	align-items: center;
+}
+
+
+
+
+/* SIDE PANEL */
+.item-side-panel {
+	border-left: solid black 0px;
+	background-color: lightgreen;
+	flex: 0 0 fit-content;
+	-webkit-box-shadow: -5px 1px 4px 1px rgba(0, 0, 0, 0.45);
+	box-shadow: -5px 1px 4px 1px rgba(0, 0, 0, 0.45);
+}
+
+.item-side-panel-toggle {
+	/*border: solid black 1px;*/
+
+}
+
+/* NOTE: Special handing to put the toggle OUTSIDE the details panel so it does
+   not affect the layout (content offset, still showing background when closed)
+*/
+.item-side-panel-toggle-wrapper {
+	overflow: visible;
+	position: relative;
+	left: -20px;
+	top: 10px;
+	width: 0;
+	height: 0;
+}
+
+/* LIST: ITEM CART */
+
+.item-list {
+	padding: 25px;
+	background-color: white;
+	border-radius: 1rem;
+}
+
+.item-list-item {
+	display: inline-flex;
+	flex-direction: column;
+	align-items: center;
+	border: solid black 2px;
+	border-radius: 1rem;
+	padding: 20px;
+	margin: 25px 10px;
+	width: 150px;
+	height: 150px;
+	overflow: visible;
+}
+
+.item-list-item.selected {
+	background-color: lightcoral;
+}
+
+.item-list-item-photo {
+	width: 150px;
+	height: 116px;
+	margin-bottom: 12px;
+}

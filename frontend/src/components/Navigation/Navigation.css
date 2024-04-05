@@ -20,15 +20,26 @@
 	display: flex;
 	width: 100%;
 	background-color: #1b7cac;
-	position: fixed
+	position: fixed;
+	z-index: 5;
 }
 
 .nav-main-inner {
 	display: flex;
 	width: 100%;
-	margin: 0.5rem;
+	margin: -0.5rem;
 	flex-wrap: wrap;
 	padding: 4px;
+	position: relative;
+	z-index: 5;
+}
+
+ul.nav-avatar-list {
+	width: 100%;
+	background-color: green;
+	height: 100px;
+	margin-bottom: 0px;
+	margin-inline-end: -10px;
 }
 
 .nav-main-list {
@@ -49,4 +60,12 @@
 }
 
 
-/* button */
+/* button and links*/
+.yes-user-nav {
+	text-decoration: none;
+}
+
+/* *OPEN MODAL MENU STYLING */
+li.modal-menu-item {
+	list-style: none;
+}

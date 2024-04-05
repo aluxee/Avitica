@@ -1,0 +1,14 @@
+.user-container {
+	display: flex;
+	position: relative;
+	flex-direction: row;
+	align-content: stretch;
+	justify-content: space-between;
+	flex-wrap: wrap;
+	margin-top: 2%;
+	margin-inline-end: 3%;
+}
+
+.fa-solid {
+	font-size: 20px;
+}

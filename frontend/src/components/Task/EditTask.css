@@ -1,0 +1,25 @@
+.task-container {
+	display: flex;
+
+}
+
+.task-banner {
+
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	justify-content: center;
+}
+
+.task-banner>h3 {
+	margin-right: 10px;
+}
+
+
+label>h4 {
+	margin: 5px 0px;
+}
+
+.et-checklist {
+	margin-top: 8px;
+}

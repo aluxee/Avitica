@@ -23,13 +23,21 @@ module.exports = {
         },
         onDelete: 'CASCADE'
       },
-      statId: {
+      // statId: {
+      //   type: Sequelize.INTEGER,
+      //   allowNull: false,
+      //   references: {
+      //     model: 'Stats',
+      //     key: 'id'
+      //   },
+      // },
+      shopId: {
         type: Sequelize.INTEGER,
         allowNull: false,
-        references: {
-          model: 'Stats',
-          key: 'id'
-        },
+        // references: {
+        //   model: 'Shops',
+        //   key: 'id'
+        // },
       },
       itemName: {
         type: Sequelize.STRING(50),
@@ -61,14 +69,6 @@ module.exports = {
       equipped: {
         type: Sequelize.BOOLEAN,
         defaultValue: false
-      },
-      description: {
-        type: Sequelize.STRING(250),
-        allowNull: false
-      },
-      price: {
-        type: Sequelize.INTEGER,
-        allowNull: false
       },
       createdAt: {
         allowNull: false,

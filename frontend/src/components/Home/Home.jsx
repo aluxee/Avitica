@@ -1,7 +1,7 @@
 import { useSelector } from 'react-redux';
 import { mainImg, mainImg2 } from '../../images';
 import './Home.css';
-import Task from '../Task/Task';
+import AllTasks from '../Task/AllTasks';
 function Home() {
 
 	const user = useSelector(state => state.session.user)
@@ -24,29 +24,27 @@ function Home() {
 	}
 	return (
 		<>
-			<div className='home-hold'>
-				{
-					user ?
-						<>
-							<div className='task-section'>
-								<Task user={user} />
-							</div>
-						</>
-						:
-						<div className='outer-home'
-							style={switchUp.style}
-						>
-							<div className='inner-home'>
-								<div></div>
-								<div></div>
-								<footer className='footer'>
-
-
-								</footer>
-							</div>
+			{
+				user ?
+					<>
+						<div className='task-section'>
+							<AllTasks user={user} />
 						</div>
-				}
-			</div>
+					</>
+					:
+					<div className='outer-home'
+						style={switchUp.style}
+					>
+						<div className='inner-home'>
+							<div></div>
+							<div></div>
+							<footer className='footer'>
+
+
+							</footer>
+						</div>
+					</div>
+			}
 		</>
 	)
 

@@ -13,9 +13,7 @@ module.exports = (sequelize, DataTypes) => {
       Stat.belongsTo(models.User, {
         foreignKey: 'userId'
       });
-      Stat.hasOne(models.Inventory, {
-        foreignKey: 'statId'
-      });
+      Stat.belongsTo(models.Inventory);
     }
   }
   Stat.init({

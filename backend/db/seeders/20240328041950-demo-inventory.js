@@ -29,185 +29,202 @@ module.exports = {
     await Inventory.bulkCreate([
       {
         userId: 1,
-        statId: 1,
+        shopId: 1,
         itemName: `${dataHpPotion.name}`,
         itemType: true,
-        description: `Restores 40 points of health (HP): ${dataHpPotion.description}`,
         healthBoost: true,
         gear: false,
         wep: false,
-        price: 20
+        Stat: {
+          hp: 40
+        },
       },
       {
         userId: 1,
-        statId: 2,
+        shopId: 2,
         itemName: `Power Muffin's ${dataOtherPotion.name}`,
-        description: `Grants a 10% boost in strength (STR)`,
         statBoost: true,
         gear: false,
         wep: false,
-        price: 30
+        Stat: {
+          strength: 0.1
+        },
       },
       {
         userId: 1,
-        statId: 3,
+        shopId: 3,
         itemName: `'Magic Jello's ${dataOtherPotion.name}`,
-        description: 'Grants a 10% boost in magic (MAGIC)',
         statBoost: true,
         gear: false,
         wep: false,
-        price: 30
+        Stat: {
+          magic: 0.1
+        },
       },
       {
         userId: 1,
-        statId: 2,
+        shopId: 5,
         itemName: 'Plad Armor',
-        description: 'Grants a 20% increase in physical defense (PDEF): Shiny rich armor of steel',
         statBoost: true,
         gear: true,
         wep: false,
         equipped: true,
-        price: 200
+        Stat: {
+          physicalDefense: 0.2
+        },
       },
       {
         userId: 1,
-        statId: 2,
+        shopId: 7,
         itemName: 'Dragon`s Fury',
-        description: `Grants 20% increase in overall strength (STR): ${dataDrgRg.description}`,
         statBoost: true,
         gear: false,
         wep: true,
         equipped: true,
-        price: 250
+        Stat: {
+          strength: 0.2
+        },
       },
       {
         userId: 2,
-        statId: 3,
+        shopId: 4,
         itemName: `Lucky Farms: ${dataOtherPotion.name}`,
-        description: 'Grants a 10% increase in luck (LUCK)',
         statBoost: true,
         gear: false,
         wep: false,
-        price: 30
+        Stat: {
+          luck: 0.1
+        },
       },
       {
         userId: 2,
-        statId: 1,
+        shopId: 6,
         itemName: 'Magic Robe',
-        description: 'Grants a 20% increase in magic defense (MDEF): A magical silk threaded robe',
         statBoost: true,
         gear: true,
         wep: false,
-        price: 200
+        Stat: {
+          magicDefense: 0.2
+        },
       },
       {
         userId: 2,
-        statId: 1,
+        shopId: 1,
         itemName: `${dataHpPotion.name}`,
-        description: `Restores 40 points of health (HP): ${dataHpPotion.description}`,
         healthBoost: true,
         gear: false,
         wep: false,
-        price: 20
+        Stat: {
+          hp: 40
+        },
       },
       {
         userId: 2,
-        statId: 3,
+        shopId: 11,
         itemName: `${dataAmeRod.name}`,
-        description: 'Grants a 20% increase in magic (MAGIC): Exquisite fashionable  gold and diamond embedded rod from the deep of Fairy Kingdoms',
         statBoost: true,
         gear: false,
         wep: true,
         equipped: true,
-        price: 250
+        Stat: {
+          magic: 0.2
+        },
       },
       {
         userId: 2,
-        statId: 3,
+        shopId: 12,
         itemName: `${dataMeiRod.name}`,
-        description: 'Grants a 20% increase in magic (MAGIC): Exquisite stylish embedded platinum rod',
         statBoost: true,
         gear: false,
         wep: true,
         equipped: false,
-        price: 250
+        Stat: {
+          magic: 0.2
+        },
       },
       {
         userId: 3,
-        statId: 1,
+        shopId: 1,
         itemName: `${dataHpPotion.name}`,
-        description: `Restores 40 points of health (HP): ${dataHpPotion.description}`,
         healthBoost: true,
         gear: false,
         wep: false,
-        price: 20
+        Stat: {
+          hp: 40
+        },
       },
       {
         userId: 3,
-        statId: 2,
+        shopId: 5,
         itemName: 'Plad Armor',
-        description: 'Grants a 20% increase in physical defense (PDEF): Shiny rich armor of steel',
         statBoost: true,
         gear: true,
         wep: false,
-        price: 250
+        Stat: {
+          physicalDefense: 0.2
+        },
       },
       {
         userId: 3,
-        statId: 2,
+        shopId: 8,
         itemName: `${dataCrim.name}`,
-        description: 'Grants a 20% increase in strength (STR): Carved from the cave walls of the Deep',
         statBoost: true,
         gear: false,
         wep: true,
         equipped: true,
-        price: 250
+        Stat: {
+          strength: 0.2
+        },
       },
       {
         userId: 3,
-        statId: 1,
+        shopId: 9,
         itemName: `${dataSoulShield.name}`,
-        description: `Grants a 10% increase in physical defense (PDEF): Pure diamonds that capture the blink of the noon sun`,
         statBoost: true,
         gear: false,
         wep: true,
         equipped: false,
-        price: 250
+        Stat: {
+          physicalDefense: 0.2
+        },
       },
       {
         userId: 3,
-        statId: 2,
+        shopId: 10,
         itemName: `${dataFirstShield.name}`,
-        description: `Grants a 10% increase in magical defense (MDEF): Collected by the magic of elves deep within the magic forest`,
         statBoost: true,
         gear: false,
         wep: true,
         equipped: true,
-        price: 250
+        Stat: {
+          magicDefense: 0.2
+        },
       },
       {
         userId: 2,
-        statId: 2,
+        shopId: 10,
         itemName: `${dataFirstShield.name}`,
-        description: `Grants a 10% increase in magical defense (MDEF): Collected by the magic of elves deep within the magic forest`,
         statBoost: true,
         gear: false,
         wep: true,
         equipped: true,
-        price: 250
+        Stat: {
+          magicDefense: 0.2
+        },
       },
       {
         userId: 1,
-        statId: 3,
+        shopId: 10,
         itemName: `${dataFirstShield.name}`,
-        description: `Grants a 10% increase in magical defense (MDEF): Collected by the magic of elves deep within the magic forest`,
         statBoost: true,
         gear: false,
         wep: true,
         equipped: false,
-        price: 250
+        Stat: {
+          magicDefense: 0.2
+        },
       },
-    ], options, { validate: true })
+    ], options, { validate: true }, { include: [Inventory.Stat] })
   },
 
   async down(queryInterface, Sequelize) {

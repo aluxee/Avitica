@@ -8,60 +8,60 @@ router = express.Router();
 
 
 // remove user stat w/ gear (removal of gear to see stats)
-router.delete('/:userId/unequip/:statId', requireAuth, async (req, res) => {
+router.delete('/:userId/unequip', requireAuth, async (req, res) => {
 
-	const { userId, statId } = req.params;
+	const { userId } = req.params;
 
-	try {
-		const itemToRemove = await Inventory.findByPk(statId, {
-			where: {
-				userId
-			}
-		})
-		if (!itemToRemove) {
-			return res
-				.status(404)
-				.json({
-					error: "Item not found"
-				})
-		}
-		const statUser = await userStat.findByPk(itemToRemove.userId)
-		if (!user) {
-			return res
-				.status(404)
-				.json({
-					error: "User not found"
-				})
-		}
-		// Revert stat application
-		const description = itemToRemove.description;
-		const statBooster = description.match(/Grants a (\d+)% increase in (.+):/);
-		if (statBooster) {
+	// try {
+	// 	const itemToRemove = await Inventory.findByPk(statId, {
+	// 		where: {
+	// 			userId
+	// 		}
+	// 	})
+	// 	if (!itemToRemove) {
+	// 		return res
+	// 			.status(404)
+	// 			.json({
+	// 				error: "Item not found"
+	// 			})
+	// 	}
+	// 	const statUser = await userStat.findByPk(itemToRemove.userId)
+	// 	if (!user) {
+	// 		return res
+	// 			.status(404)
+	// 			.json({
+	// 				error: "User not found"
+	// 			})
+	// 	}
+	// 	// Revert stat application
+	// 	const description = itemToRemove.description;
+	// 	const statBooster = description.match(/Grants a (\d+)% increase in (.+):/);
+	// 	if (statBooster) {
 
 
 
-			const percentageApplicator = parseInt(statBooster[1]);
-			const statName = statBooster[2];
-			const currStatVal = statUser[statName.toLowerCase()];
-			const statDecrease = Math.round((currStatVal * percentageApplicator / 100));
+	// 		const percentageApplicator = parseInt(statBooster[1]);
+	// 		const statName = statBooster[2];
+	// 		const currStatVal = statUser[statName.toLowerCase()];
+	// 		const statDecrease = Math.round((currStatVal * percentageApplicator / 100));
 
-			statUser[statName.toLowerCase()] -= statDecrease;
+	// 		statUser[statName.toLowerCase()] -= statDecrease;
 
-			await user.save();
-		}
-		// THEN DESTROYYYYY
-		await itemToRemove.destroy()
-		return res
-			.status(200)
-			.json({
-				message: "Item(s)successfully removed"
-			});
+	// 		await user.save();
+	// 	}
+	// 	// THEN DESTROYYYYY
+	// 	await itemToRemove.destroy()
+	// 	return res
+	// 		.status(200)
+	// 		.json({
+	// 			message: "Item(s)successfully removed"
+	// 		});
 
-	} catch (err) {
-		res
-			.status(500)
-			.json({ error: "Internal service error" });
-	};
+	// } catch (err) {
+	// 	res
+	// 		.status(500)
+	// 		.json({ error: "Internal service error" });
+	// };
 
 })
 

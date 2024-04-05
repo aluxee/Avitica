@@ -1,5 +1,5 @@
 const express = require('express')
-const { Shop } = require('../../db/models');
+const { Shop, Inventory } = require('../../db/models');
 const { requireAuth } = require('../../utils/auth');
 
 router = express.Router();
@@ -35,5 +35,10 @@ router.get('/', requireAuth, async (_req, res) => {
 	})
 
 })
+
+
+
+
+
 
 module.exports = router;

@@ -23,14 +23,14 @@ module.exports = {
         },
         onDelete: 'CASCADE'
       },
-      statId: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-        references: {
-          model: 'Stats',
-          key: 'id'
-        },
-      },
+      // statId: {
+      //   type: Sequelize.INTEGER,
+      //   allowNull: false,
+      //   references: {
+      //     model: 'Stats',
+      //     key: 'id'
+      //   },
+      // },
       shopId: {
         type: Sequelize.INTEGER,
         allowNull: false,

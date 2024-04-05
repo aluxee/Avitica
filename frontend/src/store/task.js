@@ -178,6 +178,9 @@ const taskReducer = (state = initialState, action) => {
 	switch (action.type) {
 		case LOAD_TASKS: {
 			const allTasksState = {};
+
+			console.log("%c 🚀 ~ file: task.js:182 ~ taskReducer ~ allTasksState: ", "color: red; font-size: 25px", allTasksState)
+
 			action.tasks.Task.forEach(task => {
 				allTasksState[task.id] = task;
 			});

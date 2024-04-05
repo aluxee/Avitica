@@ -9,9 +9,7 @@ module.exports = (sequelize, DataTypes) => {
       Inventory.belongsTo(models.User, {
         foreignKey: 'userId'
       });
-      Inventory.belongsTo(models.Stat, {
-        foreignKey: 'statId'
-      });
+      Inventory.hasOne(models.Stat);
       Inventory.belongsTo(models.Shop, {
         foreignKey: 'shopId'
       });
@@ -34,14 +32,14 @@ module.exports = (sequelize, DataTypes) => {
         len: [3, 50]
       }
     },
-    statId: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      references: {
-        model: 'Stats',
-        key: 'id'
-      },
-    },
+    // statId: {
+    //   type: DataTypes.INTEGER,
+    //   allowNull: false,
+    //   // references: {
+    //   //   model: 'Stats',
+    //   //   key: 'id'
+    //   // },
+    // },
     shopId: {
       type: DataTypes.INTEGER,
       allowNull: false,

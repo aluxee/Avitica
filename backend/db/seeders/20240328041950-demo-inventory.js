@@ -29,169 +29,202 @@ module.exports = {
     await Inventory.bulkCreate([
       {
         userId: 1,
-        statId: 1,
         shopId: 1,
         itemName: `${dataHpPotion.name}`,
         itemType: true,
         healthBoost: true,
         gear: false,
         wep: false,
-
+        Stat: {
+          hp: 40
+        },
       },
       {
         userId: 1,
-        statId: 2,
         shopId: 2,
         itemName: `Power Muffin's ${dataOtherPotion.name}`,
         statBoost: true,
         gear: false,
         wep: false,
+        Stat: {
+          strength: 0.1
+        },
       },
       {
         userId: 1,
-        statId: 3,
         shopId: 3,
         itemName: `'Magic Jello's ${dataOtherPotion.name}`,
         statBoost: true,
         gear: false,
         wep: false,
+        Stat: {
+          magic: 0.1
+        },
       },
       {
         userId: 1,
-        statId: 2,
         shopId: 5,
         itemName: 'Plad Armor',
         statBoost: true,
         gear: true,
         wep: false,
         equipped: true,
+        Stat: {
+          physicalDefense: 0.2
+        },
       },
       {
         userId: 1,
-        statId: 2,
         shopId: 7,
         itemName: 'Dragon`s Fury',
         statBoost: true,
         gear: false,
         wep: true,
         equipped: true,
+        Stat: {
+          strength: 0.2
+        },
       },
       {
         userId: 2,
-        statId: 3,
         shopId: 4,
         itemName: `Lucky Farms: ${dataOtherPotion.name}`,
         statBoost: true,
         gear: false,
         wep: false,
+        Stat: {
+          luck: 0.1
+        },
       },
       {
         userId: 2,
-        statId: 1,
         shopId: 6,
         itemName: 'Magic Robe',
         statBoost: true,
         gear: true,
         wep: false,
+        Stat: {
+          magicDefense: 0.2
+        },
       },
       {
         userId: 2,
-        statId: 1,
         shopId: 1,
         itemName: `${dataHpPotion.name}`,
         healthBoost: true,
         gear: false,
         wep: false,
+        Stat: {
+          hp: 40
+        },
       },
       {
         userId: 2,
-        statId: 3,
         shopId: 11,
         itemName: `${dataAmeRod.name}`,
         statBoost: true,
         gear: false,
         wep: true,
         equipped: true,
+        Stat: {
+          magic: 0.2
+        },
       },
       {
         userId: 2,
-        statId: 3,
         shopId: 12,
         itemName: `${dataMeiRod.name}`,
         statBoost: true,
         gear: false,
         wep: true,
         equipped: false,
+        Stat: {
+          magic: 0.2
+        },
       },
       {
         userId: 3,
-        statId: 1,
         shopId: 1,
         itemName: `${dataHpPotion.name}`,
         healthBoost: true,
         gear: false,
         wep: false,
+        Stat: {
+          hp: 40
+        },
       },
       {
         userId: 3,
-        statId: 2,
         shopId: 5,
         itemName: 'Plad Armor',
         statBoost: true,
         gear: true,
         wep: false,
+        Stat: {
+          physicalDefense: 0.2
+        },
       },
       {
         userId: 3,
-        statId: 2,
         shopId: 8,
         itemName: `${dataCrim.name}`,
         statBoost: true,
         gear: false,
         wep: true,
         equipped: true,
+        Stat: {
+          strength: 0.2
+        },
       },
       {
         userId: 3,
-        statId: 1,
         shopId: 9,
         itemName: `${dataSoulShield.name}`,
         statBoost: true,
         gear: false,
         wep: true,
         equipped: false,
+        Stat: {
+          physicalDefense: 0.2
+        },
       },
       {
         userId: 3,
-        statId: 2,
         shopId: 10,
         itemName: `${dataFirstShield.name}`,
         statBoost: true,
         gear: false,
         wep: true,
         equipped: true,
+        Stat: {
+          magicDefense: 0.2
+        },
       },
       {
         userId: 2,
-        statId: 2,
         shopId: 10,
         itemName: `${dataFirstShield.name}`,
         statBoost: true,
         gear: false,
         wep: true,
         equipped: true,
+        Stat: {
+          magicDefense: 0.2
+        },
       },
       {
         userId: 1,
-        statId: 3,
         shopId: 10,
         itemName: `${dataFirstShield.name}`,
         statBoost: true,
         gear: false,
         wep: true,
         equipped: false,
+        Stat: {
+          magicDefense: 0.2
+        },
       },
-    ], options, { validate: true })
+    ], options, { validate: true }, { include: [Inventory.Stat] })
   },
 
   async down(queryInterface, Sequelize) {

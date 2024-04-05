@@ -6,3 +6,27 @@
 	justify-content: center;
 	background-color: teal;
 }
+
+.sd-inv-img {
+	display: flex;
+	justify-content: center;
+	flex-direction: row;
+	flex-wrap: nowrap;
+	align-items: flex-end;
+}
+
+p.quantifier {
+	border: 1px black solid;
+	background-color: red;
+	color: black;
+}
+
+ul.bag-items {
+	width: 25%;
+	display: flex;
+	flex-direction: column;
+	flex-wrap: wrap;
+	justify-content: center;
+	align-items: stretch;
+	align-content: space-between;
+}

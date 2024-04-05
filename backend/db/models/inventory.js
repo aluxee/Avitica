@@ -9,7 +9,9 @@ module.exports = (sequelize, DataTypes) => {
       Inventory.belongsTo(models.User, {
         foreignKey: 'userId'
       });
-      Inventory.hasOne(models.Stat);
+      Inventory.hasMany(models.Stat, {
+        foreignKey: 'inventoryId'
+      });
       Inventory.belongsTo(models.Shop, {
         foreignKey: 'shopId'
       });

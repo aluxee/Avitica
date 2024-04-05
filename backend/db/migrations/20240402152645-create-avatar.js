@@ -42,7 +42,7 @@ module.exports = {
         allowNull: false
       },
       character: {
-        type: Sequelize.TEXT
+        type: Sequelize.TEXT(1000)
       },
       createdAt: {
         allowNull: false,

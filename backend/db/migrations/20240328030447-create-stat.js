@@ -22,6 +22,14 @@ module.exports = {
         },
         onDelete: 'CASCADE'
       },
+      inventoryId: {
+        type: Sequelize.INTEGER,
+        // references: {
+        //   model: 'Inventories',
+        //   key: 'id'
+        // },
+        // onDelete: 'CASCADE'
+      },
       hp: {
         type: Sequelize.FLOAT,
         allowNull: false,

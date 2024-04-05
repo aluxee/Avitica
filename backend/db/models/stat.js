@@ -13,13 +13,23 @@ module.exports = (sequelize, DataTypes) => {
       Stat.belongsTo(models.User, {
         foreignKey: 'userId'
       });
-      Stat.belongsTo(models.Inventory);
+      Stat.belongsTo(models.Inventory, {
+        foreignKey: 'id'
+      });
     }
   }
   Stat.init({
     userId: {
       type: DataTypes.INTEGER,
       allowNull: false,
+    },
+    inventoryId: {
+      type: DataTypes.INTEGER,
+      references: {
+        model: 'Inventories',
+        key: 'id'
+      },
+      onDelete: 'CASCADE'
     },
     hp: {
       type: DataTypes.FLOAT,

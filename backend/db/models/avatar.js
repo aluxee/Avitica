@@ -54,7 +54,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false
     },
-    character: DataTypes.STRING
+    character: DataTypes.TEXT
   }, {
     sequelize,
     modelName: 'Avatar',

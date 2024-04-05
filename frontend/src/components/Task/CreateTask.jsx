@@ -10,11 +10,11 @@ function CreateTask() {
 
 	const dispatch = useDispatch();
 	const [title, setTitle] = useState('');
-	const [description, setDescription] = useState('');
+	const [notes, setNotes] = useState('');
 	const [difficulty, setDifficulty] = useState('');
 	const [dueDate, setDueDate] = useState('');
 	const { closeModal } = useModal();
-	const [checklist, setChecklist] = useState(task.Checklist || []);
+	const [checklist, setChecklist] = useState([]);
 
 	const [errors, setErrors] = useState({});
 	// const [showMenu, setShowMenu] = useState(false);
@@ -34,7 +34,7 @@ function CreateTask() {
 		let newTask = {
 
 			title,
-			description,
+			notes,
 			// checklist,
 			difficulty,
 			dueDate,
@@ -79,18 +79,18 @@ function CreateTask() {
 					/>
 					{errors?.title && <p className="p-error">{errors.title} </p>}
 				</label>
-				<label htmlFor="description">
+				<label htmlFor="notes">
 					<h4>
-						Description
+						Notes
 					</h4>
-					<textarea name="description" id="et-description" cols="50" rows="10"
+					<textarea name="notes" id="et-notes" cols="50" rows="10"
 						placeholder="Describe Task"
-						value={description}
-						onChange={(e) => setDescription(e.target.value)}
+						value={notes}
+						onChange={(e) => setNotes(e.target.value)}
 					>
 					</textarea>
-					{errors?.description && (
-						<p className="p-error">{errors.description} </p>
+					{errors?.notes && (
+						<p className="p-error">{errors.notes} </p>
 					)}
 				</label>
 

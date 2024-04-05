@@ -136,19 +136,6 @@ router.post('/:taskId/checklist/new', requireAuth, async (req, res) => {
 router.get('/:taskId/checklist', requireAuth, async (req, res) => {
 	const { taskId } = req.params;
 
-	const task = await Task.findByPk(taskId, {
-		include: [
-			{
-				model: Checklist
-			}
-		],
-		where: {
-			userId: req.user.id
-		}
-	});
-
-	const taskPayload = task.toJSON();
-
 	const allCheckLists = await Checklist.findAll({
 		where: {
 			taskId,
@@ -156,16 +143,54 @@ router.get('/:taskId/checklist', requireAuth, async (req, res) => {
 		}
 	});
 
+	let checklists = [];
+	allCheckLists.forEach(list => {
+		const checkListBox = list.toJSON();
+
+		// console.log("%c 🚀 ~ file: tasks.js:149 ~ router.get ~ checkListBox: ", "color: red; font-size: 25px", checkListBox)
+
+		checklists.push(checkListBox)
+
+	})
+
+	// console.log("%c 🚀 ~ file: tasks.js:155 ~ router.get ~ checklists: ", "color: red; font-size: 25px", checklists)
+
+
+	// console.log("%c 🚀 ~ file: tasks.js:158 ~ router.get ~ checklists: ", "color: cyan; font-size: 25px", checklists)
+
+	const tasks = await Task.findAll({
+		where: {
+			userId: req.user.id,
+			id: taskId
+		}
+	});
+
+	const tasksList = [];
+	tasks.forEach(task => {
+		const viewTask = task.toJSON();
+
+		viewTask.Checklist = checklists;
+		tasksList.push(viewTask)
+	});
+
 	if (allCheckLists.length === 0) {
 		return res
 			.json({
 				message: "No checklist has been made yet for this task"
 			});
-	}
-	taskPayload.Checklist = allCheckLists
+	};
+	console.log("%c 🚀 ~ file: tasks.js:191 ~ router.get ~ tasksList: ", "color: red; font-size: 25px", tasksList, tasksList.Checklist)
 
-	return res.json(allCheckLists)
+	const checklistsArray = tasksList.map(task => task.Checklist).flat();
+
+	console.log("%c 🚀 ~ file: tasks.js:186 ~ router.get ~ checklistsArray: ", "color: red; font-size: 25px", checklistsArray)
+
+
+
+	return res.json(checklistsArray)
 });
+
+
 
 
 // * Keep in mind there are two types of task edits: one will edit the task itself, the other updates the task when a task is marked as complete or incomplete -- this one is the latter
@@ -190,7 +215,7 @@ router.put('/:taskId', requireAuth, async (req, res) => {
 		const taskUpdate = await Task.findByPk(taskId, {
 			where: {
 				userId: req.user.id
-			}
+			},
 		});
 
 		const thisDate = Date.now();
@@ -218,15 +243,17 @@ router.put('/:taskId', requireAuth, async (req, res) => {
 		// utilize the task completion (boolean) attribute prior to the point changes
 		taskUpdate.completed = completed
 
-		//save taskUpdate status
-		await taskUpdate.save();
-
-		//find userStat information
 		const userStatus = await userStat.findOne({
 			where: {
 				userId: req.user.id
 			}
 		})
+
+		// LevelStats: userStatus
+		//save taskUpdate status
+		await taskUpdate.save();
+
+		//find userStat information
 
 		// retrieve user's current level
 		const currLevel = userStatus.getLevel();
@@ -268,11 +295,7 @@ router.put('/:taskId', requireAuth, async (req, res) => {
 		// confirm such actions w/ model fxn implementation
 		return res
 			.status(200)
-			.json({
-				message: 'Task updated successfully',
-				Task: taskUpdate,
-				LevelStats: userStatus
-			});
+			.json(taskUpdate);
 
 	} catch (err) {
 		return res
@@ -309,9 +332,9 @@ router.get('/:taskId', requireAuth, async (req, res) => {
 	taskPayLoad.Checklist = allCheckLists
 
 	return res
-		.json({
-			Task: taskPayLoad
-		});
+		.json(
+			taskPayLoad
+		);
 });
 
 
@@ -467,35 +490,23 @@ router.get('/', requireAuth, authorization, async (req, res) => {
 		});
 	}
 
-	const allCheckLists = await Checklist.findAll({
-		where: {
-			userId: user.id
-		}
-	});
-	const collectList = [];
-
-
-	allCheckLists.forEach(list => {
-		const userCheckList = list.toJSON();
-		collectList.push(userCheckList)
-	});
-
 	let tasksList = [];
 
-	tasks.forEach(task => {
-		let tasksData = task.toJSON();
-		tasksData.Checklist = collectList
-
-		if (!tasksList.some(item => item.id === tasksData.id)) {
-
-			tasksList.push(tasksData)
-		}
-		return tasksList
-	})
+	for (const task of tasks) {
+		const tasksData = task.toJSON();
+		const checklists = await Checklist.findAll({
+			where: {
+				userId: req.user.id,
+				taskId: task.id
+			}
+		});
+		tasksData.Checklist = checklists.map(list => list.toJSON())
+		tasksList.push(tasksData)
+	}
 
 	return res.json({
 		Task: tasksList
-	});
+	})
 });
 
 module.exports = router;

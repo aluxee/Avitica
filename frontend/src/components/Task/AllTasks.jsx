@@ -7,7 +7,7 @@ import EditTask from './EditTask';
 import OpenModalButton from '../Navigation/OpenModalMenuItem';
 import CreateTask from './CreateTask';
 import DeleteTask from './DeleteTask';
-
+import Task from './Task';
 
 
 function AllTasks() {
@@ -26,21 +26,12 @@ function AllTasks() {
 
 		setShowMenu(!showMenu)
 	};
-	// const closeMenu = () => setShowMenu(false);
 
-
-	// const onHover = (index) => {
-	// 	setHover(index)
-	// };
-
-	// const hovering = () => {
-	// 	setHover(null);
-	// }
 
 	useEffect(() => {
 		dispatch(thunkLoadTasks())
 
-	}, [dispatch])
+	}, [dispatch]) // do not add tasks
 
 	return (
 		<>
@@ -69,7 +60,8 @@ function AllTasks() {
 									itemText={task.title}
 									onItemClick={toggleMenu}
 									modalComponent={
-										<EditTask task={task} key={task.id} />
+										// <EditTask task={task} key={task.id} taskId={task.id} />
+										<Task task={task} key={index} taskId={task.id} index={index} />
 									}
 								/>
 								<OpenModalButton

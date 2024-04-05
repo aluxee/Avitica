@@ -9,9 +9,9 @@ export const REMOVE_CHECKLIST = 'checklist/REMOVE_CHECKLIST';
 
 //? checklist:
 
-export const loadChecklist = (checklist) => ({
+export const loadChecklist = (taskId, checklist) => ({
 	type: LOAD_CHECKLIST,
-	checklist
+	taskId, checklist
 });
 
 
@@ -41,18 +41,21 @@ export const removeChecklist = (checklistId) => {
 // /** Thunk Action Creators: */
 
 //* load checklist for specific task
-export const thunkLoadChecklist = (checklist) => async dispatch => {
+export const thunkLoadChecklist = (taskId) => async dispatch => {
 
-	console.log("%c 🚀 ~ file: checklist.js:44 ~ thunkLoadChecklist ~ checklist: ", "color: gold; font-size: 25px", checklist)
+	console.log("%c 🚀 ~ file: checklist.js:44 ~ thunkLoadChecklist ~ taskId: ", "color: gold; font-size: 36px", taskId)
 
-	const response = await csrfFetch(`/api/tasks/${checklist[0].taskId}/checklist`);
+	const response = await csrfFetch(`/api/tasks/${taskId}/checklist`);
 
 
 	if (response.ok) {
 		const data = await response.json();
 
+		console.log("%c 🚀 ~ file: checklist.js:54 ~ thunkLoadChecklist ~ data: ", "color: red; font-size: 25px", data)
 
-		dispatch(loadChecklist(data))
+
+
+		dispatch(loadChecklist(taskId, data))
 	} else {
 		const errorResponse = await response.json()
 		return errorResponse
@@ -140,7 +143,7 @@ export const thunkEditChecklist = (taskId, checklistId, checked) => async (dispa
 const initialState = {}
 const listReducer = (state = initialState, action) => {
 
-console.log("%c 🚀 ~ file: checklist.js:143 ~ listReducer ~ state: ", "color: red; font-size: 25px", state)
+	console.log("%c 🚀 ~ file: checklist.js:143 ~ listReducer ~ state: ", "color: red; font-size: 25px", state)
 
 
 	// checklist are an object of array of objects
@@ -173,7 +176,7 @@ console.log("%c 🚀 ~ file: checklist.js:143 ~ listReducer ~ state: ", "color: 
 			const newState = { ...state }
 
 
-			newState[action.checklistId].checked = action.checked 
+			newState[action.checklistId].checked = action.checked
 
 			return newState;
 		}

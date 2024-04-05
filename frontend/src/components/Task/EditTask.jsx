@@ -8,19 +8,17 @@ import './EditTask.css';
 import Checklist from './Checklist/Checklist';
 
 
-function EditTask({ task }) {
+function EditTask({ task, taskId }) {
 	const dispatch = useDispatch();
 	const { closeModal } = useModal();
-	const [title, setTitle] = useState(task.title || '');
-	const [description, setDescription] = useState(task.description);
-	const [difficulty, setDifficulty] = useState(task.difficulty || '');
-	const [dueDate, setDueDate] = useState(task.dueDate || '');
-	const [checklist, setChecklist] = useState(task.Checklist || []);
+	const [title, setTitle] = useState(task.title);
+	const [notes, setNotes] = useState(task.notes);
+	const [difficulty, setDifficulty] = useState(task.difficulty);
+	const [dueDate, setDueDate] = useState(task.dueDate);
+	const [checklist, setChecklist] = useState(task.Checklist);
 
 	const [errors, setErrors] = useState({});
-	// const [showMenu, setShowMenu] = useState(false);
-
-	const taskId = task.id;
+	const [showMenu, setShowMenu] = useState(false);
 
 
 	const handleSubmit = async (e) => {
@@ -34,13 +32,14 @@ function EditTask({ task }) {
 			return;
 		}
 
-		let editUserTask = {
+		const editUserTask = {
 			title,
-			description,
+			notes,
 			checklist,
 			difficulty,
 			dueDate,
 		};
+
 		const submissionResults = await dispatch(thunkEditTask(editUserTask, taskId));
 
 		if (submissionResults.errors) {
@@ -51,23 +50,21 @@ function EditTask({ task }) {
 		closeModal();
 
 
-		await dispatch(thunkLoadTasks())
-
-
+		// await dispatch(thunkLoadTasks())
 	}
 
-	// const toggleMenu = (e) => {
-	// 	e.stopPropagation();
+	const toggleMenu = (e) => {
+		e.stopPropagation();
 
-	// 	setShowMenu(!showMenu);
-	// };
+		setShowMenu(!showMenu);
+	};
 
 
 	return (
 		<>
 			<form
 				onSubmit={handleSubmit}
-				// onClick={toggleMenu}
+				onClick={toggleMenu}
 				className="edit-task-modal"
 			>
 				<label htmlFor="title">
@@ -81,18 +78,18 @@ function EditTask({ task }) {
 					/>
 					{errors?.title && <p className="p-error">{errors.title} </p>}
 				</label>
-				<label htmlFor="description">
+				<label htmlFor="notes">
 					<h4>
-						Description
+						Notes
 					</h4>
-					<textarea name="description" id="et-description" cols="50" rows="10"
+					<textarea name="notes" id="et-notes" cols="50" rows="10"
 						placeholder="Describe Task"
-						value={description}
-						onChange={(e) => setDescription(e.target.value)}
+						value={notes}
+						onChange={(e) => setNotes(e.target.value)}
 					>
 					</textarea>
-					{errors?.description && (
-						<p className="p-error">{errors.description} </p>
+					{errors?.notes && (
+						<p className="p-error">{errors.notes} </p>
 					)}
 				</label>
 
@@ -133,7 +130,7 @@ function EditTask({ task }) {
 					<h4>
 						Checklist
 					</h4>
-					{task.Checklist.length > 0 && task?.Checklist ?
+					{task.id === taskId && task?.Checklist ?
 						// BROKEN CHECKLIST CANNOT USE DUE TO Q OF CTRL INPUT
 						<Checklist taskId={taskId} checklist={checklist} setChecklist={setChecklist} />
 						:

@@ -1,188 +1,177 @@
 import { useDispatch } from 'react-redux';
-import { useState, useRef } from 'react';
+import OpenModalButton from '../Navigation/OpenModalMenuItem';
+import { useModal } from '../../context/Modal';
+import { useState, useEffect } from 'react';
+import Checklist from './Checklist/Checklist';
+import { thunkEditTask, thunkLoadCurrentTask, thunkLoadTasks } from '../../store/task';
+import { useSelector } from 'react-redux';
 import './Task.css';
-// import { thunkLoadCurrentTask } from '../../store/task';
+import EditTask from './EditTask';
 
-function Task({ task, taskId }) {
-	// const dispatch = useDispatch();
-	// const tasks = useSelector(state => state.task);
-
-	// console.log("%c 🚀 ~ file: AllTasks.jsx:17 ~ AllTasks ~ tasks: ", "color: red; font-size: 25px", tasks)
-
-	// const [hover, setHover] = useState(null);
-	// const [showMenu, setShowMenu] = useState([]);
-	// const allTasks = Object.values(tasks);
-
-	// console.log("%c 🚀 ~ file: AllTasks.jsx:23 ~ AllTasks ~ allTasks: ", "color: red; font-size: 25px", allTasks)
-
-
+function Task({ task, taskId, index }) {
 	// const ulRef = useRef(null);
+	const dispatch = useDispatch();
+	const { closeModal } = useModal();
+	const theState = useSelector(state => state.task);
 
-	// const toggleMenu = (index) => {
-	// 	const newShowMenu = [...showMenu];
-	// 	newShowMenu[index] = !newShowMenu[index];
-	// 	setShowMenu(newShowMenu);
-	// };
-	// const closeMenu = () => setShowMenu(false);
+	console.log("%c 🚀 ~ file: Task.jsx:17 ~ Task ~ theState: ", "color: orange; font-size: 30px", theState)
 
 
-	// const onHover = (index) => {
-	// 	setHover(index)
-	// };
+	const taskState = useSelector(state => state.task[taskId]);
 
-	// const hovering = () => {
-	// 	setHover(null);
-	// }
+	console.log("%c 🚀 ~ file: Task.jsx:13 ~ Task ~ taskState: ", "color: limegreen; font-size: 25px", taskState)
 
-	// useEffect(() => {
-	// 	dispatch(thunkLoadTasks())
+	const [title, setTitle] = useState(task.title);
+	const [checklist, setChecklist] = useState([taskState.Checklist]);
 
-	// }, [dispatch])
+	const [errors, setErrors] = useState({});
+	const [showMenu, setShowMenu] = useState(false);
+	const [editTitle, setEditTitle] = useState(false);
+
+	useEffect(() => {
+		if (taskState?.title) {
+			setTitle(taskState.title);
+			// using edit dispatch will cause empty tasks to be created
+		}
+	}, [dispatch, taskState]);
 
 
-	// const ulClassName = "profile-dropdown" + (showMenu ? "" : "hidden");
-	// const hoverClassName = "menu-caption caption" + (hover !== null ? "" : "hidden");
+	const handleSubmit = async (e) => {
+		e.preventDefault();
+
+		if (title.length <= 3) {
+			setErrors({ title: "Title's name is required" });
+			return;
+		} else if (title.length > 50) {
+			setErrors({ title: "Title's name must be shorter than 50 characters long." });
+			return;
+		}
+
+		const editUserTask = {
+			title,
+		};
+
+		// const submissionResults = await dispatch(thunkEditTask(editUserTask, task.id));
+		const res = await dispatch(thunkEditTask(editUserTask, task.id));
+
+		if (res && res.errors) {
+			return setErrors(res.errors);
+		}
+
+
+		// if (submissionResults.errors) {
+		// 	setErrors(submissionResults.errors)
+		// 	return setErrors(submissionResults.errors)
+		// }
+
+		setEditTitle(false)
+	}
+
+	const toggleMenu = () => {
+		// e.stopPropagation();
+
+		setShowMenu(!showMenu)
+	};
 
 
 	return (
 		<>
 			<div className='task-container'>
-				<div className='at-menu'>
-
-					{/* <button className={`menu-icon`}
-						onClick={() => toggleMenu(index)}>
-
-
-						<i className="fa-solid fa-ellipsis-vertical"
-							onMouseOver={() => onHover(index)}
-							onMouseOut={hovering}
-							role='button'
-						/>
-						{
-							hover === index && !showMenu[index] &&
-							<p className={hoverClassName + (showMenu[index] ? " " : "hidden")}
-							>Menu</p>
-						}
-
-					</button>
-					<ul className={ulClassName + (showMenu[index] ? '' : 'hidden')}
-						ref={ulRef} key={task.id}
-
-					>
-
-						<OpenModalMenuItem
-							itemText={"View Task Details"}
-							onItemClick={closeMenu}
-
-							modalComponent={
-								<EditTask
-									task={task}
-									taskId={task.id}
-									key={task.id}
-								/>}
-						/> */}
-						{/* [allow edit, delete, post on modal]
-										[allow, edit, delete on menu button] */}
-
-						{/* <OpenModalMenuItem
-							itemText={"Delete this Task"}
-							onItemClick={closeMenu}
-							key={task.id}
-						// modalComponent={<DeleteTask tasks={tasks} />}
-						/> */}
-					{/* </ul> */}
-
-				{/* </div> */}
-
-				{/* <h2 className='all-task-li'>
-					{task.title}
-				</h2>
-				<div className='at-notes'>
-					{task.notes ?
-						<>
-							<div className='all-task-yes-notes'>
-								<div className='all-task-label'>
-									Notes:
-								</div>
-								<div className='all-task-fill'>
-									{task.notes}
-								</div>
-							</div>
-
-						</>
-						:
-						<>
-							<div className='all-task-no-notes'>
-								[Create notes for your task!]</div>
-						</>
+				<OpenModalButton
+					className="task-modal"
+					itemText={"Edit Task"}
+					onItemClick={toggleMenu}
+					modalComponent={
+						<EditTask task={task} key={task.id} taskId={taskId} index={index} />
 					}
-				</div>
-				<div className='all-task-diff'>
-					<div className='all-task-label'>
-						Difficulty:
+				/>
+				<label htmlFor="title">
+					<h4>
+						Title
+					</h4>
+					<div className='title'>
+						{editTitle === false ?
+							<div
+								onDoubleClick={() => setEditTitle(true)}
+							>
+								{title}
+							</div>
+							:
+							<form onSubmit={handleSubmit}>
+								<label htmlFor="title">
+									<input
+										value={title}
+										type='text'
+										onChange={(e) => setTitle(e.target.value)}
+										// onBlur={handleSubmit}
+										placeholder="Enter Title for Task"
+									/>
+									{errors?.title && <p className="p-error">{errors.title} </p>}
+								</label>
+							</form>
+						}
 					</div>
-					<div className='all-task-fill'>
-						{task.difficulty}
-					</div>
-				</div> */}
-				{/* <div className='all-task-checklist'>
-									{
-										task.Checklist ?
-											<>
-												<div className='all-task-yes-cl'>
-													<div className='all-task-label'>
-														Checklist:
-													</div>
-													<div className='all-task-fill at-cl-li'>
 
-														<Checklist taskId={task.id} />
-													</div>
-												</div>
-											</>
-											:
-											<>
-												<div className='all-task-no-cl'>
-													[Create a checklist here!]
-												</div>
-											</>
-									}
-								</div> */}
-				{/* <div className='all-task-complete'>
-					{
-						task.completed ?
+				</label>
+				<label htmlFor="notes">
+					<h4>
+						Notes
+					</h4>
+					<div className='notes'>
+						{task.notes !== null ?
 							<>
-								<div className='all-task-label'>
-									Completed [insert sign]:
-								</div>
-								<div className='all-task-fill'>
-									[select yes option]
-								</div>
+								{task.notes}
 							</>
 							:
 							<>
-								<div className='all-task-label'>
-									Not Completed [insert sign]:
-								</div>
-								<div className='all-task-fill'>
-									[select no option]
-								</div>
-							</>
-					}
-				</div>
-				<div className='at-due-date'>
-					<div className='all-task-label'>
-						Due Date:
+								Add Notes
+							</>}
 					</div>
-					<div className='all-task-fill'>
-						{task.dueDate}
-					</div> */}
+				</label>
 
-				</div>
+				<label htmlFor="difficulty">
+					<h4>
+						Difficulty
+					</h4>
+					<div className='difficulty'>
+						{task.difficulty}
+					</div>
+				</label>
+
+				<label htmlFor="dueDate">
+					<h4>
+						Due Date
+					</h4>
+					<div className='dueDate'>
+						{task.dueDate}
+					</div>
+				</label>
+
+				<label htmlFor="checklist"
+					className='et-checklist'
+				>
+					<h4>
+						Checklist
+					</h4>
+					{checklist && checklist.length > 0 ?
+						// BROKEN CHECKLIST CANNOT USE DUE TO Q OF CTRL INPUT
+						<Checklist taskId={taskId} checklist={checklist} setChecklist={setChecklist} />
+						:
+						<>
+							Create a checklist!
+						</>
+					}
+				</label>
+				{/* <button
+							type='submit'
+							className='et-task-submit-button submit'>
+							Save
+						</button> */}
+
 			</div>
 		</>
 	)
-};
-
+}
 
 
 

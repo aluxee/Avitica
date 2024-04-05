@@ -1,0 +1,15 @@
+.task-container {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+.task-container>li.modal-menu-item {
+	border: 2px solid black;
+	width: fit-content;
+	padding: 4px 8px;
+}
+
+li.modal-menu-item:hover {
+	cursor: pointer;
+}

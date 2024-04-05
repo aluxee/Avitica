@@ -7,34 +7,81 @@ import ItemDetails from './ItemDetails';
 import ItemCart from './ItemCart';
 import { useModal } from '../../context/Modal';
 
+import { useNavigate } from 'react-router-dom';
 function ShopDetails() {
+	const navigate = useNavigate();
 	const dispatch = useDispatch();
 	const { closeModal } = useModal();
 	const marketObj = useSelector(state => state.shop)
+
+
 	const market = Object.values(marketObj)
 	// const [showMenu, setShowMenu] = useState(false);
 	const [cart, setCart] = useState([]);
 
+	// function for handling items inside cart
 	useEffect(() => {
 		dispatch(thunkLoadShop())
+
+		const storedCartItems = JSON.parse(localStorage.getItem("cartItems" || "[]"))
+
+		setCart(storedCartItems)
 	}, [dispatch])
 
-	// function for handling items inside cart
+
 	const addToCart = (item) => {
-		setCart([...cart, item])
 
-		console.log('Cart after adding item:', cart);
-
-		console.log("%c 🚀 ~ file: ShopDetails.jsx:30 ~ addToCart ~ cart: ", "color: coral; font-size: 25px", cart)
-		console.log("%c 🚀 ~ file: ShopDetails.jsx:30 ~ addToCart ~ setCart: ", "color: coral; font-size: 25px", setCart)
+		//updating local storage
+		setCart(prevCart => {
+			prevCart = prevCart || [];
+			const updatedCart = [...prevCart, item];
+			localStorage.setItem("cartItems", JSON.stringify(updatedCart))
+			return updatedCart
+		})
+		// 	 JSON.parse(localStorage.getItem("cartItems") || "[]")
+		// cartItems.push(item);
+		// localStorage.setItem("cartItems", JSON.stringify(cartItems))
 	}
 
-	// const removeFromCart = (item) => {
+	const removeItemFromCart = (itemId) => {
+		// Get the current cart items from localStorage
+		const cartItems = JSON.parse(localStorage.getItem('cartItems') || '[]');
 
-	// }
+		// Remove the item with the specified itemId from the cart
+		const updatedCartItems = cartItems.filter(item => item.id !== itemId);
+
+		// Update cart in localStorage with the updated cart items
+		localStorage.setItem('cartItems', JSON.stringify(updatedCartItems));
+
+		// Update the local state
+		setCart(updatedCartItems);
+		closeModal();
+	}
+	const removeFromCart = () => {
+		setCart([])
+		localStorage.removeItem("cartItems")
+	}
 
 
+	const moveItemsToInventory = () => {
+		// Get cart items from localStorage
+		const cartItems = JSON.parse(localStorage.getItem('cartItems') || '[]');
 
+
+		// Get current inventory items from localStorage
+		const inventoryItems = JSON.parse(localStorage.getItem('inventory') || '[]');
+
+		// Add cart items to inventory
+		const updatedInventoryItems = [...inventoryItems, ...cartItems];
+		localStorage.setItem('inventory', JSON.stringify(updatedInventoryItems));
+
+		// Clear cart items from both local state and localStorage
+		setCart([]);
+
+		localStorage.removeItem("cartItems");
+		closeModal()
+		navigate('/inv');
+	};
 
 	return (
 
@@ -44,19 +91,19 @@ function ShopDetails() {
 					<div className='shopping-cart'>
 						<OpenModalMenuItem
 							itemText={
-								<div>
+								<div
+								// key={cart}
+								>
 									<i className="fa-solid fa-cart-plus" />
-									{cart.length > 0 && <span className='numberItems'>{cart.length}</span>}
+									{cart && cart.length > 0 ? <span className='numberItems'>{cart.length}</span> : <></>}
 								</div>
 							}
 							modalComponent={
 								<ItemCart
 									cart={cart}
-									key={cart.map(item => item.id).join()}
-								// item={item} itemId={item.id}
-
-								// isSelected={item.id === selectedItem.id}
-								// onClick={() => setSelectedItem(item)}
+									key={cart && cart.map(item => item.id).join()}
+									clearCart={moveItemsToInventory}
+									removeItemFromCart={removeItemFromCart}
 								/>
 							}
 							onButtonClick={closeModal}
@@ -67,9 +114,10 @@ function ShopDetails() {
 						{market.map((shop, index) => (
 
 							<ul className='sd-shop' key={index}>
-								<div className='sd-shop-img'>
+								<div className='sd-shop-img' key={index}>
 									<OpenModalMenuItem
 										className="item-details-modal"
+										key={index}
 										itemText={
 											<img src={shop.itemIcon} alt={shop.itemIcon} className='shop-img'
 											/>
@@ -80,6 +128,7 @@ function ShopDetails() {
 											index={index}
 											item={shop} id={shop.id}
 											onAddToCart={addToCart}
+											clearCart={removeFromCart}
 										/>}
 									/>
 

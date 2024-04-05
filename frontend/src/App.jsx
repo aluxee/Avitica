@@ -5,6 +5,10 @@ import Navigation from './components/Navigation';
 import * as sessionActions from './store/session';
 import Home from './components/Home/Home';
 import ShopDetails from './components/Shop/ShopDetails';
+import Inventory from './components/Inventory/Inventory';
+
+
+
 
 function Layout() {
   const dispatch = useDispatch();
@@ -54,6 +58,10 @@ const router = createBrowserRouter([
       {
         path: '/shop',
         element: <ShopDetails />
+      },
+      {
+        path: '/inv',
+        element: <Inventory />
       }
     ]
   }

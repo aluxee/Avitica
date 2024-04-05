@@ -6,7 +6,7 @@ const { requireAuth } = require('../../utils/auth.js');
 const sessionRouter = require('./session.js');
 const usersRouter = require('./users.js');
 const tasksRouter = require('./tasks.js');
-const inventoryRouter = require('./inventories.js');
+const inventoryRouter = require('./inventory.js');
 const userStatRouter = require('./userStats.js')
 const shopRouter = require('./shop.js');
 

@@ -5,14 +5,15 @@ import taskReducer from "./task";
 import listReducer from "./checklist";
 import userReducer from "./user";
 import shopReducer from "./shop";
-
+import invReducer from "./inventory";
 
 const rootReducer = combineReducers({
 	session: sessionReducer,
 	user: userReducer,
 	task: taskReducer,
 	checklist: listReducer,
-	shop: shopReducer
+	shop: shopReducer,
+	inventory: invReducer
 });
 
 let enhancer;

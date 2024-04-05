@@ -36,7 +36,7 @@ function DeleteTask({ taskId }) {
 					from the listings?</h3>
 				<form onSubmit={handleSubmit}>
 
-					<button className="delete-task-button" id="delete-task-no" onClick={closeModal}> No (Keep task)</button>
+					<button className="delete-task-button" id="delete-task-no" onClick={closeModal()}> No (Keep task)</button>
 
 					<button type="submit"
 						// onClick={closeModal}

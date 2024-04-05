@@ -1,9 +1,9 @@
 import { useDispatch } from 'react-redux';
 import OpenModalButton from '../Navigation/OpenModalMenuItem';
-import { useModal } from '../../context/Modal';
+// import { useModal } from '../../context/Modal';
 import { useState, useEffect } from 'react';
 import Checklist from './Checklist/Checklist';
-import { thunkEditTask, thunkLoadCurrentTask, thunkLoadTasks } from '../../store/task';
+import { thunkEditTask, thunkLoadCurrentTask, } from '../../store/task';
 import { useSelector } from 'react-redux';
 import './Task.css';
 import EditTask from './EditTask';
@@ -11,7 +11,7 @@ import EditTask from './EditTask';
 function Task({ task, taskId, index }) {
 	// const ulRef = useRef(null);
 	const dispatch = useDispatch();
-	const { closeModal } = useModal();
+	// const { closeModal } = useModal();
 	const theState = useSelector(state => state.task);
 
 	console.log("%c 🚀 ~ file: Task.jsx:17 ~ Task ~ theState: ", "color: orange; font-size: 30px", theState)
@@ -31,7 +31,6 @@ function Task({ task, taskId, index }) {
 	useEffect(() => {
 		if (taskState?.title) {
 			setTitle(taskState.title);
-			// using edit dispatch will cause empty tasks to be created
 		}
 	}, [dispatch, taskState]);
 
@@ -63,7 +62,7 @@ function Task({ task, taskId, index }) {
 		// 	setErrors(submissionResults.errors)
 		// 	return setErrors(submissionResults.errors)
 		// }
-
+		dispatch(thunkLoadCurrentTask(task.id))
 		setEditTitle(false)
 	}
 
@@ -154,7 +153,7 @@ function Task({ task, taskId, index }) {
 						Checklist
 					</h4>
 					{checklist && checklist.length > 0 ?
-						// BROKEN CHECKLIST CANNOT USE DUE TO Q OF CTRL INPUT
+
 						<Checklist taskId={taskId} checklist={checklist} setChecklist={setChecklist} />
 						:
 						<>
@@ -162,11 +161,6 @@ function Task({ task, taskId, index }) {
 						</>
 					}
 				</label>
-				{/* <button
-							type='submit'
-							className='et-task-submit-button submit'>
-							Save
-						</button> */}
 
 			</div>
 		</>

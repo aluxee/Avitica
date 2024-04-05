@@ -8,7 +8,7 @@ import { thunkLoadCurrentItem } from '../../store/shop';
 import { useModal } from '../../context/Modal';
 
 
-function ItemDetails({ item, index, onAddToCart }) {
+function ItemDetails({ item, onAddToCart }) {
 	const dispatch = useDispatch();
 	// const [showMenu, setShowMenu] = useState(false);
 	const [sideOpen, setSideOpen] = useState(true);

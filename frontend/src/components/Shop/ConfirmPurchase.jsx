@@ -2,7 +2,7 @@ import { useModal } from '../../context/Modal';
 
 
 
-function ConfirmPurchase({ cart, clearCart }) {
+function ConfirmPurchase({ cart }) {
 	const { closeModal } = useModal();
 	// once user clicks yes...
 	// 1. clear cart of items,

@@ -1,19 +1,19 @@
 // import { useModal } from '../../context/Modal';
 import { useState, useEffect, useRef } from 'react';
-import OpenModalButton from '../OpenModalButton/OpenModalButton';
+// import OpenModalButton from '../OpenModalButton/OpenModalButton';
 import './ItemCart.css';
-import { useModal } from '../../context/Modal';
-import ConfirmPurchase from './ConfirmPurchase';
-import OpenModalMenuItem from '../Navigation/OpenModalMenuItem';
+// import { useModal } from '../../context/Modal';
+// import ConfirmPurchase from './ConfirmPurchase';
+// import OpenModalMenuItem from '../Navigation/OpenModalMenuItem';
 
 
 
 function ItemCart({ cart, clearCart, removeItemFromCart }) {
-	const [showConfirmModal, setShowConfirmModal] = useState(false);
-	const { closeModal } = useModal();
-	const handleCloseModal = () => {
-		setShowConfirmModal(false);
-	};
+	// const [showConfirmModal, setShowConfirmModal] = useState(false);
+	// const { closeModal } = useModal();
+	// const handleCloseModal = () => {
+	// 	setShowConfirmModal(false);
+	// };
 
 
 	const [cartBasket, setCartBasket] = useState([]);
@@ -57,14 +57,14 @@ function ItemCart({ cart, clearCart, removeItemFromCart }) {
 		setCartBasket(updatedCartBasket);
 	};
 
-	const handleBuyNow = () => {
-		setShowConfirmModal(true);
-	};
+	// const handleBuyNow = () => {
+	// 	setShowConfirmModal(true);
+	// };
 
-	function getItemsFromLocalStorage() {
-		const cartItems = JSON.parse(localStorage.getItem('cartItems'));
-		return cartItems;
-	}
+	// function getItemsFromLocalStorage() {
+	// 	const cartItems = JSON.parse(localStorage.getItem('cartItems'));
+	// 	return cartItems;
+	// }
 
 	// const putItInTheBag = () => {
 	// 	const cartItems = getItemsFromLocalStorage();
@@ -162,6 +162,8 @@ function ItemCart({ cart, clearCart, removeItemFromCart }) {
 
 								// 	onItemClick={handleBuyNow}
 								// />
+
+								//! using modal causes error suspected it is due to this component being modal
 								<button
 									type='submit'
 									// onPointerCancel={closeModal()}

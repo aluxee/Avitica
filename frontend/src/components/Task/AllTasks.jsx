@@ -2,7 +2,7 @@ import { thunkLoadTasks } from '../../store/task';
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import './AllTasks.css';
-import EditTask from './EditTask';
+// import EditTask from './EditTask';
 // import OpenModalMenuItem from '../Navigation/OpenModalMenuItem';
 import OpenModalButton from '../Navigation/OpenModalMenuItem';
 import CreateTask from './CreateTask';

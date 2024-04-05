@@ -14,7 +14,7 @@ function CreateTask() {
 	const [difficulty, setDifficulty] = useState('');
 	const [dueDate, setDueDate] = useState('');
 	const { closeModal } = useModal();
-	const [checklist, setChecklist] = useState([]);
+	// const [checklist, setChecklist] = useState([]);
 
 	const [errors, setErrors] = useState({});
 	// const [showMenu, setShowMenu] = useState(false);

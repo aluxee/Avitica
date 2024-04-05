@@ -2,7 +2,7 @@ import { useDispatch } from 'react-redux';
 import { useState } from 'react';
 // import { useParams } from 'react-router-dom';
 import { useModal } from '../../context/Modal';
-import { thunkEditTask, thunkLoadTasks } from '../../store/task';
+import { thunkEditTask } from '../../store/task';
 import './EditTask.css';
 
 import Checklist from './Checklist/Checklist';

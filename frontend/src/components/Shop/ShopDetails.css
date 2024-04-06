@@ -11,9 +11,10 @@
 }
 
 .shopping-cart {
-	align-self: self-end;
-	color: lightblue;
+	color: #add8e6;
 	position: fixed;
+	top: 12rem;
+	right: 2rem;
 }
 
 .shopping-cart:hover {

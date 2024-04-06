@@ -99,11 +99,6 @@ function ProfileButton({ user }) {
 								<li className="profile_dropdown_username">{user.username}</li>
 								<li className="profile_dropdown_email">{user.email}</li>
 								<hr className="hr-profile" />
-								<li className="profile_dropdown_manage">
-									[ENTER DROPDOWN HERE]
-								</li>
-								<hr className="hr-profile" />
-
 								<li className="profile_dropdown_logout">
 									<button onClick={logout} className="user_logout_button">Log Out</button>
 								</li>

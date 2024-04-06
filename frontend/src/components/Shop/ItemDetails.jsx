@@ -9,10 +9,13 @@ import { useModal } from '../../context/Modal';
 
 
 function ItemDetails({ item, onAddToCart }) {
+
+
+
 	const dispatch = useDispatch();
 	// const [showMenu, setShowMenu] = useState(false);
-	const [sideOpen, setSideOpen] = useState(true);
-	const [selectedItem, setSelectedItem] = useState('')
+	// const [sideOpen, setSideOpen] = useState(true);
+	// const [selectedItem, setSelectedItem] = useState('')
 	const [des, setDes] = useState(item.description || "")
 	const { closeModal } = useModal();
 
@@ -25,21 +28,9 @@ function ItemDetails({ item, onAddToCart }) {
 		setDes(updatedDes)
 	}, [item.description])
 
-	//WATCH SELECTED ITEM
-	useEffect(() => {
-		console.log(`selectedItem CHANGED TO`, selectedItem);
-		if (selectedItem) setSideOpen(true)
-	}, [selectedItem])
+// 	const totalCost = item.reduce((total, item) => {
 
-	//WATCH SIDE OPEN PANEL
-	useEffect(() => {
-		console.log('THE SIDE THAT IS OPEN CHANGED TO...', sideOpen)
-		if (!sideOpen) {
-			setSelectedItem('')
-		}
-	}, [sideOpen])
-
-
+// })
 	const handleItemSubmit = (e) => {
 		e.stopPropagation();
 

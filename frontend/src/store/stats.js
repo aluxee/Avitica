@@ -184,8 +184,8 @@ const statsReducer = (state = initialState, action) => {
 		case LOAD_STATS: {
 			console.log("%c 🚀 ~ file: stats.js:184 ~ statsReducer ~ action: ", "color: blue; font-size: 25px", action, action.stats.Stats)
 
-			const allStats = {};
-			// allStats[action.data.Stats.id] = action.data.Stats
+			const allStats = {...state};
+			allStats[action.stats.Stats.id] = action.stats.Stats
 
 			return allStats;
 		}

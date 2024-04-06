@@ -37,9 +37,6 @@ function AllTasks() {
 		<>
 			<section className='ext outer-task-container'>
 				<div className='int inner-task-container'>
-					<div className='avatar-nav'>
-						[INSERT AVATAR STATS HERE]
-					</div>
 					<div className='task-add-task'>
 						<OpenModalButton
 							itemText={"Add a new Task"}

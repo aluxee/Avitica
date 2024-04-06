@@ -36,7 +36,10 @@
 
 /* *MAIN */
 html {
-	background-image: url('./images/animetreeriv.jpeg');
+	background-image:
+		url('https://i.pinimg.com/564x/eb/1b/07/eb1b07a02ab31c1490d584358d2afc05.jpg');
+	/* url('https://i.pinimg.com/564x/08/d0/d5/08d0d546b8bf417f730e33b85f3049a1.jpg'); */
+	/* url('https://i.pinimg.com/736x/18/e2/f3/18e2f385b896bac2b3e2270fa2116e85.jpg') */
 	background-attachment: scroll;
 	background-position: center;
 	background-repeat: no-repeat;
@@ -71,8 +74,15 @@ body {
 	display: flex;
 	height: 100%;
 	position: relative;
-	top: 10rem;
+	top: 12rem;
 	z-index: 1;
+	flex-wrap: wrap;
+	flex-direction: row;
+	align-content: flex-start;
+	/* overflow-y: clip; */
+	overflow-x: clip;
+	justify-content: space-evenly;
+	margin-bottom: 10%;
 }
 
 

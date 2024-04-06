@@ -2,18 +2,8 @@
 import { useState, useEffect, useRef } from 'react';
 // import OpenModalButton from '../OpenModalButton/OpenModalButton';
 import './ItemCart.css';
-// import { useModal } from '../../context/Modal';
-// import ConfirmPurchase from './ConfirmPurchase';
-// import OpenModalMenuItem from '../Navigation/OpenModalMenuItem';
-
-
 
 function ItemCart({ cart, clearCart, removeItemFromCart }) {
-	// const [showConfirmModal, setShowConfirmModal] = useState(false);
-	// const { closeModal } = useModal();
-	// const handleCloseModal = () => {
-	// 	setShowConfirmModal(false);
-	// };
 
 
 	const [cartBasket, setCartBasket] = useState([]);
@@ -56,59 +46,19 @@ function ItemCart({ cart, clearCart, removeItemFromCart }) {
 		}, []);
 		setCartBasket(updatedCartBasket);
 	};
+	const totalPrice = (cartRef => {
+		// Initialize total cost to 0
+		let totalCost = 0;
 
-	// const handleBuyNow = () => {
-	// 	setShowConfirmModal(true);
-	// };
+		// Iterate over each item in the cart
+		cartRef.forEach((item) => {
+			// Add the gold of the current item to the total cost
+			totalCost += item.gold * item.quantity;
+		});
 
-	// function getItemsFromLocalStorage() {
-	// 	const cartItems = JSON.parse(localStorage.getItem('cartItems'));
-	// 	return cartItems;
-	// }
-
-	// const putItInTheBag = () => {
-	// 	const cartItems = getItemsFromLocalStorage();
-	// 	const inventoryItems = JSON.parse(localStorage.getItem('inventory') || [])
-
-	// 	inventoryItems.push(...cartItems);
-
-	// 	localStorage.setItem('inventory', JSON.stringify('inventoryItems'))
-	// 	//clear the cart
-	// 	// clearCart();
-	// 	// close the modal
-	// 	closeModal();
-	// 	//move the items from shop to inv
-	// 	// navigate.push('/inventory');
-
-	// 	const boughtThose = JSON.parse(localStorage.getItem("boughtThose") || [])
-	// 	boughtThose.push(...cart)
-	// 	localStorage.setItem("boughtThose", JSON.stringify("boughtThose"))
-
-	// 	localStorage.removeItem('cart');
-
-	// // }
-	// const putItInTheBag = () => {
-	// 	const cartItems = getItemsFromLocalStorage();
-	// 	const inventoryItems = JSON.parse(localStorage.getItem('inventory') || '[]');
-
-	// 	inventoryItems.push(...cartItems);
-
-	// 	localStorage.setItem('inventory', JSON.stringify(inventoryItems));
-
-	// 	// Move items from cart to inventory
-	// 	const boughtThose = JSON.parse(localStorage.getItem('boughtThose') || '[]');
-	// 	boughtThose.push(...cart);
-	// 	localStorage.setItem('boughtThose', JSON.stringify(boughtThose));
-
-	// 	// Clear cart
-	// 	localStorage.removeItem('cart');
-
-	// 	// Close modal
-	// 	closeModal();
-
-	// 	// Navigate to inventory page if needed
-	// 	// navigate('/inventory');
-	// };
+		// Return the total cost
+		return totalCost;
+	})
 
 	return (
 		<>
@@ -118,7 +68,7 @@ function ItemCart({ cart, clearCart, removeItemFromCart }) {
 					<div className='in-the-box'>
 						{cartBasket.length > 0 ?
 							cartBasket.map((item, index) => (
-								<div key={index}>
+								<div key={index} className='basket'>
 									<div
 										className='cart-items'>
 										<div className='cart-item-icon'>
@@ -132,8 +82,9 @@ function ItemCart({ cart, clearCart, removeItemFromCart }) {
 										<p>Quantity:</p>
 										<p>{item.quantity}</p>
 									</div>}
-									<button onClick={() => removeItemFromCart(item.id)}>Remove</button>
 
+									<button onClick={() => removeItemFromCart(item.id)}>Remove</button>
+									<hr style={{ height: "1%", width: "100%", color: "black" }} />
 								</div>
 							))
 							:
@@ -148,30 +99,32 @@ function ItemCart({ cart, clearCart, removeItemFromCart }) {
 							</>
 						}
 						<div className='render-button'>
-							{cartBasket.length > 0 ?
-								// <OpenModalMenuItem
-								// 	key={index}
-								// 	itemText={"Buy Now"}
-								// 	className="confirm-modal-buy"
-								// 	modalComponent={<ConfirmPurchase
-								// 		key={index}
-								// 		cart={cart}
-								// 		onConfirm={handlePurchaseConfirmed}
-								// 		onCancel={handleCloseModal}
-								// 	/>}
+							{cartBasket?.length > 0 ?
+								<>
+									<div className='cart-total-price'>
+										<div className='label-price'>
+											Total:
+										</div>
+										<div className='fill-price'>
+											<div>
+												{totalPrice(cartBasket)}
+											</div>
+											<div>
+												gold
+											</div>
 
-								// 	onItemClick={handleBuyNow}
-								// />
-
-								//! using modal causes error suspected it is due to this component being modal
-								<button
-									type='submit'
-									// onPointerCancel={closeModal()}
-									onClick={clearCart}
-									onSubmit={clearCart}
-								>
-									Buy Now
-								</button>
+										</div>
+									</div>
+									<button
+										className='basket-buy'
+										type='submit'
+										// onPointerCancel={closeModal()}
+										onClick={clearCart}
+										onSubmit={clearCart}
+									>
+										Buy Now
+									</button>
+								</>
 								:
 								<>
 								</>

@@ -53,7 +53,7 @@ module.exports = {
       {
         userId: 1,
         shopId: 3,
-        itemName: `'Magic Jello's ${dataOtherPotion.name}`,
+        itemName: `Magic Jello's ${dataOtherPotion.name}`,
         statBoost: true,
         gear: false,
         wep: false,

@@ -29,27 +29,20 @@
 ul.profile-dropdown {
 	display: flex;
 	position: relative;
-	padding: 5% 2%;
+	padding: 8% 15%;
 	flex-direction: column;
-	/* width: 75%; */
-	width: 100px;
+	width: 100%;
+	/* width: 100px; */
 	/* width: fit-content; */
 	padding-left: 0px;
 	flex-wrap: wrap;
 	background-color: skyblue;
-	align-items: center;
 	z-index: 1;
 	right: 1rem;
+	bottom: 0.5rem;
+	justify-content: center;
 }
 
-
-
-ul.profile-dropdown>li {
-	margin: 2px 4px;
-	padding: 2px 8px;
-	/* border: 3px solid seagreen; */
-	/* background-color: cadetblue; */
-}
 
 ul.profile-dropdown>li:hover {
 	cursor: pointer;
@@ -106,4 +99,29 @@ ul.profile-dropdownhidden {
 ul.profile-dropdown>li {
 	border: none;
 	box-shadow: none;
+	margin: 2px 4px;
+	padding: 2px 8px;
+	width: 90%;
 }
+
+ul.profile-dropdown>li:hover {
+	border: none;
+	box-shadow: none;
+	background-color: #d8c5bfed;
+}
+
+hr.hr-profile {
+	color: black;
+	height: 1px;
+	width: 90%;
+}
+
+li.profile_dropdown_logout {
+	display: flex;
+	width: 100%;
+	justify-content: center;
+}
+
+li.profile_dropdown_name {}
+
+li.profile_dropdown_name:hover {}

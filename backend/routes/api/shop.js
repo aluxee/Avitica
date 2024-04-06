@@ -4,6 +4,10 @@ const { requireAuth } = require('../../utils/auth');
 
 router = express.Router();
 
+
+
+
+
 router.get('/details/:id', requireAuth, async (req, res) => {
 
 	const { id } = req.params;

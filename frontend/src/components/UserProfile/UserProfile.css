@@ -1,14 +1,113 @@
-.user-container {
+div.user-container {
 	display: flex;
-	position: relative;
+	width: 90%;
 	flex-direction: row;
-	align-content: stretch;
-	justify-content: space-between;
-	flex-wrap: wrap;
+	align-items: center;
 	margin-top: 2%;
 	margin-inline-end: 3%;
 }
 
+.user-info {
+	display: flex;
+	width: 100%;
+	flex-direction: row;
+	align-items: baseline;
+	justify-content: flex-start;
+	flex-wrap: nowrap;
+}
+
+.user-nav-container {
+	width: 100%;
+	display: flex;
+	justify-content: space-between;
+	align-items: flex-start;
+	flex-wrap: wrap;
+}
+
+
+.info-container {
+	display: flex;
+	width: 30%;
+	flex-direction: row;
+	align-items: flex-start;
+	justify-content: space-between;
+	flex-wrap: nowrap;
+}
+
 .fa-solid {
 	font-size: 20px;
+}
+
+.user-stats {
+	display: flex;
+	flex-direction: column;
+	margin-bottom: 10%;
+	justify-content: center;
+	align-items: flex-end;
+	height: 50px;
+	margin-inline-start: 20%;
+}
+
+.user-label {
+	color: fuchsia;
+	font-weight: bold;
+	font-size: larger;
+}
+
+.gold-amt {
+	color: black;
+	font-size: large;
+	font-weight: bold;
+}
+
+.user-fill.curr {
+	display: flex;
+	margin-left: 5px;
+}
+
+.stat-user {
+	display: flex;
+	flex-direction: column;
+	flex-wrap: wrap;
+	align-items: baseline;
+}
+
+
+.fill-text {
+	font-size: 12px;
+}
+
+.currency {
+	display: flex;
+	width: 30%;
+	justify-content: flex-end;
+	margin-top: 10px;
+}
+
+.user-gold {
+	display: flex;
+}
+
+.currency>div.user-fill.curr {
+	margin-left: 4px;
+}
+
+/* WEB KIT AND CHANGES */
+
+
+progress::before {
+	/* content: "Loading: " attr(value) "%"; */
+	position: absolute;
+	width: 100%;
+	text-align: center;
+	font-size: 18px;
+	color: green;
+}
+
+progress::-webkit-progress-bar {
+	background-color: green;
+}
+
+progress::-webkit-progress-value {
+	background-color: red;
 }

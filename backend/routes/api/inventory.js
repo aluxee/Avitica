@@ -48,27 +48,59 @@ router.post('/use-item', requireAuth, async (req, res) => {
 
 
 
-//for consistent inventory structure with localStorage usage
+//for consistent inventory structure with localStorage usage, includes gold usage
 router.post('/new', requireAuth, async (req, res) => {
 	// grab cart items send to this route, store cart item into inv thru for loop
 	//	fetch body pass in cart items
 
-	const { cartItems,  } = req.body;
-
-
-
-
-
+	const { cartItems, } = req.body;
 	const invArr = []
+	let newStatUser;
 	for (let item of cartItems) {
-		const shop = await Shop.findOne({
+		const shopItem = await Shop.findOne({
 			where: {
 				id: item.id
 			}
 		})
+
+		// console.log("%c 🚀 ~ file: inventory.js:66 ~ router.post ~ shopItem: ", "color: red; font-size: 25px", shopItem, "IS THIS UNDEFINED? IF SO TURN IT TO A JSON: ", shopItem.gold)
+
+
+		const itemCost = shopItem.gold
+		//find curr users gold amt
+		const userStats = await userStat.findOne({
+			where: {
+				userId: req.user.id
+			}
+		})
+		// ensure userStats exist
+		if (!userStats) {
+			return res
+				.status(400)
+				.json({
+					message: "User stats not found"
+				})
+		}
+		newStatUser = userStats.toJSON();
+		//ensure user has enough gold to purchase item
+		// console.log("%c 🚀 ~ file: inventory.js:85 ~ router.post ~ newStatUser: ", "color: red; font-size: 25px", newStatUser.gold)
+		// console.log("%c 🚀 ~ file: inventory.js:85 ~ router.post ~ itemCost: ", "color: red; font-size: 25px", itemCost)
+		if (newStatUser.gold < itemCost) {
+
+
+			return res
+				.status(400)
+				.json({
+					message: "Insufficient funds"
+				})
+		}
+		newStatUser.gold -= itemCost;
+		// console.log("%c 🚀 ~ file: inventory.js:93 ~ router.post ~ userStats: ", "color: pink; font-size: 28px", newStatUser, newStatUser.gold)
+
+		// await newStatUser.save();
 		const inventory = await Inventory.create({
 			userId: req.user.id,
-			shopId: shop.id,
+			shopId: shopItem.id,
 			itemName: item.itemName,
 			itemType: item.itemType,
 			healthBoost: item.healthBoost,
@@ -81,10 +113,13 @@ router.post('/new', requireAuth, async (req, res) => {
 		invArr.push(inventory)
 		// return res
 	}
+	// console.log("%c 🚀 ~ file: inventory.js:116 ~ router.post ~ newStatUser (BEFORE THE RETURN OF THE JSON): ", "color: gold; font-size: 25px", newStatUser, newStatUser.gold)
+
 	//extraction from localStorage so no need to utilize inventory unless extraction from state
 	return res
 		.json({
-			inventory: invArr
+			inventory: invArr,
+			stats: newStatUser
 			// message: 'Success!'
 		})
 

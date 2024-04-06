@@ -117,7 +117,7 @@ function UserProfile({ user }) {
 											style={{ color: 'goldenrod' }} className="fa-solid fa-coins" />
 										<div className='gold-amt'>
 											{/* {info.gold} */}
-											{storedGold}
+											{storedGold ? <>{storedGold}</> : <>{info?.gold}</>}
 										</div>
 									</div>
 								</div>

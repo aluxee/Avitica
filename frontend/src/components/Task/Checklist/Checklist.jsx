@@ -6,10 +6,10 @@ import './Checklist.css'
 
 function Checklist({ taskId, checklist, setChecklist }) {
 
-	console.log("%c 🚀 ~ file: Checklist.jsx:9 ~ Checklist ~ taskId: ", "color: red; font-size: 25px", taskId)
+	// console.log("%c 🚀 ~ file: Checklist.jsx:9 ~ Checklist ~ taskId: ", "color: red; font-size: 25px", taskId)
 
 
-	console.log("%c 🚀 ~ file: Checklist.jsx:9 ~ Checklist ~ checklist: ", "color: red; font-size: 25px", checklist)
+	// console.log("%c 🚀 ~ file: Checklist.jsx:9 ~ Checklist ~ checklist: ", "color: red; font-size: 25px", checklist)
 
 	const initialCheck = checklist.reduce((obj, item) => {
 
@@ -25,8 +25,11 @@ function Checklist({ taskId, checklist, setChecklist }) {
 
 	}, {})
 
-
-
+	//TODO: handle completion of tasks and point/ exp grants first in advancedTasks -- esp get the point system going
+	//TODO: remove height: 100% on body for render so that background can show up properly;
+	//TODO: make sure to change font colors for the 2nd nav -- if gold is NaN, make sure it displays as 0
+	//TODO: create enough space at bottom of the shop container
+	//* focus solely on tasks, checklist are bonus, just make sure when it is checked they disappear after user clicks out
 	const [checkItem, setCheckItem] = useState(initialCheck || {});
 
 

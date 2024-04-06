@@ -10,8 +10,9 @@ export const LOAD_CURRENT_STATS = 'stats/LOAD_CURRENT_STATS';
 
 // /**  Action Creators: */
 
-export const loadStats = () => ({
-	type: LOAD_STATS
+export const loadStats = (stats) => ({
+	type: LOAD_STATS,
+	stats
 });
 
 export const loadCurrentStats = (statsId) => {
@@ -55,7 +56,7 @@ export const thunkLoadStats = () => async dispatch => {
 	const data = await response.json();
 	if (response.ok) {
 
-		dispatch(loadStats())
+		dispatch(loadStats(data))
 		return data
 	} else {
 		const errorResponse = await response.json()
@@ -176,17 +177,15 @@ export const thunkLoadCurrentStats = () => async dispatch => {
 const initialState = {}
 const statsReducer = (state = initialState, action) => {
 
-	// stats are an object of array of objects 
+	// stats are an object of array of objects
 
 	switch (action.type) {
 
 		case LOAD_STATS: {
+			console.log("%c 🚀 ~ file: stats.js:184 ~ statsReducer ~ action: ", "color: blue; font-size: 25px", action, action.stats.Stats)
 
-			console.log("%c 🚀 ~ file: stats.js:183 ~ statsReducer ~ action: ", "color: pink; font-size: 25px", action)
 			const allStats = {};
-			// action.stats.Stats.forEach(stats => {
-			// allstatsInfo[stats.id] = stats;
-			// });
+			// allStats[action.data.Stats.id] = action.data.Stats
 
 			return allStats;
 		}

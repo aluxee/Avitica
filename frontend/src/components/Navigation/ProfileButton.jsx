@@ -46,8 +46,8 @@ function ProfileButton({ user }) {
 	}, [showMenu])
 
 	const closeMenu = () => {
-	setShowMenu(false)
-}
+		setShowMenu(false)
+	}
 
 	const logout = (e) => {
 		e.preventDefault();
@@ -114,6 +114,7 @@ function ProfileButton({ user }) {
 									onItemClick={closeMenu}
 									modalComponent={<LoginFormModal />}
 								/>
+								<hr style={{ height: "1%", color: "black", width: "100%" }} />
 								<OpenModalMenuItem
 									itemText="Sign Up"
 									onItemClick={closeMenu}

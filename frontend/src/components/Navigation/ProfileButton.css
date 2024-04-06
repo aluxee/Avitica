@@ -29,13 +29,17 @@
 ul.profile-dropdown {
 	display: flex;
 	position: relative;
+	padding: 5% 2%;
 	flex-direction: column;
-	width: 55%;
+	/* width: 75%; */
+	width: 100px;
+	/* width: fit-content; */
 	padding-left: 0px;
 	flex-wrap: wrap;
 	background-color: skyblue;
 	align-items: center;
 	z-index: 1;
+	right: 1rem;
 }
 
 
@@ -70,6 +74,7 @@ ul.profile-dropdown>li:active {
 
 button.button-profile-dropdown {
 	padding: 2px 8px;
+	margin: 10% 25%;
 	font-size: 18px;
 	background-color: transparent;
 	border: none;
@@ -78,6 +83,11 @@ button.button-profile-dropdown {
 button.button-profile-dropdown:hover {
 	cursor: pointer;
 	color: lightblue;
+}
+
+button.button-profile-dropdown>ul.profile-dropdown {
+	width: 100px;
+	display: flex;
 }
 
 /* *HIDDEN ELEMENTS */

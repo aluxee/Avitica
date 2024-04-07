@@ -9,21 +9,25 @@ function Checklist({ taskId, checklist, setChecklist }) {
 	// console.log("%c 🚀 ~ file: Checklist.jsx:9 ~ Checklist ~ taskId: ", "color: red; font-size: 25px", taskId)
 
 
-	// console.log("%c 🚀 ~ file: Checklist.jsx:9 ~ Checklist ~ checklist: ", "color: red; font-size: 25px", checklist)
+	console.log("%c 🚀 ~ file: Checklist.jsx:9 ~ Checklist ~ checklist: ", "color: red; font-size: 25px", checklist)
 
-	const initialCheck = checklist.reduce((obj, item) => {
+	const initialCheck = Object.values(checklist).reduce((obj, item) => {
+		// if (obj) {
+		// 	obj[item.id] = item.checked, {}
+		// 	console.log("%c 🚀 ~ file: obj.jsx:19 ~ initialCheck ~ obj: ", "color: pink; font-size: 25px", obj)
+		// }
+		const { id, checked } = item
+		console.log("%c 🚀 ~ file: Checklist.jsx:49 ~ initialCheck ~ id: ", "color: red; font-size: 25px", id)
+		console.log("%c 🚀 ~ file: Checklist.jsx:49 ~ initialCheck ~ checked: ", "color: red; font-size: 25px", checked)
+		console.log("%c 🚀 ~ file: Checklist.jsx:49 ~ initialCheck ~ item: ", "color: red; font-size: 25px", item)
 
-		console.log("%c 🚀 ~ file: Checklist.jsx:13 ~ initialCheck ~ item: ", "color: green; font-size: 25px", item)
 
-
-		console.log("%c 🚀 ~ file: Checklist.jsx:19 ~ initialCheck ~ obj: ", "color: green; font-size: 25px", obj)
-		if (obj) {
-			obj[item.id] = item.checked, {}
-			console.log("%c 🚀 ~ file: obj.jsx:19 ~ initialCheck ~ obj: ", "color: pink; font-size: 25px", obj)
-
-		}
+		return { ...obj, [id]: checked }
 
 	}, {})
+
+	console.log("%c 🚀 ~ file: Checklist.jsx:24 ~ initialCheck ~ initialCheck: ", "color: green; font-size: 25px", initialCheck)
+
 
 	//TODO: handle completion of tasks and point/ exp grants first in advancedTasks -- esp get the point system going
 	//TODO: remove height: 100% on body for render so that background can show up properly;
@@ -38,23 +42,38 @@ function Checklist({ taskId, checklist, setChecklist }) {
 	//created empty Checklist for initial state of task to start with thus changing bottom variable from checklistObj to theChecklist
 	const theTasks = useSelector(state => state.task)
 
-	console.log("%c 🚀 ~ file: Checklist.jsx:38 ~ Checklist ~ theTasks: ", "color: orange; font-size: 25px", theTasks)
+	console.log("%c 🚀 ~ file: Checklist.jsx:45 ~ Checklist ~ theTasks: ", "color: orange; font-size: 25px", theTasks)
 
-	const theChecklist = useSelector(state => {
-		console.log("%c 🚀 ~ file: Checklist.jsx:31 ~ STATE ~ STATE: ", "color: aliceblue; font-size: 25px", state)
-		const checklist = state.checklist
+	// const theChecklist = useSelector(state => {
 
-		console.log("%c 🚀 ~ file: Checklist.jsx:40 ~ theChecklist ~ checklist: ", "color: red; font-size: 25px", checklist)
 
-		const task = state.task[taskId]
-		if (task) {
+	// 	console.log("%c 🚀 ~ file: Checklist.jsx:31 ~ STATE ~ STATE: ", "color: aliceblue; font-size: 25px", state)
+	// 	const checklist = state.checklist
 
-			console.log("%c 🚀 ~ file: Checklist.jsx:37 ~ theChecklist ~ task (inside conditional): ", "color: aliceblue; font-size: 25px", task, task.Checklist)
-			task.Checklist = checklist
-			return task.Checklist
-		}
-	})
-	console.log("%c 🚀 ~ file: Checklist.jsx:42 ~ theChecklist ~ theChecklist: ", "color: cornflowerblue; font-size: 30px", theChecklist)
+	// 	console.log("%c 🚀 ~ file: Checklist.jsx:40 ~ theChecklist ~ checklist: ", "color: red; font-size: 25px", checklist)
+
+	// 	const task = state.task[taskId]
+	// 	if (task) {
+
+	// 		console.log("%c 🚀 ~ file: Checklist.jsx:37 ~ theChecklist ~ task (inside conditional): ", "color: aliceblue; font-size: 25px", task, task.Checklist)
+	// 		task.Checklist = checklist
+	// 		return task.Checklist
+	// 	}
+	// })
+	// console.log("%c 🚀 ~ file: Checklist.jsx:42 ~ theChecklist ~ theChecklist: ", "color: cornflowerblue; font-size: 30px", theChecklist)
+
+	const list = useSelector(state => state.checklist)
+	const checklistAllArr = Object.values(list)
+
+
+	// console.log("%c 🚀 ~ file: Checklist.jsx:67 ~ Checklist ~ list: ", "color: cornflowerblue; font-size: 25px", list)
+	// console.log("%c 🚀 ~ file: Checklist.jsx:68 ~ Checklist ~ checklistAllArr: ", "color: red; font-size: 25px", checklistAllArr)
+	const theChecklist = checklistAllArr.filter(item => item.taskId === taskId)
+
+	// console.log("%c 🚀 ~ file: Checklist.jsx:73 ~ Checklist ~ theChecklist: ", "color: red; font-size: 25px", theChecklist)
+
+
+
 
 	// const theList = checklistObj ? Object.values(checklistObj) : [];
 	const checkListArr = Object.values(theChecklist)
@@ -67,7 +86,7 @@ function Checklist({ taskId, checklist, setChecklist }) {
 		// Update the local checklist state
 		const previousCheck = checkItem[id];
 		setCheckItem({ ...checkItem, [id]: !previousCheck })
-		const updatedChecklist = checklist.map(item => {
+		const updatedChecklist = checkListArr?.map(item => {
 			if (item.id === id) {
 				return { ...item, checked: !previousCheck };
 			}
@@ -90,7 +109,7 @@ function Checklist({ taskId, checklist, setChecklist }) {
 				<div className="cl-inner">
 					<div className="theList-form-not-form">
 
-						{checkListArr.length > 0 && checkListArr.map(item => (
+						{checkListArr.length > 0 && checkListArr?.map(item => (
 
 							<div key={item.id} className="checklist-ind">
 								<input

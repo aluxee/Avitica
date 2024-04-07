@@ -234,16 +234,14 @@ router.get('/current', async (req, res) => {
 router.get('/', requireAuth, async (req, res) => {
 	try {
 		// without a user stat we need to create one as a default, though this is still ultimately a "GET"
+		const { user } = req;
 
-
-		console.log("%c 🚀 ~ file: userStats.js:2349 ~ router.get ~ user: ", "color: red; font-size: 25px", req.user, req.user.heroClass)
+		console.log("%c 🚀 ~ file: userStats.js:2349 ~ router.get ~ user: ", "color: red; font-size: 25px", user, user.heroClass)
 
 
 		// all the userStats of a user (health, exp)
-		const userStats = await userStat.findOne({
-			where: {
-				userId: req.user.id
-			},
+		const userStats = await userStat.findByPk(user.id, {
+
 			attributes: {
 				exclude: [
 					'createdAt', 'updatedAt'
@@ -301,29 +299,29 @@ router.get('/', requireAuth, async (req, res) => {
 		// .json({Stats: response})
 		// 	}
 
-		// }
+	// }
 		// else {
-		// 			const currUser = await User.findByPk(user.id, {
-		// 		where: {
-		// 			id: user.id
-		// 		},
-		// 		include: [{
-		// 			model: userStat
-		// 		}]
-		// 	})
-		// 	return res
-		// 		.json({ Stats: currUser })
-		// }
+// 			const currUser = await User.findByPk(user.id, {
+// 		where: {
+// 			id: user.id
+// 		},
+// 		include: [{
+// 			model: userStat
+// 		}]
+// 	})
+// 	return res
+// 		.json({ Stats: currUser })
+// }
 		return res
-			.json({ Stats: userStats })
+		.json({Stats: userStats})
 	} catch (err) {
 
-		return res
-			.status(400)
-			.json({
-				error: `Error fetching user stats: ${err}`
-			})
-	}
+	return res
+		.status(400)
+		.json({
+			error: `Error fetching user stats: ${err}`
+		})
+}
 });
 
 

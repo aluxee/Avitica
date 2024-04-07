@@ -104,7 +104,7 @@ function ShopDetails() {
 		// Calculate total cost of items in the cart
 		const totalCost = cartItems.reduce((total, item) => {
 
-			console.log("%c 🚀 ~ file: ShopDetails.jsx:97 ~ totalCost ~ item: ", "color: red; font-size: 25px", item)
+			// console.log("%c 🚀 ~ file: ShopDetails.jsx:97 ~ totalCost ~ item: ", "color: red; font-size: 25px", item)
 
 			// Ensure item.cost is a number
 			const itemCost = typeof item.gold === 'number' ? item.gold : parseFloat(item.gold);
@@ -118,15 +118,15 @@ function ShopDetails() {
 			}
 		}, 0); //107
 
-		console.log("%c 🚀 ~ file: ShopDetails.jsx:107 ~ totalCost ~ totalCost: ", "color: pink; font-size: 25px", totalCost)
+		// console.log("%c 🚀 ~ file: ShopDetails.jsx:107 ~ totalCost ~ totalCost: ", "color: pink; font-size: 25px", totalCost)
 
 		// Check if the user has enough gold to make the purchase
 		//Get gold from localStorage, a number
 		let goldAmt = parseInt(localStorage.getItem('gold', 10) || gold);
 
-		console.log("%c 🚀 ~ file: ShopDetails.jsx:120 ~ moveItemsToInventory ~ gold: ", "color: magenta; font-size: 25px", gold) //1000
+		// console.log("%c 🚀 ~ file: ShopDetails.jsx:120 ~ moveItemsToInventory ~ gold: ", "color: magenta; font-size: 25px", gold) //1000
 
-		console.log("%c 🚀 ~ file: ShopDetails.jsx:122 ~ moveItemsToInventory ~ goldAmt: ", "color: magenta; font-size: 30px", goldAmt) // 0
+		// console.log("%c 🚀 ~ file: ShopDetails.jsx:122 ~ moveItemsToInventory ~ goldAmt: ", "color: magenta; font-size: 30px", goldAmt) // 0
 
 		if (goldAmt < totalCost) {
 			alert('You do not have enough gold to make this purchase.');

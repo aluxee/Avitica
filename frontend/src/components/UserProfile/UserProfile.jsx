@@ -1,3 +1,4 @@
+import { csrfFetch } from '../../store/csrf';
 import { useSelector, useDispatch } from 'react-redux';
 import { useEffect, useState } from 'react';
 import { thunkLoadStats } from '../../store/stats';
@@ -7,61 +8,33 @@ import './UserProfile.css';
 
 function UserProfile({ user }) {
 
-	console.log("%c 🚀 ~ file: UserProfile.jsx:11 ~ UserProfile ~ user: ", "color: red; font-size: 25px", user)
-
+	// console.log("%c 🚀 ~ file: UserProfile.jsx:11 ~ UserProfile ~ user: ", "color: red; font-size: 25px", user)
+	const userId = user.id;
 	const dispatch = useDispatch();
-	const userInfo = useSelector(state => state.stats)
+	const userInfo = useSelector(state => state.stats);
+	const userStats = Object.values(userInfo);
+	const storedGold = parseInt(localStorage.getItem('gold'), 10 || 0)
+	// userStats[0].gold = storedGold
+	const userStat = userStats[0];
+	const taskObj = useSelector(state => state.task)
+	const tasks = Object.values(taskObj);
+
+
 	const [healthPercent, setHealthPercent] = useState(0);
 	const [expPercent, setExpPercent] = useState(0);
+	const [currStat, setCurrStat] = useState(null)
 
-	const userStats = Object.values(userInfo)
 
+
+	//TODO: Create interactive buttons to complete and incomplete task causing dynamic changes in user's stats
 	useEffect(() => {
 		// fill out form
 		// button to test look: generate avatar
 		// finalize look: submit avatar
 		dispatch(thunkLoadStats())
+		// setCurrStat(userStat) // this will always result to undefined
 	}, [dispatch])
 
-	useEffect(() => {
-		const fetchUserStats = async () => {
-			try {
-				// Fetch user's stats from the backend
-				const response = await fetch('/api/user/stats', {
-					method: 'GET',
-					credentials: 'include', // Include credentials if required
-				});
-
-				if (!response.ok) {
-					throw new Error('Failed to fetch user stats');
-				}
-
-				const data = await response.json();
-
-				if (data.userStats) {
-					// Calculate health and exp percentages based on user's level
-					const level = data.userStats.getLevel();
-					const defaultHealth = data.userStats.calcDefaultHealth(level);
-					const defaultExperience = data.userStats.calcDefaultExperience(level);
-					const healthPercent = (data.userStats.health / defaultHealth) * 100;
-					const expPercent = (data.userStats.experience / defaultExperience) * 100;
-
-					// Update state with health and exp percentages
-					setHealthPercent(healthPercent);
-					setExpPercent(expPercent);
-				}
-			} catch (error) {
-				console.error('Error fetching user stats:', error.message);
-			}
-		};
-
-		// Call fxn
-		fetchUserStats();
-	}, [healthPercent, expPercent])
-
-	const storedGold = parseInt(localStorage.getItem('gold'), 10 || 0)
-
-	console.log("%c 🚀 ~ file: UserProfile.jsx:64 ~ UserProfile ~ storedGold: ", "color: green; font-size: 35px", storedGold)
 
 
 

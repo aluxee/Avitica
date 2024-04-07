@@ -2,7 +2,7 @@ import { useDispatch } from 'react-redux';
 import OpenModalButton from '../Navigation/OpenModalMenuItem';
 // import { useModal } from '../../context/Modal';
 import { useState, useEffect } from 'react';
-import Checklist from './Checklist/Checklist';
+// import Checklist from './Checklist/Checklist';
 import { thunkEditTask, thunkLoadCurrentTask, } from '../../store/task';
 import { useSelector } from 'react-redux';
 import './Task.css';
@@ -22,7 +22,7 @@ function Task({ task, taskId, index }) {
 	console.log("%c 🚀 ~ file: Task.jsx:13 ~ Task ~ taskState: ", "color: limegreen; font-size: 25px", taskState)
 
 	const [title, setTitle] = useState(task.title);
-	const [checklist, setChecklist] = useState([taskState.Checklist]);
+	// const [checklist, setChecklist] = useState([taskState.Checklist]);
 
 	const [errors, setErrors] = useState({});
 	const [showMenu, setShowMenu] = useState(false);
@@ -149,17 +149,17 @@ function Task({ task, taskId, index }) {
 				<label htmlFor="checklist"
 					className='et-checklist'
 				>
-					<h4>
+					{/* <h4>
 						Checklist
-					</h4>
-					{checklist && checklist.length > 0 ?
+					</h4> */}
+					{/* {checklist && checklist.length > 0 ?
 
 						<Checklist taskId={taskId} checklist={checklist} setChecklist={setChecklist} />
 						:
 						<>
 							Create a checklist!
 						</>
-					}
+					} */}
 				</label>
 
 			</div>

@@ -1,4 +1,4 @@
-import { thunkLoadTasks, thunkRemoveTask } from '../../store/task';
+import { thunkLoadTasks } from '../../store/task';
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import './AllTasks.css';
@@ -6,7 +6,7 @@ import './AllTasks.css';
 import OpenModalMenuItem from '../Navigation/OpenModalMenuItem';
 import OpenModalButton from '../OpenModalButton/OpenModalButton';
 import CreateTask from './CreateTask';
-import DeleteTask from './DeleteTask';
+// import DeleteTask from './DeleteTask';
 import Task from './Task';
 
 
@@ -19,8 +19,8 @@ function AllTasks() {
 
 	// console.log("%c 🚀 ~ file: AllTasks.jsx:23 ~ AllTasks ~ taskObj: ", "color: red; font-size: 25px", taskObj)
 
-	const [filteredTasks, setFilteredTasks] = useState([]);
-	const [taskStatus, setTaskStatus] = useState(false);
+	// const [filteredTasks, setFilteredTasks] = useState([]);
+	// const [taskStatus, setTaskStatus] = useState(false);
 	const allTasks = Object.values(taskObj)
 
 	// console.log("%c 🚀 ~ file: AllTasks.jsx:24 ~ AllTasks ~ allTasks: ", "color: red; font-size: 25px", allTasks)
@@ -65,7 +65,7 @@ function AllTasks() {
 		// e.preventDefault();
 		//* careful when utilizing this function, may cause weird behavior in localStorage and the items to go missing
 
-		const tasks = JSON.parse(localStorage.getItem('tasks' || filteredTasks || []));
+		const tasks = JSON.parse(localStorage.getItem('tasks' || []));
 		//update list of tasks
 		// console.log("%c 🚀 ~ file: AllTasks.jsx:70 ~ handleTaskComplete ~ tasks: ", "color: red; font-size: 25px", tasks)
 		const updatedTaskList = tasks.filter(task => task.id !== taskId)
@@ -84,7 +84,7 @@ function AllTasks() {
 		// // actually remove the task here:
 		// await dispatch(thunkRemoveTask(completedTask.id))
 		//set task status to true
-		setTaskStatus(true)
+		// setTaskStatus(true)
 		handleExpAndGold()
 		await dispatch(thunkLoadTasks())
 	}

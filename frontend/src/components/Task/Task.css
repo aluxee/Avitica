@@ -4,6 +4,47 @@
 	align-items: center;
 }
 
+.task-container>h4 {
+	margin: 8px 4px;
+}
+
+.debrief {
+	font-style: oblique;
+	width: 100%;
+	font-size: 12px;
+	text-align: left;
+	margin-bottom: 12px;
+	color: #42B8C1;
+}
+
+.title-container {
+	display: flex;
+	flex-wrap: wrap;
+	flex-direction: column;
+	align-items: center;
+	width: 250px;
+}
+
+.notes-container {
+	display: flex;
+	flex-wrap: wrap;
+	flex-direction: column;
+	align-items: center;
+	width: 250px;
+}
+
+.notes {
+	text-align: center;
+	margin: 0px 20px;
+}
+
+.diff-container {
+	display: flex;
+	flex-wrap: wrap;
+	flex-direction: column;
+	align-items: center;
+}
+
 .task-container>li.modal-menu-item {
 	border: 2px solid black;
 	width: fit-content;
@@ -12,4 +53,18 @@
 
 li.modal-menu-item:hover {
 	cursor: pointer;
+}
+
+.task-container>.notes-container>.notes>div:first-child {
+	display: flex;
+	flex-wrap: wrap;
+	flex-direction: column;
+	align-items: center;
+}
+
+
+
+
+.dueDate-label {
+	display: flex;
 }

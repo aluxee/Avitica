@@ -9,7 +9,7 @@ function Checklist({ taskId, checklist, setChecklist }) {
 	// console.log("%c 🚀 ~ file: Checklist.jsx:9 ~ Checklist ~ taskId: ", "color: red; font-size: 25px", taskId)
 
 
-	console.log("%c 🚀 ~ file: Checklist.jsx:9 ~ Checklist ~ checklist: ", "color: red; font-size: 25px", checklist)
+	// console.log("%c 🚀 ~ file: Checklist.jsx:9 ~ Checklist ~ checklist: ", "color: red; font-size: 25px", checklist)
 
 	const initialCheck = Object.values(checklist).reduce((obj, item) => {
 		// if (obj) {
@@ -17,16 +17,16 @@ function Checklist({ taskId, checklist, setChecklist }) {
 		// 	console.log("%c 🚀 ~ file: obj.jsx:19 ~ initialCheck ~ obj: ", "color: pink; font-size: 25px", obj)
 		// }
 		const { id, checked } = item
-		console.log("%c 🚀 ~ file: Checklist.jsx:49 ~ initialCheck ~ id: ", "color: red; font-size: 25px", id)
-		console.log("%c 🚀 ~ file: Checklist.jsx:49 ~ initialCheck ~ checked: ", "color: red; font-size: 25px", checked)
-		console.log("%c 🚀 ~ file: Checklist.jsx:49 ~ initialCheck ~ item: ", "color: red; font-size: 25px", item)
+		// console.log("%c 🚀 ~ file: Checklist.jsx:49 ~ initialCheck ~ id: ", "color: red; font-size: 25px", id)
+		// console.log("%c 🚀 ~ file: Checklist.jsx:49 ~ initialCheck ~ checked: ", "color: red; font-size: 25px", checked)
+		// console.log("%c 🚀 ~ file: Checklist.jsx:49 ~ initialCheck ~ item: ", "color: red; font-size: 25px", item)
 
 
 		return { ...obj, [id]: checked }
 
 	}, {})
 
-	console.log("%c 🚀 ~ file: Checklist.jsx:24 ~ initialCheck ~ initialCheck: ", "color: green; font-size: 25px", initialCheck)
+	// console.log("%c 🚀 ~ file: Checklist.jsx:24 ~ initialCheck ~ initialCheck: ", "color: green; font-size: 25px", initialCheck)
 
 
 	//TODO: handle completion of tasks and point/ exp grants first in advancedTasks -- esp get the point system going
@@ -42,7 +42,7 @@ function Checklist({ taskId, checklist, setChecklist }) {
 	//created empty Checklist for initial state of task to start with thus changing bottom variable from checklistObj to theChecklist
 	const theTasks = useSelector(state => state.task)
 
-	console.log("%c 🚀 ~ file: Checklist.jsx:45 ~ Checklist ~ theTasks: ", "color: orange; font-size: 25px", theTasks)
+	// console.log("%c 🚀 ~ file: Checklist.jsx:45 ~ Checklist ~ theTasks: ", "color: orange; font-size: 25px", theTasks)
 
 	// const theChecklist = useSelector(state => {
 

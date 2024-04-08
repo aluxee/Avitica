@@ -7,7 +7,7 @@ import './EditTask.css';
 
 import Checklist from './Checklist/Checklist';
 
-
+//Only available for guidance or future option
 function EditTask({ task, taskId }) {
 	const dispatch = useDispatch();
 	const { closeModal } = useModal();
@@ -20,6 +20,12 @@ function EditTask({ task, taskId }) {
 	const [errors, setErrors] = useState({});
 	const [showMenu, setShowMenu] = useState(false);
 
+	useEffect(() => {
+		const errorsObj = {};
+		title.length <= 3 ? errorsObj.title("Title's name is required, please enter at least 3 characters") : ''
+
+		setErrors(errorsObj)
+	}, [title])
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
@@ -27,7 +33,8 @@ function EditTask({ task, taskId }) {
 		if (title.length <= 3) {
 			setErrors({ title: "Title's name is required" });
 			return;
-		} else if (title.length > 50) {
+		}
+		if (title.length > 50) {
 			setErrors({ title: "Title's name must be shorter than 50 characters long." });
 			return;
 		}
@@ -78,6 +85,7 @@ function EditTask({ task, taskId }) {
 					/>
 					{errors?.title && <p className="p-error">{errors.title} </p>}
 				</label>
+
 				<label htmlFor="notes">
 					<h4>
 						Notes
@@ -145,6 +153,14 @@ function EditTask({ task, taskId }) {
 					Save
 				</button>
 			</form>
+			<div>
+				<OpenModalMenuItem
+					itemText={<i className="fa-solid fa-trash" />}
+					// onItemClick={toggleMenu}
+					onItemClick={toggleMenu}
+					modalComponent={<DeleteTask taskId={task.id} key={task.id} />}
+				/>
+			</div>
 		</>
 	)
 }

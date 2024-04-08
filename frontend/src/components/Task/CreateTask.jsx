@@ -19,19 +19,28 @@ function CreateTask() {
 	const [errors, setErrors] = useState({});
 	// const [showMenu, setShowMenu] = useState(false);
 
+	useEffect(() => {
+		const errorsObject = {};
+
+		title.length <= 3 ? errorsObject.title = 'Title`s name is required' : title
+		title.length >= 50 ? errorsObject.title = 'Title`s name must be shorter than 50 characters long' : title
+
+		notes.length >= 100 ? errorsObject.notes = 'Mayhap consider shortening this?' : notes
+
+		const currentDate = new Date();
+		const selectedDate = new Date(dueDate);
+		if (selectedDate < currentDate) {
+			errorsObject.dueDate = 'Due date must be on or after the current date'
+		}
+
+		setErrors(errorsObject);
+	}, title, dueDate, notes)
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 
-		if (title.length <= 3) {
-			setErrors({ title: "Title's name is required" });
-			return;
-		} else if (title.length > 50) {
-			setErrors({ title: "Title's name must be shorter than 50 characters long." });
-			return;
-		}
 
-		let newTask = {
+		const newTask = {
 
 			title,
 			notes,
@@ -42,8 +51,6 @@ function CreateTask() {
 
 
 		const submissionResults = await dispatch(thunkCreateTask(newTask));
-
-		// console.log("%c 🚀 ~ file: CreateTask.jsx:52 ~ handleSubmit ~ submissionResults: ", "color: red; font-size: 25px", submissionResults)
 
 
 		if (!submissionResults?.errors) {
@@ -59,6 +66,17 @@ function CreateTask() {
 
 	};
 
+	const handleChangeTitle = (e) => {
+		const newTitle = e.target.value;
+		if (newTitle.length >= 50) {
+			// If the length exceeds the limit, truncate the title
+			setTitle(newTitle.slice(0, 50));
+			setErrors({ title: "Title's name must be less than 50 characters" });
+		} else {
+			setTitle(newTitle);
+			setErrors({ title: '' });
+		}
+	};
 
 	return (
 		<>
@@ -74,10 +92,10 @@ function CreateTask() {
 						className="pt-task-input"
 						type="text"
 						value={title}
-						onChange={(e) => setTitle(e.target.value)}
+						onChange={handleChangeTitle}
 						placeholder="Enter Title for Task"
 					/>
-					{errors?.title && <p className="p-error">{errors.title} </p>}
+					<p className="p-error">{errors?.title}</p>
 				</label>
 				<label htmlFor="notes">
 					<h4>
@@ -120,9 +138,7 @@ function CreateTask() {
 						type="date"
 						onChange={(e) => setDueDate(e.target.value)}
 					/>
-					{errors?.dueDate && (
-						<p className="p-error">{errors.dueDate} </p>
-					)}
+					<p className="p-error">{errors?.dueDate}</p>
 				</label>
 				<button type="submit" className="pt-task-submit-button submit">
 					Save

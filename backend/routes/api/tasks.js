@@ -251,12 +251,10 @@ router.put('/:taskId/status', requireAuth, async (req, res) => {
 
 //* update task only
 router.put('/:taskId', requireAuth, async (req, res) => {
-	//* May need testing with front end
-	// this portion must come from the frontend where the task is marked as complete by boolean of check to indicate that the task is or is not complete
+
+
 	const { title, notes, difficulty, dueDate, completed } = req.body;
 	const { taskId } = req.params;
-
-
 	try {
 		if (!title) {
 			return res
@@ -271,6 +269,9 @@ router.put('/:taskId', requireAuth, async (req, res) => {
 				userId: req.user.id
 			},
 		});
+
+		console.log("%c 🚀 ~ file: tasks.js:275 ~ router.put ~ taskUpdate: ", "color: red; font-size: 25px", taskUpdate)
+
 
 		const thisDate = Date.now();
 		let currentDate = new Date(thisDate);
@@ -291,7 +292,7 @@ router.put('/:taskId', requireAuth, async (req, res) => {
 		}
 
 		taskUpdate.title = title
-		taskUpdate.notes = notes || null
+		taskUpdate.notes = notes
 		taskUpdate.difficulty = difficulty || "Trivial" || null
 		taskUpdate.dueDate = dueDate || stringDate
 		// utilize the task completion (boolean) attribute prior to the point changes
@@ -303,9 +304,7 @@ router.put('/:taskId', requireAuth, async (req, res) => {
 		await taskUpdate.save();
 
 		// confirm such actions w/ model fxn implementation
-		return res
-			.status(200)
-			.json(taskUpdate);
+		res.json(taskUpdate);
 
 	} catch (err) {
 		return res

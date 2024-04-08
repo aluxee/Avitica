@@ -15,9 +15,6 @@ function AllTasks() {
 	// console.log("%c 🚀 ~ file: AllTasks.jsx:17 ~ AllTasks ~ tasks: ", "color: red; font-size: 25px", tasks)
 	// const [hover, setHover] = useState(null);
 	const [showMenu, setShowMenu] = useState(false);
-	// const navigate = useNavigate();
-	// const ulRef = useRef(null);
-
 	const taskObj = useSelector(state => state.task);
 
 	// console.log("%c 🚀 ~ file: AllTasks.jsx:23 ~ AllTasks ~ taskObj: ", "color: red; font-size: 25px", taskObj)
@@ -129,7 +126,7 @@ function AllTasks() {
 				<div className='int inner-task-container'>
 					<div className='task-add-task'>
 						<OpenModalButton
-							itemText={"Add a new Task"}
+							buttonText={"Add a new task"}
 							onItemClick={toggleMenu}
 							modalComponent={<CreateTask allTasks={allStoredTasks} />}
 						// change allTasks to setTasks
@@ -138,7 +135,7 @@ function AllTasks() {
 					<div className='all-task-container'
 					// key={tasks.id}
 					>
-						{allStoredTasks.length && allStoredTasks?.map((task, index) => (
+						{allTasks.length && allTasks?.map((task, index) => (
 							<div className='at-tasks'
 								key={index}
 							//getting unique key issue may be preventing edit from submitting, but delete works
@@ -157,16 +154,12 @@ function AllTasks() {
 										itemText={task.title}
 										onItemClick={toggleMenu}
 										modalComponent={
-											// <EditTask task={task} key={task.id} taskId={task.id} />
-											<Task task={task} key={index} taskId={task.id} index={index} />
+
+											<Task task={task} key={index} taskId={task.id} index={index}
+											/>
 										}
 									/>
-									<OpenModalMenuItem
-										itemText={<i className="fa-solid fa-trash" />}
-										// onItemClick={toggleMenu}
-										onItemClick={toggleMenu}
-										modalComponent={<DeleteTask taskId={task.id} key={task.id} />}
-									/>
+
 								</div>
 								<div className='task-mark incomplete'>
 									<i className="fa-solid fa-xmark" />

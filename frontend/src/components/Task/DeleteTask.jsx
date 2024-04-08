@@ -10,16 +10,19 @@ function DeleteTask({ taskId }) {
 	const { closeModal } = useModal();
 
 	const handleSubmit = async (e) => {
-		e.preventDefault();
+		// const confirmDelete = window.confirm("Are you sure you want to delete this task?");
 
-		const res = await dispatch(thunkRemoveTask(taskId));
-		if (res && res.errors) {
-			return res.errors;
+		if (confirmDelete) {
+
+			const res = await dispatch(thunkRemoveTask(taskId));
+			if (res && res.errors) {
+				return res.errors;
+			}
+			await dispatch(thunkLoadTasks())
+			// navigate('/')
+			closeModal()
+			// return res;
 		}
-		await dispatch(thunkLoadTasks())
-		// navigate('/')
-		closeModal()
-		// return res;
 
 	}
 
@@ -29,7 +32,7 @@ function DeleteTask({ taskId }) {
 
 	return (
 		<>
-			<div className="delete-spot_container">
+			{/* <div className="delete-spot_container">
 
 				<h1> Confirm Delete</h1>
 				<h3>Are you sure you want to remove this task
@@ -43,7 +46,7 @@ function DeleteTask({ taskId }) {
 						className="delete-task-button" id="delete-task-yes">Yes (Delete task)
 					</button>
 				</form>
-			</div>
+			</div> */}
 
 		</>
 	);

@@ -46,7 +46,7 @@ function ShopDetails() {
 		const storedGold = parseInt(localStorage.getItem('gold'), 10) || goldenHour;
 		setGold(storedGold)
 		dispatch(thunkLoadShop())
-	}, [goldenHour])
+	}, [goldenHour, dispatch])
 
 	useEffect(() => {
 		goldRef.current = gold

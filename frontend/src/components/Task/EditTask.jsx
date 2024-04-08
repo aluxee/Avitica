@@ -1,12 +1,12 @@
 import { useDispatch } from 'react-redux';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 // import { useParams } from 'react-router-dom';
 import { useModal } from '../../context/Modal';
 import { thunkEditTask } from '../../store/task';
 import './EditTask.css';
-
+import OpenModalMenuItem from '../Navigation/OpenModalMenuItem';
 import Checklist from './Checklist/Checklist';
-
+import DeleteTask from './DeleteTask';
 //Only available for guidance or future option
 function EditTask({ task, taskId }) {
 	const dispatch = useDispatch();

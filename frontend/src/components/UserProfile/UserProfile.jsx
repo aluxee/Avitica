@@ -1,23 +1,22 @@
-import { csrfFetch } from '../../store/csrf';
-import { useSelector, useDispatch } from 'react-redux';
+
+// import { useSelector, useDispatch } from 'react-redux';
 import { useEffect, useState, useRef } from 'react';
-import { thunkLoadStats } from '../../store/stats';
+// import { thunkLoadStats } from '../../store/stats';
 import './UserProfile.css';
 import { one, two, three, four, five, six } from '../../clips';
 
 
 function UserProfile({ user }) {
 
-	console.log("%c 🚀 ~ file: UserProfile.jsx:11 ~ UserProfile ~ user: ", "color: magenta; font-size: 25px", user, user.Stats)
+	// console.log("%c 🚀 ~ file: UserProfile.jsx:11 ~ UserProfile ~ user: ", "color: magenta; font-size: 25px", user, user.Stats)
 	// const userId = user.id;
-	const dispatch = useDispatch();
 	const userInfo = user.userStats;
 	// const stats = user.Stats;
 	const goldFromStorage = parseInt(localStorage.getItem('gold'), 10) || userInfo.gold;
 	const [gold, setGold] = useState(goldFromStorage);
 	const goldRef = useRef(gold)
 
-	console.log("%c 🚀 ~ file: UserProfile.jsx:22 ~ UserProfile ~ goldRef: ", "color: red; font-size: 25px", goldRef)
+	// console.log("%c 🚀 ~ file: UserProfile.jsx:22 ~ UserProfile ~ goldRef: ", "color: red; font-size: 25px", goldRef)
 	useEffect(() => {
 		// fill out form
 		// button to test look: generate avatar
@@ -44,8 +43,8 @@ function UserProfile({ user }) {
 
 	// userStats[0].gold = storedGold
 	// const userStat = userStats[0];
-	const taskObj = useSelector(state => state.task)
-	const tasks = Object.values(taskObj);
+	// const taskObj = useSelector(state => state.task)
+	// const tasks = Object.values(taskObj);
 
 
 	// const [healthPercent, setHealthPercent] = useState(0);

@@ -40,7 +40,7 @@ function Checklist({ taskId, checklist, setChecklist }) {
 
 	const dispatch = useDispatch();
 	//created empty Checklist for initial state of task to start with thus changing bottom variable from checklistObj to theChecklist
-	const theTasks = useSelector(state => state.task)
+	// const theTasks = useSelector(state => state.task)
 
 	// console.log("%c 🚀 ~ file: Checklist.jsx:45 ~ Checklist ~ theTasks: ", "color: orange; font-size: 25px", theTasks)
 

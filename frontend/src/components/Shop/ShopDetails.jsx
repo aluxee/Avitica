@@ -1,6 +1,6 @@
 // import { csrfFetch } from '../../store/csrf';
 import { useSelector, useDispatch } from 'react-redux';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import OpenModalMenuItem from '../Navigation/OpenModalMenuItem';
 import './ShopDetails.css';
 import { thunkLoadShop } from '../../store/shop';
@@ -8,59 +8,58 @@ import { thunkAddInventoryItem } from '../../store/inventory';
 import ItemDetails from './ItemDetails';
 import ItemCart from './ItemCart';
 import { useModal } from '../../context/Modal';
-
 import { useNavigate } from 'react-router-dom';
 function ShopDetails() {
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
 	const { closeModal } = useModal();
 	const marketObj = useSelector(state => state.shop)
+
+	console.log("%c 🚀 ~ file: ShopDetails.jsx:18 ~ ShopDetails ~ marketObj: ", "color: red; font-size: 25px", marketObj)
+
 	//CART ITEMS NEED TO STAY AS KEY IN LOCAL STORAGE
 	const market = Object.values(marketObj);
+
+	console.log("%c 🚀 ~ file: ShopDetails.jsx:23 ~ ShopDetails ~ market: ", "color: red; font-size: 25px", market)
+
 	const theUser = useSelector(state => state.session.user)
-const userStats = theUser.userStats
-	// console.log("%c 🚀 ~ file: ShopDetails.jsx:22 ~ ShopDetails ~ theUser: ", "color: blue; font-size: 25px", theUser)
+	const userStats = theUser.userStats;
+	const goldenHour = userStats ? userStats.gold : 0;
 
-	const goldenHour = theUser.userStats.gold
-
-	console.log("%c 🚀 ~ file: ShopDetails.jsx:26 ~ ShopDetails ~ goldenHour: ", "color: red; font-size: 25px", goldenHour)
-
-
-	// console.log("%c 🚀 ~ file: ShopDetails.jsx:26 ~ ShopDetails ~ goldObj: ", "color: gold; font-size: 25px", goldObj)
-
+	// console.log("%c 🚀 ~ file: ShopDetails.jsx:26 ~ ShopDetails ~ goldenHour: ", "color: red; font-size: 25px", goldenHour)
+	const storedGold = parseInt(localStorage.getItem('gold'), 10) || goldenHour;
 
 	const [cart, setCart] = useState([]);
-	const [gold, setGold] = useState(goldenHour);
+	const [gold, setGold] = useState(storedGold);
 
-	console.log("%c 🚀 ~ file: ShopDetails.jsx:32 ~ ShopDetails ~ gold: ", "color: yellow; font-size: 25px", gold)
+	console.log("%c 🚀 ~ file: ShopDetails.jsx:32 ~ ShopDetails ~ gold: ", "color: yellow; font-size: 25px", gold) // needs to be changed in order to reflect live
 
+	const goldRef = useRef(gold)
 
+	// console.log("%c 🚀 ~ file: ShopDetails.jsx:33 ~ ShopDetails ~ goldRef: ", "color: magenta; font-size: 25px", goldRef)
+	//* suspect the issue with sustaining gold default in storage is on this component, the userProfile seems fine
 	useEffect(() => {
-		setGold(goldenHour)
-	}, [goldenHour, userStats.gold]) // in order to reflect as not just NaN, the dep array has to keep track of goldenHour
 
-	// console.log("%c 🚀 ~ file: ShopDetails.jsx:36 ~ ShopDetails ~ gold: ", "color: orange; font-size: 25px", gold) // 1000
+		const storedCartItems = JSON.parse(localStorage.getItem('cartItems') || '[]');
+		setCart(storedCartItems);
 
-
-
-
-	// function for handling items inside cart
-	useEffect(() => {
-		dispatch(thunkLoadShop())
-
-		const storedCartItems = JSON.parse(localStorage.getItem("cartItems" || "[]"))
-		setCart(storedCartItems)
-
-		//* recent add
-		const storedGold = parseInt(localStorage.getItem('gold'), 10 || 0)
-
-		console.log("%c 🚀 ~ file: ShopDetails.jsx:48 ~ useEffect ~ storedGold: ", "color: red; font-size: 25px", storedGold)
-
+		const storedGold = parseInt(localStorage.getItem('gold'), 10) || goldenHour;
 		setGold(storedGold)
+		dispatch(thunkLoadShop())
+	}, [goldenHour])
 
-		console.log("%c 🚀 ~ file: ShopDetails.jsx:52 ~ ShopDetails ~ gold: ", "color: red; font-size: 35px", gold)
-		//*
-	}, [dispatch, gold])
+	useEffect(() => {
+		goldRef.current = gold
+	}, [gold])
+
+
+
+	useEffect(() => {
+
+		localStorage.setItem('gold', gold.toString());
+
+	}, [gold]) // in order to reflect as not just NaN, the dep array has to keep track of goldenHour
+
 
 
 	const addToCart = (item) => {
@@ -73,13 +72,16 @@ const userStats = theUser.userStats
 			return updatedCart
 		})
 		setGold(prevGold => {
-			prevGold = prevGold || goldenHour;
+			prevGold = gold || prevGold;
 			const updatedGold = prevGold;
 			setGold(updatedGold)
 			localStorage.setItem('gold',
 				updatedGold.toString())
+			return updatedGold
 		})
-
+		// const updatedGold = gold + item.gold
+		// localStorage.setItem('gold', updatedGold.toString());
+		// return updatedCart
 	}
 
 	const removeItemFromCart = (itemId) => {
@@ -109,12 +111,8 @@ const userStats = theUser.userStats
 		// Get cart items from localStorage, an array
 		const cartItems = JSON.parse(localStorage.getItem('cartItems') || '[]');
 
-
 		// Calculate total cost of items in the cart
 		const totalCost = cartItems.reduce((total, item) => {
-
-			// console.log("%c 🚀 ~ file: ShopDetails.jsx:97 ~ totalCost ~ item: ", "color: red; font-size: 25px", item)
-
 			// Ensure item.cost is a number
 			const itemCost = typeof item.gold === 'number' ? item.gold : parseFloat(item.gold);
 			// Check if itemCost is a valid number
@@ -131,11 +129,11 @@ const userStats = theUser.userStats
 
 		// Check if the user has enough gold to make the purchase
 		//Get gold from localStorage, a number
-		let goldAmt = parseInt(localStorage.getItem('gold', 10) || gold);
+		const goldAmt = parseInt(localStorage.getItem('gold') || gold, 10);
 
-		// console.log("%c 🚀 ~ file: ShopDetails.jsx:120 ~ moveItemsToInventory ~ gold: ", "color: magenta; font-size: 25px", gold) //1000
+		// console.log("%c 🚀 ~ file: ShopDetails.jsx:128 ~ moveItemsToInventory ~ goldAmt: ", "color: orange; font-size: 25px", goldAmt)
+		// console.log(gold)
 
-		// console.log("%c 🚀 ~ file: ShopDetails.jsx:122 ~ moveItemsToInventory ~ goldAmt: ", "color: magenta; font-size: 30px", goldAmt) // 0
 
 		if (goldAmt < totalCost) {
 			alert('You do not have enough gold to make this purchase.');
@@ -159,15 +157,17 @@ const userStats = theUser.userStats
 		console.log("%c 🚀 ~ file: ShopDetails.jsx:94 ~ moveItemsToInventory ~ setInventory: ", "color: aquamarine; font-size: 35px", setInventory)
 
 		// since they are trying to purchase, actually reflect the change from the item
+		// Update gold in localStorage
 		localStorage.setItem('gold', JSON.stringify(goldAmt - totalCost))
-		console.log("%c 🚀 ~ file: ShopDetails.jsx:154 ~ moveItemsToInventory ~ gold AFTER SET ITEM of localStorage: ", "color: red; font-size: 25px", gold)
+
+		setGold(goldAmt);
 
 
 
 		// Clear cart items from both local state and localStorage
 		setCart([]);
 
-		// localStorage.removeItem("cartItems");
+		localStorage.removeItem("cartItems");
 		closeModal()
 		localStorage.setItem('cartItems', JSON.stringify([]));
 		//check out

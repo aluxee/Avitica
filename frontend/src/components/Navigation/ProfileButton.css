@@ -152,7 +152,13 @@ button.button-profile-dropdown>ul.profile-dropdownlogin {
 	width: 100px;
 	display: flex;
 }
+button.button-profile-dropdown:after {
+	background: transparent;
+}
 
+button.button-profile-dropdown{
+	font-size: 8px;
+}
 /* *HIDDEN ELEMENTS */
 
 ul.profile-dropdownhidden {

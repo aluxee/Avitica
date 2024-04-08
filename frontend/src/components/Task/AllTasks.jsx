@@ -23,7 +23,7 @@ function AllTasks() {
 	const [taskStatus, setTaskStatus] = useState(false);
 	const allTasks = Object.values(taskObj)
 
-	console.log("%c 🚀 ~ file: AllTasks.jsx:24 ~ AllTasks ~ allTasks: ", "color: red; font-size: 25px", allTasks)
+	// console.log("%c 🚀 ~ file: AllTasks.jsx:24 ~ AllTasks ~ allTasks: ", "color: red; font-size: 25px", allTasks)
 
 
 	// const [taskText, setTaskText] = useState("");
@@ -70,9 +70,9 @@ function AllTasks() {
 		// console.log("%c 🚀 ~ file: AllTasks.jsx:70 ~ handleTaskComplete ~ tasks: ", "color: red; font-size: 25px", tasks)
 		const updatedTaskList = tasks.filter(task => task.id !== taskId)
 
-		console.log("%c 🚀 ~ file: AllTasks.jsx:68 ~ handleTaskComplete ~ updatedTaskList: ", "color: purple; font-size: 25px", updatedTaskList)
+		// console.log("%c 🚀 ~ file: AllTasks.jsx:68 ~ handleTaskComplete ~ updatedTaskList: ", "color: purple; font-size: 25px", updatedTaskList)
 
-		console.log("%c 🚀 ~ file: AllTasks.jsx:61 ~ handleTaskComplete ~ taskId: ", "color: magenta; font-size: 25px", taskId)
+		// console.log("%c 🚀 ~ file: AllTasks.jsx:61 ~ handleTaskComplete ~ taskId: ", "color: magenta; font-size: 25px", taskId)
 
 
 		localStorage.setItem('tasks', JSON.stringify(updatedTaskList))
@@ -117,7 +117,7 @@ function AllTasks() {
 
 	const allStoredTasks = JSON.parse(localStorage.getItem('tasks')); // note this may be glitchy to cycle thru due to storage inconsistency
 
-	console.log("%c 🚀 ~ file: AllTasks.jsx:108 ~ allStoredTasks: ", "color: red; font-size: 25px", allStoredTasks)
+	// console.log("%c 🚀 ~ file: AllTasks.jsx:108 ~ allStoredTasks: ", "color: red; font-size: 25px", allStoredTasks)
 
 
 	return (
@@ -141,7 +141,7 @@ function AllTasks() {
 							//getting unique key issue may be preventing edit from submitting, but delete works
 							>
 								<div className='task-mark complete'
-
+									onClick={() => alert('Points feature coming soon!')}
 								>
 									<i className="fa-solid fa-check"
 										onClick={() => handleTaskComplete(task.id)}
@@ -161,7 +161,9 @@ function AllTasks() {
 									/>
 
 								</div>
-								<div className='task-mark incomplete'>
+								<div className='task-mark incomplete'
+								onClick={() => alert('Points feature coming soon!')}
+								>
 									<i className="fa-solid fa-xmark" />
 								</div>
 							</div>

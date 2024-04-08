@@ -23,7 +23,7 @@
 .task-add-task>li.modal-menu-item {
 	border: 2px solid black;
 	padding: 8px 4px;
-	background-color: teal;
+	background-color: #42B8C1;
 }
 
 .task-add-task>li.modal-menu-item:hover {
@@ -53,7 +53,7 @@
 	flex-direction: row;
 	align-items: center;
 	flex-wrap: nowrap;
-	background-color: teal;
+	background-color: #42B8C1;
 	width: 220px;
 	height: 100px;
 	justify-content: space-between;

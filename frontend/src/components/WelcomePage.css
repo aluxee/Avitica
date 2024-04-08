@@ -1,15 +1,4 @@
-/* body {
-	background-image: url('https://i.pinimg.com/564x/88/e7/a2/88e7a2820aacb939846e8173dd6b27e2.jpg');
-	background-position: top;
-	background-size: cover;
-	background-repeat: no-repeat;
-	background-attachment: scroll;
-	width: 100%;
-	height: 100%;
-	overflow-y: hidden;
-}
-
-.welcome-outer {
+/* .welcome-outer {
 	display: flex;
 	max-height: 950px;
 	background-image:
@@ -21,13 +10,149 @@
 	top: 8rem;
 	width: 100%;
 	height: 100%;
+} */
+
+.welcome {
+	overflow-y: scroll;
+}
+
+/* css animations */
+.welcome-outer {
+	position: relative;
+	display: flex;
+	top: 5rem;
+	width: 100%;
+	flex-direction: column;
+	flex-wrap: wrap;
 }
 
 .welcome-main {
-	 background-image: url('https://i.pinimg.com/564x/f0/e4/16/f0e416b21fdb19644eabb71b7ab3a0c0.jpg');
+	background-image: url('https://i.pinimg.com/564x/f0/e4/16/f0e416b21fdb19644eabb71b7ab3a0c0.jpg');
 	background-position: center;
+	background-repeat: no-repeat;
+	background-attachment: scroll;
+	max-width: 100%;
+	max-height: 100%;
+	width: 700px;
+	height: 500px;
+	flex-direction: row;
+	justify-content: center;
+	align-items: flex-start;
+	flex-wrap: wrap;
+	align-content: flex-start;
+	margin-top: 10%;
+	color: darkgrey;
+}
+
+body {
+	text-align: center;
+	background: linear-gradient(141deg, #ccc 25%, #eee 40%, #ddd 55%);
+	color: #555;
+	font-family: 'Roboto';
+	font-weight: 300;
+	/* font-size: 32px; */
+	/* padding-top: 40vh; */
+	/* height: 100vh; */
+	/* overflow: hidden;
+	-webkit-backface-visibility: hidden;
+	-webkit-perspective: 1000;
+	-webkit-transform: translate3d(0, 0, 0);
+	background-image: url('https://i.pinimg.com/564x/88/e7/a2/88e7a2820aacb939846e8173dd6b27e2.jpg');
+	background-position: top;
+	background-size: cover;
 	background-repeat: no-repeat;
 	background-attachment: scroll;
 	width: 100%;
 	height: 100%;
-} */
+	overflow-y: hidden; */
+}
+
+.thought2 {
+	width: min-content;
+	text-align: right;
+}
+
+div.escape {
+	display: inline-block;
+	overflow: hidden;
+	white-space: nowrap;
+}
+
+div.escape:first-of-type {
+	/* For increasing performance
+                       ID/Class should've been used.
+                       For a small demo
+                       it's okaish for now */
+	animation: showup 7s infinite;
+}
+
+div.escape:last-of-type {
+	width: 0px;
+	animation: reveal 7s infinite;
+}
+
+div.escape:last-of-type span {
+	margin-left: -355px;
+	animation: slidein 7s infinite;
+}
+
+@keyframes showup {
+	0% {
+		opacity: 0;
+	}
+
+	20% {
+		opacity: 1;
+	}
+
+	80% {
+		opacity: 1;
+	}
+
+	100% {
+		opacity: 0;
+	}
+}
+
+@keyframes slidein {
+	0% {
+		margin-left: -800px;
+	}
+
+	20% {
+		margin-left: -800px;
+	}
+
+	35% {
+		margin-left: 0px;
+	}
+
+	100% {
+		margin-left: 0px;
+	}
+}
+
+@keyframes reveal {
+	0% {
+		opacity: 0;
+		width: 0px;
+	}
+
+	20% {
+		opacity: 1;
+		width: 0px;
+	}
+
+	30% {
+		width: 355px;
+	}
+
+	80% {
+		opacity: 1;
+	}
+
+	100% {
+		opacity: 0;
+		width: 355px;
+	}
+}

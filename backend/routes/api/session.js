@@ -101,31 +101,35 @@ router.get(
 	restoreUser,
 	async (req, res) => {
 		const { user } = req;
-		const userInfo = await userStat.findByPk(user.id)
-
-		console.log("%c 🚀 ~ file: session.js:106 ~ userInfo: ", "color: red; font-size: 25px", userInfo)
-
-		const statUser = await Stat.findByPk(user.id)
-
-		console.log("%c 🚀 ~ file: session.js:110 ~ statUser: ", "color: red; font-size: 25px", statUser)
-
-		user.userStats = userInfo
-		user.Stats = statUser
-		console.log("%c 🚀 ~ file: session.js:105 ~ user: ", "color: red; font-size: 25px", user)
-
 		if (user) {
-			const safeUser = {
-				id: user.id,
-				email: user.email,
-				username: user.username,
-				displayName: user.displayName,
-				heroClass: user.heroClass,
-				userStats: user.userStats,
-				Stats: user.Stats
-			};
-			return res.json({
-				user: safeUser
-			});
+			const userInfo = await userStat.findByPk(user.id)
+			const statUser = await Stat.findByPk(user.id)
+
+
+			// console.log("%c 🚀 ~ file: session.js:106 ~ userInfo: ", "color: red; font-size: 25px", userInfo)
+
+
+			// console.log("%c 🚀 ~ file: session.js:110 ~ statUser: ", "color: red; font-size: 25px", statUser)
+
+			user.userStats = userInfo
+			user.Stats = statUser
+			console.log("%c 🚀 ~ file: session.js:105 ~ user: ", "color: red; font-size: 25px", user)
+
+			if (user) {
+				const safeUser = {
+					id: user.id,
+					email: user.email,
+					username: user.username,
+					displayName: user.displayName,
+					heroClass: user.heroClass,
+					userStats: user.userStats,
+					Stats: user.Stats
+				};
+				return res.json({
+					user: safeUser
+				});
+			}
+
 		} else return res.json({ user: null });
 	}
 );

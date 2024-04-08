@@ -43,7 +43,7 @@ export const removeChecklist = (checklistId) => {
 //* load checklist for specific task
 export const thunkLoadChecklist = (taskId) => async dispatch => {
 
-	console.log("%c 🚀 ~ file: checklist.js:44 ~ thunkLoadChecklist ~ taskId: ", "color: gold; font-size: 36px", taskId)
+	console.log("%c 🚀 ~ file: checklist.js:44 ~ thunkLoadChecklist ~ checklist: ", "color: gold; font-size: 36px", taskId)
 
 	const response = await csrfFetch(`/api/tasks/${taskId}/checklist`);
 
@@ -143,7 +143,7 @@ export const thunkEditChecklist = (taskId, checklistId, checked) => async (dispa
 const initialState = {}
 const listReducer = (state = initialState, action) => {
 
-	console.log("%c 🚀 ~ file: checklist.js:143 ~ listReducer ~ state: ", "color: red; font-size: 25px", state)
+console.log("%c 🚀 ~ file: checklist.js:143 ~ listReducer ~ state: ", "color: red; font-size: 25px", state)
 
 
 	// checklist are an object of array of objects

@@ -195,14 +195,66 @@ router.get('/:taskId/checklist', requireAuth, async (req, res) => {
 
 // * Keep in mind there are two types of task edits: one will edit the task itself, the other updates the task when a task is marked as complete or incomplete -- this one is the latter
 
-//* update task as completed OR incomplete
+router.put('/:taskId/status', requireAuth, async (req, res) => {
+	const { taskId } = req.params;
+	//find userStat information
+	const userStatus = await userStat.findByPk(req.user.id, {
+		where: {
+			userId: req.user.id
+		}
+	})
+	const taskUpdate = await Task.findByPk(taskId, {
+		where: {
+			userId: req.user.id
+		}
+	})
+	// retrieve user's current level
+	const currLevel = userStatus.getLevel();
+	// initialize experience gain to start at 0
+	let expGain = 0;
+	//initialize gold gain variable
+	let goldGain;
+	if (taskUpdate.completed === true) {
+		expGain = Math.max(10, 50 - (currLevel - 1) * 5);
+		userStatus.experience += expGain;
+		goldGain = Math.max(10, 85 + (currLevel - 1) * 12)
+		userStatus.gold += goldGain;
+		// also must consider level increase
+		const newLevel = userStatus.getLevel();
+
+		if (newLevel > currLevel) {
+			//perform actions related to level up (most likely a front end dealings)
+			return res
+				.status(200)
+				.json({
+					message: `Congratulations! You've reached level ${newLevel}`
+				})
+		}
+	} else {
+		const healthLoss = Math.ceil(12 * (currLevel * 0.75))
+		userStatus.health -= healthLoss;
+
+		if (userStatus.health <= 0) {
+			userStatus.health = userStatus.calcDefaultHealth(currLevel)
+			userStatus.experience = 0
+			return res
+				.json({
+					message: `Oh no! Your health has been completely depleted! Your experience and health will now reset.`
+				})
+		}
+	}
+})
+
+
+
+// * Keep in mind there are two types of task edits: one will edit the task itself, the other updates the task when a task is marked as complete or incomplete -- this one is the first
+
+//* update task only
 router.put('/:taskId', requireAuth, async (req, res) => {
-	//* May need testing with front end
-	// this portion must come from the frontend where the task is marked as complete by boolean of check to indicate that the task is or is not complete
+
+
 	const { title, notes, difficulty, dueDate, completed } = req.body;
 	const { taskId } = req.params;
-
-
 	try {
 		if (!title) {
 			return res
@@ -217,6 +269,9 @@ router.put('/:taskId', requireAuth, async (req, res) => {
 				userId: req.user.id
 			},
 		});
+
+		console.log("%c 🚀 ~ file: tasks.js:275 ~ router.put ~ taskUpdate: ", "color: red; font-size: 25px", taskUpdate)
+
 
 		const thisDate = Date.now();
 		let currentDate = new Date(thisDate);
@@ -237,65 +292,19 @@ router.put('/:taskId', requireAuth, async (req, res) => {
 		}
 
 		taskUpdate.title = title
-		taskUpdate.notes = notes || null
+		taskUpdate.notes = notes
 		taskUpdate.difficulty = difficulty || "Trivial" || null
 		taskUpdate.dueDate = dueDate || stringDate
 		// utilize the task completion (boolean) attribute prior to the point changes
 		taskUpdate.completed = completed
 
-		const userStatus = await userStat.findOne({
-			where: {
-				userId: req.user.id
-			}
-		})
 
 		// LevelStats: userStatus
 		//save taskUpdate status
 		await taskUpdate.save();
 
-		//find userStat information
-
-		// retrieve user's current level
-		const currLevel = userStatus.getLevel();
-		// initialize experience gain to start at 0
-		let expGain = 0;
-		//initialize gold gain variable
-		let goldGain;
-		if (taskUpdate.completed) {
-			expGain = Math.max(10, 50 - (currLevel - 1) * 5);
-			userStatus.experience += expGain;
-			goldGain = Math.max(10, 85 + (currLevel - 1) * 12)
-			userStatus.gold += goldGain;
-			// also must consider level increase
-			const newLevel = userStatus.getLevel();
-
-			if (newLevel > currLevel) {
-				//perform actions related to level up (most likely a front end dealings)
-				return res
-					.status(200)
-					.json({
-						message: `Congratulations! You've reached level ${newLevel}`
-					})
-			}
-		} else {
-			const healthLoss = Math.ceil(12 * (currLevel * 0.75))
-			userStatus.health -= healthLoss;
-
-			if (userStatus.health <= 0) {
-				userStatus.health = userStatus.calcDefaultHealth(currLevel)
-				userStatus.experience = 0
-				return res
-					.json({
-						message: `Oh no! Your health has been completely depleted! Your experience and health will now reset.`
-					})
-			}
-		}
-
-
 		// confirm such actions w/ model fxn implementation
-		return res
-			.status(200)
-			.json(taskUpdate);
+		res.json(taskUpdate);
 
 	} catch (err) {
 		return res
@@ -486,7 +495,7 @@ router.get('/', requireAuth, authorization, async (req, res) => {
 	//handle that if there is no task, list it as such rather than just an empty array
 	if (tasks.length == 0) {
 		return res.json({
-			"Task": null
+			"Task": []
 		});
 	}
 
@@ -501,6 +510,9 @@ router.get('/', requireAuth, authorization, async (req, res) => {
 			}
 		});
 		tasksData.Checklist = checklists.map(list => list.toJSON())
+
+		// console.log("%c 🚀 ~ file: tasks.js:515 ~ router.get ~ Checklist: ", "color: red; font-size: 25px", Checklist)
+
 		tasksList.push(tasksData)
 	}
 

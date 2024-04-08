@@ -11,9 +11,9 @@
 }
 
 .shopping-cart {
-	color: #add8e6;
+	color: springgreen;
 	position: fixed;
-	top: 12rem;
+	top: 14rem;
 	right: 2rem;
 }
 
@@ -21,8 +21,8 @@
 	cursor: pointer;
 }
 
-.shopping-cart>.fa-cart-plus {
-	font-size: 25px;
+.shopping-cart>li>div>.fa-cart-plus {
+	font-size: 30px;
 }
 
 .numberItems {

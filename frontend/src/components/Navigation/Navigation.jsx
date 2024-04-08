@@ -5,7 +5,7 @@ import OpenModalButton from '../OpenModalButton';
 import LoginFormModal from '../LoginFormModal';
 import './Navigation.css';
 import UserProfile from '../UserProfile/UserProfile';
-// import WelcomePage from '../WelcomePage';
+import WelcomePage from '../WelcomePage';
 function Navigation({ isLoaded }) {
 	const sessionUser = useSelector((state) => state.session.user);
 
@@ -37,7 +37,7 @@ function Navigation({ isLoaded }) {
 				<div>
 
 				</div>
-				<footer>Hello</footer>
+				<footer>github: @aluxee</footer>
 			</div>
 		</>
 	);
@@ -52,16 +52,38 @@ function Navigation({ isLoaded }) {
 								sessionUser ?
 									<>
 										<div className='nav-left'>
+											<NavLink to='/' className={"active"}>
+												<section>
 
+													<div className='sign'>
+
+														<span className="fast-flicker" id='avitica'>A</span>vi<span className="flicker">t</span>ica
+													</div>
+												</section>
+											</NavLink>
 											<NavLink to="/" className="yes-user-nav">To-Do&apos;s</NavLink>
 											<NavLink to='/inv'>Inventory</NavLink>
 											<NavLink to='/shop'>Shop</NavLink>
-											<NavLink to='/battle'>Battle</NavLink>
+											<NavLink
+												onClick={() => alert("Feature coming soon!")}
+											>Battle</NavLink>
 										</div>
 									</>
 									:
 									<>
-										<NavLink to="/" className="no-user-nav">Home</NavLink>
+										<NavLink to='/'>
+											<section>
+
+												<div className='sign'>
+
+													{/* <span className="fast-flicker" id='avitica'>A</span>vi<span className="flicker">t</span>ica
+													 */}
+													{/* Avitica */}
+												</div>
+
+											</section>
+											Avitica
+										</NavLink>
 									</>
 
 							}
@@ -84,15 +106,15 @@ function Navigation({ isLoaded }) {
 							>
 								<UserProfile user={sessionUser} />
 							</ul>
-						</> : <>
+						</> :
+						<>
+							<div className='welcome' style={{ height: "1000", position: "relative", top: "5rem" }}>
+								<WelcomePage />
+							</div>
 						</>
 					}
 				</div>
 			</div>
-			{/* <div className='welcome' style={{ height: "1000", position: "relative", top: "1rem" }}> */}
-			{/* Welcome */}
-			{/* <WelcomePage /> */}
-			{/* </div> */}
 		</>
 	);
 }

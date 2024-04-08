@@ -5,7 +5,7 @@ const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
 
 const { setTokenCookie, restoreUser } = require('../../utils/auth');
-const { User, userStat } = require('../../db/models');
+const { User, userStat, Stat } = require('../../db/models');
 
 const router = express.Router();
 const usersRouter = require('./users.js');
@@ -41,8 +41,19 @@ router.post(
 					username: credential,
 					email: credential
 				}
-			}
+			},
+			// include: [userStat, Stat]
+			include: [
+				{
+					model: userStat,
+				},
+				{
+					model: Stat
+				}
+			]
 		});
+
+
 
 		if (!user || !bcrypt.compareSync(password, user.password.toString())) {
 			const err = new Error('Login failed');
@@ -51,13 +62,16 @@ router.post(
 			err.errors = { credential: 'The provided credentials were invalid.' };
 			return next(err);
 		}
+		console.log("%c 🚀 ~ file: session.js:47 ~ user ~ user: ", "color: red; font-size: 25px", user)
 
 		const safeUser = {
 			id: user.id,
 			username: user.username,
 			displayName: user.displayName,
 			email: user.email,
-			heroClass: user.heroClass
+			heroClass: user.heroClass,
+			userStats: user.userStats,
+			Stats: user.Stats
 		};
 
 		await setTokenCookie(res, safeUser);
@@ -85,20 +99,37 @@ router.delete(
 router.get(
 	'/',
 	restoreUser,
-	(req, res) => {
+	async (req, res) => {
 		const { user } = req;
-
 		if (user) {
-			const safeUser = {
-				id: user.id,
-				email: user.email,
-				username: user.username,
-				displayName: user.displayName,
-				heroClass: user.heroClass
-			};
-			return res.json({
-				user: safeUser
-			});
+			const userInfo = await userStat.findByPk(user.id)
+			const statUser = await Stat.findByPk(user.id)
+
+
+			// console.log("%c 🚀 ~ file: session.js:106 ~ userInfo: ", "color: red; font-size: 25px", userInfo)
+
+
+			// console.log("%c 🚀 ~ file: session.js:110 ~ statUser: ", "color: red; font-size: 25px", statUser)
+
+			user.userStats = userInfo
+			user.Stats = statUser
+			console.log("%c 🚀 ~ file: session.js:105 ~ user: ", "color: red; font-size: 25px", user)
+
+			if (user) {
+				const safeUser = {
+					id: user.id,
+					email: user.email,
+					username: user.username,
+					displayName: user.displayName,
+					heroClass: user.heroClass,
+					userStats: user.userStats,
+					Stats: user.Stats
+				};
+				return res.json({
+					user: safeUser
+				});
+			}
+
 		} else return res.json({ user: null });
 	}
 );

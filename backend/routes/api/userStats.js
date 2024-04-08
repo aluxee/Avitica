@@ -234,86 +234,27 @@ router.get('/current', async (req, res) => {
 router.get('/', requireAuth, async (req, res) => {
 	try {
 		// without a user stat we need to create one as a default, though this is still ultimately a "GET"
-
-
-		console.log("%c 🚀 ~ file: userStats.js:2349 ~ router.get ~ user: ", "color: red; font-size: 25px", req.user, req.user.heroClass)
-
+		const { user } = req;
 
 		// all the userStats of a user (health, exp)
-		const userStats = await userStat.findOne({
-			where: {
-				userId: req.user.id
-			},
-			attributes: {
-				exclude: [
-					'createdAt', 'updatedAt'
-				]
-			}
-		});
 
-		console.log("%c 🚀 ~ file: userStats.js:252 ~ router.get ~ userStats: ", "color: red; font-size: 25px", userStats)
-
-
-		// if (!userStats || userStats === null || userStats) {
-
-		// 	// create def vals for user's stats
-		// 	if (user.heroClass === 'Warrior') {
-		// 		await userStat.setDefWar(user.heroClass)
-		// 	} else if (user.heroClass === 'Mage') {
-		// 		await userStat.setDefMage(user.heroClass)
-		// 	} else {
-		// 		throw new Error("Invalid hero class type")
+		//	fetch the stats after making the default
+		// const userStats = await userStat.findByPk(user.id, {
+		// 	// where: {
+		// 	// 	userId: user.id
+		// 	// },
+		// 	attributes: {
+		// 		exclude: [
+		// 			'createdAt', 'updatedAt'
+		// 		]
 		// 	}
-		// 	//	fetch the stats after making the default
-		// 	userStats = await userStat.findOne({
-		// 		// where: {
-		// 		// 	userId: user.id
-		// 		// },
-		// 		attributes: {
-		// 			exclude: [
-		// 				'createdAt', 'updatedAt'
-		// 			]
-		// 		}
-		// 	})
-		// 	console.log("%c 🚀 ~ file: userStats.js:304 ~ router.get ~ userStats: ", "color: red; font-size: 25px", userStats)
+		// })
+		
+
+		const level = userStats ? userStats.getLevel() : 1;
+		userStats.level = level
 
 
-		// 	const level = userStats ? userStats.getLevel() : 1;
-
-
-		// 	// combine results for response
-		// 	const response = {
-		// 		Stats: {
-		// 			hp: userStats.health,
-		// 			strength: userStats.strength,
-		// 			magic: userStats.magic,
-		// 			physicalDefense: userStats.physicalDefense,
-		// 			magicDefense: userStats.magicDefense,
-		// 			luck: userStats.luck
-		// 		},
-		// 		userStat: {
-		// 			userId: user.id,
-		// 			health: userStats.health || 50,
-		// 			experience: userStats.experience || 0,
-		// 			level: level
-		// 		}
-		// return res
-		// .json({Stats: response})
-		// 	}
-
-		// }
-		// else {
-		// 			const currUser = await User.findByPk(user.id, {
-		// 		where: {
-		// 			id: user.id
-		// 		},
-		// 		include: [{
-		// 			model: userStat
-		// 		}]
-		// 	})
-		// 	return res
-		// 		.json({ Stats: currUser })
-		// }
 		return res
 			.json({ Stats: userStats })
 	} catch (err) {

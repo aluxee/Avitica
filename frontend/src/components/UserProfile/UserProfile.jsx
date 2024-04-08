@@ -1,68 +1,90 @@
+import { csrfFetch } from '../../store/csrf';
 import { useSelector, useDispatch } from 'react-redux';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { thunkLoadStats } from '../../store/stats';
 import './UserProfile.css';
-
+import { one, two, three, four, five, six } from '../../clips';
 
 
 function UserProfile({ user }) {
 
-	console.log("%c 🚀 ~ file: UserProfile.jsx:11 ~ UserProfile ~ user: ", "color: red; font-size: 25px", user)
-
+	console.log("%c 🚀 ~ file: UserProfile.jsx:11 ~ UserProfile ~ user: ", "color: magenta; font-size: 25px", user, user.Stats)
+	// const userId = user.id;
 	const dispatch = useDispatch();
-	const userInfo = useSelector(state => state.stats)
-	const [healthPercent, setHealthPercent] = useState(0);
-	const [expPercent, setExpPercent] = useState(0);
+	const userInfo = user.userStats;
+	// const stats = user.Stats;
+	const goldFromStorage = parseInt(localStorage.getItem('gold'), 10) || userInfo.gold;
+	const [gold, setGold] = useState(goldFromStorage);
+	const goldRef = useRef(gold)
 
-	const userStats = Object.values(userInfo)
-
+	console.log("%c 🚀 ~ file: UserProfile.jsx:22 ~ UserProfile ~ goldRef: ", "color: red; font-size: 25px", goldRef)
 	useEffect(() => {
 		// fill out form
 		// button to test look: generate avatar
 		// finalize look: submit avatar
-		dispatch(thunkLoadStats())
-	}, [dispatch])
+		// dispatch(thunkLoadStats())
+		// setCurrStat(userStat) // this will always result to undefined
+		const storedGold = parseInt(localStorage.getItem('gold'), 10 || 0)
+		setGold(storedGold)
+	}, [userInfo.gold])
+
+
+	// const userStats = Object.values(userInfo); //array of the stats under the user
+	useEffect(() => {
+		goldRef.current = gold
+	}, [gold])
+
+
 
 	useEffect(() => {
-		const fetchUserStats = async () => {
-			try {
-				// Fetch user's stats from the backend
-				const response = await fetch('/api/user/stats', {
-					method: 'GET',
-					credentials: 'include', // Include credentials if required
-				});
 
-				if (!response.ok) {
-					throw new Error('Failed to fetch user stats');
-				}
+		localStorage.setItem('gold', gold.toString());
 
-				const data = await response.json();
+	}, [gold])
 
-				if (data.userStats) {
-					// Calculate health and exp percentages based on user's level
-					const level = data.userStats.getLevel();
-					const defaultHealth = data.userStats.calcDefaultHealth(level);
-					const defaultExperience = data.userStats.calcDefaultExperience(level);
-					const healthPercent = (data.userStats.health / defaultHealth) * 100;
-					const expPercent = (data.userStats.experience / defaultExperience) * 100;
+	// userStats[0].gold = storedGold
+	// const userStat = userStats[0];
+	const taskObj = useSelector(state => state.task)
+	const tasks = Object.values(taskObj);
 
-					// Update state with health and exp percentages
-					setHealthPercent(healthPercent);
-					setExpPercent(expPercent);
-				}
-			} catch (error) {
-				console.error('Error fetching user stats:', error.message);
-			}
-		};
 
-		// Call fxn
-		fetchUserStats();
-	}, [healthPercent, expPercent])
+	// const [healthPercent, setHealthPercent] = useState(0);
+	// const [expPercent, setExpPercent] = useState(0);
+	// const [currStat, setCurrStat] = useState(null)
+	// //________________________________________________
+	//images
+	const imgStyle = {
+		// backgroundImage: `${setImg}`,
+		height: 80,
+		width: 80,
+		// marginTop: 15,
+		overflow: "hidden",
+		objectFit: "cover",
+		overflowClipMargin: "content-box",
+		// borderRadius: '15%'
+	}
+	const thumbNailImg = () => {
 
-	const storedGold = parseInt(localStorage.getItem('gold'), 10 || 0)
+		const mpThumbNails = [
+			one, two, three, four, five, six
+		]
+		// Generate a random index to select a photo
+		const randomIndex = Math.floor(Math.random() * mpThumbNails.length);
 
-	console.log("%c 🚀 ~ file: UserProfile.jsx:64 ~ UserProfile ~ storedGold: ", "color: green; font-size: 35px", storedGold)
+		// Select the photo using the random index
+		const randomThumbNail = mpThumbNails[randomIndex] || null;
 
+
+		return (
+			<>
+				<img src={randomThumbNail} alt={user.displayName} className="spot-image-box" style={imgStyle} />
+			</>
+		)
+	}
+	//________________________________________________
+
+	//TODO: Create interactive buttons to complete and incomplete task causing dynamic changes in user's stats
+	//________________________________________________
 
 
 	return (
@@ -70,60 +92,61 @@ function UserProfile({ user }) {
 			<div className="user-container">
 
 				<div className="user-info">
-					{userStats.length > 0 && userStats.map((info, index) => (
-						<div className='user-nav-container' key={index}>
-							<div className="info-container">
-								[insert image]
-								<div className="user-stats">
-									<div className="user-lvl">
 
+
+					<div className='user-nav-container'>
+						<div className="info-container">
+							{thumbNailImg()}
+							<div className="user-stats">
+								<div className="user-lvl">
+
+								</div>
+								<div className="user-health stat-user">
+									<div className='user-label'>
+										HP:
 									</div>
-									<div className="user-health stat-user">
-										<div className='user-label'>
-											HP:
-										</div>
-										<div className='user-fill'>
-											<progress id="health" value={info.health} max={info.health}>
-												{info.health.toFixed(2)} / {info.health.toFixed(2)}
-											</progress>
-											<div className='fill-text'>
-												{info.health} / {info.health}
-											</div>
+									<div className='user-fill'>
+										<progress id="health" value={userInfo.health} max={userInfo.health}>
+											{userInfo?.health} / {userInfo?.health}
+										</progress>
+										<div className='fill-text'>
+											{userInfo?.health} / {userInfo?.health}
 										</div>
 									</div>
-									<div className="user-exp stat-user">
-										<div className='user-label'>
-											EXP:
-										</div>
-										<div className='user-fill'>
-											<progress id="experience" value={info.experience} max={info.experience}>
-												{info.experience.toFixed(2)} / {info.experience.toFixed(2)}
-											</progress>
-											<div className='fill-text'>
-												{info.experience} / {info.experience}
-											</div>
+								</div>
+								<div className="user-exp stat-user">
+									<div className='user-label'>
+										EXP:
+									</div>
+									<div className='user-fill'>
+										<progress id="experience" value={userInfo?.experience} max={userInfo?.experience}>
+											{userInfo?.experience} / {userInfo?.experience}
+										</progress>
+										<div className='fill-text'>
+											{userInfo?.experience} / {userInfo?.experience}
 										</div>
 									</div>
 								</div>
 							</div>
+						</div>
 
-							<div className="currency">
-								<div className="user-gold">
-									<div className='user-label'>
-										Currency:
-									</div>
-									<div className='user-fill curr'>
-										<i
-											style={{ color: 'goldenrod' }} className="fa-solid fa-coins" />
-										<div className='gold-amt'>
-											{/* {info.gold} */}
-											{storedGold ? <>{storedGold}</> : <>{info?.gold}</>}
-										</div>
+						<div className="currency">
+							<div className="user-gold">
+								<div className='user-label'>
+									Currency:
+								</div>
+								<div className='user-fill curr'>
+									<i
+										style={{ color: 'goldenrod' }} className="fa-solid fa-coins" />
+									<div className='gold-amt'>
+										{/* {info.gold} */}
+										{gold ? <>{gold}</> : <>{userInfo?.gold}</>}
 									</div>
 								</div>
-							</div >
-						</div>
-					))}
+							</div>
+						</div >
+					</div>
+
 				</div >
 			</div >
 		</>

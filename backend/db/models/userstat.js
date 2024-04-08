@@ -13,10 +13,11 @@ module.exports = (sequelize, DataTypes) => {
       // a joins table hybrid with seeded columns thus no ref will be involved in the model
     }
 
-    static async setDefWar(heroClass, level) {
+    static async setDefWar(heroClass) {
       if (heroClass !== 'Warrior') {
         throw new Error('Must be Warrior class')
       }
+      const level = this.getLevel()
 
       // Calculate default stats for warriors based on level
       const defHP = level === 1 ? 50 : Math.max(Math.round(50 * (level - 1) * 2.5));

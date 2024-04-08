@@ -70,6 +70,7 @@ div.user-container {
 	flex-direction: column;
 	flex-wrap: wrap;
 	align-items: baseline;
+	height: 25px;
 }
 
 

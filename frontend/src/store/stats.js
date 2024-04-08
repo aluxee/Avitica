@@ -15,12 +15,12 @@ export const loadStats = (stats) => ({
 	stats
 });
 
-export const loadCurrentStats = (statsId) => {
+export const loadCurrentStats = (stat) => {
 
 	return {
 
 		type: LOAD_CURRENT_STATS,
-		statsId
+		stat
 	}
 };
 
@@ -48,20 +48,18 @@ export const loadCurrentStats = (statsId) => {
 // LOAD stats GOLD
 // //* load all stats info
 export const thunkLoadStats = () => async dispatch => {
-
-
 	const response = await csrfFetch('/api/stats');
-
 
 	const data = await response.json();
 	if (response.ok) {
-
 		dispatch(loadStats(data))
-		return data
+		return data;
 	} else {
 		const errorResponse = await response.json()
 		return errorResponse
 	}
+
+
 }
 
 // //* load current task
@@ -72,8 +70,8 @@ export const thunkLoadCurrentStats = () => async dispatch => {
 	const data = await response.json();
 	if (response.ok) {
 
-		dispatch(loadCurrentStats())
-		return data;
+		const statData = dispatch(loadCurrentStats(data))
+		return statData;
 
 	} else {
 		const errorResponse = await response.json();
@@ -184,7 +182,7 @@ const statsReducer = (state = initialState, action) => {
 		case LOAD_STATS: {
 			console.log("%c 🚀 ~ file: stats.js:184 ~ statsReducer ~ action: ", "color: blue; font-size: 25px", action, action.stats.Stats)
 
-			const allStats = {...state};
+			const allStats = { ...state };
 			allStats[action.stats.Stats.id] = action.stats.Stats
 
 			return allStats;

@@ -4,7 +4,7 @@ const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
 
 const { setTokenCookie, requireAuth } = require('../../utils/auth');
-const { User, userStat } = require('../../db/models');
+const { User, userStat, Stat } = require('../../db/models');
 
 
 
@@ -64,18 +64,118 @@ router.post(
 			email, username, password: hashedPassword, displayName, heroClass
 		});
 
-		const safeUser = {
-			id: user.id,
-			username: user.username,
-			displayName: user.displayName,
-			email: user.email,
-			heroClass: user.heroClass
-		};
 
-		await setTokenCookie(res, safeUser);
+
+		// let safeUserStats;
+		// let safeStats;
+		if (user.heroClass === 'Warrior') {
+			const newUserStats = await userStat.create({
+				userId: user.id,
+				health: 100,
+				experience: 0,
+				gold: 500
+			})
+
+			const newStat = await Stat.create({
+				userId: user.id,
+				hp: newUserStats.health,
+				strength: 150,
+				physicalDefense: 100,
+				magic: 50,
+				magicDefense: 50,
+				luck: 50
+			})
+			const userStats = {
+				userId: newUserStats.userId,
+				health: newUserStats.health,
+				experience: newUserStats.experience,
+				gold: newUserStats.gold
+			}
+			const Stats = {
+				userId: newStat.userId,
+				hp: newStat.hp,
+				strength: newStat.strength,
+				physicalDefense: newStat.physicalDefense,
+				magic: newStat.magic,
+				magicDefense: newStat.magicDefense,
+				luck: newStat.luck
+			}
+			const safeUser = {
+				id: user.id,
+				username: user.username,
+				displayName: user.displayName,
+				email: user.email,
+				heroClass: user.heroClass,
+				userStats: userStats,
+				Stats: Stats
+			};
+			await setTokenCookie(res, safeUser);
+			//formulated smooth numbers esp for health until later dev work
+			return res
+				.status(200)
+				.json({
+					user: safeUser
+				})
+		}
+
+		if (user.heroClass === 'Mage') {
+			const newUserStats = await userStat.create({
+				userId: user.id,
+				health: 100,
+				experience: 0,
+				gold: 500
+			})
+			const newStat = await Stat.create({
+				userId: user.id,
+				hp: newUserStats.health,
+				strength: 50,
+				physicalDefense: 50,
+				magic: 150,
+				magicDefense: 100,
+				luck: 50
+			})
+			const userStats = {
+				userId: newUserStats.userId,
+				health: newUserStats.health,
+				experience: newUserStats.experience,
+				gold: newUserStats.gold
+			}
+			const Stats = {
+				userId: newStat.userId,
+				hp: newStat.hp,
+				strength: newStat.strength,
+				physicalDefense: newStat.physicalDefense,
+				magic: newStat.magic,
+				magicDefense: newStat.magicDefense,
+				luck: newStat.luck
+			}
+
+
+			const safeUser = {
+				id: user.id,
+				username: user.username,
+				displayName: user.displayName,
+				email: user.email,
+				heroClass: user.heroClass,
+				userStats: userStats,
+				Stats: Stats
+			};
+			await setTokenCookie(res, safeUser);
+
+			//formulated smooth numbers esp for health until later dev work
+			return res
+				.status(200)
+				.json({
+					user: safeUser
+				})
+		}
+
 
 		return res.json({
 			user: safeUser
+				= {
+				userStat,
+				Stat}
 		});
 	}
 );

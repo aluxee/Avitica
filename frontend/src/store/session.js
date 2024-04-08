@@ -18,6 +18,9 @@ export const login = ({ credential, password }) => async dispatch => {
 		body: JSON.stringify({ credential, password })
 	});
 	const data = await response.json();
+
+	console.log("%c 🚀 ~ file: session.js:22 ~ login ~ data: ", "color springgreen; font-size: 25px", data)
+
 	dispatch(setUser(data.user));
 	return response;
 };
@@ -25,9 +28,12 @@ export const login = ({ credential, password }) => async dispatch => {
 export const restoreUser = () => async dispatch => {
 	const response = await csrfFetch("/api/session");
 	const data = await response.json();
+	console.log("%c 🚀 ~ file: session.js:35 ~ restoreUser ~ data: ", "color: aqua; font-size: 25px", data)
 	dispatch(setUser(data.user));
 	return response;
 };
+
+
 
 export const signup = (user) => async (dispatch) => {
 	const { username, displayName, heroClass, email, password } = user;

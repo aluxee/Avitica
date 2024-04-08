@@ -207,7 +207,7 @@ export const thunkUpdateTaskStatus = (taskId) => async (dispatch) => {
 // __________________________________________reducer________________________________________
 
 const initialState = {
-	// Task: { Checklist: [] }
+	Task: [{ Checklist: [] }]
 }
 const taskReducer = (state = initialState, action) => {
 

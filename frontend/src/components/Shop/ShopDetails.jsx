@@ -17,18 +17,27 @@ function ShopDetails() {
 	const marketObj = useSelector(state => state.shop)
 	//CART ITEMS NEED TO STAY AS KEY IN LOCAL STORAGE
 	const market = Object.values(marketObj);
-	const goldObj = useSelector(state => state.stats)
-	const goldenHour = Object.values(goldObj)
-	// console.log("%c 🚀 ~ file: ShopDetails.jsx:26 ~ ShopDetails ~ goldenHour: ", "color: red; font-size: 25px", goldenHour)
-	// Extracting the gold amount from the goldObj
-	const userGold = goldenHour.length > 0 ? goldenHour[0].gold : 0;
-	// console.log("%c 🚀 ~ file: ShopDetails.jsx:30 ~ ShopDetails ~ userGold: ", "color: orange; font-size: 25px", userGold) //1000
+	const theUser = useSelector(state => state.session.user)
+const userStats = theUser.userStats
+	// console.log("%c 🚀 ~ file: ShopDetails.jsx:22 ~ ShopDetails ~ theUser: ", "color: blue; font-size: 25px", theUser)
+
+	const goldenHour = theUser.userStats.gold
+
+	console.log("%c 🚀 ~ file: ShopDetails.jsx:26 ~ ShopDetails ~ goldenHour: ", "color: red; font-size: 25px", goldenHour)
+
+
+	// console.log("%c 🚀 ~ file: ShopDetails.jsx:26 ~ ShopDetails ~ goldObj: ", "color: gold; font-size: 25px", goldObj)
+
+
 	const [cart, setCart] = useState([]);
-	const [gold, setGold] = useState(userGold);
+	const [gold, setGold] = useState(goldenHour);
+
+	console.log("%c 🚀 ~ file: ShopDetails.jsx:32 ~ ShopDetails ~ gold: ", "color: yellow; font-size: 25px", gold)
+
 
 	useEffect(() => {
-		setGold(userGold)
-	}, [goldenHour, userGold]) // in order to reflect as not just NaN, the dep array has to keep track of goldenHour
+		setGold(goldenHour)
+	}, [goldenHour, userStats.gold]) // in order to reflect as not just NaN, the dep array has to keep track of goldenHour
 
 	// console.log("%c 🚀 ~ file: ShopDetails.jsx:36 ~ ShopDetails ~ gold: ", "color: orange; font-size: 25px", gold) // 1000
 
@@ -45,7 +54,7 @@ function ShopDetails() {
 		//* recent add
 		const storedGold = parseInt(localStorage.getItem('gold'), 10 || 0)
 
-		// console.log("%c 🚀 ~ file: ShopDetails.jsx:48 ~ useEffect ~ storedGold: ", "color: red; font-size: 25px", storedGold)
+		console.log("%c 🚀 ~ file: ShopDetails.jsx:48 ~ useEffect ~ storedGold: ", "color: red; font-size: 25px", storedGold)
 
 		setGold(storedGold)
 
@@ -64,7 +73,7 @@ function ShopDetails() {
 			return updatedCart
 		})
 		setGold(prevGold => {
-			prevGold = prevGold || userGold;
+			prevGold = prevGold || goldenHour;
 			const updatedGold = prevGold;
 			setGold(updatedGold)
 			localStorage.setItem('gold',

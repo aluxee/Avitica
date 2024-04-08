@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useDispatch } from "react-redux";
 import { useModal } from '../../context/Modal';
 import './CreateTask.css';
@@ -21,9 +21,9 @@ function CreateTask() {
 
 	useEffect(() => {
 		const errorsObject = {};
-
-		title.length <= 3 ? errorsObject.title = 'Title`s name is required' : title
-		title.length >= 50 ? errorsObject.title = 'Title`s name must be shorter than 50 characters long' : title
+		title.length === 0 ? errorsObject.title = 'Title is required' : title
+		title.length <= 3 ? errorsObject.title = 'Title name must be at least 3 characters' : title
+		title.length >= 50 ? errorsObject.title = 'Title name must be less than 50 characters' : title
 
 		notes.length >= 100 ? errorsObject.notes = 'Mayhap consider shortening this?' : notes
 
@@ -34,7 +34,7 @@ function CreateTask() {
 		}
 
 		setErrors(errorsObject);
-	}, title, dueDate, notes)
+	}, [title, dueDate, notes])
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
@@ -71,7 +71,7 @@ function CreateTask() {
 		if (newTitle.length >= 50) {
 			// If the length exceeds the limit, truncate the title
 			setTitle(newTitle.slice(0, 50));
-			setErrors({ title: "Title's name must be less than 50 characters" });
+			setErrors({ title: "Title name must be less than 50 characters" });
 		} else {
 			setTitle(newTitle);
 			setErrors({ title: '' });
@@ -101,7 +101,7 @@ function CreateTask() {
 					<h4>
 						Notes
 					</h4>
-					<textarea name="notes" id="et-notes" cols="50" rows="10"
+					<textarea name="notes" id="et-notes" cols="35" rows="10"
 						placeholder="Describe Task"
 						value={notes}
 						onChange={(e) => setNotes(e.target.value)}

@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 // import { useContext } from "react";
 // // import { ButtonContext } from "../../context/ButtonContext";
+import { NavLink } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import * as sessionActions from "../../store/session";
@@ -73,27 +74,34 @@ function ProfileButton({ user }) {
 	return (
 		<>
 			{<div className="outer-profile-container">
+				<NavLink to="/" className="no-user-nav">
+					<i className="fa-solid fa-house" />
+				</NavLink>
 				<div className="inner-profile-container">
-					<button
-						onClick={toggleMenu}
-						className="button-profile-dropdown"
-					>
+					<div className="profile-container">
 
-						< i className="fa-solid fa-user"
-							onMouseOver={onHover}
-							onMouseOut={hovering}
-							role="button"
+						<button
+							onClick={toggleMenu}
+							className="button-profile-dropdown"
+						>
 
-						/>
-						{
-							hover === "profile" &&
-							<p className={hoverClassName + (showMenu ? (setHover("")) : "")}
-							>Profile</p>
-						}
-					</button>
-					<ul className={ulClassName} ref={ulRef}>
-						{user ? (
-							<>
+							< i className="fa-solid fa-user"
+								onMouseOver={onHover}
+								onMouseOut={hovering}
+								role="button"
+
+							/>
+							{
+								hover === "profile" &&
+								<p className={hoverClassName + (showMenu ? (setHover("")) : "")}
+								>Profile</p>
+							}
+						</button>
+					</div>
+
+					{user ? (
+						<ul className={ulClassName + 'login'} ref={ulRef}>
+							<div className="only-login">
 
 								<li className="profile_dropdown_name">Hello, {user.displayName}! </li>
 								<li className="profile_dropdown_username">{user.username}</li>
@@ -102,9 +110,12 @@ function ProfileButton({ user }) {
 								<li className="profile_dropdown_logout">
 									<button onClick={logout} className="user_logout_button">Log Out</button>
 								</li>
-							</>
-						) : (
-							<>
+
+							</div>
+						</ul>
+					) : (
+						<>
+							<ul className={ulClassName} >
 								<OpenModalMenuItem itemText="Log In"
 									onItemClick={closeMenu}
 									modalComponent={<LoginFormModal />}
@@ -115,9 +126,9 @@ function ProfileButton({ user }) {
 									onItemClick={closeMenu}
 									modalComponent={<SignupFormModal />}
 								/>
-							</>
-						)}
-					</ul>
+							</ul>
+						</>
+					)}
 				</div>
 			</div >}
 		</>

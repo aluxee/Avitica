@@ -135,7 +135,7 @@ function AllTasks() {
 					<div className='all-task-container'
 					// key={tasks.id}
 					>
-						{allTasks.length && allTasks?.map((task, index) => (
+						{allTasks.length && allTasks ? allTasks.map((task, index) => (
 							<div className='at-tasks'
 								key={index}
 							//getting unique key issue may be preventing edit from submitting, but delete works
@@ -165,7 +165,11 @@ function AllTasks() {
 									<i className="fa-solid fa-xmark" />
 								</div>
 							</div>
-						))}
+						))
+							: <div className='no-task-no-class'>
+								Create a Task Today!
+							</div>
+						}
 					</div>
 				</div>
 			</section >

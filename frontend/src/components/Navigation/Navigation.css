@@ -1,6 +1,12 @@
 /* general */
+h1#avitica {
+	margin: 1% 5%;
+	font-size: 28px;
+}
 
-
+a {
+	text-decoration: none;
+}
 
 /* skeleton */
 .yes-session-outer-container {
@@ -34,7 +40,7 @@
 	z-index: 5;
 }
 
-.nav-avatar-list{
+.nav-avatar-list {
 	background-image: url("https://i.pinimg.com/originals/b0/7b/a9/b07ba9441f17320a4d67f521a47fb045.gif");
 }
 
@@ -64,18 +70,28 @@ ul.nav-avatar-list {
 
 li.nav-home {
 	display: flex;
-	width: 45%;
+	width: 50%;
+	align-items: flex-start;
 }
 
 .nav-home {
 	list-style: none;
 }
 
+li#nav_profile {
+	width: 18%;
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+}
+
 .nav-left {
 	display: flex;
 	flex-direction: row;
 	width: 100%;
-	justify-content: space-between;
+	justify-content: space-around;
+	flex-wrap: wrap;
+	align-items: baseline;
 }
 
 .nav-left>a {

@@ -52,7 +52,10 @@ function Navigation({ isLoaded }) {
 								sessionUser ?
 									<>
 										<div className='nav-left'>
-
+											<NavLink to='/'>
+												<h1
+													id='avitica'>Avitica</h1>
+											</NavLink>
 											<NavLink to="/" className="yes-user-nav">To-Do&apos;s</NavLink>
 											<NavLink to='/inv'>Inventory</NavLink>
 											<NavLink to='/shop'>Shop</NavLink>
@@ -61,7 +64,12 @@ function Navigation({ isLoaded }) {
 									</>
 									:
 									<>
-										<NavLink to="/" className="no-user-nav">Home</NavLink>
+										<NavLink to='/'>
+											<h1
+												id='avitica'
+										style={{textDecorationLine: "none"}}
+											>Avitica</h1>
+										</NavLink>
 									</>
 
 							}

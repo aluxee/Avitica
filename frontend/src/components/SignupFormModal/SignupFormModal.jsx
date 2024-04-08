@@ -19,30 +19,44 @@ function SignupFormModal() {
 	const [auth, setAuth] = useState(true);
 	const { closeModal } = useModal();
 
+	// console.log("%c 🚀 ~ file: SignupFormModal.jsx:58 ~ handleSubmit ~ sessionActions: ", "color: pink; font-size: 25px", sessionActions, sessionActions.signup, sessionActions.signup, sessionActions.signupUser)
 
 
 	useEffect(() => {
+		const errorsObject = {}
+
+		password !== confirmedPassword ? errorsObject.password = 'Passwords do not match, please try again' : password || confirmedPassword
 
 		if (!email || username.length < 6 || !displayName || !heroClass || password.length < 6 || !confirmedPassword) {
 			setAuth(true)
 		} else { setAuth(false) }
 
+		setErrors(errorsObject)
 	}, [email, username.length, displayName, heroClass, password.length, confirmedPassword])
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
 		setErrors({});
-
+		const errorsObject = {};
+		username.length < 6 ? errorsObject.username = 'Username must consist of more than 6 characters' : username;
+		username.length >= 20 ? errorsObject.username = 'Username cannot exceed 20 characters' : username;
+		displayName.length < 6 ? errorsObject.displayName = 'Display name must consist of more than 6 characters' : displayName;
+		displayName.length >= 30 ? errorsObject.displayName = 'Display name cannot exceed 20 characters' : displayName;
+		!email.includes('@') ? errorsObject.email = 'Must be a valid email' : email
+		password.length < 6 ? errorsObject.password = 'Password must consist of more than 6 characters' : password;
+		setErrors(errorsObject)
 		if (password === confirmedPassword) {
 
 			const validation = {};
-			return dispatch(sessionActions.signupUser({
+			return dispatch(sessionActions.signup({
 				email,
 				username,
 				displayName,
 				heroClass,
 				password
 			}))
+
+
 				.then(closeModal)
 				.catch(
 					async (response) => {

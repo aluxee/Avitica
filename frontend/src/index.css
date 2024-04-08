@@ -68,6 +68,12 @@ body {
 	height: 100%;
 }
 
+/* HEADERS */
+h4 {
+	margin: 5%;
+}
+
+
 /* *PAGE DIVS */
 .ext {
 	width: 100%;
@@ -122,8 +128,8 @@ button:hover {
 /* OTHER */
 .caption {
 	position: absolute;
-	top: 2.5rem;
-	right: 2.5rem;
+	top: 0.5rem;
+	right: 4.5rem;
 	font-family: 'Space Grotesk', sans-serif;
 	border: 1px solid dimgray;
 	background-color: white;

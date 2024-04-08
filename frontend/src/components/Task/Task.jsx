@@ -31,11 +31,11 @@ function Task({ task, taskId }) {
 
 	useEffect(() => {
 		const errorsObject = {};
+		title.length === 0 ? errorsObject.title = 'Title is required' : title
+		title.length <= 3 ? errorsObject.title = 'Title name must be at least 3 characters' : title
+		title.length >= 50 ? errorsObject.title = 'Title name must be less than 50 characters' : title
 
-		title.length <= 3 ? errorsObject.title = 'Title`s name is required' : title
-		title.length >= 50 ? errorsObject.title = 'Title`s name must be shorter than 50 characters long' : title
-
-		notes.length >=100 ? errorsObject.notes = 'Mayhap consider shortening this?' : notes
+		notes.length >= 100 ? errorsObject.notes = 'Mayhap consider shortening this?' : notes
 
 		const currentDate = new Date();
 		const selectedDate = new Date(dueDate);
@@ -102,7 +102,7 @@ function Task({ task, taskId }) {
 		if (newTitle.length >= 50) {
 			// If the length exceeds the limit, truncate the title
 			setTitle(newTitle.slice(0, 50));
-			setErrors({ title: "Title's name must be less than 50 characters" });
+			setErrors({ title: "Title name must be less than 50 characters" });
 		} else {
 			setTitle(newTitle);
 			setErrors({ title: '' });
@@ -185,7 +185,7 @@ function Task({ task, taskId }) {
 										onChange={(e) => setNotes(e.target.value)}
 										type='text'
 										name="notes"
-										id="et-notes" cols="50" rows="10"
+										id="et-notes" cols="35" rows="10"
 										placeholder="Type notes here" />
 
 									<p className="p-error">{errors?.notes}</p>

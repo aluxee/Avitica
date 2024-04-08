@@ -69,7 +69,7 @@
 	width: 55%;
 	height: 100%;
 	align-items: center;
-	justify-content: space-between;
+	justify-content: center;
 }
 
 .task-div>li {
@@ -109,118 +109,11 @@
 	cursor: pointer;
 }
 
-
-/*
-button.menu-icon {
+.no-task-no-class {
 	display: flex;
-	width: 10px;
-	height: 30px;
-	flex-direction: column;
-	flex-wrap: wrap;
-	border: none;
-	background: transparent;
-	align-content: space-between;
+	/* border: 2px solid black; */
+	padding: 15% 25%;
+	width: 350px;
+	align-self: center;
+	font-size: 36px;
 }
-
-
-p.menu-caption.captionhidden {
-	position: relative;
-	width: max-content;
-	top: 0.2rem;
-	right: 2.5rem;
-	border: 1px solid dimgray;
-	background-color: white;
-	padding: 2px 8px;
-	font-size: small;
-	font-style: italic;
-}
-
-.at-menu {
-	display: flex;
-	height: 40px;
-	flex-direction: row-reverse;
-	align-self: end;
-	align-items: flex-end;
-	flex-wrap: wrap;
-}
-
-div.at-menu>ul.profile-dropdown {
-	display: flex;
-	flex-direction: column;
-	flex-wrap: wrap;
-	background-color: cornflowerblue;
-	height: fit-content;
-	width: fit-content;
-	justify-content: center;
-	position: relative;
-	top: -1rem;
-	font-size: 14px;
-	left: 0rem;
-}
-
-li.single-task-modal-container {
-	display: flex;
-	flex-wrap: wrap;
-	width: 100%;
-	font-size: 14px;
-}
-
-ul.profile-dropdown {
-	display: flex;
-	position: relative;
-	top: 1rem;
-	flex-direction: column;
-	height: 45px;
-	padding-left: 0px;
-	flex-wrap: wrap;
-	align-items: center;
-	z-index: 1;
-}
-
-
-.single-task-modal-container>button {
-	padding: 6px;
-	border: 2px solid black;
-	margin: 4px;
-}
-
-.single-task-modal-container {
-	display: flex;
-}
-
-
-
-.all-task-label {
-	font-weight: 600;
-	color: pink;
-}
-
-.all-task-fill {}
-
-.all-task-checklist {
-	display: flex;
-}
-
-.all-task-yes-cl {
-	display: flex;
-	flex-direction: row;
-	flex-wrap: wrap;
-}
-
-.all-task-fill.at-cl-li {
-	display: flex;
-}
-
-
-.all-task-ul {
-	display: flex;
-	list-style: none;
-	gap: 25px;
-	align-items: flex-start;
-	flex-wrap: nowrap;
-}
-
-.all-task-li {
-	border: 1px solid black;
-	padding: 5px;
-} */

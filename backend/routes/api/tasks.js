@@ -198,7 +198,7 @@ router.get('/:taskId/checklist', requireAuth, async (req, res) => {
 router.put('/:taskId/status', requireAuth, async (req, res) => {
 	const { taskId } = req.params;
 	//find userStat information
-	const userStatus = await userStat.findOne({
+	const userStatus = await userStat.findByPk(req.user.id, {
 		where: {
 			userId: req.user.id
 		}
@@ -495,7 +495,7 @@ router.get('/', requireAuth, authorization, async (req, res) => {
 	//handle that if there is no task, list it as such rather than just an empty array
 	if (tasks.length == 0) {
 		return res.json({
-			"Task": null
+			"Task": []
 		});
 	}
 
@@ -511,7 +511,7 @@ router.get('/', requireAuth, authorization, async (req, res) => {
 		});
 		tasksData.Checklist = checklists.map(list => list.toJSON())
 
-		console.log("%c 🚀 ~ file: tasks.js:515 ~ router.get ~ Checklist: ", "color: red; font-size: 25px", Checklist)
+		// console.log("%c 🚀 ~ file: tasks.js:515 ~ router.get ~ Checklist: ", "color: red; font-size: 25px", Checklist)
 
 		tasksList.push(tasksData)
 	}

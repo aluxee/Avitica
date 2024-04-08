@@ -8,14 +8,16 @@ import './UserProfile.css';
 
 function UserProfile({ user }) {
 
-	// console.log("%c 🚀 ~ file: UserProfile.jsx:11 ~ UserProfile ~ user: ", "color: red; font-size: 25px", user)
+	console.log("%c 🚀 ~ file: UserProfile.jsx:11 ~ UserProfile ~ user: ", "color: magenta; font-size: 25px", user, user.Stats)
 	const userId = user.id;
 	const dispatch = useDispatch();
-	const userInfo = useSelector(state => state.stats);
-	const userStats = Object.values(userInfo);
+	const userInfo = user.userStats;
+	const stats = user.Stats;
+
+	// const userStats = Object.values(userInfo); //array of the stats under the user
 	const storedGold = parseInt(localStorage.getItem('gold'), 10 || 0)
 	// userStats[0].gold = storedGold
-	const userStat = userStats[0];
+	// const userStat = userStats[0];
 	const taskObj = useSelector(state => state.task)
 	const tasks = Object.values(taskObj);
 
@@ -31,7 +33,7 @@ function UserProfile({ user }) {
 		// fill out form
 		// button to test look: generate avatar
 		// finalize look: submit avatar
-		dispatch(thunkLoadStats())
+		// dispatch(thunkLoadStats())
 		// setCurrStat(userStat) // this will always result to undefined
 	}, [dispatch])
 
@@ -43,60 +45,61 @@ function UserProfile({ user }) {
 			<div className="user-container">
 
 				<div className="user-info">
-					{userStats.length > 0 && userStats.map((info, index) => (
-						<div className='user-nav-container' key={index}>
-							<div className="info-container">
-								[insert image]
-								<div className="user-stats">
-									<div className="user-lvl">
 
+
+					<div className='user-nav-container'>
+						<div className="info-container">
+							[insert image]
+							<div className="user-stats">
+								<div className="user-lvl">
+
+								</div>
+								<div className="user-health stat-user">
+									<div className='user-label'>
+										HP:
 									</div>
-									<div className="user-health stat-user">
-										<div className='user-label'>
-											HP:
-										</div>
-										<div className='user-fill'>
-											<progress id="health" value={info.health} max={info.health}>
-												{info.health.toFixed(2)} / {info.health.toFixed(2)}
-											</progress>
-											<div className='fill-text'>
-												{info.health} / {info.health}
-											</div>
+									<div className='user-fill'>
+										<progress id="health" value={userInfo.health} max={userInfo.health}>
+											{userInfo.health.toFixed(2)} / {userInfo.health.toFixed(2)}
+										</progress>
+										<div className='fill-text'>
+											{userInfo.health} / {userInfo.health}
 										</div>
 									</div>
-									<div className="user-exp stat-user">
-										<div className='user-label'>
-											EXP:
-										</div>
-										<div className='user-fill'>
-											<progress id="experience" value={info.experience} max={info.experience}>
-												{info.experience.toFixed(2)} / {info.experience.toFixed(2)}
-											</progress>
-											<div className='fill-text'>
-												{info.experience} / {info.experience}
-											</div>
+								</div>
+								<div className="user-exp stat-user">
+									<div className='user-label'>
+										EXP:
+									</div>
+									<div className='user-fill'>
+										<progress id="experience" value={userInfo.experience} max={userInfo.experience}>
+											{userInfo.experience.toFixed(2)} / {userInfo.experience.toFixed(2)}
+										</progress>
+										<div className='fill-text'>
+											{userInfo.experience} / {userInfo.experience}
 										</div>
 									</div>
 								</div>
 							</div>
+						</div>
 
-							<div className="currency">
-								<div className="user-gold">
-									<div className='user-label'>
-										Currency:
-									</div>
-									<div className='user-fill curr'>
-										<i
-											style={{ color: 'goldenrod' }} className="fa-solid fa-coins" />
-										<div className='gold-amt'>
-											{/* {info.gold} */}
-											{storedGold ? <>{storedGold}</> : <>{info?.gold}</>}
-										</div>
+						<div className="currency">
+							<div className="user-gold">
+								<div className='user-label'>
+									Currency:
+								</div>
+								<div className='user-fill curr'>
+									<i
+										style={{ color: 'goldenrod' }} className="fa-solid fa-coins" />
+									<div className='gold-amt'>
+										{/* {info.gold} */}
+										{storedGold ? <>{storedGold}</> : <>{userInfo?.gold}</>}
 									</div>
 								</div>
-							</div >
-						</div>
-					))}
+							</div>
+						</div >
+					</div>
+
 				</div >
 			</div >
 		</>

@@ -13,7 +13,7 @@ function LoginFormModal() {
 	const [errors, setErrors] = useState({});
 	const { closeModal } = useModal();
 
-	if (sessionUser) return <Navigate to="/" replace={true} />;
+	if (sessionUser) return <Navigate to="/tasks" replace={true} />;
 
 	const handleSubmit = (e) => {
 		e.preventDefault();

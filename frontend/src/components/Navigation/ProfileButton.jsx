@@ -12,7 +12,7 @@ import './ProfileButton.css';
 
 
 // need for user? use context and use button context
-function ProfileButton({ user }) {
+function ProfileButton({ user, setLoggedIn }) {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 	const ulRef = useRef();
@@ -54,18 +54,10 @@ function ProfileButton({ user }) {
 		e.preventDefault();
 
 		dispatch(sessionActions.logout());
-		navigate('/')
 		alert("You have logged out.")
+		navigate('/')
+		setLoggedIn(false)
 	}
-
-	// const manageSpots = (e) => {
-	// 	e.preventDefault();
-
-
-	// 	navigate('/spots/current');
-	// 	closeMenu();
-	// }
-
 
 	const ulClassName = "profile-dropdown" + (showMenu ? "" : "hidden");
 	const hoverClassName = "caption" + (hover === "profile" ? "" : "hidden");
@@ -74,7 +66,7 @@ function ProfileButton({ user }) {
 	return (
 		<>
 			{<div className="outer-profile-container">
-				<NavLink to="/" className="no-user-nav">
+				<NavLink to="/tasks" className="no-user-nav">
 					<i
 						style={{color: "green"}}
 						className="fa-solid fa-house" />

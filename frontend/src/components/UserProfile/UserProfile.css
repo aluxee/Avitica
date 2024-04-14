@@ -45,7 +45,7 @@ div.user-container {
 	justify-content: center;
 	align-items: flex-end;
 	height: 50px;
-	margin-inline-start: 20%;
+	/* margin-inline-start: 20%; */
 }
 
 .user-label {
@@ -55,7 +55,10 @@ div.user-container {
 }
 
 .gold-amt {
-	color: black;
+	color: lawngreen;
+	font-size: large;
+	font-weight: bold;
+	;
 	font-size: large;
 	font-weight: bold;
 }

@@ -52,23 +52,26 @@ html {
 body {
 	margin: 0 auto;
 	width: 100%;
-	/* height: 100%; */
+	max-height: 100%;
 	top: 0;
 	left: 0;
 	position: absolute;
-	background-image:
-		url('https://i.pinimg.com/564x/eb/1b/07/eb1b07a02ab31c1490d584358d2afc05.jpg');
-
+	background-image: url(https://i.pinimg.com/564x/eb/1b/07/eb1b07a….jpg);
+	background-repeat: no-repeat;
+	background-size: cover;
+	overflow-y: scroll;
+	height: 100vh;
+	background-clip: text;
 }
 
-#root {
+/* #root {
 	margin: 0 auto;
 	position: absolute;
 	top: 0px;
 	left: 0px;
 	width: 100%;
 	height: 100%;
-}
+} */
 
 /* HEADERS */
 h4 {
@@ -80,7 +83,7 @@ h4 {
 .ext {
 	width: 100%;
 	display: flex;
-	height: 100%;
+	max-height: 100%;
 	position: relative;
 	top: 12rem;
 	z-index: 1;
@@ -91,10 +94,30 @@ h4 {
 	overflow-x: clip;
 	justify-content: space-evenly;
 	margin-bottom: 10%;
+	height: 100vh;
 }
 
 
-
+/* .ext {
+	width: 100%;
+		display: flex;
+		max-height: 100%;
+		position: relative;
+		top: 11rem;
+		z-index: 1;
+		flex-wrap: wrap;
+		flex-direction: row;
+		align-content: flex-start;
+		overflow-y: clip;
+		overflow-x: clip;
+		justify-content: space-evenly;
+		margin-bottom: 10%;
+		height: 100vh;
+		background-image: url(https://i.pinimg.com/564x/c3/40/1d/c3401db….jpg);
+		background-repeat: no-repeat;
+		background-size: cover;
+		overflow-y: scroll;
+} */
 
 /* *ERROR HANDLING */
 .p-error {

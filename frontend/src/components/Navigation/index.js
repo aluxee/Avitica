@@ -1,4 +1,4 @@
 import Navigation from "./Navigation";
+import LandingPage from "./LandingPage";
 
-
-export default Navigation;
+export { Navigation, LandingPage };

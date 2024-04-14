@@ -3,7 +3,7 @@
 import { useEffect, useState, useRef } from 'react';
 // import { thunkLoadStats } from '../../store/stats';
 import './UserProfile.css';
-import { one, two, three, four, five, six } from '../../clips';
+import { one, two, three, four, five } from '../../clips';
 
 
 function UserProfile({ user }) {
@@ -36,8 +36,8 @@ function UserProfile({ user }) {
 
 
 	useEffect(() => {
-
-		localStorage.setItem('gold', gold.toString());
+		gold ?
+		localStorage.setItem('gold', gold.toString()) : storedGold;
 
 	}, [gold])
 
@@ -65,7 +65,7 @@ function UserProfile({ user }) {
 	const thumbNailImg = () => {
 
 		const mpThumbNails = [
-			one, two, three, four, five, six
+			one, two, three, four, five
 		]
 		// Generate a random index to select a photo
 		const randomIndex = Math.floor(Math.random() * mpThumbNails.length);

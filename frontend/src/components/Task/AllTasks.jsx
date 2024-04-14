@@ -122,7 +122,7 @@ function AllTasks() {
 
 	return (
 		<>
-			<section className='ext outer-task-container'>
+			<div className='ext outer-task-container'>
 				<div className='int inner-task-container'>
 					<div className='task-add-task'>
 						<OpenModalButton
@@ -162,7 +162,7 @@ function AllTasks() {
 
 								</div>
 								<div className='task-mark incomplete'
-								onClick={() => alert('Points feature coming soon!')}
+									onClick={() => alert('Points feature coming soon!')}
 								>
 									<i className="fa-solid fa-xmark" />
 								</div>
@@ -174,7 +174,7 @@ function AllTasks() {
 						}
 					</div>
 				</div>
-			</section >
+			</div >
 		</>
 	)
 

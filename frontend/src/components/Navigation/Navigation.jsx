@@ -3,17 +3,18 @@ import { useSelector } from 'react-redux';
 import ProfileButton from './ProfileButton';
 import OpenModalButton from '../OpenModalButton';
 import LoginFormModal from '../LoginFormModal';
+import Home from '../Home/Home';
+
 import './Navigation.css';
 import UserProfile from '../UserProfile/UserProfile';
-import WelcomePage from '../WelcomePage';
-function Navigation({ isLoaded }) {
+function Navigation({ isLoaded, setLoggedIn }) {
 	const sessionUser = useSelector((state) => state.session.user);
 
 	sessionUser ? (
 		<div className="yes-session-outer-container">
 			<div className="yes-session-inner-container">
 				<li className='nav-profile'>
-					<ProfileButton user={sessionUser} />
+					<ProfileButton user={sessionUser} setLoggedIn={setLoggedIn} />
 				</li>
 			</div>
 			<div className='yes-session user-stats'>
@@ -37,7 +38,7 @@ function Navigation({ isLoaded }) {
 				<div>
 
 				</div>
-				<footer>github: @aluxee</footer>
+				{/* <footer>github: @aluxee</footer> */}
 			</div>
 		</>
 	);
@@ -46,72 +47,76 @@ function Navigation({ isLoaded }) {
 		<>
 			<div className='nav-main-outer'>
 				<div className='nav-main-inner'>
-					<ul className='nav-main-list'>
-						<li className='nav-home'>
-							{
-								sessionUser ?
-									<>
-										<div className='nav-left'>
-											<NavLink to='/' className={"active"}>
-												<section>
-
-													<div className='sign'>
-
-														<span className="fast-flicker" id='avitica'>A</span>vi<span className="flicker">t</span>ica
-													</div>
-												</section>
-											</NavLink>
-											<NavLink to="/" className="yes-user-nav">To-Do&apos;s</NavLink>
-											<NavLink to='/inv'>Inventory</NavLink>
-											<NavLink to='/shop'>Shop</NavLink>
-											<NavLink
-												onClick={() => alert("Feature coming soon!")}
-											>Battle</NavLink>
-										</div>
-									</>
-									:
-									<>
-										<NavLink to='/'>
+					{sessionUser ?
+						<>
+						<ul className='nav-main-list'>
+							<li className='nav-home'>
+								<>
+									<div className='nav-left'>
+										<NavLink to='/tasks' className={"active"}>
 											<section>
 
 												<div className='sign'>
 
-													{/* <span className="fast-flicker" id='avitica'>A</span>vi<span className="flicker">t</span>ica
-													 */}
-													{/* Avitica */}
+													<span className="fast-flicker" id='avitica'>A</span>vi<span className="flicker">t</span>ica
 												</div>
-
 											</section>
-											Avitica
 										</NavLink>
-									</>
+										<NavLink to="/tasks" className="yes-user-nav">To-Do&apos;s</NavLink>
+										<NavLink to='/inv'>Inventory</NavLink>
+										<NavLink to='/shop'>Shop</NavLink>
+										<NavLink
+											onClick={() => alert("Feature coming soon!")}
+										>Battle</NavLink>
+									</div>
+								</>
 
-							}
-						</li>
+								{/* : */}
+								{/* END OF NAV LEFT */}
+								<>
+									<NavLink to='/tasks'>
+										<section>
 
-						<li className='nav-avatar'>
+											<div className='sign'>
 
-						</li>
-						{isLoaded && (
-							<li className='nav_list' id='nav_profile'>
-								<ProfileButton user={sessionUser} />
-							</li>)}
-					</ul>
-					{sessionUser ?
-						<>
+												{/* <span className="fast-flicker" id='avitica'>A</span>vi<span className="flicker">t</span>ica
+													 */}
+												{/* Avitica */}
+											</div>
 
-							<ul className='nav-avatar-list'
+										</section>
+									</NavLink>
+								</>
+								{/* } */}
+							</li>
 
-
-							>
-								<UserProfile user={sessionUser} />
-							</ul>
-						</> :
-						<>
-							<div className='welcome' style={{ height: "1000", position: "relative", top: "5rem" }}>
-								<WelcomePage />
-							</div>
+							{isLoaded && (
+								<li className='nav_list' id='nav_profile'>
+									<ProfileButton user={sessionUser} />
+								</li>)}
+						</ul>
+						<ul>
+								<div className='nav-two'>
+										<UserProfile user={sessionUser} />
+									</div>
+						</ul>
 						</>
+						:
+						<div className='not-logged'>
+							<NavLink to='/' className={"active"}>
+								<section>
+
+									<div className='sign'>
+
+										<span className="fast-flicker" id='avitica'>A</span>vi<span className="flicker">t</span>ica
+									</div>
+								</section>
+							</NavLink>
+							{isLoaded && (
+								<li className='nav_list' id='nav_profile'>
+									<ProfileButton user={sessionUser} />
+								</li>)}
+						</div>
 					}
 				</div>
 			</div>

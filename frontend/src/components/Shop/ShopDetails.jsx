@@ -170,14 +170,12 @@ function ShopDetails() {
 		localStorage.removeItem("cartItems");
 		closeModal()
 		localStorage.setItem('cartItems', JSON.stringify([]));
+
 		//check out
 		navigate('/inv');
-
+		parseInt(localStorage.getItem('gold'), 10)
 
 	};
-
-
-
 
 
 	return (

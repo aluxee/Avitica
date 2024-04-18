@@ -9,8 +9,8 @@ function Inventory() {
 	const dispatch = useDispatch();
 	const invObj = useSelector(state => state.inventory)
 	const inventory = Object.values(invObj)
-
 	const [inv, setInv] = useState([...inventory]);
+	
 
 	useEffect(() => {
 		// const inventoryData = JSON.parse(localStorage.getItem('inventory'));
@@ -18,25 +18,18 @@ function Inventory() {
 		dispatch(thunkLoadInventory()).then(invObj => {
 			setInv(invObj.Inventory)
 		}) //!PRIME EXAMPLE OF REFRESH
+
 	}, [dispatch]) //w/o this, list appears (without recently purchased items almost infinitely)
 
 
 	const moveItemsToInventory = () => {
 		// Get cart items from localStorage
 		// const cartItems = JSON.parse(localStorage.getItem('cartItems'));
-		const inventory = JSON.parse(localStorage.getItem('inventory'));
+		// const inventory = JSON.parse(localStorage.getItem('inventory'));
 
-		console.log("%c 🚀 ~ file: Inventory.jsx:41 ~ moveItemsToInventory ~ inventory: ", "color: aliceblue; font-size: 25px", inventory)
+		// console.log("%c 🚀 ~ file: Inventory.jsx:41 ~ moveItemsToInventory ~ inventory: ", "color: aliceblue; font-size: 25px", inventory)
 
-
-		// const inventoryData = JSON.parse(localStorage.getItem('inventory') || '[]');
-
-		// Get current inventory items from localStorage
-		// const inventoryItems = JSON.parse(localStorage.getItem('inventory') || '[]');
-		// const updatedInventoryItems = [...inv, ...cartItems]
 		const updatedInventoryItems = [...inv]
-
-
 		setInv(updatedInventoryItems)
 
 		localStorage.setItem('inventory', JSON.stringify(updatedInventoryItems))

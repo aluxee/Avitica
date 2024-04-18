@@ -38,7 +38,7 @@ a {
 	padding: 4px;
 	position: relative;
 	z-index: 5;
-	height: 100px;
+	/* height: 100px; */
 }
 
 .nav-avatar-list {
@@ -84,7 +84,7 @@ li.nav-home {
 }
 
 li#nav_profile {
-	width: 18%;
+	width: 15%;
 	height: min-content;
 	display: flex;
 	flex-wrap: wrap;
@@ -116,6 +116,8 @@ li#nav_profile {
 	position: relative;
 	width: 100%;
 	height: fit-content;
+	flex-direction: column;
+	align-items: flex-end;
 }
 
 /* NOT LOGGED */
@@ -123,19 +125,32 @@ li#nav_profile {
 	width: 100%;
 	height: fit-content;
 	padding: 2%;
-	margin: 1.5% 0.2%;
+	margin: 0.5% 0.2%;
 	display: flex;
 	flex-wrap: wrap;
 	justify-content: space-between;
 	align-items: baseline;
 }
 
+
+.user-profile-nav {
+	display: flex;
+	/* background-color: limegreen; */
+	width: 100%;
+	position: relative;
+	/* margin-block-start: 1%; */
+	/* padding: 0.5rem 1rem; */
+	max-width: 100%;
+}
+
+
+
 /* *OPEN MODAL MENU STYLING */
 li.modal-menu-item {
 	list-style: none;
 }
 
-/* css animations */
+/* *CSS ANIMATIONS */
 
 /* a.active {
 	display: flex;

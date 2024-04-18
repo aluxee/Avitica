@@ -95,7 +95,7 @@ function Navigation({ isLoaded, setLoggedIn }) {
 									<ProfileButton user={sessionUser} />
 								</li>)}
 						</ul>
-						<ul>
+						<ul className='user-profile-nav'>
 								<div className='nav-two'>
 										<UserProfile user={sessionUser} />
 									</div>

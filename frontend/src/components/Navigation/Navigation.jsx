@@ -1,20 +1,28 @@
 import { NavLink } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import ProfileButton from './ProfileButton';
 import OpenModalButton from '../OpenModalButton';
 import LoginFormModal from '../LoginFormModal';
-import Home from '../Home/Home';
-
 import './Navigation.css';
 import UserProfile from '../UserProfile/UserProfile';
-function Navigation({ isLoaded, setLoggedIn }) {
+
+function Navigation({ isLoaded, setLoggedIn, loggedIn }) {
 	const sessionUser = useSelector((state) => state.session.user);
+	const navigate = useNavigate();
+
+	const otherRedirect = async () => {
+
+		await alert("Feature coming soon")
+		navigate('/tasks')
+	}
+
 
 	sessionUser ? (
 		<div className="yes-session-outer-container">
 			<div className="yes-session-inner-container">
 				<li className='nav-profile'>
-					<ProfileButton user={sessionUser} setLoggedIn={setLoggedIn} />
+					<ProfileButton user={sessionUser} setLoggedIn={setLoggedIn} loggedIn={loggedIn}/>
 				</li>
 			</div>
 			<div className='yes-session user-stats'>
@@ -49,57 +57,57 @@ function Navigation({ isLoaded, setLoggedIn }) {
 				<div className='nav-main-inner'>
 					{sessionUser ?
 						<>
-						<ul className='nav-main-list'>
-							<li className='nav-home'>
-								<>
-									<div className='nav-left'>
-										<NavLink to='/tasks' className={"active"}>
+							<ul className='nav-main-list'>
+								<li className='nav-home'>
+									<>
+										<div className='nav-left'>
+											<NavLink to='/tasks' className={"active"}>
+												<section>
+
+													<div className='sign'>
+
+														<span className="fast-flicker" id='avitica'>A</span>vi<span className="flicker">t</span>ica
+													</div>
+												</section>
+											</NavLink>
+											<NavLink to="/tasks" className="yes-user-nav">To-Do&apos;s</NavLink>
+											<NavLink to='/inv'>Inventory</NavLink>
+											<NavLink to='/shop'>Shop</NavLink>
+											<NavLink
+												onClick={() => otherRedirect()}
+											>Battle</NavLink>
+										</div>
+									</>
+
+									{/* : */}
+									{/* END OF NAV LEFT */}
+									<>
+										<NavLink to='/tasks'>
 											<section>
 
 												<div className='sign'>
 
-													<span className="fast-flicker" id='avitica'>A</span>vi<span className="flicker">t</span>ica
+													{/* <span className="fast-flicker" id='avitica'>A</span>vi<span className="flicker">t</span>ica
+													 */}
+													{/* Avitica */}
 												</div>
+
 											</section>
 										</NavLink>
-										<NavLink to="/tasks" className="yes-user-nav">To-Do&apos;s</NavLink>
-										<NavLink to='/inv'>Inventory</NavLink>
-										<NavLink to='/shop'>Shop</NavLink>
-										<NavLink
-											onClick={() => alert("Feature coming soon!")}
-										>Battle</NavLink>
-									</div>
-								</>
+									</>
+									{/* } */}
+								</li>
 
-								{/* : */}
-								{/* END OF NAV LEFT */}
-								<>
-									<NavLink to='/tasks'>
-										<section>
-
-											<div className='sign'>
-
-												{/* <span className="fast-flicker" id='avitica'>A</span>vi<span className="flicker">t</span>ica
-													 */}
-												{/* Avitica */}
-											</div>
-
-										</section>
-									</NavLink>
-								</>
-								{/* } */}
-							</li>
-
-							{isLoaded && (
-								<li className='nav_list' id='nav_profile'>
-									<ProfileButton user={sessionUser} />
-								</li>)}
-						</ul>
-						<ul className='user-profile-nav'>
+								{isLoaded && (
+									<li className='nav_list' id='nav_profile'>
+										<ProfileButton user={sessionUser} />
+									</li>)}
+							</ul>
+							<ul className='user-profile-nav'>
 								<div className='nav-two'>
-										<UserProfile user={sessionUser} />
-									</div>
-						</ul>
+									<UserProfile user={sessionUser} />
+								</div>
+							</ul>
 						</>
 						:
 						<div className='not-logged'>

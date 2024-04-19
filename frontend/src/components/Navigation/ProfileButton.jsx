@@ -12,7 +12,7 @@ import './ProfileButton.css';
 
 
 // need for user? use context and use button context
-function ProfileButton({ user, setLoggedIn }) {
+function ProfileButton({ user, setLoggedIn, loggedIn }) {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 	const ulRef = useRef();
@@ -44,7 +44,7 @@ function ProfileButton({ user, setLoggedIn }) {
 
 		return () => document.removeEventListener("click", closeMenu);
 
-	}, [showMenu])
+	}, [showMenu, loggedIn])
 
 	const closeMenu = () => {
 		setShowMenu(false)
@@ -55,8 +55,8 @@ function ProfileButton({ user, setLoggedIn }) {
 
 		dispatch(sessionActions.logout());
 		alert("You have logged out.")
-		navigate('/')
-		setLoggedIn(false)
+		navigate('/');
+		setLoggedIn(false);
 	}
 
 	const ulClassName = "profile-dropdown" + (showMenu ? "" : "hidden");

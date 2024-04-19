@@ -27,7 +27,7 @@ div.user-container {
 
 .info-container {
 	display: flex;
-	width: 35%;
+	width: 50%;
 	padding: 0rem 0.5rem;
 	flex-direction: row;
 	align-items: flex-start;
@@ -41,16 +41,11 @@ div.user-container {
 
 .user-stats {
 	display: flex;
-	/* margin-bottom: 10%; */
-	/* justify-content: center; */
-	/* width: 70%; */
 	align-items: flex-end;
-	/* height: 50px; */
-	/* margin-inline-start: 20%; */
 	flex-wrap: wrap;
 	flex-direction: column;
 	align-content: flex-end;
-	margin-inline-start: 2%;
+	margin-inline-start: 5%;
 }
 
 .user-label {

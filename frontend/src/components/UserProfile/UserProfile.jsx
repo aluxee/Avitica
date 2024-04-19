@@ -1,8 +1,7 @@
-
-// import { useSelector, useDispatch } from 'react-redux';
+import { useLocation } from 'react-router-dom';
+// import { useSelector, useDispatch } from 'react-redux;
 import { useEffect, useState, useRef } from 'react';
 // import { thunkLoadStats } from '../../store/stats';
-import { useLocation } from 'react-router-dom';
 import './UserProfile.css';
 import { one, two, three, four, five } from '../../clips';
 
@@ -10,16 +9,16 @@ import { one, two, three, four, five } from '../../clips';
 function UserProfile({ user }) {
 	const location = useLocation();
 	const userInfo = user.userStats;
-	console.log("%c 🚀 ~ file: UserProfile.jsx:14 ~ UserProfile ~ userInfo: ", "color: hotpink; font-size: 25px", userInfo)
+	console.log("%c 🚀 ~ file: UserProfile.jsx:12 ~ UserProfile ~ userInfo: ", "color: hotpink; font-size: 25px", userInfo)
 
-	const goldenHour = userInfo ? userInfo.gold : 0;
-	console.log("%c 🚀 ~ file: UserProfile.jsx:19 ~ UserProfile ~ goldenHour: ", "color: hotpink; font-size: 25px", goldenHour)
+	// * -------------GOLD SECTION------------- *
+	// const goldenHour = userInfo ? userInfo.gold : 0;
+	// console.log("%c 🚀 ~ file: UserProfile.jsx:19 ~ UserProfile ~ goldenHour: ", "color: hotpink; font-size: 25px", goldenHour)
 
-	const storedGold = parseInt(localStorage.getItem('gold'), 10) || goldenHour;
-	console.log("%c 🚀 ~ file: UserProfile.jsx:20 ~ UserProfile ~ storedGold: ", "color: darkgoldenrod; font-size: 25px", storedGold)
+	// const storedGold = parseInt(localStorage.getItem('gold'), 10) || goldenHour;
+	// console.log("%c 🚀 ~ file: UserProfile.jsx:20 ~ UserProfile ~ storedGold: ", "color: darkgoldenrod; font-size: 25px", storedGold)
 
 	const [gold, setGold] = useState('');
-	// const [gold, setGold] = useState(() => storedGold);
 	const goldRef = useRef(gold);
 	console.log("%c 🚀 ~ file: UserProfile.jsx:25 ~ UserProfile ~ goldRef: ", "color: red; font-size: 25px", goldRef)
 
@@ -28,16 +27,11 @@ function UserProfile({ user }) {
 	}, [gold])
 
 	const getGoldFxn = () => {
-
 		const storedGold = parseInt(localStorage.getItem('gold'), 10) || 0;
 
 		setGold(storedGold)
-		console.log("%c 🚀 ~ file: UserProfile.jsx:36 ~ goldFunction ~ gold: ", "color: pink; font-size: 25px", gold)
-		console.log("%c 🚀 ~ file: UserProfile.jsx:37 ~ getGoldFxn ~ storedGold(STORED): ", "color: pink; font-size: 25px", storedGold)
-
 		return storedGold
-	}
-
+	};
 
 	const storeGoldFxn = () => {
 		setGold(prevGold => {
@@ -72,6 +66,7 @@ function UserProfile({ user }) {
 		const storedGold = parseInt(localStorage.getItem('gold'), 10) || 0;
 
 		setGold(storedGold);
+
 		// ___  OTHER WAY  ___
 
 		// const updatedStoredGold = parseInt(localStorage.getItem('gold'), 10);
@@ -95,6 +90,96 @@ function UserProfile({ user }) {
 		// };
 
 	}, [gold, location])
+	// * -------------HEALTH SECTION------------- *
+	const healthBar = userInfo.health ? userInfo.health : 100;
+
+	console.log("%c 🚀 ~ file: UserProfile.jsx:97 ~ UserProfile ~ healthBar: ", "color: crimson; font-size: 25px", healthBar)
+
+	// console.log("%c 🚀 ~ file: UserProfile.jsx:100 ~ UserProfile ~ storedHealth: ", "color: crimson; font-size: 25px", storedHealth)
+
+	const [health, setHealth] = useState('');
+	const [currHealth, setCurrHealth] = useState('');
+	const healthRef = useRef(health);
+
+	useEffect(() => {
+		healthRef.current = health;
+		const storedHealth = parseInt(localStorage.getItem('health'), 10) || healthBar;
+		setHealth(storedHealth);
+	}, [health, location])
+
+	// const getHealth = () => {
+
+
+	// 	console.log("%c 🚀 ~ file: UserProfile.jsx:112 ~ getHealth ~ storedHealth: ", "color: red; font-size: 25px", storedHealth) // yields 215
+
+	// 	setHealth(storedHealth)
+	// 	return storedHealth
+	// };
+
+	const storeHealth = () => {
+		setHealth(prevHealth => {
+			prevHealth = health || prevHealth;
+			const updatedHealth = prevHealth;
+
+			console.log("%c 🚀 ~ file: UserProfile.jsx:113 ~ goldSetFunction ~ updatedGold: ", "color: pink; font-size: 25px", updatedHealth)
+
+			setHealth(updatedHealth)
+			localStorage.setItem('health', updatedHealth.toString())
+			return updatedHealth
+		})
+	}
+	// useEffect(() => {
+	// 	getHealth()
+	// }, [])
+
+	useEffect(() => {
+		storeHealth()
+	}, [healthBar])
+
+	// * -------------EXP SECTION------------- *
+	const expBar = userInfo.experience ? userInfo.experience : 0;
+
+	console.log("%c 🚀 ~ file: UserProfile.jsx:144 ~ UserProfile ~ expBar: ", "color: crimson; font-size: 25px", expBar)
+
+	const [exp, setExp] = useState('');
+	const [currExp, setCurrExp] = useState('');
+	const expRef = useRef(exp);
+
+	useEffect(() => {
+		expRef.current = exp;
+		const storedExp = parseInt(localStorage.getItem('exp'), 10) || expBar;
+		setExp(storedExp);
+	}, [exp, location])
+
+	// const getExp = () => {
+
+	// 	setExp(storedExp)
+	// 	return storedExp
+	// };
+
+	const storeExp = () => {
+		setExp(prevXP => {
+			prevXP = exp || prevXP;
+			const updatedExp = prevXP;
+
+			console.log("%c 🚀 ~ file: UserProfile.jsx:167 ~ goldSetFunction ~ updatedExp: ", "color: pink; font-size: 25px", updatedExp)
+
+			setExp(updatedExp)
+			localStorage.setItem('exp', updatedExp.toString())
+			return updatedExp
+		})
+	}
+
+	// useEffect(() => {
+	// 	getHealth()
+	// }, [])
+
+	useEffect(() => {
+		storeExp()
+	}, [])
+
+
+
 
 	// userStats[0].gold = storedGold
 	// const userStat = userStats[0];
@@ -144,9 +229,7 @@ function UserProfile({ user }) {
 	return (
 		<>
 			<div className="user-container">
-
 				<div className="user-info">
-
 
 					<div className='user-nav-container'>
 						<div className="info-container">
@@ -160,11 +243,11 @@ function UserProfile({ user }) {
 										HP:
 									</div>
 									<div className='user-fill'>
-										<progress id="health" value={userInfo.health} max={userInfo.health}>
-											{userInfo?.health} / {userInfo?.health}
+										<progress id="health" value={health} max={health}>
+											{health} / {health}
 										</progress>
 										<div className='fill-text'>
-											{userInfo?.health} / {userInfo?.health}
+											{health} / {health}
 										</div>
 									</div>
 								</div>
@@ -173,11 +256,11 @@ function UserProfile({ user }) {
 										EXP:
 									</div>
 									<div className='user-fill'>
-										<progress id="experience" value={userInfo?.experience} max={userInfo?.experience}>
-											{userInfo?.experience} / {userInfo?.experience}
+										<progress id="experience" value={exp} max={exp}>
+											{exp} / {exp}
 										</progress>
 										<div className='fill-text'>
-											{userInfo?.experience} / {userInfo?.experience}
+											{exp} / {exp}
 										</div>
 									</div>
 								</div>

@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { createBrowserRouter, RouterProvider, Outlet } from 'react-router-dom';
 import Navigation from './components/Navigation/Navigation';
 import { Navigate } from 'react-router-dom';
-
 import LandingPage from './components/Navigation/LandingPage';
 import * as sessionActions from './store/session';
 import Home from './components/Home/Home';
@@ -49,7 +48,7 @@ function Layout() {
         </div>
         : (
           <>
-            <Navigation isLoaded={isLoaded} setLoggedIn={setLoggedIn} />
+            <Navigation isLoaded={isLoaded} setLoggedIn={setLoggedIn} loggedIn={loggedIn} />
             <Outlet>
               {loggedIn === false ?
                 <LandingPage /> : <Home />

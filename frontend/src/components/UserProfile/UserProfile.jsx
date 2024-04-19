@@ -16,54 +16,84 @@ function UserProfile({ user }) {
 
 	const goldenHour = userInfo ? userInfo.gold : 0;
 
+	console.log("%c 🚀 ~ file: UserProfile.jsx:19 ~ UserProfile ~ goldenHour: ", "color: hotpink; font-size: 25px", goldenHour)
+
+
 	const storedGold = parseInt(localStorage.getItem('gold'), 10) || goldenHour;
 
 	console.log("%c 🚀 ~ file: UserProfile.jsx:20 ~ UserProfile ~ storedGold: ", "color: darkgoldenrod; font-size: 25px", storedGold)
 
-	const [gold, setGold] = useState(storedGold);
+	const [gold, setGold] = useState('');
 	//! to return full amount of gold for testing, function useState and return storedGold
+	// const [gold, setGold] = useState(() => storedGold);
 	const goldRef = useRef(gold);
 
 	console.log("%c 🚀 ~ file: UserProfile.jsx:25 ~ UserProfile ~ goldRef: ", "color: red; font-size: 25px", goldRef)
 
+	//* leaving empty string, useEffect fill in setGold => useEffect constantly looking that data
+	const goldFunction = () => {
 
+		const storedGold = parseInt(localStorage.getItem('gold'), 10) || 0;
+
+		setGold(storedGold)
+		console.log("%c 🚀 ~ file: UserProfile.jsx:39 ~ goldFunction ~ gold: ", "color: red; font-size: 25px", gold)
+
+		return gold
+	}
 
 	useEffect(() => {
-		// fill out form
-		// button to test look: generate avatar
-		// finalize look: submit avatar
-		// setCurrStat(userStat) // this will always result to undefined
-
-		// const storedGold = parseInt(localStorage.getItem('gold'), 10) || goldenHour;
-
-
-		// setGold(storedGold)
-		// console.log("%c 🚀 ~ file: UserProfile.jsx:42 ~ useEffect ~ storedGold: ", "color: hotpink; font-size: 25px", storedGold)
-
-
-		// ___ ^ OLD WAY ^ ___
-
-		const updatedStoredGold = parseInt(localStorage.getItem('gold'), 10);
-
-		if (updatedStoredGold) {
-			setGold(updatedStoredGold)
-		}
-
-		const handleEventGoldStorage = (event) => {
-			if (event.key === 'gold') {
-				setGold(parseInt(event.newValue, 10))
-			}
-		}
-		// Listen for changes to localStorage
-		window.addEventListener('storage', handleEventGoldStorage);
-
-		return () => {
-			// Cleanup the event listener when component unmounts
-			window.removeEventListener('storage', handleEventGoldStorage);
-		};
-
+		goldFunction()
 	}, [])
 
+
+	// useEffect(() => {
+	// 	console.log("checking if this is working!!!!")
+	// 	// fill out form
+	// 	// button to test look: generate avatar
+	// 	// finalize look: submit avatar
+	// 	// setCurrStat(userStat) // this will always result to undefined
+
+	// 	const storedGold = parseInt(localStorage.getItem('gold'), 10) || 0;
+
+	// 	setGold(storedGold)
+
+	// 	// const pulledData = localStorage.getItem('gold')
+
+	// 	// if (pulledData) {
+	// 	// 	// const goldData =
+	// 	// }
+
+
+	// 	// console.log("%c 🚀 ~ file: UserProfile.jsx:42 ~ useEffect ~ storedGold: ", "color: hotpink; font-size: 25px", storedGold)
+
+
+	// 	// ___ ^ OLD WAY ^ ___
+
+	// 	// const updatedStoredGold = parseInt(localStorage.getItem('gold'), 10);
+
+
+
+	// 	// if (updatedStoredGold) {
+	// 	// 	setGold(updatedStoredGold)
+	// 	// }
+
+	// 	// const handleEventGoldStorage = (event) => {
+	// 	// 	if (event.key === 'gold') {
+	// 	// 		setGold(parseInt(event.newValue, 10))
+	// 	// 	}
+	// 	// }
+
+
+
+	// 	// // Listen for changes to localStorage
+	// 	// window.addEventListener('storage', handleEventGoldStorage(event));
+
+	// 	// return () => {
+	// 	// 	// Cleanup the event listener when component unmounts
+	// 	// 	window.removeEventListener('storage', handleEventGoldStorage);
+	// 	// };
+
+	// }, [goldenHour])
 
 	// useEffect(() => {
 
@@ -77,6 +107,7 @@ function UserProfile({ user }) {
 	}, [gold])
 
 
+	console.log("%c 🚀 ~ file: UserProfile.jsx:53 ~ useEffect ~ gold: ", "color: red; font-size: 25px", gold)
 
 	// userStats[0].gold = storedGold
 	// const userStat = userStats[0];

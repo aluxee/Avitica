@@ -162,8 +162,6 @@ function ShopDetails() {
 
 		setGold(goldAmt);
 
-
-
 		// Clear cart items from both local state and localStorage
 		setCart([]);
 

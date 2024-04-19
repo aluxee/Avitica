@@ -1,7 +1,6 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
-
-
+import { useLocation } from 'react-router-dom';
 import './Inventory.css';
 import { thunkLoadInventory } from '../../store/inventory';
 
@@ -10,7 +9,8 @@ function Inventory() {
 	const invObj = useSelector(state => state.inventory)
 	const inventory = Object.values(invObj)
 	const [inv, setInv] = useState([...inventory]);
-	
+	const location = useLocation();
+
 
 	useEffect(() => {
 		// const inventoryData = JSON.parse(localStorage.getItem('inventory'));
@@ -42,7 +42,7 @@ function Inventory() {
 	useEffect(() => {
 		// Move items from cart to inventory when the component mounts
 		moveItemsToInventory(); //* removing dependency array or adding this function to dependency array, or solely putting it outside of the useEffect causes repeats
-	}, []);
+	}, [location]);
 
 	// count how many times an item appears
 	const itemCounts = {};

@@ -2,112 +2,99 @@
 // import { useSelector, useDispatch } from 'react-redux';
 import { useEffect, useState, useRef } from 'react';
 // import { thunkLoadStats } from '../../store/stats';
+import { useLocation } from 'react-router-dom';
 import './UserProfile.css';
 import { one, two, three, four, five } from '../../clips';
 
 
 function UserProfile({ user }) {
-	// const dispatch = useDispatch();
-
-	// const userId = user.id;
+	const location = useLocation();
 	const userInfo = user.userStats;
-
 	console.log("%c 🚀 ~ file: UserProfile.jsx:14 ~ UserProfile ~ userInfo: ", "color: hotpink; font-size: 25px", userInfo)
 
 	const goldenHour = userInfo ? userInfo.gold : 0;
-
 	console.log("%c 🚀 ~ file: UserProfile.jsx:19 ~ UserProfile ~ goldenHour: ", "color: hotpink; font-size: 25px", goldenHour)
 
-
 	const storedGold = parseInt(localStorage.getItem('gold'), 10) || goldenHour;
-
 	console.log("%c 🚀 ~ file: UserProfile.jsx:20 ~ UserProfile ~ storedGold: ", "color: darkgoldenrod; font-size: 25px", storedGold)
 
 	const [gold, setGold] = useState('');
-	//! to return full amount of gold for testing, function useState and return storedGold
 	// const [gold, setGold] = useState(() => storedGold);
 	const goldRef = useRef(gold);
-
 	console.log("%c 🚀 ~ file: UserProfile.jsx:25 ~ UserProfile ~ goldRef: ", "color: red; font-size: 25px", goldRef)
 
-	//* leaving empty string, useEffect fill in setGold => useEffect constantly looking that data
-	const goldFunction = () => {
-
-		const storedGold = parseInt(localStorage.getItem('gold'), 10) || 0;
-
-		setGold(storedGold)
-		console.log("%c 🚀 ~ file: UserProfile.jsx:39 ~ goldFunction ~ gold: ", "color: red; font-size: 25px", gold)
-
-		return gold
-	}
-
-	useEffect(() => {
-		goldFunction()
-	}, [])
-
-
-	// useEffect(() => {
-	// 	console.log("checking if this is working!!!!")
-	// 	// fill out form
-	// 	// button to test look: generate avatar
-	// 	// finalize look: submit avatar
-	// 	// setCurrStat(userStat) // this will always result to undefined
-
-	// 	const storedGold = parseInt(localStorage.getItem('gold'), 10) || 0;
-
-	// 	setGold(storedGold)
-
-	// 	// const pulledData = localStorage.getItem('gold')
-
-	// 	// if (pulledData) {
-	// 	// 	// const goldData =
-	// 	// }
-
-
-	// 	// console.log("%c 🚀 ~ file: UserProfile.jsx:42 ~ useEffect ~ storedGold: ", "color: hotpink; font-size: 25px", storedGold)
-
-
-	// 	// ___ ^ OLD WAY ^ ___
-
-	// 	// const updatedStoredGold = parseInt(localStorage.getItem('gold'), 10);
-
-
-
-	// 	// if (updatedStoredGold) {
-	// 	// 	setGold(updatedStoredGold)
-	// 	// }
-
-	// 	// const handleEventGoldStorage = (event) => {
-	// 	// 	if (event.key === 'gold') {
-	// 	// 		setGold(parseInt(event.newValue, 10))
-	// 	// 	}
-	// 	// }
-
-
-
-	// 	// // Listen for changes to localStorage
-	// 	// window.addEventListener('storage', handleEventGoldStorage(event));
-
-	// 	// return () => {
-	// 	// 	// Cleanup the event listener when component unmounts
-	// 	// 	window.removeEventListener('storage', handleEventGoldStorage);
-	// 	// };
-
-	// }, [goldenHour])
-
-	// useEffect(() => {
-
-	// 	localStorage.setItem('gold', gold.toString())
-
-	// }, [gold])
-
-	// const userStats = Object.values(userInfo); //array of the stats under the user
 	useEffect(() => {
 		goldRef.current = gold
 	}, [gold])
 
+	const getGoldFxn = () => {
 
-	console.log("%c 🚀 ~ file: UserProfile.jsx:53 ~ useEffect ~ gold: ", "color: red; font-size: 25px", gold)
+		const storedGold = parseInt(localStorage.getItem('gold'), 10) || 0;
+
+		setGold(storedGold)
+		console.log("%c 🚀 ~ file: UserProfile.jsx:36 ~ goldFunction ~ gold: ", "color: pink; font-size: 25px", gold)
+		console.log("%c 🚀 ~ file: UserProfile.jsx:37 ~ getGoldFxn ~ storedGold(STORED): ", "color: pink; font-size: 25px", storedGold)
+
+		return storedGold
+	}
+
+
+	const storeGoldFxn = () => {
+		setGold(prevGold => {
+			prevGold = gold || prevGold;
+			const updatedGold = prevGold;
+
+			console.log("%c 🚀 ~ file: UserProfile.jsx:48 ~ goldSetFunction ~ updatedGold: ", "color: pink; font-size: 25px", updatedGold)
+
+			setGold(updatedGold)
+			localStorage.setItem('gold', updatedGold.toString())
+			return updatedGold
+		})
+	}
+
+	useEffect(() => {
+		getGoldFxn()
+	}, [])
+
+	useEffect(() => {
+		storeGoldFxn()
+	}, [])
+
+	// useEffect(() => {
+		// fill out form
+		// button to test look: generate avatar
+		// finalize look: submit avatar
+		// setCurrStat(userStat) // this will always result to undefined
+
+	// })
+
+	useEffect(() => {
+		const storedGold = parseInt(localStorage.getItem('gold'), 10) || 0;
+
+		setGold(storedGold);
+		// ___  OTHER WAY  ___
+
+		// const updatedStoredGold = parseInt(localStorage.getItem('gold'), 10);
+
+		// if (updatedStoredGold) {
+		// 	setGold(updatedStoredGold)
+		// }
+
+		// const handleEventGoldStorage = (event) => {
+		// 	if (event.key === 'gold') {
+		// 		setGold(parseInt(event.newValue, 10))
+		// 	}
+		// }
+
+		// // Listen for changes to localStorage
+		// window.addEventListener('storage', handleEventGoldStorage(event));
+
+		// return () => {
+		// 	// Cleanup the event listener when component unmounts
+		// 	window.removeEventListener('storage', handleEventGoldStorage);
+		// };
+
+	}, [gold, location])
 
 	// userStats[0].gold = storedGold
 	// const userStat = userStats[0];

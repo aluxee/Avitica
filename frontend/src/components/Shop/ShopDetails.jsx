@@ -1,6 +1,7 @@
 // import { csrfFetch } from '../../store/csrf';
 import { useSelector, useDispatch } from 'react-redux';
 import { useEffect, useRef, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import OpenModalMenuItem from '../Navigation/OpenModalMenuItem';
 import './ShopDetails.css';
 import { thunkLoadShop } from '../../store/shop';
@@ -11,6 +12,7 @@ import { useModal } from '../../context/Modal';
 import { useNavigate } from 'react-router-dom';
 function ShopDetails() {
 	const navigate = useNavigate();
+	const location = useLocation();
 	const dispatch = useDispatch();
 	const { closeModal } = useModal();
 	const marketObj = useSelector(state => state.shop)
@@ -46,7 +48,7 @@ function ShopDetails() {
 		const storedGold = parseInt(localStorage.getItem('gold'), 10) || goldenHour;
 		setGold(storedGold)
 		dispatch(thunkLoadShop())
-	}, [goldenHour, dispatch])
+	}, [goldenHour, dispatch, location])
 
 	useEffect(() => {
 		goldRef.current = gold
@@ -58,7 +60,7 @@ function ShopDetails() {
 
 		localStorage.setItem('gold', gold.toString());
 
-	}, [gold]) // in order to reflect as not just NaN, the dep array has to keep track of goldenHour
+	}, [gold, location]) // in order to reflect as not just NaN, the dep array has to keep track of goldenHour
 
 
 
@@ -198,6 +200,8 @@ function ShopDetails() {
 									itemId={cart && cart.map(item => item.id)}
 									clearCart={moveItemsToInventory}
 									removeItemFromCart={removeItemFromCart}
+									location={location}
+
 								/>
 							}
 							onButtonClick={closeModal}

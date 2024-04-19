@@ -3,7 +3,7 @@ import { useState, useEffect, useRef } from 'react';
 // import OpenModalButton from '../OpenModalButton/OpenModalButton';
 import './ItemCart.css';
 
-function ItemCart({ cart, clearCart, removeItemFromCart }) {
+function ItemCart({ cart, clearCart, removeItemFromCart, location }) {
 
 
 	const [cartBasket, setCartBasket] = useState([]);
@@ -14,7 +14,7 @@ function ItemCart({ cart, clearCart, removeItemFromCart }) {
 	useEffect(() => {
 		// update the cart whenever the cartRef changes
 		cartRef.current = cart
-	}, [cart])
+	}, [cart, location])
 
 	//do not change this useEffect, if this is changed, then we can no longer quantify whats inside the cart nor can we see the items in the cart
 	useEffect(() => {
@@ -22,13 +22,9 @@ function ItemCart({ cart, clearCart, removeItemFromCart }) {
 		if (cartRef.current.length > 0) countCartItems(cartRef.current)
 	}, [cart])
 
-
-
-
-	//how can i save the current cart in the cartBasket with the value as item?
 	useEffect(() => {
 		localStorage.setItem(`${cartRef.current}`, "item")
-	})
+	}, [location])
 
 	//changed cart to cartRef
 	const countCartItems = (cartRef) => {

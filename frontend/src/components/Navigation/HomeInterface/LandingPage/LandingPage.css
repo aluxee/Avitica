@@ -16,25 +16,13 @@
 	overflow-y: scroll;
 }
 
-/* css animations */
-.welcome-outer {
-	position: relative;
-	display: flex;
-	top: 7rem;
-	width: 100%;
-	height: 100%;
-	flex-direction: column;
-	flex-wrap: wrap;
-}
 
 .welcome-inner {
+display: flex;
+	flex-direction: row-reverse;
+	flex-wrap: wrap;
 	width: 100%;
 	height: 100%;
-	display: flex;
-	display: flex;
-	flex-wrap: wrap;
-	flex-direction: column;
-	align-content: center;
 }
 
 .welcome-main {
@@ -54,47 +42,38 @@
 	margin-top: 10%;
 	color: darkgrey;
 }
-
-body {
-	text-align: center;
-	background: linear-gradient(141deg, #ccc 25%, #eee 40%, #ddd 55%);
-	color: #555;
-	font-family: 'Roboto';
-	font-weight: 300;
-	/* font-size: 32px; */
-	/* padding-top: 40vh; */
-	/* height: 100vh; */
+.landing-nav {
+	position: relative;
+	top: 4rem;
 }
 
-.thought2 {
-	width: min-content;
-	text-align: right;
+.landing-right {
+	display: flex;
+	width: 50%;
+	flex-direction: column;
+	flex-wrap: wrap;
 }
 
-div.escape {
-	display: inline-block;
-	overflow: hidden;
-	white-space: nowrap;
+/* ____________________________________ */
+.landing-left {
+	display: flex;
+	width: 50%;
+	flex-wrap: nowrap;
+	justify-content: center;
 }
 
-div.escape:first-of-type {
-	/* For increasing performance
-                       ID/Class should've been used.
-                       For a small demo
-                       it's okaish for now */
-	animation: showup 7s infinite;
+.landing-left-background {
+	display: flex;
+	flex-direction: column;
+
 }
 
-div.escape:last-of-type {
-	width: 0px;
-	animation: reveal 7s infinite;
-}
+.landing-left-block {}
 
-div.escape:last-of-type span {
-	margin-left: -355px;
-	animation: slidein 7s infinite;
-}
+.landing-left-pic {}
 
+
+/* ____________________________________ */
 @keyframes showup {
 	0% {
 		opacity: 0;
@@ -155,3 +134,45 @@ div.escape:last-of-type span {
 		width: 355px;
 	}
 }
+
+body {
+	text-align: center;
+	background: linear-gradient(141deg, #ccc 25%, #eee 40%, #ddd 55%);
+	color: #555;
+	font-family: 'Roboto';
+	font-weight: 300;
+	/* font-size: 32px; */
+	/* padding-top: 40vh; */
+	/* height: 100vh; */
+}
+
+.thought2 {
+	width: min-content;
+	text-align: right;
+}
+
+div.escape {
+	display: inline-block;
+	overflow: hidden;
+	white-space: nowrap;
+}
+
+div.escape:first-of-type {
+	/* For increasing performance
+                       ID/Class should've been used.
+                       For a small demo
+                       it's okaish for now */
+	animation: showup 7s infinite;
+}
+
+div.escape:last-of-type {
+	width: 0px;
+	animation: reveal 7s infinite;
+}
+
+div.escape:last-of-type span {
+	margin-left: -355px;
+	animation: slidein 7s infinite;
+}
+
+/* LANDING MAIN */

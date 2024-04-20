@@ -3,7 +3,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import { createBrowserRouter, RouterProvider, Outlet } from 'react-router-dom';
 import Navigation from './components/Navigation/Navigation';
 import { Navigate } from 'react-router-dom';
-import LandingPage from './components/Navigation/LandingPage';
+import Swiper from './components/Navigation/HomeInterface/Swiper';
+import LandingHome from './components/Navigation/HomeInterface/LandingHome/LandingHome';
+import LandingPage from './components/Navigation/HomeInterface/LandingPage/LandingPage';
+import About from './components/Navigation/HomeInterface/About/About';
+import Features from './components/Navigation/HomeInterface/Features/Features';
 import * as sessionActions from './store/session';
 import Home from './components/Home/Home';
 import ShopDetails from './components/Shop/ShopDetails';
@@ -27,7 +31,7 @@ function Layout() {
       setIsLoaded(true)
     });
   }, [dispatch]);
-  console.log("%c 🚀 ~ file: App.jsx:28 ~ Outside Layout ~ sessionUser: ", "color: orange; font-size: 25px", sessionUser)
+
   const loginRedirect = sessionUser ? <Navigate to="/tasks" replace /> : null;
 
   useEffect(() => {
@@ -50,9 +54,11 @@ function Layout() {
           <>
             <Navigation isLoaded={isLoaded} setLoggedIn={setLoggedIn} loggedIn={loggedIn} />
             <Outlet>
-              {loggedIn === false ?
-                <LandingPage /> : <Home />
-              }
+              {loggedIn === false &&
+                <>
+                  <Swiper />
+                  <LandingPage />
+                </>}
             </Outlet>
             {loginRedirect}
           </>
@@ -69,7 +75,21 @@ const router = createBrowserRouter([
     children: [
       {
         path: '/',
-        element: <LandingPage />
+        element: <LandingHome />,
+        children: [
+          {
+            path: '/',
+            element: <LandingPage />
+          },
+          {
+            path: '/about',
+            element: <About />,
+          },
+          {
+            path: '/features',
+            element: <Features />,
+          },
+        ],
       },
       {
         path: '/tasks',

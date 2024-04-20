@@ -112,22 +112,20 @@ h4 {
 .demoPage.stf__item.--soft.--right:hover {
 	cursor: pointer;
 	background: linear-gradient(45deg,
-			/* #ff0000, */
-			/* #ff7300, */
-			/* #fffb00, */
+			#ff0000,
+			#ff7300,
+			#fffb00,
 			#48ff00,
 			#00ffd5,
 			#002bff,
 			#7a00ff,
-			/* #ff00c8, */
+			#ff00c8,
 			#ff0000);
-	/* position: absolute; */
-	/* top: -2px; */
-	/* left: -2px; */
+	position: absolute;
+	top: -2px;
+	left: -2px;
 	background-size: 400%;
 	z-index: -1;
-	/* filter: blur(5px); */
-	/* -webkit-filter: blur(5px); */
 	width: calc(100% + 4px);
 	height: calc(100% + 4px);
 	animation: glowing-button-85 20s linear infinite;
@@ -149,6 +147,15 @@ h4 {
 	}
 }
 
+.stf__parent {
+	min-width: 600px;
+	min-height: 800px;
+	width: 100%;
+	/* max-width: 1200px; */
+	display: block;
+	position: relative;
+	top: 2.5rem;
+}
 
 
 

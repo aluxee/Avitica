@@ -23,7 +23,7 @@ function Swiper() {
 
 	const prevPage = () => {
 		if (currPage > 0) {
-		const prevPage = currPage - 1;
+			const prevPage = currPage - 1;
 			setCurrPage(prevPage);
 			navigateToPage(prevPage);
 		}
@@ -55,8 +55,8 @@ function Swiper() {
 			</div>
 
 			{/* Render the next and back buttons */}
-			<button onClick={prevPage} disabled={isBackDisabled}>Back</button>
-			<button onClick={nextPage} disabled={isNextDisabled}>Next</button>
+			{/* <button onClick={prevPage} disabled={isBackDisabled}>Back</button>
+			<button onClick={nextPage} disabled={isNextDisabled}>Next</button> */}
 		</div>
 	);
 }

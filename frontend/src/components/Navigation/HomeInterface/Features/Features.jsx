@@ -11,6 +11,6 @@ function Features() {
 			</div>
 		</>
 	);
-};
+}
 
 export default Features;

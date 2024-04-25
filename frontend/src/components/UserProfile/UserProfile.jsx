@@ -7,6 +7,9 @@ import { one, two, three, four, five } from '../../clips';
 
 
 function UserProfile({ user }) {
+
+	console.log("%c 🚀 ~ file: UserProfile.jsx:11 ~ UserProfile ~ user: ", "color: blueviolet; font-size: 25px", user)
+
 	const location = useLocation();
 	const userInfo = user.userStats;
 	console.log("%c 🚀 ~ file: UserProfile.jsx:12 ~ UserProfile ~ userInfo: ", "color: hotpink; font-size: 25px", userInfo)

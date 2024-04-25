@@ -17,14 +17,17 @@ function AllTasks() {
 	const [showMenu, setShowMenu] = useState(false);
 	const taskObj = useSelector(state => state.task);
 
-	// console.log("%c 🚀 ~ file: AllTasks.jsx:23 ~ AllTasks ~ taskObj: ", "color: red; font-size: 25px", taskObj)
+	console.log("%c 🚀 ~ file: AllTasks.jsx:23 ~ AllTasks ~ taskObj: ", "color: orange; font-size: 25px", taskObj)
 
 	// const [filteredTasks, setFilteredTasks] = useState([]);
 	// const [taskStatus, setTaskStatus] = useState(false);
-	const allTasks = Object.values(taskObj)
+	const allTasks = Object.values(taskObj); //an array of all the tasks
 
-	// console.log("%c 🚀 ~ file: AllTasks.jsx:24 ~ AllTasks ~ allTasks: ", "color: red; font-size: 25px", allTasks)
+	console.log("%c 🚀 ~ file: AllTasks.jsx:24 ~ AllTasks ~ allTasks: ", "color: orange; font-size: 25px", allTasks)
 
+	const allStoredTasks = allTasks && JSON.parse(localStorage.getItem('tasks')) || allTasks; // note this may be glitchy to cycle thru due to storage inconsistency
+
+	console.log("%c 🚀 ~ file: AllTasks.jsx:108 ~ allStoredTasks: ", "color: orange; font-size: 25px", allStoredTasks)
 
 	// const [taskText, setTaskText] = useState("");
 	const [tasks, setTasks] = useState([]);
@@ -115,9 +118,6 @@ function AllTasks() {
 		}
 	}
 
-	const allStoredTasks = JSON.parse(localStorage.getItem('tasks')); // note this may be glitchy to cycle thru due to storage inconsistency
-
-	// console.log("%c 🚀 ~ file: AllTasks.jsx:108 ~ allStoredTasks: ", "color: red; font-size: 25px", allStoredTasks)
 
 
 	return (

@@ -6,7 +6,7 @@ import './SignupFormModal.css';
 
 
 
-function SignupFormModal() {
+function SignupFormModal({onModalOpen, onModalClosed}) {
 	const dispatch = useDispatch();
 
 	const [username, setUsername] = useState('');
@@ -19,8 +19,15 @@ function SignupFormModal() {
 	const [auth, setAuth] = useState(true);
 	const { closeModal } = useModal();
 
-	// console.log("%c 🚀 ~ file: SignupFormModal.jsx:58 ~ handleSubmit ~ sessionActions: ", "color: pink; font-size: 25px", sessionActions, sessionActions.signup, sessionActions.signup, sessionActions.signupUser)
+	useEffect(() => {
+		// Disable flipbook interaction when modal is open
+		onModalOpen()
 
+		//clean up interaction to return flipbook interactivity when modal is closed
+		return () => {
+			onModalClosed()
+		}
+	}, [onModalClosed, onModalOpen]);
 
 	useEffect(() => {
 		const errorsObject = {}

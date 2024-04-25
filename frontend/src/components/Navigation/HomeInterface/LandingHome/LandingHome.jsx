@@ -1,5 +1,5 @@
+import { useState, useEffect, useRef } from "react";
 import LandingPage from "../LandingPage/LandingPage";
-import { useState } from "react";
 import About from "../About/About";
 import Features from "../Features/Features";
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -10,6 +10,8 @@ function LandingHome() {
 	const location = useLocation();
 	const navigate = useNavigate();
 	const [page, setPage] = useState(getPageIndex(location.pathname));
+	const [showMenu, setShowMenu] = useState(false);
+	const [modalOpen, setModalOpen] = useState(false); // State to track if any modal is open
 
 	// Function to get the page index based on the current route
 	function getPageIndex(pathname) {
@@ -47,20 +49,64 @@ function LandingHome() {
 		}
 	}
 
+
+	// Function to handle modal open
+	const handleModalOpen = () => {
+		setModalOpen(true);
+		closeMenu(); // Close menu when modal opens
+	};
+
+	// Function to handle modal close
+	const handleModalClose = () => {
+		setModalOpen(false);
+	};
+
+	const toggleMenu = (e) => {
+		e.stopPropagation(); // Keep click from bubbling up to document and triggering closeMenu
+		setShowMenu(!showMenu)
+	}
+	useEffect(() => {
+		if (!showMenu) return;
+
+		const closeMenu = () => {
+			setShowMenu(false);
+		};
+
+		document.addEventListener('click', closeMenu);
+
+		return () => document.removeEventListener("click", closeMenu);
+
+	}, [showMenu])
+
+	const closeMenu = () => {
+		setShowMenu(false)
+	}
+
 	return (
 		<div className="home-outer">
-			<div className="home-inner">
-				<HTMLFlipBook width={800} height={800} minWidth={315} maxWidth={1150} minHeight={400} maxHeight={1533} showCover={true} currentPage={page}>
-					<div className="demoPage">
-						<LandingPage />
-					</div>
-					<div className="demoPage">
-						<About />
-					</div>
-					<div className="demoPage">
-						<Features />
-					</div>
-				</HTMLFlipBook>
+			<div className="home-inner"
+			>
+				{
+					modalOpen ? null : (
+
+						<HTMLFlipBook width={800} height={800} minWidth={315} maxWidth={1150} minHeight={400} maxHeight={1533} showCover={true} currentPage={page}>
+
+							<div className="demoPage">
+								<LandingPage closeMenu={closeMenu} toggleMenu={toggleMenu} showMenu={showMenu} setShowMenu={setShowMenu}
+									onModalOpen={handleModalOpen}
+									onModalClosed={handleModalClose}
+								/>
+							</div>
+							<div className="demoPage">
+								<About />
+							</div>
+							<div className="demoPage">
+								<Features />
+							</div>
+						</HTMLFlipBook>
+					)
+				}
+
 				<div className="navigation-buttons">
 					<button onClick={handlePrev} disabled={page === 0}>Prev</button>
 					<button onClick={handleNext} disabled={page === 2}>Next</button>

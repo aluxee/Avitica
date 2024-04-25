@@ -13,9 +13,39 @@ import './Navigation.css';
 function Navigation({ isLoaded }) {
 
 	const navigate = useNavigate();
-	const { user, loggedIn, setLoggedIn } = useContext(LoggedContext)
+	const { user } = useContext(LoggedContext)
+	const [modalOpen, setModalOpen] = useState(false); // State to track if any modal is open
 
 
+	// Function to handle modal open
+	const handleModalOpen = () => {
+		setModalOpen(true);
+		// closeMenu(); // Close menu when modal opens
+	};
+
+	// Function to handle modal close
+	const handleModalClose = () => {
+		setModalOpen(false);
+	};
+
+	// Effect to disable flipbook interaction when modal is open
+	useEffect(() => {
+		const disableFlipBook = (e) => {
+			if (modalOpen) {
+				e.preventDefault();
+				e.stopPropagation();
+			}
+		};
+
+		// Add event listener to disable interaction when modal is open; questionable necessity
+		document.addEventListener('click', disableFlipBook);
+
+
+		// Clean up event listener
+		return () => {
+			document.removeEventListener('click', disableFlipBook);
+		};
+	}, [modalOpen]);
 
 	const otherRedirect = async () => {
 
@@ -42,7 +72,12 @@ function Navigation({ isLoaded }) {
 					<li>
 						<OpenModalButton
 							buttonText="Log In"
-							modalComponent={<LoginFormModal />}
+							modalComponent={<LoginFormModal
+								onModalOpen={handleModalOpen}
+								onModalClosed={handleModalClose}
+								navModalOpen={modalOpen}
+
+							/>}
 						/>
 					</li>
 					<li>

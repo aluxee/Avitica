@@ -13,7 +13,7 @@ import { LoggedContext } from '../../context/LoggedProvider';
 import './ProfileButton.css';
 
 
-// need for user? use context and use button context
+
 function ProfileButton() {
 	const { user, loggedIn, setLoggedIn } = useContext(LoggedContext)
 

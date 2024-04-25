@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import LoginFormModal from '../../../LoginFormModal';
 import OpenModalButton from '../../../OpenModalButton';
@@ -5,11 +6,51 @@ import './LandingPage.css';
 import OpenModalMenuItem from '../../OpenModalMenuItem';
 import SignupFormModal from '../../../SignupFormModal';
 
-function LandingPage() {
-	const sessionUser = useSelector(state => state.session.user)
+function LandingPage({ toggleMenu, showMenu, setShowMenu, onModalOpen, onModalClosed }) {
+
+	// console.log("%c 🚀 ~ file: LandingPage.jsx:11 ~ LandingPage ~ setAllowFlip: ", "color: red; font-size: 25px", setAllowFlip)
+
+	const sessionUser = useSelector(state => state.session.user);
 
 	console.log("%c 🚀 ~ file: LandingPage.jsx:12 ~ LandingPage ~ sessionUser: ", "color: yellow; font-size: 25px", sessionUser)
 
+	// const [modalHovered, setModalHovered] = useState(false);
+	const [modalOpen, setModalOpen] = useState(false); // State to track if any modal is open
+	// TRYING TO ATTEMPT WHEN A USER HOVERS OUTSIDE OF MODAL, THE HTML FLIP BOOK SHOULD NOT ACTIVATE!
+
+
+	// enter useEffect to make flipbook changes
+
+	// Effect to disable flipbook interaction when modal is open
+	useEffect(() => {
+		const disableFlipBook = (e) => {
+			if (modalOpen) {
+				e.preventDefault();
+				e.stopPropagation();
+			}
+		};
+
+		// Add event listener to disable interaction when modal is open; questionable necessity
+		document.addEventListener('click', disableFlipBook);
+
+
+		// Clean up event listener
+		return () => {
+			document.removeEventListener('click', disableFlipBook);
+		};
+	}, [modalOpen]);
+
+	// Function to handle modal open
+	const handleModalOpen = () => {
+		setModalOpen(true);
+		// closeMenu(); // Close menu when modal opens
+	};
+
+
+	const closeMenu = () => {
+		setShowMenu(false)
+		setModalOpen(false)
+	}
 
 	return (
 		<>
@@ -40,21 +81,35 @@ function LandingPage() {
 							<div className='thoughts'>Dive in and organize your gameplay
 							</div>
 							<div className='log-sign'>
+								{
 
-								<div className='login'>
+									// showMenu === true &&
+									(
+										<div className='login'>
 
-									{!sessionUser && (
-										<OpenModalButton
-											buttonText="Log In"
-											modalComponent={<LoginFormModal />}
-										/>
+											{!sessionUser && (
+												<OpenModalButton
+													buttonText="Log In"
+													modalComponent={<LoginFormModal
+														onModalOpen={onModalOpen}
+														onButtonClick={handleModalOpen}
+														onModalClosed={onModalClosed}
+													/>}
+
+												/>
+											)}
+										</div>
 									)}
-								</div>
 								<div className="signup">
 									{!sessionUser && (
 										<OpenModalMenuItem
 											itemText="Sign Up"
-											modalComponent={<SignupFormModal />
+
+											modalComponent={<SignupFormModal
+												onModalOpen={onModalOpen}
+												onItemClick={handleModalOpen}
+												onModalClosed={onModalClosed}
+											/>
 											}
 										/>
 									)}

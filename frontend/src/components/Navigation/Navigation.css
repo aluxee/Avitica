@@ -19,7 +19,9 @@ a {
 
 .no-session-outer-container {}
 
-.no-session-inner-container {}
+.no-session-inner-container > div.login-modal{
+pointer-events: none;
+}
 
 
 .nav-main-outer {

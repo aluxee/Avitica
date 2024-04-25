@@ -4,6 +4,13 @@ import { createBrowserRouter, RouterProvider, Outlet } from 'react-router-dom';
 import Navigation from './components/Navigation/Navigation';
 import { Navigate } from 'react-router-dom';
 import Swiper from './components/Navigation/HomeInterface/Swiper';
+
+import { useContext } from 'react';
+import { LoggedContext } from './context/LoggedProvider';
+
+console.log("%c 🚀 ~ file: App.jsx:11 ~ LoggedContext: ", "color: red; font-size: 25px", LoggedContext)
+
+
 import LandingHome from './components/Navigation/HomeInterface/LandingHome/LandingHome';
 import LandingPage from './components/Navigation/HomeInterface/LandingPage/LandingPage';
 import About from './components/Navigation/HomeInterface/About/About';
@@ -20,7 +27,7 @@ function Layout() {
   const dispatch = useDispatch();
   const [isLoaded, setIsLoaded] = useState(false);
   const sessionUser = useSelector(state => state.session.user)
-  const [loggedIn, setLoggedIn] = useState(false);
+  const { loggedIn, setLoggedIn } = useContext(LoggedContext)
 
   console.log("%c 🚀 ~ file: App.jsx:19 ~ Layout ~ sessionUser: ", "color: orange; font-size: 25px", sessionUser)
 
@@ -42,7 +49,6 @@ function Layout() {
     }
   }, [loggedIn, sessionUser])
 
-  console.log("%c 🚀 ~ file: App.jsx:39 ~ Layout ~ loggedIn: ", "color: pink; font-size: 25px", loggedIn)
 
   return (
     <>
@@ -52,7 +58,7 @@ function Layout() {
         </div>
         : (
           <>
-            <Navigation isLoaded={isLoaded} setLoggedIn={setLoggedIn} loggedIn={loggedIn} />
+            <Navigation isLoaded={isLoaded} />
             <Outlet>
               {loggedIn === false &&
                 <>

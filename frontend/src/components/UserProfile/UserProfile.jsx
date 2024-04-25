@@ -12,13 +12,13 @@ function UserProfile({ user }) {
 	console.log("%c 🚀 ~ file: UserProfile.jsx:12 ~ UserProfile ~ userInfo: ", "color: hotpink; font-size: 25px", userInfo)
 
 	// * -------------GOLD SECTION------------- *
-	// const goldenHour = userInfo ? userInfo.gold : 0;
-	// console.log("%c 🚀 ~ file: UserProfile.jsx:19 ~ UserProfile ~ goldenHour: ", "color: hotpink; font-size: 25px", goldenHour)
+	const goldenHour = userInfo ? userInfo.gold : 0;
+	console.log("%c 🚀 ~ file: UserProfile.jsx:19 ~ UserProfile ~ goldenHour: ", "color: hotpink; font-size: 25px", goldenHour, "and just in case ..., ", userInfo.gold)
 
-	// const storedGold = parseInt(localStorage.getItem('gold'), 10) || goldenHour;
-	// console.log("%c 🚀 ~ file: UserProfile.jsx:20 ~ UserProfile ~ storedGold: ", "color: darkgoldenrod; font-size: 25px", storedGold)
+	const storedGold = parseInt(localStorage.getItem('gold'), 10) || goldenHour;
+	console.log("%c 🚀 ~ file: UserProfile.jsx:20 ~ UserProfile ~ storedGold: ", "color: darkgoldenrod; font-size: 25px", storedGold)
 
-	const [gold, setGold] = useState('');
+	const [gold, setGold] = useState(storedGold);
 	const goldRef = useRef(gold);
 	console.log("%c 🚀 ~ file: UserProfile.jsx:25 ~ UserProfile ~ goldRef: ", "color: red; font-size: 25px", goldRef)
 

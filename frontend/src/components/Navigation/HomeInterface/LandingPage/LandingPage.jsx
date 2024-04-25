@@ -39,23 +39,26 @@ function LandingPage() {
 							</div> */}
 							<div className='thoughts'>Dive in and organize your gameplay
 							</div>
-							<div className='login'>
+							<div className='log-sign'>
 
-								{!sessionUser && (
-									<OpenModalButton
-										buttonText="Log In"
-										modalComponent={<LoginFormModal />}
-									/>
-								)}
-							</div>
-							<div className="signup">
-								{!sessionUser && (
-									<OpenModalMenuItem
-										itemText="Sign Up"
-										modalComponent={<SignupFormModal />
-										}
-									/>
-								)}
+								<div className='login'>
+
+									{!sessionUser && (
+										<OpenModalButton
+											buttonText="Log In"
+											modalComponent={<LoginFormModal />}
+										/>
+									)}
+								</div>
+								<div className="signup">
+									{!sessionUser && (
+										<OpenModalMenuItem
+											itemText="Sign Up"
+											modalComponent={<SignupFormModal />
+											}
+										/>
+									)}
+								</div>
 							</div>
 						</div>
 					</div>

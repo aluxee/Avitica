@@ -1,15 +1,21 @@
+import { useState, useEffect, useRef } from 'react';
 import { NavLink } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import ProfileButton from './ProfileButton';
 import OpenModalButton from '../OpenModalButton';
 import LoginFormModal from '../LoginFormModal';
-import './Navigation.css';
 import UserProfile from '../UserProfile/UserProfile';
+import { useContext } from 'react';
+import { LoggedContext } from '../../context/LoggedProvider';
+import './Navigation.css';
 
-function Navigation({ isLoaded, setLoggedIn, loggedIn }) {
-	const sessionUser = useSelector((state) => state.session.user);
+function Navigation({ isLoaded }) {
+
 	const navigate = useNavigate();
+	const { user, loggedIn, setLoggedIn } = useContext(LoggedContext)
+
+
 
 	const otherRedirect = async () => {
 
@@ -18,15 +24,15 @@ function Navigation({ isLoaded, setLoggedIn, loggedIn }) {
 	}
 
 
-	sessionUser ? (
+	user ? (
 		<div className="yes-session-outer-container">
 			<div className="yes-session-inner-container">
 				<li className='nav-profile'>
-					<ProfileButton user={sessionUser} setLoggedIn={setLoggedIn} loggedIn={loggedIn}/>
+					<ProfileButton />
 				</li>
 			</div>
 			<div className='yes-session user-stats'>
-				<UserProfile user={sessionUser} />
+				<UserProfile user={user} />
 			</div>
 		</div>
 	) : (
@@ -55,7 +61,7 @@ function Navigation({ isLoaded, setLoggedIn, loggedIn }) {
 		<>
 			<div className='nav-main-outer'>
 				<div className='nav-main-inner'>
-					{sessionUser ?
+					{user ?
 						<>
 							<ul className='nav-main-list'>
 								<li className='nav-home'>
@@ -100,12 +106,12 @@ function Navigation({ isLoaded, setLoggedIn, loggedIn }) {
 
 								{isLoaded && (
 									<li className='nav_list' id='nav_profile'>
-										<ProfileButton user={sessionUser} />
+										<ProfileButton user={user} />
 									</li>)}
 							</ul>
 							<ul className='user-profile-nav'>
 								<div className='nav-two'>
-									<UserProfile user={sessionUser} />
+									<UserProfile user={user} />
 								</div>
 							</ul>
 						</>
@@ -122,7 +128,7 @@ function Navigation({ isLoaded, setLoggedIn, loggedIn }) {
 							</NavLink>
 							{isLoaded && (
 								<li className='nav_list' id='nav_profile'>
-									<ProfileButton user={sessionUser} />
+									<ProfileButton user={user} />
 								</li>)}
 						</div>
 					}

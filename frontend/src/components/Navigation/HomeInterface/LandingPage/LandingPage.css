@@ -55,7 +55,7 @@ display: flex;
 	display: flex;
 	flex-direction: column;
 	height: 300px;
-	justify-content: space-around;
+	justify-content: space-evenly;
 }
 .landing-nav {
 	position: relative;
@@ -95,9 +95,15 @@ display: flex;
 
 /* ____________________________________ */
 
+/* .log-sign{ */
+	/* display: flex; */
+/* } */
 .signup > li.modal-menu-item{
 	font-size: medium;
 	text-decoration: underline;
+}
+.signup > li.modal-menu-item:hover{
+color: green
 }
 /* ____________________________________ */
 @keyframes showup {

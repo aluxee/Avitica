@@ -36,7 +36,7 @@ function ShopDetails() {
 
 	console.log("%c 🚀 ~ file: ShopDetails.jsx:32 ~ ShopDetails ~ gold: ", "color: yellow; font-size: 25px", gold) // needs to be changed in order to reflect live
 
-	const goldRef = useRef(gold)
+	const goldRef = useRef(gold);
 
 	// console.log("%c 🚀 ~ file: ShopDetails.jsx:33 ~ ShopDetails ~ goldRef: ", "color: magenta; font-size: 25px", goldRef)
 	//* suspect the issue with sustaining gold default in storage is on this component, the userProfile seems fine
@@ -48,7 +48,8 @@ function ShopDetails() {
 		const storedGold = parseInt(localStorage.getItem('gold'), 10) || goldenHour;
 		setGold(storedGold)
 		dispatch(thunkLoadShop())
-	}, [goldenHour, dispatch, location])
+		localStorage.setItem('gold', gold.toString());
+	}, [goldenHour, dispatch, location, gold])
 
 	useEffect(() => {
 		goldRef.current = gold
@@ -56,11 +57,8 @@ function ShopDetails() {
 
 
 
-	useEffect(() => {
-
-		localStorage.setItem('gold', gold.toString());
-
-	}, [gold, location]) // in order to reflect as not just NaN, the dep array has to keep track of goldenHour
+	// useEffect(() => {
+	// }, [gold, location]) // in order to reflect as not just NaN, the dep array has to keep track of goldenHour
 
 
 

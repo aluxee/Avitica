@@ -2,7 +2,8 @@ import { useSelector } from 'react-redux';
 import LoginFormModal from '../../../LoginFormModal';
 import OpenModalButton from '../../../OpenModalButton';
 import './LandingPage.css';
-import Swiper from '../Swiper';
+import OpenModalMenuItem from '../../OpenModalMenuItem';
+import SignupFormModal from '../../../SignupFormModal';
 
 function LandingPage() {
 	const sessionUser = useSelector(state => state.session.user)
@@ -12,13 +13,16 @@ function LandingPage() {
 
 	return (
 		<>
+			<div className='title'>
+				<h1>Welcome to Avitica </h1>
+			</div>
 			<div className="welcome-outer">
 				<div className="int welcome-inner" style={{ "fontSize": "32px" }}>
 
 					<div className='landing-right'>
 						<div className='landing-right-heading'>
 							<div className='slimes'>
-								<h3>slime</h3>
+								<img src="https://i.pinimg.com/564x/16/65/46/1665466883e0be557276d5eb85015481.jpg" alt="slime" width={100} />
 							</div>
 							<div>
 								<div className='escape'>
@@ -31,15 +35,28 @@ function LandingPage() {
 						</div>
 
 						<div className='welcome-main'>
-							<div className='welcome-title'>Welcome to Avitica</div>
+							{/* <div className='welcome-title'>Welcome to Avitica
+							</div> */}
 							<div className='thoughts'>Dive in and organize your gameplay
 							</div>
-							{!sessionUser && (
-								<OpenModalButton
-									buttonText="Log In"
-									modalComponent={<LoginFormModal />}
-								/>
-							)}
+							<div className='login'>
+
+								{!sessionUser && (
+									<OpenModalButton
+										buttonText="Log In"
+										modalComponent={<LoginFormModal />}
+									/>
+								)}
+							</div>
+							<div className="signup">
+								{!sessionUser && (
+									<OpenModalMenuItem
+										itemText="Sign Up"
+										modalComponent={<SignupFormModal />
+										}
+									/>
+								)}
+							</div>
 						</div>
 					</div>
 
@@ -47,8 +64,7 @@ function LandingPage() {
 						<div className='landing-left-background'>
 							<div className='landing-left-block'>
 								<div className='landing-left-pic'>
-									<h1>hello</h1>
-									<h1>good bye</h1>
+									<img src="https://i.pinimg.com/564x/cc/78/11/cc78118dd058b3a1363ecbe5fd9f373d.jpg" alt="maplestory-bck-clip" width={315} />
 								</div>
 							</div>
 						</div>
@@ -56,11 +72,6 @@ function LandingPage() {
 
 				</div>
 			</div>
-
-
-
-
-
 
 		</>
 	)

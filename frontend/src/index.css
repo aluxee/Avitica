@@ -106,12 +106,12 @@ h4 {
 }
 
 .demoPage.stf__item.--soft.--right:before {
-	background: white;
+	background: transparent;
 }
 
 .demoPage.stf__item.--soft.--right:hover {
 	cursor: pointer;
-	background: linear-gradient(45deg,
+	/* background: linear-gradient(45deg,
 			#ff0000,
 			#ff7300,
 			#fffb00,
@@ -120,17 +120,19 @@ h4 {
 			#002bff,
 			#7a00ff,
 			#ff00c8,
-			#ff0000);
-	position: absolute;
-	top: -2px;
-	left: -2px;
-	background-size: 400%;
+			#ff0000); */
+			background: transparent;
+	/* position: absolute; */
+	position: relative;
+	/* top: 5rem; */
+	/* left: -2px; */
+	/* background-size: 400%;
 	z-index: -1;
 	width: calc(100% + 4px);
 	height: calc(100% + 4px);
 	animation: glowing-button-85 20s linear infinite;
 	transition: opacity 0.3s ease-in-out;
-	border-radius: 10px;
+	border-radius: 10px; */
 }
 
 @keyframes glowing-button-85 {
@@ -154,10 +156,20 @@ h4 {
 	/* max-width: 1200px; */
 	display: block;
 	position: relative;
-	top: 2.5rem;
+	/* top: 2.5rem; */
 }
 
+.demoPage.stf__item.--soft.--right.--simple{
+	top: 0rem;
+}
+.stf__block{
+	/* top: 5rem; */
 
+}
+.demoPage.stf__item{
+	position: relative;
+	top: 0rem;
+}
 
 /* BUTTON */
 button {

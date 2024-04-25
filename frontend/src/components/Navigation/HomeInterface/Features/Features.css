@@ -1,0 +1,12 @@
+.features-inner {
+	display: flex;
+	flex-direction: column;
+	width: 75%;
+}
+
+.features-outer {
+	display: flex;
+	height: 100%;
+	justify-content: center;
+	align-items: center;
+}

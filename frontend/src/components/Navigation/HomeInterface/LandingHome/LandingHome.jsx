@@ -50,7 +50,7 @@ function LandingHome() {
 	return (
 		<div className="home-outer">
 			<div className="home-inner">
-				<HTMLFlipBook width={600} height={800} minWidth={315} maxWidth={1000} minHeight={400} maxHeight={1533} showCover={true} currentPage={page}>
+				<HTMLFlipBook width={800} height={800} minWidth={315} maxWidth={1150} minHeight={400} maxHeight={1533} showCover={true} currentPage={page}>
 					<div className="demoPage">
 						<LandingPage />
 					</div>

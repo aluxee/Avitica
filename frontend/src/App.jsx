@@ -56,7 +56,7 @@ function Layout() {
             <Outlet>
               {loggedIn === false &&
                 <>
-                  <Swiper />
+                  {/* <Swiper /> */}
                   <LandingPage />
                 </>}
             </Outlet>

@@ -13,7 +13,7 @@ import './Navigation.css';
 function Navigation({ isLoaded }) {
 
 	const navigate = useNavigate();
-	const { user } = useContext(LoggedContext)
+	const { user } = useContext(LoggedContext);
 	const [modalOpen, setModalOpen] = useState(false); // State to track if any modal is open
 
 
@@ -62,7 +62,7 @@ function Navigation({ isLoaded }) {
 				</li>
 			</div>
 			<div className='yes-session user-stats'>
-				<UserProfile user={user} />
+				<UserProfile  />
 			</div>
 		</div>
 	) : (

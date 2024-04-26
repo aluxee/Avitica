@@ -62,7 +62,17 @@ router.post(
 			err.errors = { credential: 'The provided credentials were invalid.' };
 			return next(err);
 		}
-		console.log("%c 🚀 ~ file: session.js:47 ~ user ~ user: ", "color: red; font-size: 25px", user)
+		console.log("%c 🚀 ~ file: session.js:65 ~ user ~ user: ", "color: red; font-size: 25px", user, user.userStats)
+
+		const userInfo = await userStat.findByPk(user.id)
+		const statUser = await Stat.findByPk(user.id)
+
+		//! we need to change the userStats and Stats to just an object rather than an array so that it's data type doesnt change
+
+
+		// Checking if userInfo and statUser are arrays and contain elements
+		user.userStats = Array.isArray(userInfo) && userInfo.length > 0 ? userInfo[0] : userInfo;
+		user.Stats = Array.isArray(statUser) && statUser.length > 0 ? statUser[0] : statUser;
 
 		const safeUser = {
 			id: user.id,
@@ -106,14 +116,17 @@ router.get(
 			const statUser = await Stat.findByPk(user.id)
 
 
-			// console.log("%c 🚀 ~ file: session.js:106 ~ userInfo: ", "color: red; font-size: 25px", userInfo)
+			console.log("%c 🚀 ~ file: session.js:106 ~ userInfo: ", "color: red; font-size: 25px", userInfo)
 
 
-			// console.log("%c 🚀 ~ file: session.js:110 ~ statUser: ", "color: red; font-size: 25px", statUser)
+			console.log("%c 🚀 ~ file: session.js:110 ~ statUser: ", "color: red; font-size: 25px", statUser)
 
-			user.userStats = userInfo
-			user.Stats = statUser
-			console.log("%c 🚀 ~ file: session.js:105 ~ user: ", "color: red; font-size: 25px", user)
+
+			// Checking if userInfo and statUser are arrays and contain elements
+			user.userStats = Array.isArray(userInfo) && userInfo.length > 0 ? userInfo[0] : userInfo;
+			user.Stats = Array.isArray(statUser) && statUser.length > 0 ? statUser[0] : statUser;
+
+			// console.log("%c 🚀 ~ file: session.js:105 ~ user: ", "color: red; font-size: 25px", user)
 
 			if (user) {
 				const safeUser = {

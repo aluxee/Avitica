@@ -4,27 +4,31 @@ import { useEffect, useState, useRef } from 'react';
 // import { thunkLoadStats } from '../../store/stats';
 import './UserProfile.css';
 import { one, two, three, four, five } from '../../clips';
+import { useContext } from 'react';
+import { LoggedContext } from '../../context/LoggedProvider';
 
+function UserProfile() {
 
-function UserProfile({ user }) {
+	// console.log("%c 🚀 ~ file: UserProfile.jsx:11 ~ UserProfile ~ user: ", "color: blueviolet; font-size: 25px", profileUser) // no longer inheriting as prop, but using context instead
+	const { user } = useContext(LoggedContext);
+	console.log("%c 🚀 ~ file: UserProfile.jsx:14 ~ UserProfile ~ user: ", "color: blueviolet; font-size: 25px", user)
 
-	console.log("%c 🚀 ~ file: UserProfile.jsx:11 ~ UserProfile ~ user: ", "color: blueviolet; font-size: 25px", user)
 
 	const location = useLocation();
-	const userInfo = user.userStats[0]; // this is an array containing an object, to ensure always object we select the first and only index
-	console.log("%c 🚀 ~ file: UserProfile.jsx:12 ~ UserProfile ~ userInfo: ", "color: hotpink; font-size: 25px", userInfo, userInfo.gold)
+	const userInfo = user.userStats; // this is an array containing an object, to ensure always object we select the first and only index..but sometimes, thats not needed...
+	console.log("%c 🚀 ~ file: UserProfile.jsx:12 ~ UserProfile ~ userInfo: ", "color: hotpink; font-size: 25px", userInfo, userInfo?.gold)
 	//ensure userInfo is an object only:
 
 	// * -------------GOLD SECTION------------- *
 	const goldenHour = userInfo?.gold || 0;
-	console.log("%c 🚀 ~ file: UserProfile.jsx:19 ~ UserProfile ~ goldenHour: ", "color: hotpink; font-size: 25px", goldenHour, "and just in case ..., ", userInfo.gold)
+	// console.log("%c 🚀 ~ file: UserProfile.jsx:19 ~ UserProfile ~ goldenHour: ", "color: hotpink; font-size: 25px", goldenHour, "and just in case ..., ", userInfo.gold)
 
 	const storedGold = parseInt(localStorage.getItem('gold'), 10) || goldenHour;
 	console.log("%c 🚀 ~ file: UserProfile.jsx:20 ~ UserProfile ~ storedGold: ", "color: darkgoldenrod; font-size: 25px", storedGold)
 
 	const [gold, setGold] = useState(storedGold);
 	const goldRef = useRef(gold);
-	console.log("%c 🚀 ~ file: UserProfile.jsx:25 ~ UserProfile ~ goldRef: ", "color: red; font-size: 25px", goldRef)
+	// console.log("%c 🚀 ~ file: UserProfile.jsx:25 ~ UserProfile ~ goldRef: ", "color: red; font-size: 25px", goldRef)
 
 	useEffect(() => {
 		goldRef.current = gold

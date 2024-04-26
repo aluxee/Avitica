@@ -1,13 +1,14 @@
 import { thunkLoadTasks } from '../../store/task';
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import './AllTasks.css';
-// import EditTask from './EditTask';
+
 import OpenModalMenuItem from '../Navigation/OpenModalMenuItem';
 import OpenModalButton from '../OpenModalButton/OpenModalButton';
 import CreateTask from './CreateTask';
-// import DeleteTask from './DeleteTask';
 import Task from './Task';
+import { LoggedContext } from '../../context/LoggedProvider';
+
 
 
 function AllTasks() {
@@ -15,6 +16,8 @@ function AllTasks() {
 	// console.log("%c 🚀 ~ file: AllTasks.jsx:17 ~ AllTasks ~ tasks: ", "color: red; font-size: 25px", tasks)
 	// const [hover, setHover] = useState(null);
 	const [showMenu, setShowMenu] = useState(false);
+	const { user } = useContext(LoggedContext);
+
 	const taskObj = useSelector(state => state.task);
 
 	console.log("%c 🚀 ~ file: AllTasks.jsx:23 ~ AllTasks ~ taskObj: ", "color: orange; font-size: 25px", taskObj)
@@ -27,9 +30,21 @@ function AllTasks() {
 
 	const allStoredTasks = allTasks && JSON.parse(localStorage.getItem('tasks')) || allTasks; // note this may be glitchy to cycle thru due to storage inconsistency
 
-	console.log("%c 🚀 ~ file: AllTasks.jsx:108 ~ allStoredTasks: ", "color: orange; font-size: 25px", allStoredTasks)
+	console.log("%c 🚀 ~ file: AllTasks.jsx:33 ~ allStoredTasks: ", "color: orange; font-size: 25px", allStoredTasks)
 
-	// const [taskText, setTaskText] = useState("");
+	// * -------------GOLD SECTION------------- *
+	//!! grab the amount of gold, upon completion, dispatch a thunk that will handle completion of a task (using state) and grant additional gold to the user
+	// const storedGold = parseInt(localStorage.getItem('gold'), 10);
+
+	// const [gold, setGold] = useState(storedGold);
+	// console.log("%c 🚀 ~ file: AllTasks.jsx:40 ~ allStoredTasks: ", "color: orange; font-size: 25px",  storedGold)
+
+	// useEffect(() => {
+
+	// })
+	// * -------------TASK SECTION------------- *
+
+
 	const [tasks, setTasks] = useState([]);
 	//*error fix: tasks cannot disappear on refresh!
 
@@ -72,10 +87,6 @@ function AllTasks() {
 		//update list of tasks
 		// console.log("%c 🚀 ~ file: AllTasks.jsx:70 ~ handleTaskComplete ~ tasks: ", "color: red; font-size: 25px", tasks)
 		const updatedTaskList = tasks.filter(task => task.id !== taskId)
-
-		// console.log("%c 🚀 ~ file: AllTasks.jsx:68 ~ handleTaskComplete ~ updatedTaskList: ", "color: purple; font-size: 25px", updatedTaskList)
-
-		// console.log("%c 🚀 ~ file: AllTasks.jsx:61 ~ handleTaskComplete ~ taskId: ", "color: magenta; font-size: 25px", taskId)
 
 
 		localStorage.setItem('tasks', JSON.stringify(updatedTaskList))

@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, createContext } from "react";
+import { useState, useEffect, createContext } from "react";
 import { useSelector } from "react-redux";
 
 export const LoggedContext = createContext();

@@ -8,8 +8,6 @@ import './LoginFormModal.css';
 
 function LoginFormModal({ onModalOpen, onModalClosed, navModalOpen }) {
 
-	console.log("%c 🚀 ~ file: LoginFormModal.jsx:11 ~ LoginFormModal ~ onModalClosed: ", "color: red; font-size: 25px", onModalClosed)
-
 	const dispatch = useDispatch();
 	const sessionUser = useSelector((state) => state.session.user);
 	const [credential, setCredential] = useState("");
@@ -31,34 +29,25 @@ function LoginFormModal({ onModalOpen, onModalClosed, navModalOpen }) {
 	}, [onModalClosed, onModalOpen, modalRef]);
 
 
-	const handleOpenModal = () => {
-		setModalIsOpen(true);
-	};
-
-	const handleCloseModal = () => {
-		setModalIsOpen(false);
-	};
-
-	useEffect(() => {
-	// 	// Disable flipbook interaction when modal is open
-		if (modalIsOpen) {
-			onModalOpen();
-		} else {
-			// onModalClosed();
-			handleCloseModal()
-		}
-	}, [modalIsOpen, onModalOpen, onModalClosed, handleCloseModal]);
-
-
 	// const handleOpenModal = () => {
 	// 	setModalIsOpen(true);
-	// 	onModalOpen();
 	// };
 
 	// const handleCloseModal = () => {
 	// 	setModalIsOpen(false);
-	// 	onModalClosed();
 	// };
+
+	// useEffect(() => {
+	// // 	// Disable flipbook interaction when modal is open
+	// 	if (modalIsOpen) {
+	// 		onModalOpen();
+	// 	} else {
+	// 		// onModalClosed();
+	// 		handleCloseModal()
+	// 	}
+	// }, [modalIsOpen, onModalOpen, onModalClosed, handleCloseModal]);
+
+
 
 	if (sessionUser) return <Navigate to="/tasks" replace={true} />;
 
@@ -91,7 +80,7 @@ function LoginFormModal({ onModalOpen, onModalClosed, navModalOpen }) {
 
 	return (
 		<div className='login-modal'>
-			{/* <Modal */}
+			{/* <Modal
 				{/* isOpen={modalIsOpen} // Control modal visibility
 				onRequestClose={() => setModalIsOpen(false)} // Close modal on request
 				// onClick={handleOpenModal}

@@ -21,24 +21,24 @@ function LandingPage({ toggleMenu, showMenu, setShowMenu, onModalOpen, onModalCl
 
 	// enter useEffect to make flipbook changes
 
-	// Effect to disable flipbook interaction when modal is open
-	useEffect(() => {
-		const disableFlipBook = (e) => {
-			if (modalOpen) {
-				e.preventDefault();
-				e.stopPropagation();
-			}
-		};
+	// // Effect to disable flipbook interaction when modal is open
+	// useEffect(() => {
+	// 	const disableFlipBook = (e) => {
+	// 		if (modalOpen) {
+	// 			e.preventDefault();
+	// 			e.stopPropagation();
+	// 		}
+	// 	};
 
-		// Add event listener to disable interaction when modal is open; questionable necessity
-		document.addEventListener('click', disableFlipBook);
+	// 	// Add event listener to disable interaction when modal is open; questionable necessity
+	// 	document.addEventListener('click', disableFlipBook);
 
 
-		// Clean up event listener
-		return () => {
-			document.removeEventListener('click', disableFlipBook);
-		};
-	}, [modalOpen]);
+	// 	// Clean up event listener
+	// 	return () => {
+	// 		document.removeEventListener('click', disableFlipBook);
+	// 	};
+	// }, [modalOpen]);
 
 	// Function to handle modal open
 	const handleModalOpen = () => {

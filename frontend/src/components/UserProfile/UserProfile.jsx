@@ -11,11 +11,12 @@ function UserProfile({ user }) {
 	console.log("%c 🚀 ~ file: UserProfile.jsx:11 ~ UserProfile ~ user: ", "color: blueviolet; font-size: 25px", user)
 
 	const location = useLocation();
-	const userInfo = user.userStats;
-	console.log("%c 🚀 ~ file: UserProfile.jsx:12 ~ UserProfile ~ userInfo: ", "color: hotpink; font-size: 25px", userInfo)
+	const userInfo = user.userStats[0]; // this is an array containing an object, to ensure always object we select the first and only index
+	console.log("%c 🚀 ~ file: UserProfile.jsx:12 ~ UserProfile ~ userInfo: ", "color: hotpink; font-size: 25px", userInfo, userInfo.gold)
+	//ensure userInfo is an object only:
 
 	// * -------------GOLD SECTION------------- *
-	const goldenHour = userInfo ? userInfo.gold : 0;
+	const goldenHour = userInfo?.gold || 0;
 	console.log("%c 🚀 ~ file: UserProfile.jsx:19 ~ UserProfile ~ goldenHour: ", "color: hotpink; font-size: 25px", goldenHour, "and just in case ..., ", userInfo.gold)
 
 	const storedGold = parseInt(localStorage.getItem('gold'), 10) || goldenHour;
@@ -94,6 +95,7 @@ function UserProfile({ user }) {
 
 	}, [gold, location])
 	// * -------------HEALTH SECTION------------- *
+
 	const healthBar = userInfo.health ? userInfo.health : 100;
 
 	console.log("%c 🚀 ~ file: UserProfile.jsx:97 ~ UserProfile ~ healthBar: ", "color: crimson; font-size: 25px", healthBar)

@@ -1,19 +1,34 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import * as sessionActions from '../../store/session';
 import { useDispatch, useSelector } from 'react-redux';
 import { Navigate } from 'react-router-dom';
 import { useModal } from '../../context/Modal';
 import './LoginFormModal.css';
 
-function LoginFormModal() {
+function LoginFormModal({ onModalOpen, onModalClosed }) {
+
 	const dispatch = useDispatch();
 	const sessionUser = useSelector((state) => state.session.user);
 	const [credential, setCredential] = useState("");
 	const [password, setPassword] = useState("");
 	const [errors, setErrors] = useState({});
 	const { closeModal } = useModal();
+	const modalRef = useRef(null);
+	useEffect(() => {
+		// Disable flipbook interaction when modal is open
+		if (onModalOpen) {
+			onModalOpen()
+			//clean up interaction to return flipbook interactivity when modal is closed
+			return () => {
+				onModalClosed()
+			}
+		}
 
-	if (sessionUser) return <Navigate to="/" replace={true} />;
+	}, [onModalClosed, onModalOpen, modalRef]);
+
+
+
+	if (sessionUser) return <Navigate to="/tasks" replace={true} />;
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
@@ -44,6 +59,7 @@ function LoginFormModal() {
 
 	return (
 		<div className='login-modal'>
+
 			<h1>Log In</h1>
 			<form onSubmit={handleSubmit}>
 				<label>
@@ -66,11 +82,12 @@ function LoginFormModal() {
 				</label>
 				{errors.credential && <p>{errors.credential}</p>}
 				<div className='login-buttons'>
-				<button type="submit">Log In</button>
-				<button className='demo' onClick={demoUser}>Log in as Demo User</button>
+					<button type="submit">Log In</button>
+					<button className='demo' onClick={demoUser}>Log in as Demo User</button>
 
 				</div>
 			</form>
+			{/* </Modal> */}
 		</div>
 	);
 }

@@ -1,44 +1,51 @@
 import { NavLink } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import ProfileButton from './ProfileButton';
-import OpenModalButton from '../OpenModalButton';
-import LoginFormModal from '../LoginFormModal';
-import './Navigation.css';
 import UserProfile from '../UserProfile/UserProfile';
-import WelcomePage from '../WelcomePage';
-function Navigation({ isLoaded }) {
-	const sessionUser = useSelector((state) => state.session.user);
+import { useContext } from 'react';
+import { LoggedContext } from '../../context/LoggedProvider';
+import './Navigation.css';
 
-	sessionUser ? (
+function Navigation({ isLoaded }) {
+
+	const navigate = useNavigate();
+	const { user } = useContext(LoggedContext);
+
+	const otherRedirect = async () => {
+
+		await alert("Feature coming soon")
+		navigate('/tasks')
+	}
+
+
+	user ? (
 		<div className="yes-session-outer-container">
 			<div className="yes-session-inner-container">
 				<li className='nav-profile'>
-					<ProfileButton user={sessionUser} />
+					<ProfileButton />
 				</li>
 			</div>
 			<div className='yes-session user-stats'>
-				<UserProfile user={sessionUser} />
+				<UserProfile />
 			</div>
 		</div>
 	) : (
 		<>
 			<div className="no-session-outer-container">
-				<div className="no-session-inner-container">
+
+				{/* <div className="no-session-inner-container">
 					<li>
-						<OpenModalButton
-							buttonText="Log In"
-							modalComponent={<LoginFormModal />}
-						/>
+							<NavLink to="/login">Log In</NavLink>
 					</li>
 					<li>
 						<NavLink to="/signup">Sign Up</NavLink>
 					</li>
-				</div>
+					</div> */}
 				<div>
 
 				</div>
-				<footer>github: @aluxee</footer>
-			</div>
+				{/* <footer>github: @aluxee</footer> */}
+			</div >
 		</>
 	);
 
@@ -46,13 +53,13 @@ function Navigation({ isLoaded }) {
 		<>
 			<div className='nav-main-outer'>
 				<div className='nav-main-inner'>
-					<ul className='nav-main-list'>
-						<li className='nav-home'>
-							{
-								sessionUser ?
+					{user ?
+						<>
+							<ul className='nav-main-list'>
+								<li className='nav-home'>
 									<>
 										<div className='nav-left'>
-											<NavLink to='/' className={"active"}>
+											<NavLink to='/tasks' className={"active"}>
 												<section>
 
 													<div className='sign'>
@@ -61,17 +68,19 @@ function Navigation({ isLoaded }) {
 													</div>
 												</section>
 											</NavLink>
-											<NavLink to="/" className="yes-user-nav">To-Do&apos;s</NavLink>
+											<NavLink to="/tasks" className="yes-user-nav">To-Do&apos;s</NavLink>
 											<NavLink to='/inv'>Inventory</NavLink>
 											<NavLink to='/shop'>Shop</NavLink>
 											<NavLink
-												onClick={() => alert("Feature coming soon!")}
+												onClick={() => otherRedirect()}
 											>Battle</NavLink>
 										</div>
 									</>
-									:
+
+									{/* : */}
+									{/* END OF NAV LEFT */}
 									<>
-										<NavLink to='/'>
+										<NavLink to='/tasks'>
 											<section>
 
 												<div className='sign'>
@@ -82,36 +91,40 @@ function Navigation({ isLoaded }) {
 												</div>
 
 											</section>
-											Avitica
 										</NavLink>
 									</>
+									{/* } */}
+								</li>
 
-							}
-						</li>
-
-						<li className='nav-avatar'>
-
-						</li>
-						{isLoaded && (
-							<li className='nav_list' id='nav_profile'>
-								<ProfileButton user={sessionUser} />
-							</li>)}
-					</ul>
-					{sessionUser ?
-						<>
-
-							<ul className='nav-avatar-list'
-
-
-							>
-								<UserProfile user={sessionUser} />
+								{isLoaded && (
+									<li className='nav_list' id='nav_profile'>
+										<ProfileButton user={user} />
+									</li>)}
 							</ul>
-						</> :
-						<>
-							<div className='welcome' style={{ height: "1000", position: "relative", top: "5rem" }}>
-								<WelcomePage />
-							</div>
+							<ul className='user-profile-nav'>
+								<div className='nav-two'>
+									<UserProfile user={user} />
+								</div>
+							</ul>
 						</>
+						:
+						<div className='not-logged'>
+							<NavLink to='/' className={"active"}>
+								<section>
+
+									<div className='sign'>
+
+										<span className="fast-flicker" id='avitica'>A</span>vi<span className="flicker">t</span>ica
+									</div>
+								</section>
+							</NavLink>
+							{isLoaded && (
+								<li className='nav_list' id='nav_profile'>
+									{/* <ProfileButton user={user} />
+									NOTE: no nav pro buttons if not logged in
+									*/}
+								</li>)}
+						</div>
 					}
 				</div>
 			</div>

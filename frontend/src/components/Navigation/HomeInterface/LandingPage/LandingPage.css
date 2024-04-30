@@ -1,0 +1,210 @@
+/* .welcome-outer {
+	display: flex;
+	max-height: 950px;
+	background-image:
+	 url('https://i.pinimg.com/564x/f0/e4/16/f0e416b21fdb19644eabb71b7ab3a0c0.jpg');;
+	background-position: center;
+	background-repeat: no-repeat;
+	background-attachment: scroll;
+	position: relative;
+	top: 8rem;
+	width: 100%;
+	height: 100%;
+} */
+.welcome-outer {
+	margin: 5%;
+	padding: 2%;
+	width: 85%;
+	display: flex;
+	background: white;
+	flex-wrap: wrap;
+}
+
+.welcome {
+	overflow-y: scroll;
+}
+
+
+.welcome-inner {
+display: flex;
+	flex-direction: row-reverse;
+	flex-wrap: nowrap;
+	width: 100%;
+	height: 100%;
+	gap: 1.5rem;
+	padding: 2%;
+}
+
+.welcome-main {
+	/* background-image: url('https://i.pinimg.com/564x/f0/e4/16/f0e416b21fdb19644eabb71b7ab3a0c0.jpg');
+	background-position: center;
+	background-repeat: no-repeat;
+	background-attachment: scroll; */
+	/* max-width: 100%;
+	max-height: 100%;
+	width: 700px;
+	flex-direction: row;
+	justify-content: center;
+	align-items: flex-start;
+	flex-wrap: wrap;
+	align-content: flex-start;
+	margin-top: 10%;
+	color: darkgrey; */
+}
+.welcome-main{
+	display: flex;
+	flex-direction: column;
+	height: 300px;
+	justify-content: space-evenly;
+}
+.landing-nav {
+	position: relative;
+	top: 4rem;
+}
+
+.landing-right {
+	display: flex;
+	width: 50%;
+	flex-direction: column;
+	flex-wrap: nowrap;
+}
+
+.landing-right-heading {
+	display: flex;
+	flex-direction: row-reverse;
+	align-items: flex-end;
+}
+/* ____________________________________ */
+.landing-left {
+	display: flex;
+	flex-direction: column;
+	width: 50%;
+	flex-wrap: nowrap;
+	justify-content: center;
+}
+
+.landing-left-background {
+	display: flex;
+	flex-direction: column;
+
+}
+
+.landing-left-block {}
+
+.landing-left-pic {}
+
+/* ____________________________________ */
+
+/* .log-sign{ */
+	/* display: flex; */
+/* } */
+.signup > li.modal-menu-item{
+	font-size: medium;
+	text-decoration: underline;
+}
+.signup > li.modal-menu-item:hover{
+color: green
+}
+/* ____________________________________ */
+@keyframes showup {
+	0% {
+		opacity: 0;
+	}
+
+	20% {
+		opacity: 1;
+	}
+
+	80% {
+		opacity: 1;
+	}
+
+	100% {
+		opacity: 0;
+	}
+}
+
+@keyframes slidein {
+	0% {
+		margin-left: -800px;
+	}
+
+	20% {
+		margin-left: -800px;
+	}
+
+	35% {
+		margin-left: 0px;
+	}
+
+	100% {
+		margin-left: 0px;
+	}
+}
+
+@keyframes reveal {
+	0% {
+		opacity: 0;
+		width: 0px;
+	}
+
+	20% {
+		opacity: 1;
+		width: 0px;
+	}
+
+	30% {
+		width: 355px;
+	}
+
+	80% {
+		opacity: 1;
+	}
+
+	100% {
+		opacity: 0;
+		width: 355px;
+	}
+}
+
+body {
+	text-align: center;
+	background: linear-gradient(141deg, #ccc 25%, #eee 40%, #ddd 55%);
+	color: #555;
+	font-family: 'Roboto';
+	font-weight: 300;
+	/* font-size: 32px; */
+	/* padding-top: 40vh; */
+	/* height: 100vh; */
+}
+
+.thought2 {
+	width: min-content;
+	text-align: right;
+}
+
+div.escape {
+	display: inline-block;
+	overflow: hidden;
+	white-space: nowrap;
+}
+
+div.escape:first-of-type {
+	/* For increasing performance
+                       ID/Class should've been used.
+                       For a small demo
+                       it's okaish for now */
+	animation: showup 7s infinite;
+}
+
+div.escape:last-of-type {
+	width: 0px;
+	animation: reveal 7s infinite;
+}
+
+div.escape:last-of-type span {
+	margin-left: -355px;
+	animation: slidein 7s infinite;
+}
+
+/* LANDING MAIN */

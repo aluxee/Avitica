@@ -8,11 +8,20 @@ import * as sessionActions from "../../store/session";
 import OpenModalMenuItem from './OpenModalMenuItem';
 import LoginFormModal from '../LoginFormModal';
 import SignupFormModal from '../SignupFormModal';
+import { useContext } from 'react';
+import { LoggedContext } from '../../context/LoggedProvider';
 import './ProfileButton.css';
 
 
-// need for user? use context and use button context
-function ProfileButton({ user }) {
+
+function ProfileButton() {
+	const { user, loggedIn, setLoggedIn } = useContext(LoggedContext)
+
+	console.log("%c 🚀 ~ file: ProfileButton.jsx:17 ~ ProfileButton ~ loggedIn: ", "color: aqua; font-size: 25px", loggedIn)
+
+
+	console.log("%c 🚀 ~ file: ProfileButton.jsx:17 ~ ProfileButton ~ setLoggedIn: ", "color: aqua; font-size: 25px", setLoggedIn)
+
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 	const ulRef = useRef();
@@ -44,7 +53,7 @@ function ProfileButton({ user }) {
 
 		return () => document.removeEventListener("click", closeMenu);
 
-	}, [showMenu])
+	}, [showMenu, loggedIn])
 
 	const closeMenu = () => {
 		setShowMenu(false)
@@ -54,18 +63,10 @@ function ProfileButton({ user }) {
 		e.preventDefault();
 
 		dispatch(sessionActions.logout());
-		navigate('/')
 		alert("You have logged out.")
+		navigate('/');
+		setLoggedIn(false);
 	}
-
-	// const manageSpots = (e) => {
-	// 	e.preventDefault();
-
-
-	// 	navigate('/spots/current');
-	// 	closeMenu();
-	// }
-
 
 	const ulClassName = "profile-dropdown" + (showMenu ? "" : "hidden");
 	const hoverClassName = "caption" + (hover === "profile" ? "" : "hidden");
@@ -74,9 +75,9 @@ function ProfileButton({ user }) {
 	return (
 		<>
 			{<div className="outer-profile-container">
-				<NavLink to="/" className="no-user-nav">
+				<NavLink to="/tasks" className="no-user-nav">
 					<i
-						style={{color: "green"}}
+						style={{ color: "green" }}
 						className="fa-solid fa-house" />
 				</NavLink>
 				<div className="inner-profile-container">

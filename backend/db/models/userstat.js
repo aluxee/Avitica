@@ -2,6 +2,8 @@
 const {
   Model
 } = require('sequelize');
+
+const { User } = require('./user');
 module.exports = (sequelize, DataTypes) => {
   class userStat extends Model {
     /**
@@ -13,104 +15,81 @@ module.exports = (sequelize, DataTypes) => {
       // a joins table hybrid with seeded columns thus no ref will be involved in the model
     }
 
-    static async setDefWar(heroClass) {
-      if (heroClass !== 'Warrior') {
-        throw new Error('Must be Warrior class')
-      }
-      const level = this.getLevel()
-
-      // Calculate default stats for warriors based on level
-      const defHP = level === 1 ? 50 : Math.max(Math.round(50 * (level - 1) * 2.5));
-      const defSTR = 100 + (level - 1) * 75; // Core stat (STR) increases by 75 per level
-      const defPDEF = 100 + (level - 1) * 100;
-      // Other stats increase by 50 per level
-      const defMagic = 50 + (level - 1) * 50;
-      const defLuck = 50 + (level - 1) * 50;
-      const defMDef = 50 + (level - 1) * 50;
-      //update those stats
-      await userStat.upsert({
-        health: defHP,
-        strength: defSTR,
-        physicalDefense: defPDEF,
-        magic: defMagic,
-        magicDefense: defMDef,
-        luck: defLuck,
-      });
-    }
-
-    static async setDefMage(heroClass) {
-      if (heroClass !== 'Mage') {
-        throw new Error('Must be Mage class')
-      }
-      const level = this.getLevel()
-
-      // Calculate default stats for mages based on level
-      const defHP = level === 1 ? 50 : Math.max(Math.round(50 * (level - 1) * 2.5));
-      const defSTR = 50 + (level - 1) * 50;
-      const defPDEF = 50 + (level - 1) * 50;
-      const defMagic = 100 + (level - 1) * 100;
-      const defLuck = 50 + (level - 1) * 50;
-      const defMDef = 100 + (level - 1) * 75;
-      //update those stats
-      await userStat.upsert({
-        health: defHP,
-        strength: defSTR,
-        physicalDefense: defPDEF,
-        magic: defMagic,
-        magicDefense: defMDef,
-        luck: defLuck,
-      });
-    }
-    async calcHpAndExp(completed) {
-      const currLevel = this.getLevel();
-      let expGain;
-      let goldGain;
-      //increase gained exp points per task per level
-      if (completed) {
-        expGain = Math.max(10, 50 - (currLevel - 1) * 5);
-        /* 1: 50 exp, 2: 45 exp, 3: 40 exp, 4: 35 exp, 5: 30 exp
-        */
-        goldGain = Math.max(10, 85 + (currLevel - 1) * 12)
-        this.experience += expGain;
-        this.gold += goldGain;
-      } else {
-        const healthLoss = Math.ceil(12 * (currLevel * 0.75))
-        this.health -= healthLoss;
-      }
-      // If health drops below 0, reset to default hp based on level
-      if (this.health <= 0) {
-        this.health = this.calcDefaultHealth(currLevel); // Reset hp to default based on level
-        // Reset exp to default based on level
-        this.experience = this.calcDefaultExperience(currLevel);
-      }
-      return expGain;
-    }
-
     // Method to calculate default hp based on level
-    calcDefaultHealth(level) {
+    static calcDefaultHealth(level) {
       return level === 1 ? 50 : Math.max(Math.round(50 * (level - 1) * 2.5));
     }
-    calcDefaultExperience(level) {
+
+    // Method to calculate default experience based on level
+    static calcDefaultExperience(level) {
       return level === 1 ? 100 : Math.max(Math.round(((level - 1) * 25) * ((level - 1) * 1.25)), 0); // 2 = 125, 3 = 187, 5 = 500
     }
 
     // Method to calculate level dynamically based on amt of exp points
-    getLevel() {
+    static getLevel(experience, currLevel) {
       // Calculate level based on total experience
-      let level = 1;
-      if (level === null) {
-        level = 1
-        return level
-      }
-      let totalExp = this.experience;
+      let level = currLevel;
+      let totalExp = experience;
+
       while (totalExp >= Math.round(Math.max(((level - 1) * 25)) * ((level - 1) * 1.25)) && level < 5) {
         level++;
-
         totalExp -= Math.round(Math.max(((level - 1) * 25) * ((level - 1) * 1.25)))
       }
       return level;
     }
+
+    static async setDefaultStats(user, heroClass) {
+      let stats;
+
+      if (heroClass === 'Warrior') {
+        stats = await User.findOne({ where: { class: 'Warrior' } });
+      } else if (heroClass === 'Mage') {
+        stats = await User.findOne({ where: { class: 'Mage' } });
+      } else {
+        throw new Error('Invalid hero class');
+      }
+
+      if (!stats) {
+        throw new Error('Default stats for hero class not found');
+      }
+
+      // Update userStat with default stats
+      await userStat.upsert({
+        userId: user.id,
+        health: stats.health,
+        experience: user.experience || 0,
+        level: this.getLevel(user.experience || 0),
+        gold: user.gold || 0
+      });
+    }
+
+    async calcHpAndExp(completed) {
+      const currLevel = this.level;
+      let expGain;
+      let goldGain;
+
+      // Increase gained exp points per task per level
+      if (completed) {
+        expGain = Math.max(10, 200 + (currLevel - 1) * 75);
+        goldGain = Math.max(10, 85 + (currLevel - 1) * 12);
+        this.experience += expGain;
+        this.gold += goldGain;
+      } else {
+        const healthLoss = Math.ceil(12 * (currLevel * 0.75));
+        this.health -= healthLoss;
+      }
+
+      // If health drops below 0, reset to default hp based on level
+      if (this.health <= 0) {
+        this.health = userStat.calcDefaultHealth(currLevel); // Reset hp to default based on level
+        // Reset exp to default based on level
+        this.experience = userStat.calcDefaultExperience(currLevel);
+      }
+
+      return expGain;
+    }
   }
+
   userStat.init({
     userId: {
       type: DataTypes.INTEGER,
@@ -124,12 +103,16 @@ module.exports = (sequelize, DataTypes) => {
     experience: {
       type: DataTypes.FLOAT,
       allowNull: false,
-      defaultValue: 0 // default experience value, but code ensures it starts at 100
+      defaultValue: 0
     },
     gold: {
       type: DataTypes.FLOAT,
       allowNull: false,
       defaultValue: 0
+    },
+    level: {
+      type: DataTypes.INTEGER,
+      allowNull: false
     },
   }, {
     sequelize,

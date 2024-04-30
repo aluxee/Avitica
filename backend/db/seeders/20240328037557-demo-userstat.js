@@ -13,20 +13,23 @@ module.exports = {
       {
         userId: 1,
         health: 50,
-        experience: 100,
-        gold: 1000
+        experience: 0,
+        gold: 1000,
+        level: 1
       },
       {
         userId: 2,
         health: 125,
-        experience: 187,
-        gold: 3000
+        experience: 0,
+        gold: 3000,
+        level: 3
       },
       {
         userId: 3,
         health: 210,
-        experience: 500,
-        gold: 5000
+        experience: 0,
+        gold: 5000,
+        level: 5
       },
     ], options, { validate: true });
   },

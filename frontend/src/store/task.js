@@ -6,8 +6,7 @@ export const LOAD_CURRENT_TASK = 'tasks/LOAD_CURRENT_TASK';
 export const POST_TASK = 'tasks/POST_TASK';
 export const UPDATE_TASK = 'tasks/UPDATE_TASK';
 export const REMOVE_TASK = 'tasks/REMOVE_TASK';
-// for task completion status
-export const UPDATE_TASK_STATUS = 'tasks/UPDATE_TASK_STATUS';
+
 
 // /**  Action Creators: */
 
@@ -44,12 +43,6 @@ export const removeTask = (taskId) => {
 	}
 };
 
-export const updateTaskStatus = () => {
-	return {
-		type: UPDATE_TASK_STATUS,
-	}
-}
-
 // /** Thunk Action Creators: */
 
 //* load all tasks
@@ -79,7 +72,7 @@ export const thunkLoadCurrentTask = (taskId) => async dispatch => {
 
 	const tasksCurrentData = await response.json();
 
-	console.log("%c 🚀 ~ file: task.js:76 ~ thunkLoadCurrentTasks ~ tasksCurrentData: ", "color: cyan; font-size: 25px", tasksCurrentData)
+	// console.log("%c 🚀 ~ file: task.js:76 ~ thunkLoadCurrentTasks ~ tasksCurrentData: ", "color: cyan; font-size: 25px", tasksCurrentData)
 	if (response.ok) {
 
 		if (!tasksCurrentData.errors) {
@@ -90,17 +83,6 @@ export const thunkLoadCurrentTask = (taskId) => async dispatch => {
 		const errorResponse = await response.json()
 		return errorResponse
 	}
-	// if (response.ok) {
-
-
-
-	// 	await dispatch(loadCurrentTask(tasksCurrentData))
-	// 	return tasksCurrentData;
-
-	// } else {
-	// 	const errorResponse = await response.json();
-	// 	return errorResponse;
-	// }
 
 }
 
@@ -129,9 +111,7 @@ export const thunkCreateTask = (task) => async (dispatch) => {
 // edit a task
 export const thunkEditTask = (task, taskId) => async (dispatch) => {
 
-	console.log("%c 🚀 ~ file: task.js:132 ~ thunkEditTask ~ task: ", "color: yellow; font-size: 25px", task, "followed by task Id", taskId)
-
-
+	// console.log("%c 🚀 ~ file: task.js:132 ~ thunkEditTask ~ task: ", "color: yellow; font-size: 25px", task, "followed by task Id", taskId)
 
 	const response = await csrfFetch(`/api/tasks/${taskId}`, {
 		method: 'PUT',
@@ -140,6 +120,9 @@ export const thunkEditTask = (task, taskId) => async (dispatch) => {
 		},
 		body: JSON.stringify(task)
 	})
+
+		console.log("%c 🚀 ~ file: task.js:124 ~ thunkEditTask ~ task: ", "color: red; font-size: 25px", task)
+
 	// body passing task[taskId] => 400, task => 500, taskId => 400
 
 	console.log("%c 🚀 ~ file: task.js:133 ~ thunkEditTask ~ response: ", "color: red; font-size: 25px", response)
@@ -160,7 +143,7 @@ export const thunkEditTask = (task, taskId) => async (dispatch) => {
 // //* delete/remove a task
 export const thunkRemoveTask = (taskId) => async dispatch => {
 
-	console.log("%c 🚀 ~ file: task.js:174 ~ thunkRemoveTask ~ taskId: ", "color: cyan; font-size: 25px", taskId)
+	// console.log("%c 🚀 ~ file: task.js:151 ~ thunkRemoveTask ~ taskId: ", "color: cyan; font-size: 25px", taskId)
 
 
 	const response = await csrfFetch(`/api/tasks/${taskId}`, {
@@ -172,36 +155,10 @@ export const thunkRemoveTask = (taskId) => async dispatch => {
 
 	if (response.ok) { // removed data and replaced it with id
 
-		dispatch(removeTask(taskId))
+		await dispatch(removeTask(taskId))
 		// return taskId
 	}
 }
-
-
-// //* update task status
-export const thunkUpdateTaskStatus = (taskId) => async (dispatch) => {
-
-
-	const response = await csrfFetch(`/api/tasks/${taskId}/status`, {
-		method: 'PUT',
-		headers: {
-			"Content-Type": "application/json",
-		},
-		body: JSON.stringify(taskId)
-	})
-
-	const data = await response.json();
-
-	if (data.errors) {
-		const errorResponse = await response.json()
-		return errorResponse
-	} else {
-		const taskData = await dispatch(updateTaskStatus(taskId))
-		return taskData
-	}
-}
-
-
 
 
 // __________________________________________reducer________________________________________
@@ -217,7 +174,7 @@ const taskReducer = (state = initialState, action) => {
 		case LOAD_TASKS: {
 			const allTasksState = {};
 
-			console.log("%c 🚀 ~ file: task.js:182 ~ taskReducer ~ allTasksState: ", "color: red; font-size: 25px", allTasksState)
+			console.log("%c 🚀 ~ file: task.js:182 ~ taskReducer ~ allTasksState: ", "color: yellow; font-size: 25px", allTasksState)
 
 			action.tasks.Task.forEach(task => {
 				allTasksState[task.id] = task;
@@ -225,19 +182,7 @@ const taskReducer = (state = initialState, action) => {
 			return allTasksState;
 		}
 
-
 		case LOAD_CURRENT_TASK: {
-			// const currentTaskState = { ...state };
-
-			// action.tasks.Task.forEach(task => {
-			// 	const newTaskState = { ...task }
-
-			// 	currentTaskState[task.id] = { ...state[task.id], ...newTaskState };
-
-			// })
-			// return currentTaskState;
-			console.log("%c 🚀 ~ file: Checklist.jsx:198 ~ state ~ state inside load curr: ", "color: crimson; font-size: 25px", state)
-
 			return { ...state, [action.task.id]: action.task };
 		}
 
@@ -256,9 +201,6 @@ const taskReducer = (state = initialState, action) => {
 			return removeState;
 		}
 
-		case UPDATE_TASK_STATUS: {
-			return { ...state, [action.task.id]: action.task };
-		}
 
 		default:
 			return state;

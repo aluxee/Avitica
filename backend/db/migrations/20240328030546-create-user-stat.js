@@ -37,6 +37,10 @@ module.exports = {
         allowNull: false,
         defaultValue: 0
       },
+      level: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

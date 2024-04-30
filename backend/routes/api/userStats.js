@@ -182,48 +182,46 @@ router.get('/:userId/potion', requireAuth, async (req, res) => {
 
 
 
-// Get userStats for a user upon task completion
-// see the put route for the put request of task
-router.get('/current', async (req, res) => {
-	//! this may end up hanging, do not test solely on the backend
+// Get userStats max stats (exp and health) for a user upon task completion
 
-	const { completed } = req.body;
-	const taskMark = await Task.findAll({
+router.get('/max-stats/:level', requireAuth, async (req, res) => {
+	const { level } = req.params;
+
+	const userStatus = await userStat.findByPk(req.user.id, {
 		where: {
 			userId: req.user.id
 		}
 	})
-	try {
-		const userInfo = await userStat.findByPk(req.user.id);
 
-		console.log("%c 🚀 ~ file: userStats.js:201 ~ router.get ~ userInfo: ", "color: red; font-size: 25px", userInfo)
+	let maxHp;
+	let maxExp;
+	if (userStatus.level === 1) {
 
+		maxHp = 50;
+		maxExp = 100;
+		userStatus.maxHp = maxHp
+		userStatus.maxExp = maxExp
+		await userStatus.save()
 
+	} else {
+		maxHp = Math.max(Math.round(50 * (parseInt(level) - 1) * 2.5), 0);
+		maxExp = Math.max(Math.round(((parseInt(level) - 1) * 25) * ((parseInt(level) - 1) * 1.25)), 0);
 
-		// Determine current level
-		const level = userInfo?.getLevel();
+		userStatus.maxHp = maxHp
+		userStatus.maxExp = maxExp
+		await userStatus.save()
 
-		console.log("%c 🚀 ~ file: userStats.js:205 ~ router.get ~ level: ", "color: red; font-size: 25px", level)
-
-
-		// Calculating exp gain and updating health upon task completion (or failure to complete)
-		if (completed) {
-			taskMark.completed = completed
-			userInfo.calcHpAndExp(completed);
-			// Save changes to userStats
-			await userInfo.save();
-
-			res
-				.status(200)
-				.json({ userInfo, level });
-		}
-
-	} catch (error) {
-		console.error(error);
-		res
-			.status(500)
-			.json({ message: 'Internal server error' });
 	}
+	console.log("%c 🚀 ~ file: userStats.js:220 ~ router.get ~ userStatus: ", "color: red; font-size: 25px", userStatus)
+
+	return res
+		.status(200)
+		.json({
+			maxStat: {
+				maxHp, maxExp
+			}
+		})
+
 });
 
 
@@ -236,29 +234,26 @@ router.get('/', requireAuth, async (req, res) => {
 		// without a user stat we need to create one as a default, though this is still ultimately a "GET"
 		const { user } = req;
 
+		console.log("%c 🚀 ~ file: userStats.js:245 ~ router.get ~ user: ", "color: red; font-size: 25px", user)
+
+
 		// all the userStats of a user (health, exp)
 
 		//	fetch the stats after making the default
-		// const userStats = await userStat.findByPk(user.id, {
-		// 	// where: {
-		// 	// 	userId: user.id
-		// 	// },
-		// 	attributes: {
-		// 		exclude: [
-		// 			'createdAt', 'updatedAt'
-		// 		]
-		// 	}
-		// })
-		
-
-		const level = userStats ? userStats.getLevel() : 1;
-		userStats.level = level
-
+		const userStats = await userStat.findByPk(user.id, {
+			where: {
+				userId: user.id
+			},
+			attributes: {
+				exclude: [
+					'createdAt', 'updatedAt'
+				]
+			}
+		})
 
 		return res
-			.json({ Stats: userStats })
+			.json({ userStats })
 	} catch (err) {
-
 		return res
 			.status(400)
 			.json({

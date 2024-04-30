@@ -32,8 +32,8 @@
 
 .main-shop {
 	display: flex;
-	width: 85%;
-	height: 85%;
+	/* width: 85%; */
+	/* height: 85%; */
 	flex-direction: row;
 	flex-wrap: wrap;
 	align-items: baseline;

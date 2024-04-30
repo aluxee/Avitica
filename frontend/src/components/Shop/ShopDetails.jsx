@@ -1,6 +1,7 @@
 // import { csrfFetch } from '../../store/csrf';
 import { useSelector, useDispatch } from 'react-redux';
 import { useEffect, useRef, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import OpenModalMenuItem from '../Navigation/OpenModalMenuItem';
 import './ShopDetails.css';
 import { thunkLoadShop } from '../../store/shop';
@@ -11,6 +12,7 @@ import { useModal } from '../../context/Modal';
 import { useNavigate } from 'react-router-dom';
 function ShopDetails() {
 	const navigate = useNavigate();
+	const location = useLocation();
 	const dispatch = useDispatch();
 	const { closeModal } = useModal();
 	const marketObj = useSelector(state => state.shop)
@@ -22,8 +24,12 @@ function ShopDetails() {
 
 	console.log("%c 🚀 ~ file: ShopDetails.jsx:23 ~ ShopDetails ~ market: ", "color: red; font-size: 25px", market)
 
+	//!! change to extracting from context
 	const theUser = useSelector(state => state.session.user)
 	const userStats = theUser.userStats;
+
+	console.log("%c 🚀 ~ file: ShopDetails.jsx:30 ~ ShopDetails ~ userStats: ", "color: red; font-size: 25px", userStats)
+
 	const goldenHour = userStats ? userStats.gold : 0;
 
 	// console.log("%c 🚀 ~ file: ShopDetails.jsx:26 ~ ShopDetails ~ goldenHour: ", "color: red; font-size: 25px", goldenHour)
@@ -34,7 +40,7 @@ function ShopDetails() {
 
 	console.log("%c 🚀 ~ file: ShopDetails.jsx:32 ~ ShopDetails ~ gold: ", "color: yellow; font-size: 25px", gold) // needs to be changed in order to reflect live
 
-	const goldRef = useRef(gold)
+	const goldRef = useRef(gold);
 
 	// console.log("%c 🚀 ~ file: ShopDetails.jsx:33 ~ ShopDetails ~ goldRef: ", "color: magenta; font-size: 25px", goldRef)
 	//* suspect the issue with sustaining gold default in storage is on this component, the userProfile seems fine
@@ -44,9 +50,12 @@ function ShopDetails() {
 		setCart(storedCartItems);
 
 		const storedGold = parseInt(localStorage.getItem('gold'), 10) || goldenHour;
-		setGold(storedGold)
-		dispatch(thunkLoadShop())
-	}, [goldenHour, dispatch])
+		setGold(storedGold);
+		// also reflect it on userStats.gold
+		userStats.gold = gold;
+		dispatch(thunkLoadShop());
+		localStorage.setItem('gold', gold.toString());
+	}, [goldenHour, dispatch, location, gold])
 
 	useEffect(() => {
 		goldRef.current = gold
@@ -54,11 +63,8 @@ function ShopDetails() {
 
 
 
-	useEffect(() => {
-
-		localStorage.setItem('gold', gold.toString());
-
-	}, [gold]) // in order to reflect as not just NaN, the dep array has to keep track of goldenHour
+	// useEffect(() => {
+	// }, [gold, location]) // in order to reflect as not just NaN, the dep array has to keep track of goldenHour
 
 
 
@@ -74,7 +80,9 @@ function ShopDetails() {
 		setGold(prevGold => {
 			prevGold = gold || prevGold;
 			const updatedGold = prevGold;
-			setGold(updatedGold)
+			setGold(updatedGold);
+			// also reflect it on userStats.gold
+			userStats.gold = gold;
 			localStorage.setItem('gold',
 				updatedGold.toString())
 			return updatedGold
@@ -98,8 +106,6 @@ function ShopDetails() {
 		setCart(updatedCartItems);
 		closeModal();
 	}
-
-
 
 	const removeFromCart = () => {
 		setCart([])
@@ -162,22 +168,18 @@ function ShopDetails() {
 
 		setGold(goldAmt);
 
-
-
 		// Clear cart items from both local state and localStorage
 		setCart([]);
 
 		localStorage.removeItem("cartItems");
 		closeModal()
 		localStorage.setItem('cartItems', JSON.stringify([]));
+
 		//check out
 		navigate('/inv');
-
+		parseInt(localStorage.getItem('gold'), 10)
 
 	};
-
-
-
 
 
 	return (
@@ -202,6 +204,8 @@ function ShopDetails() {
 									itemId={cart && cart.map(item => item.id)}
 									clearCart={moveItemsToInventory}
 									removeItemFromCart={removeItemFromCart}
+									location={location}
+
 								/>
 							}
 							onButtonClick={closeModal}

@@ -6,6 +6,7 @@ import listReducer from "./checklist";
 import statsReducer from "./stats";
 import shopReducer from "./shop";
 import invReducer from "./inventory";
+import userStatsReducer from "./userStats";
 
 const rootReducer = combineReducers({
 	session: sessionReducer,
@@ -13,7 +14,8 @@ const rootReducer = combineReducers({
 	task: taskReducer,
 	checklist: listReducer,
 	shop: shopReducer,
-	inventory: invReducer
+	inventory: invReducer,
+	userStats: userStatsReducer,
 });
 
 let enhancer;

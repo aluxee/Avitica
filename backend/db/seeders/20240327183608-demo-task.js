@@ -15,7 +15,7 @@ module.exports = {
         userId: 1,
         difficulty: 'Trivial',
         dueDate: new Date("2024-04-30"),
-        complete: true
+        completed: false
       },
       {
         title: 'Exercise for 10 minutes',
@@ -23,7 +23,7 @@ module.exports = {
         userId: 1,
         difficulty: 'Trivial',
         dueDate: new Date("2024-04-30"),
-        completed: true
+        completed: false
       },
       {
         title: 'Study for 1 hour',
@@ -39,7 +39,7 @@ module.exports = {
         userId: 2,
         difficulty: 'Trivial',
         dueDate: new Date("2024-04-15"),
-        completed: true
+        completed: false
       },
       {
         title: 'Read for 1 hour',
@@ -47,7 +47,7 @@ module.exports = {
         userId: 2,
         difficulty: 'Trivial',
         dueDate: new Date("2024-04-15"),
-        completed: true
+        completed: false
       },
       {
         title: 'Write down achievements for the day',
@@ -63,7 +63,7 @@ module.exports = {
         userId: 3,
         difficulty: 'Trivial',
         dueDate: new Date("2024-04-25"),
-        completed: true
+        completed: false
       },
       {
         title: 'Organize work assignments for the week',
@@ -79,7 +79,7 @@ module.exports = {
         userId: 3,
         difficulty: 'Trivial',
         dueDate: new Date("2024-04-19"),
-        completed: true
+        completed: false
       },
     ], options, { validate: true });
   },

@@ -1,4 +1,6 @@
 import React from 'react';
+// import ReactModal from 'react-modal';
+
 import ReactDOM from 'react-dom/client';
 import { Provider } from 'react-redux';
 import App from './App';
@@ -6,7 +8,7 @@ import configureStore from './store';
 import './index.css';
 import { restoreCSRF, csrfFetch } from './store/csrf';
 import { Modal, ModalProvider } from './context/Modal';
-
+import { LoggedProvider } from './context/LoggedProvider';
 
 
 const store = configureStore();
@@ -32,8 +34,10 @@ ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <ModalProvider>
       <Provider store={store}>
-        <App />
-        <Modal />
+        <LoggedProvider>
+          <App />
+          <Modal />
+        </LoggedProvider>
       </Provider>
     </ModalProvider>
   </React.StrictMode>

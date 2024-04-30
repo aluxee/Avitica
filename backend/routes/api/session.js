@@ -42,15 +42,7 @@ router.post(
 					email: credential
 				}
 			},
-			// include: [userStat, Stat]
-			include: [
-				{
-					model: userStat,
-				},
-				{
-					model: Stat
-				}
-			]
+			include: [userStat, Stat]
 		});
 
 
@@ -62,7 +54,15 @@ router.post(
 			err.errors = { credential: 'The provided credentials were invalid.' };
 			return next(err);
 		}
-		console.log("%c 🚀 ~ file: session.js:47 ~ user ~ user: ", "color: red; font-size: 25px", user)
+		// console.log("%c 🚀 ~ file: session.js:65 ~ user ~ user: ", "color: red; font-size: 25px", user, user.userStats)
+
+		// const userInfo = await userStat.findByPk(user.id)
+		// const statUser = await Stat.findByPk(user.id)
+
+
+		// Checking if userInfo and statUser are arrays and contain elements
+		const userStats = Array.isArray(user.userStats) && user.userStats.length > 0 ? user.userStats[0] : user.userStats;
+		const Stats = Array.isArray(user.Stats) && user.Stats.length > 0 ? user.Stats[0] : user.Stats;
 
 		const safeUser = {
 			id: user.id,
@@ -70,8 +70,8 @@ router.post(
 			displayName: user.displayName,
 			email: user.email,
 			heroClass: user.heroClass,
-			userStats: user.userStats,
-			Stats: user.Stats
+			userStats,
+			Stats
 		};
 
 		await setTokenCookie(res, safeUser);
@@ -111,9 +111,12 @@ router.get(
 
 			// console.log("%c 🚀 ~ file: session.js:110 ~ statUser: ", "color: red; font-size: 25px", statUser)
 
-			user.userStats = userInfo
-			user.Stats = statUser
-			console.log("%c 🚀 ~ file: session.js:105 ~ user: ", "color: red; font-size: 25px", user)
+
+			// Checking if userInfo and statUser are arrays and contain elements
+			user.userStats = Array.isArray(userInfo) && userInfo.length > 0 ? userInfo[0] : userInfo;
+			user.Stats = Array.isArray(statUser) && statUser.length > 0 ? statUser[0] : statUser;
+
+			// console.log("%c 🚀 ~ file: session.js:105 ~ user: ", "color: red; font-size: 25px", user)
 
 			if (user) {
 				const safeUser = {

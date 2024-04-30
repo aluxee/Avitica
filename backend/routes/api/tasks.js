@@ -192,9 +192,70 @@ router.get('/:taskId/checklist', requireAuth, async (req, res) => {
 
 
 
+//stat helper functions
+function calcDefaultHealth(level) {
+	return level === 1 ? 50 : Math.max(Math.round(50 * (level - 1) * 2.5));
+}
+
+function calcDefaultExperience(level) {
+	return level === 1 ? 100 : Math.max(Math.round(((level - 1) * 25) * ((level - 1) * 1.25)), 0); // 2 = 125, 3 = 187, 5 = 500
+}
+function getLevel(experience, currLevel) {
+	let level = currLevel;
+	let totalExp = experience;
+
+	while (totalExp >= Math.round(Math.max(((level - 1) * 25)) * ((level - 1) * 1.25)) && level < 10) {
+		level++;
+		totalExp -= Math.round(Math.max(((level - 1) * 25) * ((level - 1) * 1.25)))
+	}
+	return level;
+}
+Math.max(((2 - 1) * 25)) * ((2 - 1) * 1.25)
+function calculateExperienceThreshold(currentLevel) {
+	// Define base experience and experience increment
+	const baseExperience = 100; // Adjust this value as needed
+	const experienceIncrement = 50; // Adjust this value as needed
+
+	// Calculate the experience threshold for the next level
+	const threshold = baseExperience + (currentLevel - 1) * experienceIncrement;
+
+	return threshold;
+}
+
+function calcHpAndExp(completed, level) {
+	const currLevel = level;
+	let expGain;
+	let goldGain;
+
+	// Increase gained exp points per task per level
+	if (completed) {
+		expGain = Math.max(10, 50 - (currLevel - 1) * 5);
+		goldGain = Math.max(10, 85 + (currLevel - 1) * 12);
+		this.experience += expGain;
+		this.gold += goldGain;
+	} else {
+		const healthLoss = Math.ceil(12 * (currLevel * 0.75));
+		this.health -= healthLoss;
+	}
+
+	// If health drops below 0, reset to default hp based on level
+	if (this.health <= 0) {
+		this.health = userStat.calcDefaultHealth(currLevel); // Reset hp to default based on level
+		// Reset exp to default based on level
+		this.experience = userStat.calcDefaultExperience(currLevel);
+
+		// console.log("%c 🚀 ~ file: tasks.js:247 ~ calcHpAndExp ~ this.experience: ", "color: red; font-size: 25px", this.experience)
+
+	}
+
+}
+
+
+
+
 
 // * Keep in mind there are two types of task edits: one will edit the task itself, the other updates the task when a task is marked as complete or incomplete -- this one is the latter
-
+//TODO: re-eval update of exp and gold
 router.put('/:taskId/status', requireAuth, async (req, res) => {
 	const { taskId } = req.params;
 	//find userStat information
@@ -203,45 +264,114 @@ router.put('/:taskId/status', requireAuth, async (req, res) => {
 			userId: req.user.id
 		}
 	})
+
+	// console.log("%c 🚀 ~ file: tasks.js:207 ~ router.put ~ userStatus: ", "color: red; font-size: 25px", userStatus)
+
 	const taskUpdate = await Task.findByPk(taskId, {
 		where: {
 			userId: req.user.id
 		}
 	})
-	// retrieve user's current level
-	const currLevel = userStatus.getLevel();
-	// initialize experience gain to start at 0
-	let expGain = 0;
-	//initialize gold gain variable
-	let goldGain;
-	if (taskUpdate.completed === true) {
-		expGain = Math.max(10, 50 - (currLevel - 1) * 5);
-		userStatus.experience += expGain;
-		goldGain = Math.max(10, 85 + (currLevel - 1) * 12)
-		userStatus.gold += goldGain;
-		// also must consider level increase
-		const newLevel = userStatus.getLevel();
+	if (!userStatus || !taskUpdate) {
+		return res
+			.status(404)
+			.json({ message: 'User status or task not found' });
+	}
 
-		if (newLevel > currLevel) {
-			//perform actions related to level up (most likely a front end dealings)
+	// console.log("%c 🚀 ~ file: tasks.js:215 ~ router.put ~ taskUpdate: ", "color: red; font-size: 25px", taskUpdate)
+
+	// retrieve user's current level
+	const currLevel = userStatus.level;
+	const expThreshold = calculateExperienceThreshold(currLevel)
+	// initialize experience gain variable
+	// let expGain = 0;
+	//initialize gold gain variable
+	// let goldGain = 0;
+
+	if (taskUpdate.completed === true) {
+		calcHpAndExp(taskUpdate.completed, currLevel)
+		let expGain;
+		let goldGain;
+		expGain = Math.max(10, 50 - (currLevel - 1) * 5);
+		goldGain = Math.max(10, 85 + (currLevel - 1) * 12);
+
+		userStatus.experience += expGain;
+
+		// console.log("%c 🚀 ~ file: tasks.js:301 ~ router.put ~ expGain: ", "color: red; font-size: 25px", expGain)
+
+
+		// console.log("%c 🚀 ~ file: tasks.js:301 ~ router.put ~ userStatus.experience: ", "color: red; font-size: 25px", userStatus.experience)
+
+		userStatus.gold += goldGain;
+		await userStatus.save();
+
+		if (userStatus.experience >= expThreshold) {
+			// Level up logic
+			userStatus.level++;
+			userStatus.experience = 0;
+
+			// Reset health and experience to default values for the new level
+			userStatus.health = calcDefaultHealth(userStatus.level);
+			// userStatus.experience = calcDefaultExperience(userStatus.level);
+
+			await userStatus.save();
 			return res
 				.status(200)
 				.json({
-					message: `Congratulations! You've reached level ${newLevel}`
+					userStats: {
+						level: userStatus.level,
+						experience: userStatus.experience,
+						gold: userStatus.gold,
+						health: userStatus.health, // Include any other relevant user stats
+					},
+					levelUp: true,
 				})
 		}
+		// save the updated userStatus
+		await userStatus.save();
+
+		return res
+			.status(201)
+			.json({
+				userStats: {
+					level: userStatus.level,
+					experience: userStatus.experience,
+					gold: userStatus.gold,
+					health: userStatus.health // Include any other relevant user stats
+				}
+			})
 	} else {
 		const healthLoss = Math.ceil(12 * (currLevel * 0.75))
 		userStatus.health -= healthLoss;
 
 		if (userStatus.health <= 0) {
 			userStatus.health = userStatus.calcDefaultHealth(currLevel)
-			userStatus.experience = 0
+
+			// console.log("%c 🚀 ~ file: tasks.js:254 ~ router.put ~ userStatus.health: ", "color: red; font-size: 25px", userStatus, userStatus.health)
+
+			userStatus.experience = 0;
+			await userStatus.save();
+			const newUserStats = {
+				userId: req.user.id,
+				experience: userStatus.experience,
+				gold: userStatus.gold,
+				health: userStatus.health,
+				level: userStatus.level
+			}
 			return res
+				.status(200)
 				.json({
-					message: `Oh no! Your health has been completely depleted! Your experience and health will now reset.`
-				})
+					userStats: newUserStats,
+					message: `Oh no! Your health has been completely depleted! Your experience and health will now reset.`,
+					levelUp: false,
+				},
+				)
 		}
+		return res
+			.status(200)
+			.json({
+				userStat: userStatus
+			})
 	}
 })
 
@@ -270,7 +400,7 @@ router.put('/:taskId', requireAuth, async (req, res) => {
 			},
 		});
 
-		console.log("%c 🚀 ~ file: tasks.js:275 ~ router.put ~ taskUpdate: ", "color: red; font-size: 25px", taskUpdate)
+		// console.log("%c 🚀 ~ file: tasks.js:273 ~ router.put ~ taskUpdate: ", "color: red; font-size: 25px", taskUpdate)
 
 
 		const thisDate = Date.now();
@@ -295,6 +425,7 @@ router.put('/:taskId', requireAuth, async (req, res) => {
 		taskUpdate.notes = notes
 		taskUpdate.difficulty = difficulty || "Trivial" || null
 		taskUpdate.dueDate = dueDate || stringDate
+
 		// utilize the task completion (boolean) attribute prior to the point changes
 		taskUpdate.completed = completed
 
@@ -366,17 +497,21 @@ router.delete('/:taskId', requireAuth, async (req, res) => {
 		}
 	})
 
+
+
 	if (!taskId) {
 		return res
 			.status(404)
 			.json({
 				"error": "Task could not be found"
 			})
+
 	}
+	console.log("%c 🚀 ~ file: tasks.js:386 ~ router.delete ~ task: ", "color: red; font-size: 25px", "HELLO THIS IS DELETING A TASK !!!!!!! \n", task)
 
 	await task.destroy();
 
-	res
+	return res
 		.status(200)
 		.json({
 			message: "Successfully deleted"

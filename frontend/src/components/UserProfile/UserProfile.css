@@ -1,10 +1,10 @@
 div.user-container {
 	display: flex;
-	width: 90%;
+	width: 100%;
 	flex-direction: row;
 	align-items: center;
-	margin-top: 2%;
-	margin-inline-end: 3%;
+	/* margin-top: 2%; */
+	margin-inline-end: 2%;
 }
 
 .user-info {
@@ -27,10 +27,11 @@ div.user-container {
 
 .info-container {
 	display: flex;
-	width: 30%;
+	width: 50%;
+	padding: 0rem 0.5rem;
 	flex-direction: row;
 	align-items: flex-start;
-	justify-content: space-between;
+	justify-content: flex-start;
 	flex-wrap: nowrap;
 }
 
@@ -40,12 +41,24 @@ div.user-container {
 
 .user-stats {
 	display: flex;
-	flex-direction: column;
-	margin-bottom: 10%;
-	justify-content: center;
 	align-items: flex-end;
-	height: 50px;
-	margin-inline-start: 20%;
+	flex-wrap: wrap;
+	flex-direction: column;
+	align-content: flex-end;
+	margin-inline-start: 5%;
+}
+
+.user-lvl{
+	display: flex;
+	font-size: larger;
+	font-weight: bold;
+	color: fuchsia;
+	gap: 5px;
+}
+
+.lvl-value{
+	color: #555;
+	font-weight: lighter;
 }
 
 .user-label {
@@ -55,7 +68,10 @@ div.user-container {
 }
 
 .gold-amt {
-	color: black;
+	color: lawngreen;
+	font-size: large;
+	font-weight: bold;
+	;
 	font-size: large;
 	font-weight: bold;
 }

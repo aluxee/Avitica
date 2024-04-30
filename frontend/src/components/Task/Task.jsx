@@ -1,9 +1,10 @@
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useModal } from '../../context/Modal';
 import { useState, useEffect } from 'react';
 import Checklist from './Checklist/Checklist';
 import { thunkEditTask, thunkLoadCurrentTask, thunkRemoveTask, thunkLoadTasks } from '../../store/task';
-import { useSelector } from 'react-redux';
+import OpenModalMenuItem from '../Navigation/OpenModalMenuItem';
+
 import './Task.css';
 function Task({ task, taskId }) {
 	const dispatch = useDispatch();
@@ -276,7 +277,14 @@ function Task({ task, taskId }) {
 						<Checklist taskId={taskId} checklist={checklist} setChecklist={setChecklist} />
 						:
 						<>
-							Create a checklist!
+							<OpenModalMenuItem
+								className="checklist-modal"
+								itemText={"Create a Checklist!"}
+								onItemClick={toggleMenu}
+							// modalComponent={}
+							//TODO: ADD MODAL COMPONENT TO CREATE CHECKLIST
+							/>
+
 						</>
 					}
 				</label>

@@ -14,11 +14,9 @@ import { LoggedContext } from '../../context/LoggedProvider';
 
 
 function AllTasks() {
-	console.log("START FUNCTION COMPONENT ALLTASKS")
+
 	const location = useLocation();
 	const dispatch = useDispatch();
-	// console.log("%c 🚀 ~ file: AllTasks.jsx:17 ~ AllTasks ~ tasks: ", "color: red; font-size: 25px", tasks)
-	// const [hover, setHover] = useState(null);
 	const [showMenu, setShowMenu] = useState(false);
 	const { user } = useContext(LoggedContext);
 
@@ -33,12 +31,6 @@ function AllTasks() {
 
 
 	// * -------------GOLD SECTION------------- *
-
-	// retrieve curr gold amount
-	// const storedGold = parseInt(localStorage.getItem('gold'), 10);
-
-	// console.log("%c 🚀 ~ file: AllTasks.jsx:40 ~ AllTasks ~ storedGold: ", "color: red; font-size: 25px", storedGold)
-
 
 	// save the local storage amt to state
 	const [gold, setGold] = useState('');
@@ -136,12 +128,6 @@ function AllTasks() {
 			if (updatedUserStats && updatedUserStats.userStats) {
 				const results = await dispatch(thunkLoadUserStats())
 				user.userStats = results.userStats
-
-				// const newGold = user.userStats.gold
-
-				// setGold(newGold)
-				// localStorage.setItem('gold', newGold.toString())
-
 
 			}
 

@@ -129,7 +129,7 @@ router.get('/:userId/equipped', requireAuth, async (req, res) => {
 //route where an inventory item potion is used it will apply to the depleted health
 router.get('/:userId/potion', requireAuth, async (req, res) => {
 	const { userId } = req.params;
-	const potionItem = await Inventory.findAll({
+	const potionItems = await Inventory.findAll({
 		where: {
 			userId,
 			healthBoost: true
@@ -138,7 +138,7 @@ router.get('/:userId/potion', requireAuth, async (req, res) => {
 			exclude: ['gear', 'wep', 'statBoost', 'equipped']
 		}
 	})
-	if (potionItem.length === 0) {
+	if (potionItems.length === 0) {
 		return res
 			.status(404)
 			.json({

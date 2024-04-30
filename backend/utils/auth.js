@@ -76,7 +76,7 @@ const requireAuth = function (req, _res, next) {
 
 
 const authorization = async function (req, res, next) {
-	const { taskId, userId, checklistId } = req.params;
+	const { taskId, userId, checklistId, itemId } = req.params;
 
 
 	if (taskId) {
@@ -98,7 +98,8 @@ const authorization = async function (req, res, next) {
 		}
 		if (req.user.id !== task.userId) handleNotAuthorized(res)
 	}
-	next()
+
+	next();
 };
 
 

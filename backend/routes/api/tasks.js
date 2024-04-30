@@ -252,7 +252,7 @@ function calcHpAndExp(completed, level) {
 
 
 // * Keep in mind there are two types of task edits: one will edit the task itself, the other updates the task when a task is marked as complete or incomplete -- this one is the latter
-//TODO: re-eval update of exp and gold
+
 router.put('/:taskId/status', requireAuth, async (req, res) => {
 	const { taskId } = req.params;
 	//find userStat information
@@ -512,7 +512,7 @@ router.delete('/:taskId', requireAuth, async (req, res) => {
 			})
 
 	}
-	console.log("%c 🚀 ~ file: tasks.js:386 ~ router.delete ~ task: ", "color: red; font-size: 25px", "HELLO THIS IS DELETING A TASK !!!!!!! \n", task)
+
 
 	await task.destroy();
 
@@ -529,6 +529,7 @@ router.delete('/:taskId', requireAuth, async (req, res) => {
 router.post('/new', requireAuth, async (req, res) => {
 	// const { title, notes, difficulty, dueDate } = req.body;
 	const { title, notes, difficulty, dueDate } = req.body;
+
 	const thisDate = Date.now();
 	let currentDate = new Date(thisDate);
 
@@ -660,5 +661,6 @@ router.get('/', requireAuth, authorization, async (req, res) => {
 		Task: tasksList
 	})
 });
+
 
 module.exports = router;

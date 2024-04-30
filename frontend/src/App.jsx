@@ -24,6 +24,7 @@ import Inventory from './components/Inventory/Inventory';
 function Layout() {
   const dispatch = useDispatch();
   const [isLoaded, setIsLoaded] = useState(false);
+  // to see css, set the value to true, use in main component
   const sessionUser = useSelector(state => state.session.user)
   const { loggedIn, setLoggedIn } = useContext(LoggedContext)
 

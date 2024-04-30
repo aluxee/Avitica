@@ -1,20 +1,15 @@
 import { useLocation } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, useContext } from 'react';
 import './UserProfile.css';
 import { one, two, three, four, five } from '../../clips';
-import { useContext } from 'react';
 import { LoggedContext } from '../../context/LoggedProvider';
 import { thunkGetMaxStats } from '../../store/userStats';
 
 function UserProfile() {
 	const dispatch = useDispatch();
-
-	const { user } = useContext(LoggedContext);
-	console.log("%c 🚀 ~ file: UserProfile.jsx:15 ~ UserProfile ~ user: ", "color: blueviolet; font-size: 25px", user)
-
-
 	const location = useLocation();
+	const { user } = useContext(LoggedContext);
 	let rawUserStats = useSelector(state => state.userStats)
 
 
@@ -29,17 +24,19 @@ function UserProfile() {
 	// console.log("%c 🚀 ~ file: UserProfile.jsx:25 ~ UserProfile ~ rawUserStats: ", "color: cadetblue; font-size: 25px", rawUserStats)
 
 	// * -------------GOLD SECTION------------- *
+	const storedGold = parseInt(localStorage?.getItem('gold'), 10);
+
+	console.log("%c 🚀 ~ file: UserProfile.jsx:33 ~ UserProfile ~ storedGold: ", "color: tomato; font-size: 25px", storedGold, "prior to setting the amount")
+	// if accurate, set userInfo's gold to above number
+
 	const goldenHour = rawUserStats?.gold || 0;
 	// console.log("%c 🚀 ~ file: UserProfile.jsx:19 ~ UserProfile ~ goldenHour: ", "color: hotpink; font-size: 25px", goldenHour, "and just in case ..., ", rawUserStats.gold);
 
-	localStorage.setItem('gold', goldenHour.toString())
-	const storedGold = parseInt(localStorage.getItem('gold'), 10) || goldenHour;
-	// console.log("%c 🚀 ~ file: UserProfile.jsx:34 ~ UserProfile ~ storedGold: ", "color: darkgoldenrod; font-size: 25px", storedGold)
+	// localStorage.setItem('gold', goldenHour.toString())
 
-	const [gold, setGold] = useState(storedGold);
+	const [gold, setGold] = useState(storedGold || goldenHour);
 	const goldRef = useRef(storedGold);
 	// console.log("%c 🚀 ~ file: UserProfile.jsx:25 ~ UserProfile ~ goldRef: ", "color: red; font-size: 25px", goldRef)
-	//!! Ensure gold in userStat is the same is inside the memory
 
 	useEffect(() => {
 		setGold(storedGold);
@@ -82,7 +79,7 @@ function UserProfile() {
 
 	// * -------------LEVEL SECTION------------- *
 	const level = userInfo.level;
-
+//TODO: AFTER LEVEL 2 ON DEMO, EXP BAR NO LONGER STARTS OVER EVEN WHEN NUMBER SURPASSES MAX, AND EXP POINTS PER LEVEL SHOULD BE SMALLER ESP FOR EARLIER LEVELS
 	console.log("%c 🚀 ~ file: UserProfile.jsx:91 ~ UserProfile ~ level: ", "color: tomato; font-size: 25px", level);
 
 	const [currLevel, setCurrLevel] = useState(level);
@@ -97,15 +94,6 @@ function UserProfile() {
 	const [health, setHealth] = useState(healthBar);
 	const [totalHealth, setTotalHealth] = useState(0);
 	// const healthRef = useRef(health);
-
-	// useEffect(async () => {
-	// 	const data = await dispatch(thunkGetMaxStats(level))
-
-	// 	console.log("%c 🚀 ~ file: UserProfile.jsx:109 ~ useEffect ~ data: ", "color: red; font-size: 25px", data)
-
-	// 	//set health
-
-	// }, [dispatch])
 
 	// * -------------EXP SECTION------------- *
 	//!! Fix initial render, then check the math
@@ -163,6 +151,7 @@ function UserProfile() {
 		)
 	}
 
+	//!! add transition for the progress bar
 	//________________________________________________
 
 

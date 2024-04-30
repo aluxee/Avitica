@@ -5,6 +5,27 @@ const { requireAuth, authorization } = require('../../utils/auth');
 router = express.Router();
 
 
+// remove item
+router.delete('/:itemId', requireAuth, authorization, async (req, res) => {
+
+	const { itemId } = req.params;
+	const item = await Inventory.findByPk(itemId, {
+		where: {
+			userId: req.user.id
+		}
+	})
+
+	console.log("%c 🚀 ~ file: inventory.js:18 ~ router.delete ~ item: ", "color: red; font-size: 25px", item)
+
+	await item.destroy();
+	res
+		.status(200)
+		.json({
+			"message": "Successfully deleted"
+		})
+
+
+})
 
 //for utilization of an item
 router.post('/use-item', requireAuth, async (req, res) => {
@@ -53,18 +74,28 @@ router.post('/new', requireAuth, async (req, res) => {
 	// grab cart items send to this route, store cart item into inv thru for loop
 	//	fetch body pass in cart items
 
-	const { cartItems, } = req.body;
-	const invArr = []
+	const { cartItems } = req.body;
+
+	console.log("%c 🚀 ~ file: inventory.js:79 ~ router.post ~ cartItems: ", "color: red; font-size: 25px", cartItems)
+
+	const invArr = [];
 	let newStatUser;
 	for (let item of cartItems) {
+
+		console.log("%c 🚀 ~ file: inventory.js:85 ~ router.post ~ item: ", "color: red; font-size: 25px", item)
+		let currHealthBoost;
+		if (item.itemName === 'Red Potion') {
+			currHealthBoost = true
+
+
+		}
+		console.log("%c 🚀 ~ file: inventory.js:90 ~ router.post ~ currHealthBoost: ", "color: red; font-size: 25px", currHealthBoost)
+
 		const shopItem = await Shop.findOne({
 			where: {
 				id: item.id
 			}
 		})
-
-		// console.log("%c 🚀 ~ file: inventory.js:66 ~ router.post ~ shopItem: ", "color: red; font-size: 25px", shopItem, "IS THIS UNDEFINED? IF SO TURN IT TO A JSON: ", shopItem.gold)
-
 
 		const itemCost = shopItem.gold
 		//find curr users gold amt
@@ -82,9 +113,10 @@ router.post('/new', requireAuth, async (req, res) => {
 				})
 		}
 		newStatUser = userStats.toJSON();
-		//ensure user has enough gold to purchase item
-		// console.log("%c 🚀 ~ file: inventory.js:85 ~ router.post ~ newStatUser: ", "color: red; font-size: 25px", newStatUser.gold)
-		// console.log("%c 🚀 ~ file: inventory.js:85 ~ router.post ~ itemCost: ", "color: red; font-size: 25px", itemCost)
+
+		console.log("%c 🚀 ~ file: inventory.js:107 ~ router.post ~ newStatUser: ", "color: red; font-size: 25px", newStatUser)
+
+
 		if (newStatUser.gold < itemCost) {
 
 
@@ -97,26 +129,29 @@ router.post('/new', requireAuth, async (req, res) => {
 		newStatUser.gold -= itemCost;
 		// console.log("%c 🚀 ~ file: inventory.js:93 ~ router.post ~ userStats: ", "color: pink; font-size: 28px", newStatUser, newStatUser.gold)
 
-		// await newStatUser.save();
 		const inventory = await Inventory.create({
 			userId: req.user.id,
 			shopId: shopItem.id,
 			itemName: item.itemName,
 			itemType: item.itemType,
-			healthBoost: item.healthBoost,
+			healthBoost: item.healthBoost || item.itemName === 'Red Potion' ? currHealthBoost : item.healthBoost,
 			statBoost: item.statBoost,
 			gear: item.gear,
 			wep: item.wep,
 
 		})
-		inventory.save()
-		invArr.push(inventory)
+
+		// console.log("%c 🚀 ~ file: inventory.js:135 ~ router.post ~ inventory: ", "color: red; font-size: 25px", inventory)
+
+		await inventory.save();
+		invArr.push(...cartItems, inventory)
 		// return res
 	}
 	// console.log("%c 🚀 ~ file: inventory.js:116 ~ router.post ~ newStatUser (BEFORE THE RETURN OF THE JSON): ", "color: gold; font-size: 25px", newStatUser, newStatUser.gold)
 
 	//extraction from localStorage so no need to utilize inventory unless extraction from state
 	return res
+		.status(201)
 		.json({
 			inventory: invArr,
 			stats: newStatUser
@@ -136,10 +171,11 @@ router.get('/', requireAuth, async (req, res) => {
 				where: {
 					userId: req.user.id
 				},
-				order: ['healthBoost', 'statBoost'],
+
+				order: [['healthBoost', 'DESC'], ['equipped', 'ASC'], ['statBoost', 'DESC']],
 				include: [{
 					model: Shop,
-					attributes: ['itemIcon']
+					attributes: ['itemIcon', 'description']
 				}],
 			}
 		)

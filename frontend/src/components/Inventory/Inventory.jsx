@@ -1,15 +1,23 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useEffect, useState, useContext } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import OpenModalMenuItem from '../Navigation/OpenModalMenuItem';
+import { thunkLoadInventory, thunkRemoveInventoryItem } from '../../store/inventory';
 import './Inventory.css';
-import { thunkLoadInventory } from '../../store/inventory';
+import InventoryItemDetails from './InventoryItemDetails';
+import { useModal } from '../../context/Modal';
+import { LoggedContext } from '../../context/LoggedProvider';
 
 function Inventory() {
 	const dispatch = useDispatch();
+	const navigate = useNavigate();
 	const invObj = useSelector(state => state.inventory)
-	const inventory = Object.values(invObj)
-	const [inv, setInv] = useState([...inventory]);
+	const inventory = Object.values(invObj);
 	const location = useLocation();
+	const { closeModal } = useModal();
+	const { user } = useContext(LoggedContext);
+	console.log("%c 🚀 ~ file: Inventory.jsx:21 ~ Inventory ~ user: ", "color: deepskyblue; font-size: 25px", user, user.userStats.gold);
+	const [inv, setInv] = useState([...inventory]);
 
 
 	useEffect(() => {
@@ -17,17 +25,32 @@ function Inventory() {
 
 		dispatch(thunkLoadInventory()).then(invObj => {
 			setInv(invObj.Inventory)
-		}) //!PRIME EXAMPLE OF REFRESH
+		}) //PRIME EXAMPLE OF REFRESH
 
-	}, [dispatch]) //w/o this, list appears (without recently purchased items almost infinitely)
+	}, [dispatch, location]) //w/o this, list appears (without recently purchased items almost infinitely)
+
+
+	const removeItem = async (item, itemId) => {
+		if (itemId) {
+
+			//grab inventory array in LS
+			const inventory = JSON.parse(localStorage.getItem('inventory'))
+
+			console.log("%c 🚀 ~ file: InventoryItemDetails.jsx:44 ~ removeItem ~ inventory: ", "color: deepskyblue; font-size: 25px", inventory)
+			// updated inventory array in LS to be array without selected item
+			const updatedInventory = inventory.filter(i => i.id !== itemId)
+			await dispatch(thunkRemoveInventoryItem(itemId))
+			console.log("%c 🚀 ~ file: Inventory.jsx:46 ~ removeItem ~ item: ", "color: blue; font-size: 25px", item, item.id, itemId)
+			localStorage.setItem('inventory', JSON.stringify(updatedInventory))
+			setInv(updatedInventory)
+			closeModal();
+			await dispatch(thunkLoadInventory())
+			navigate('/inv');
+		}
+	}
 
 
 	const moveItemsToInventory = () => {
-		// Get cart items from localStorage
-		// const cartItems = JSON.parse(localStorage.getItem('cartItems'));
-		// const inventory = JSON.parse(localStorage.getItem('inventory'));
-
-		// console.log("%c 🚀 ~ file: Inventory.jsx:41 ~ moveItemsToInventory ~ inventory: ", "color: aliceblue; font-size: 25px", inventory)
 
 		const updatedInventoryItems = [...inv]
 		setInv(updatedInventoryItems)
@@ -36,13 +59,12 @@ function Inventory() {
 
 	};
 
-
-
-
 	useEffect(() => {
 		// Move items from cart to inventory when the component mounts
 		moveItemsToInventory(); //* removing dependency array or adding this function to dependency array, or solely putting it outside of the useEffect causes repeats
-	}, [location]);
+		removeItem();
+	}, [location, invObj]);
+
 
 	// count how many times an item appears
 	const itemCounts = {};
@@ -69,9 +91,20 @@ function Inventory() {
 							// { && }
 							<ul key={index} className='bag-items'>
 								<div className='sd-inv-img' key={index}>
-									<img src={item.Shop?.itemIcon}
-										alt={item.itemName} className='shop-img'
+									<OpenModalMenuItem
+										className="item-details-modal"
+										itemText={
+											<img src={item.Shop?.itemIcon}
+												alt={item.itemName} className='shop-img'
+											/>
+										}
+										modalComponent={<InventoryItemDetails item={item} index={index}
+											itemId={item.id}
+											removeItem={removeItem}
+										/>}
+									// key={index}
 									/>
+
 									{itemCounts[item.itemName] > 1 &&
 										<p className='quantifier'>
 											{itemCounts[item.itemName]}</p>}
@@ -79,7 +112,6 @@ function Inventory() {
 								<div className='inv-name'>
 									{item.itemName}
 								</div>
-
 							</ul>
 						))}
 					</div>

@@ -28,13 +28,27 @@ function CreateTask() {
 		notes.length >= 100 ? errorsObject.notes = 'Mayhap consider shortening this?' : notes
 
 		const currentDate = new Date();
-		const selectedDate = new Date(dueDate);
-		if (selectedDate < currentDate) {
-			errorsObject.dueDate = 'Due date must be on or after the current date'
+
+
+		currentDate.setHours(0, 0, 0, 0);
+		// console.log("%c 🚀 ~ file: CreateTask.jsx:32 ~ useEffect ~ currentDate: ", "color: red; font-size: 25px", currentDate)
+
+		// Parse the selected date without considering the time
+		const selectedDate = dueDate ? new Date(dueDate) : null;
+
+
+		if (selectedDate) selectedDate.setHours(24, 0, 0, 0); // must resync selectedDate
+		// console.log("%c 🚀 ~ file: CreateTask.jsx:39 ~ useEffect ~ selectedDate: ", "color: red; font-size: 25px", selectedDate)
+
+		if (selectedDate) {
+			// Check if selected date is before the current date
+			if (selectedDate < currentDate) {
+				errorsObject.dueDate = 'Due date must be on or after the current date';
+			}
 		}
 
 		setErrors(errorsObject);
-	}, [title, dueDate, notes])
+	}, [title, notes, dueDate])
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
@@ -143,7 +157,9 @@ function CreateTask() {
 					/>
 					<p className="p-error">{errors?.dueDate}</p>
 				</label>
-				<button type="submit" className="pt-task-submit-button submit">
+				<button type="submit" className="pt-task-submit-button submit"
+					disabled={Object.values(errors).length > 0}
+				>
 					Save
 				</button>
 			</form>

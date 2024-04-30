@@ -89,7 +89,7 @@ function LandingHome() {
 				{
 					modalOpen ? null : (
 
-						<HTMLFlipBook width={800} height={800} minWidth={315} maxWidth={1150} minHeight={400} maxHeight={1533} showCover={true} currentPage={page}>
+						<HTMLFlipBook width={800} height={800} minWidth={315} maxWidth={1150} minHeight={400} maxHeight={1200} showCover={true} currentPage={page}>
 
 							<div className="demoPage">
 								<LandingPage closeMenu={closeMenu} toggleMenu={toggleMenu} showMenu={showMenu} setShowMenu={setShowMenu}
@@ -108,8 +108,8 @@ function LandingHome() {
 				}
 
 				<div className="navigation-buttons">
-					<button onClick={handlePrev} disabled={page === 0}>Prev</button>
-					<button onClick={handleNext} disabled={page === 2}>Next</button>
+					{/* <button onClick={handlePrev} disabled={page === 0}>Prev</button> */}
+					{/* <button onClick={handleNext} disabled={page === 2}>Next</button> */}
 				</div>
 			</div>
 		</div>

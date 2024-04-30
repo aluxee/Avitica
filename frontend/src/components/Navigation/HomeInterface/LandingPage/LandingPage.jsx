@@ -37,9 +37,6 @@ function LandingPage({ onModalOpen, onModalClosed }) {
 
 	return (
 		<>
-			<div className='title'>
-				<h1>Welcome to Avitica </h1>
-			</div>
 			<div className="welcome-outer">
 				<div className="int welcome-inner" style={{ "fontSize": "32px" }}>
 

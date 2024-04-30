@@ -251,9 +251,6 @@ function calcHpAndExp(completed, level) {
 }
 
 
-
-
-
 // * Keep in mind there are two types of task edits: one will edit the task itself, the other updates the task when a task is marked as complete or incomplete -- this one is the latter
 //TODO: re-eval update of exp and gold
 router.put('/:taskId/status', requireAuth, async (req, res) => {
@@ -367,10 +364,18 @@ router.put('/:taskId/status', requireAuth, async (req, res) => {
 				},
 				)
 		}
+		// save the updated userStatus
+		await userStatus.save();
+
 		return res
-			.status(200)
+			.status(201)
 			.json({
-				userStat: userStatus
+				userStats: {
+					level: userStatus.level,
+					experience: userStatus.experience,
+					gold: userStatus.gold,
+					health: userStatus.health // Include any other relevant user stats
+				}
 			})
 	}
 })

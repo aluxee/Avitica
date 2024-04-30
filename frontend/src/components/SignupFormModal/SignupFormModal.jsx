@@ -39,7 +39,7 @@ function SignupFormModal({onModalOpen, onModalClosed}) {
 		} else { setAuth(false) }
 
 		setErrors(errorsObject)
-	}, [email, username.length, displayName, heroClass, password.length, confirmedPassword])
+	}, [email, username.length, displayName, heroClass, password, confirmedPassword])
 
 	const handleSubmit = (e) => {
 		e.preventDefault();

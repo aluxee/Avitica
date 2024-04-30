@@ -194,7 +194,7 @@ router.get('/:taskId/checklist', requireAuth, async (req, res) => {
 
 
 // * Keep in mind there are two types of task edits: one will edit the task itself, the other updates the task when a task is marked as complete or incomplete -- this one is the latter
-
+//TODO: re-eval update of exp and gold
 router.put('/:taskId/status', requireAuth, async (req, res) => {
 	const { taskId } = req.params;
 	//find userStat information
@@ -203,13 +203,24 @@ router.put('/:taskId/status', requireAuth, async (req, res) => {
 			userId: req.user.id
 		}
 	})
+
+	console.log("%c 🚀 ~ file: tasks.js:207 ~ router.put ~ userStatus: ", "color: red; font-size: 25px", userStatus)
+
 	const taskUpdate = await Task.findByPk(taskId, {
 		where: {
 			userId: req.user.id
 		}
 	})
+	if (!userStatus || !taskUpdate) {
+		return res
+			.status(404)
+			.json({ message: 'User status or task not found' });
+	}
+
+	console.log("%c 🚀 ~ file: tasks.js:215 ~ router.put ~ taskUpdate: ", "color: red; font-size: 25px", taskUpdate)
+
 	// retrieve user's current level
-	const currLevel = userStatus.getLevel();
+	const currLevel = userStatus.level;
 	// initialize experience gain to start at 0
 	let expGain = 0;
 	//initialize gold gain variable
@@ -220,28 +231,61 @@ router.put('/:taskId/status', requireAuth, async (req, res) => {
 		goldGain = Math.max(10, 85 + (currLevel - 1) * 12)
 		userStatus.gold += goldGain;
 		// also must consider level increase
-		const newLevel = userStatus.getLevel();
+		const newLevel = userStatus.level
 
 		if (newLevel > currLevel) {
 			//perform actions related to level up (most likely a front end dealings)
-			return res
-				.status(200)
-				.json({
-					message: `Congratulations! You've reached level ${newLevel}`
-				})
+			//TODO: set the experience to 0 and reflect the new hp and level (check?)
+			userStatus.experience = 0
+			userStatus.level = newLevel
+			// return res
+			// 	.status(200)
+			// 	.json({
+			// 		userStat: userStatus
+			// 	})
 		}
+		await userStatus.save();
+		const newUserStats = {
+			userId: req.user.id,
+			experience: userStatus.experience,
+			gold: userStatus.gold,
+			health: userStatus.health,
+			level: userStatus.level
+		}
+		return res
+			.status(201)
+			.json({
+				userStats: newUserStats
+			})
 	} else {
 		const healthLoss = Math.ceil(12 * (currLevel * 0.75))
 		userStatus.health -= healthLoss;
 
 		if (userStatus.health <= 0) {
 			userStatus.health = userStatus.calcDefaultHealth(currLevel)
-			userStatus.experience = 0
+
+			console.log("%c 🚀 ~ file: tasks.js:254 ~ router.put ~ userStatus.health: ", "color: red; font-size: 25px", userStatus, userStatus.health)
+
+			userStatus.experience = 0;
+			await userStatus.save();
+			const newUserStats = {
+				userId: req.user.id,
+				experience: userStatus.experience,
+				gold: userStatus.gold,
+				health: userStatus.health,
+				level: userStatus.level
+			}
 			return res
 				.json({
+					userStats: newUserStats,
 					message: `Oh no! Your health has been completely depleted! Your experience and health will now reset.`
 				})
 		}
+		return res
+			.status(200)
+			.json({
+				userStat: userStatus
+			})
 	}
 })
 
@@ -270,7 +314,7 @@ router.put('/:taskId', requireAuth, async (req, res) => {
 			},
 		});
 
-		console.log("%c 🚀 ~ file: tasks.js:275 ~ router.put ~ taskUpdate: ", "color: red; font-size: 25px", taskUpdate)
+		// console.log("%c 🚀 ~ file: tasks.js:273 ~ router.put ~ taskUpdate: ", "color: red; font-size: 25px", taskUpdate)
 
 
 		const thisDate = Date.now();
@@ -295,6 +339,7 @@ router.put('/:taskId', requireAuth, async (req, res) => {
 		taskUpdate.notes = notes
 		taskUpdate.difficulty = difficulty || "Trivial" || null
 		taskUpdate.dueDate = dueDate || stringDate
+
 		// utilize the task completion (boolean) attribute prior to the point changes
 		taskUpdate.completed = completed
 
@@ -366,17 +411,21 @@ router.delete('/:taskId', requireAuth, async (req, res) => {
 		}
 	})
 
+
+
 	if (!taskId) {
 		return res
 			.status(404)
 			.json({
 				"error": "Task could not be found"
 			})
+
 	}
+	console.log("%c 🚀 ~ file: tasks.js:386 ~ router.delete ~ task: ", "color: red; font-size: 25px", "HELLO THIS IS DELETING A TASK !!!!!!! \n", task)
 
 	await task.destroy();
 
-	res
+	return res
 		.status(200)
 		.json({
 			message: "Successfully deleted"

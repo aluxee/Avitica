@@ -24,8 +24,12 @@ function ShopDetails() {
 
 	console.log("%c 🚀 ~ file: ShopDetails.jsx:23 ~ ShopDetails ~ market: ", "color: red; font-size: 25px", market)
 
+	//!! change to extracting from context
 	const theUser = useSelector(state => state.session.user)
 	const userStats = theUser.userStats;
+
+	console.log("%c 🚀 ~ file: ShopDetails.jsx:30 ~ ShopDetails ~ userStats: ", "color: red; font-size: 25px", userStats)
+
 	const goldenHour = userStats ? userStats.gold : 0;
 
 	// console.log("%c 🚀 ~ file: ShopDetails.jsx:26 ~ ShopDetails ~ goldenHour: ", "color: red; font-size: 25px", goldenHour)
@@ -46,8 +50,10 @@ function ShopDetails() {
 		setCart(storedCartItems);
 
 		const storedGold = parseInt(localStorage.getItem('gold'), 10) || goldenHour;
-		setGold(storedGold)
-		dispatch(thunkLoadShop())
+		setGold(storedGold);
+		// also reflect it on userStats.gold
+		userStats.gold = gold;
+		dispatch(thunkLoadShop());
 		localStorage.setItem('gold', gold.toString());
 	}, [goldenHour, dispatch, location, gold])
 
@@ -74,7 +80,9 @@ function ShopDetails() {
 		setGold(prevGold => {
 			prevGold = gold || prevGold;
 			const updatedGold = prevGold;
-			setGold(updatedGold)
+			setGold(updatedGold);
+			// also reflect it on userStats.gold
+			userStats.gold = gold;
 			localStorage.setItem('gold',
 				updatedGold.toString())
 			return updatedGold
@@ -98,8 +106,6 @@ function ShopDetails() {
 		setCart(updatedCartItems);
 		closeModal();
 	}
-
-
 
 	const removeFromCart = () => {
 		setCart([])

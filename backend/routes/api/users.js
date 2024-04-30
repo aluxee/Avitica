@@ -66,17 +66,18 @@ router.post(
 
 
 
-		// let safeUserStats;
-		// let safeStats;
+		let newUserStats;
+		let newStat;
 		if (user.heroClass === 'Warrior') {
-			const newUserStats = await userStat.create({
+			newUserStats = await userStat.create({
 				userId: user.id,
 				health: 100,
 				experience: 0,
-				gold: 500
+				gold: 500,
+				level: 1
 			})
 
-			const newStat = await Stat.create({
+			newStat = await Stat.create({
 				userId: user.id,
 				hp: newUserStats.health,
 				strength: 150,
@@ -85,47 +86,16 @@ router.post(
 				magicDefense: 50,
 				luck: 50
 			})
-			const userStats = {
-				userId: newUserStats.userId,
-				health: newUserStats.health,
-				experience: newUserStats.experience,
-				gold: newUserStats.gold
-			}
-			const Stats = {
-				userId: newStat.userId,
-				hp: newStat.hp,
-				strength: newStat.strength,
-				physicalDefense: newStat.physicalDefense,
-				magic: newStat.magic,
-				magicDefense: newStat.magicDefense,
-				luck: newStat.luck
-			}
-			const safeUser = {
-				id: user.id,
-				username: user.username,
-				displayName: user.displayName,
-				email: user.email,
-				heroClass: user.heroClass,
-				userStats: userStats,
-				Stats: Stats
-			};
-			await setTokenCookie(res, safeUser);
-			//formulated smooth numbers esp for health until later dev work
-			return res
-				.status(200)
-				.json({
-					user: safeUser
-				})
-		}
-
-		if (user.heroClass === 'Mage') {
-			const newUserStats = await userStat.create({
+		} else if (user.heroClass === 'Mage') {
+			newUserStats = await userStat.create({
 				userId: user.id,
 				health: 100,
 				experience: 0,
-				gold: 500
-			})
-			const newStat = await Stat.create({
+				gold: 500,
+				level: 1
+			});
+
+			newStat = await Stat.create({
 				userId: user.id,
 				hp: newUserStats.health,
 				strength: 50,
@@ -133,50 +103,33 @@ router.post(
 				magic: 150,
 				magicDefense: 100,
 				luck: 50
-			})
-			const userStats = {
-				userId: newUserStats.userId,
-				health: newUserStats.health,
-				experience: newUserStats.experience,
-				gold: newUserStats.gold
-			}
-			const Stats = {
-				userId: newStat.userId,
-				hp: newStat.hp,
-				strength: newStat.strength,
-				physicalDefense: newStat.physicalDefense,
-				magic: newStat.magic,
-				magicDefense: newStat.magicDefense,
-				luck: newStat.luck
-			}
-
-
-			const safeUser = {
-				id: user.id,
-				username: user.username,
-				displayName: user.displayName,
-				email: user.email,
-				heroClass: user.heroClass,
-				userStats: userStats,
-				Stats: Stats
-			};
-			await setTokenCookie(res, safeUser);
-
-			//formulated smooth numbers esp for health until later dev work
-			return res
-				.status(200)
-				.json({
-					user: safeUser
-				})
+			});
 		}
 
+		// Associate userStat and Stat with the user
+		// await user.setUserStat(newUserStats);
+		// await user.setStat(newStat);
+		user.userStat = newUserStats;
+		user.Stat = newStat;
+		await user.userStat.save();
+		await user.Stat.save();
 
-		return res.json({
-			user: safeUser
-				= {
-				userStat,
-				Stat}
-		});
+		// Construct the response object
+		const safeUser = {
+			id: user.id,
+			username: user.username,
+			displayName: user.displayName,
+			email: user.email,
+			heroClass: user.heroClass,
+			userStats: newUserStats,
+			Stats: newStat
+		};
+
+		await setTokenCookie(res, safeUser);
+		//formulated smooth numbers esp for health until later dev work
+		return res
+			.status(200)
+			.json({ user: safeUser });
 	}
 );
 

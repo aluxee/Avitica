@@ -48,6 +48,18 @@ div.user-container {
 	margin-inline-start: 5%;
 }
 
+.user-lvl{
+	display: flex;
+	font-size: larger;
+	font-weight: bold;
+	color: fuchsia;
+}
+
+.lvl-value{
+	color: #555;
+	font-weight: lighter;
+}
+
 .user-label {
 	color: fuchsia;
 	font-weight: bold;

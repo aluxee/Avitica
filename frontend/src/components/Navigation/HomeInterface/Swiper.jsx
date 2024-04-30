@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useSwipeable } from 'react-swipeable';
 import { useNavigate } from 'react-router-dom';
 import './Swiper.css';
@@ -39,8 +39,8 @@ function Swiper() {
 			navigate('/features');
 		}
 	};
-	const isBackDisabled = currPage === 0;
-	const isNextDisabled = currPage === 2;
+	// const isBackDisabled = currPage === 0;
+	// const isNextDisabled = currPage === 2;
 
 	return (
 		<div {...handlers} className='swiper'>

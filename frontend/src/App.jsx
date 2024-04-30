@@ -3,12 +3,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { createBrowserRouter, RouterProvider, Outlet } from 'react-router-dom';
 import Navigation from './components/Navigation/Navigation';
 import { Navigate } from 'react-router-dom';
-import Swiper from './components/Navigation/HomeInterface/Swiper';
+
 
 import { useContext } from 'react';
 import { LoggedContext } from './context/LoggedProvider';
-
-console.log("%c 🚀 ~ file: App.jsx:11 ~ LoggedContext: ", "color: red; font-size: 25px", LoggedContext)
 
 
 import LandingHome from './components/Navigation/HomeInterface/LandingHome/LandingHome';

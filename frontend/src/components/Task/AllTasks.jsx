@@ -1,6 +1,8 @@
-import { thunkLoadTasks } from '../../store/task';
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect, useState, useContext } from "react";
+import { useLocation } from 'react-router-dom';
+import { useEffect, useState, useContext, useRef } from "react";
+import { thunkEditTask, thunkLoadTasks, thunkRemoveTask } from '../../store/task';
+import { thunkLoadUserStats, thunkUpdateTaskStatus } from '../../store/userStats';
 import './AllTasks.css';
 
 import OpenModalMenuItem from '../Navigation/OpenModalMenuItem';
@@ -12,6 +14,8 @@ import { LoggedContext } from '../../context/LoggedProvider';
 
 
 function AllTasks() {
+	console.log("START FUNCTION COMPONENT ALLTASKS")
+	const location = useLocation();
 	const dispatch = useDispatch();
 	// console.log("%c 🚀 ~ file: AllTasks.jsx:17 ~ AllTasks ~ tasks: ", "color: red; font-size: 25px", tasks)
 	// const [hover, setHover] = useState(null);
@@ -20,116 +24,141 @@ function AllTasks() {
 
 	const taskObj = useSelector(state => state.task);
 
-	console.log("%c 🚀 ~ file: AllTasks.jsx:23 ~ AllTasks ~ taskObj: ", "color: orange; font-size: 25px", taskObj)
+	// console.log("%c 🚀 ~ file: AllTasks.jsx:27 ~ AllTasks ~ taskObj: ", "color: red; font-size: 25px", taskObj)
 
-	// const [filteredTasks, setFilteredTasks] = useState([]);
-	// const [taskStatus, setTaskStatus] = useState(false);
+
 	const allTasks = Object.values(taskObj); //an array of all the tasks
 
-	console.log("%c 🚀 ~ file: AllTasks.jsx:24 ~ AllTasks ~ allTasks: ", "color: orange; font-size: 25px", allTasks)
+	// console.log("%c 🚀 ~ file: AllTasks.jsx:24 ~ AllTasks ~ allTasks: ", "color: orange; font-size: 25px", allTasks)
 
-	const allStoredTasks = allTasks && JSON.parse(localStorage.getItem('tasks')) || allTasks; // note this may be glitchy to cycle thru due to storage inconsistency
-
-	console.log("%c 🚀 ~ file: AllTasks.jsx:33 ~ allStoredTasks: ", "color: orange; font-size: 25px", allStoredTasks)
 
 	// * -------------GOLD SECTION------------- *
-	//!! grab the amount of gold, upon completion, dispatch a thunk that will handle completion of a task (using state) and grant additional gold to the user
+
+	// retrieve curr gold amount
 	// const storedGold = parseInt(localStorage.getItem('gold'), 10);
 
-	// const [gold, setGold] = useState(storedGold);
-	// console.log("%c 🚀 ~ file: AllTasks.jsx:40 ~ allStoredTasks: ", "color: orange; font-size: 25px",  storedGold)
+	// console.log("%c 🚀 ~ file: AllTasks.jsx:40 ~ AllTasks ~ storedGold: ", "color: red; font-size: 25px", storedGold)
 
-	// useEffect(() => {
 
-	// })
+	// save the local storage amt to state
+	const [gold, setGold] = useState('');
+
+	console.log("%c 🚀 ~ file: AllTasks.jsx:43 ~ AllTasks ~ gold: ", "color: tomato; font-size: 25px", gold)
+
+	// console.log("%c 🚀 ~ file: AllTasks.jsx:45 ~ allStoredTasks: ", "color: orange; font-size: 25px", storedGold)
+	// useEffect handling
+
+	const goldRef = useRef(gold);
+
+	console.log("%c 🚀 ~ file: AllTasks.jsx:53 ~ AllTasks ~ goldRef: ", "color: red; font-size: 25px", goldRef)
+
+	useEffect(() => {
+		goldRef.current = gold
+	}, [gold])
+
+
+
+	//function that handles upon clicking completion for the task, to handle the dispatch and math
+
+
+
 	// * -------------TASK SECTION------------- *
 
 
-	const [tasks, setTasks] = useState([]);
-	//*error fix: tasks cannot disappear on refresh!
+	const [tasks, setTasks] = useState(allTasks);
+	const [currTask, setCurrTask] = useState('');
+
+
+	// * -------------USER INFO SECTION------------- *
+	// const userInfo = user.userStats
+
+
+	//* HANDLE ALL SECTIONS FUNCTIONS
+
+	//function that handles upon clicking completion for the task, to handle the dispatch and math
+
+	const handleTaskComplete = async (task, taskId) => {
+
+		// //task completion useState
+		task.completed = true
+		// setTaskComplete(task.completed)
+		if (taskId) {
+
+		await dispatch(thunkEditTask(task, taskId))
+
+		// console.log("HEY THERE")
+		// //task handle gold and exp
+
+		const updatedUserStats = await dispatch(thunkUpdateTaskStatus(taskId))
+		// console.log("HEY WORLD!")
+
+		if (updatedUserStats && updatedUserStats.userStats) {
+			const results = await dispatch(thunkLoadUserStats())
+
+			// console.log("%c 🚀 ~ file: AllTasks.jsx:94 ~ handleTaskComplete ~ results: ", "color: hotpink; font-size: 25px", results)
+			user.userStats = results.userStats
+
+			// console.log("%c 🚀 ~ file: AllTasks.jsx:97 ~ handleTaskComplete ~ user.userStats: ", "color: orange; font-size: 25px", user.userStats, user.userStats)
+			const newGold = user.userStats.gold
+
+			// console.log("%c 🚀 ~ file: AllTasks.jsx:99 ~ handleTaskComplete ~ newGold: ", "color: red; font-size: 25px", newGold)
+
+			setGold(newGold)
+			localStorage.setItem('gold', newGold.toString())
+
+
+		}
+
+		// //remove task after its been updated
+		await dispatch(thunkRemoveTask(taskId))
+
+		// Remove the completed task from the list of tasks
+		const filteredTasks = allTasks.filter(task => task.id !== taskId);
+		setTasks(filteredTasks);
+
+
+		// // loads current list of tasks
+		await dispatch(thunkLoadTasks()) // effectively deleting live with this catch-all thunk
+		}
+
+	}
+
+
+
+	//* useEffect handling
 
 	useEffect(() => {
 		setTasks(allTasks)
 
-	}, [])
+	}, []) // do not put allTasks in dependency-- do not change
+
+	const completionHandler = (taskId) => {
+		const handleTask = allTasks.filter(task => task.id === taskId)
+
+		setCurrTask(handleTask)
+
+		handleTaskComplete(handleTask, taskId)
+		const filteredTasks = allTasks.filter(task => (task.id !== taskId) || (task.id !== handleTask.id))
+
+		setTasks(filteredTasks)
+
+		return filteredTasks
+	}
+
+	//need to have refresh upon handleTask
 	useEffect(() => {
+		completionHandler(); // no need to pass in anything, do not pass in dep array
 		dispatch(thunkLoadTasks())
-		pullTaskLocal()
 
-		// const storedTasks = JSON.parse(localStorage.getItem('tasks' || '[]'));
+	}, [dispatch, location, gold, user.userStats, user])
 
-		// setTasks(storedTasks)
-	}, [dispatch])
-
-	// 1. onclick of checkmark, the task will be set to completed being true
-	useEffect(() => {
-		handleTaskComplete() // do NOT put it in the dep array
-		// lastly save the task
-		saveTaskLocal()
-	}, [tasks]) // cannot remove dep array either
-
-	// }
 	const toggleMenu = () => {
 		// e.stopPropagation();
 
 		setShowMenu(!showMenu)
 	};
-	const handleTaskComplete = async (taskId) => {
 
-		// if (!taskId) {
-		// 	console.error('Task ID is undefined');
-		// 	return;
-		// }
-		// e.preventDefault();
-		//* careful when utilizing this function, may cause weird behavior in localStorage and the items to go missing
-
-		const tasks = JSON.parse(localStorage.getItem('tasks' || []));
-		//update list of tasks
-		// console.log("%c 🚀 ~ file: AllTasks.jsx:70 ~ handleTaskComplete ~ tasks: ", "color: red; font-size: 25px", tasks)
-		const updatedTaskList = tasks.filter(task => task.id !== taskId)
-
-
-		localStorage.setItem('tasks', JSON.stringify(updatedTaskList))
-		setTasks(updatedTaskList)
-		// set task completion
-
-
-		// setFilteredTasks(completedTask)
-		// // actually remove the task here:
-		// await dispatch(thunkRemoveTask(completedTask.id))
-		//set task status to true
-		// setTaskStatus(true)
-		handleExpAndGold()
-		await dispatch(thunkLoadTasks())
-	}
-
-	const handleExpAndGold = () => {
-		//invoke inside handleTaskComplete
-	}
-
-
-	const saveTaskLocal = () => {
-		setTasks(currTask => {
-			// currTask = currTask || [...allTasks];
-			currTask = allTasks || currTask;
-			const taskList = [...currTask]
-
-			localStorage.setItem('tasks', JSON.stringify(taskList));
-		})
-	}
-	const pullTaskLocal = (allTasks) => {
-
-		if (localStorage.getItem('tasks') === allTasks) {
-			localStorage.setItem('tasks', JSON.stringify('tasks'));
-		} else {
-			// 	let taskStorage = JSON.parse(localStorage.getItem("tasks"));
-			// 	setTasks(taskStorage);
-			const storedTasks = JSON.parse(localStorage.getItem('tasks'))
-			setTasks(storedTasks)
-		}
-	}
-
-
+console.log('tasks', tasks)
 
 	return (
 		<>
@@ -139,23 +168,23 @@ function AllTasks() {
 						<OpenModalButton
 							buttonText={"Add a new task"}
 							onItemClick={toggleMenu}
-							modalComponent={<CreateTask allTasks={allStoredTasks} />}
+							modalComponent={<CreateTask allTasks={tasks} />}
 						// change allTasks to setTasks
 						/>
 					</div>
 					<div className='all-task-container'
 					// key={tasks.id}
 					>
-						{allTasks.length && allTasks ? allTasks.map((task, index) => (
+						{tasks.length && tasks ? tasks.map((task, index) => (
 							<div className='at-tasks'
 								key={index}
-							//getting unique key issue may be preventing edit from submitting, but delete works
 							>
 								<div className='task-mark complete'
-									onClick={() => alert('Points feature coming soon!')}
+									// onClick={() => alert('Points feature coming soon!')}
+									onClick={() => handleTaskComplete(task, task.id)}
 								>
 									<i className="fa-solid fa-check"
-										onClick={() => handleTaskComplete(task.id)}
+
 									/>
 								</div>
 								<div className='task-div'>

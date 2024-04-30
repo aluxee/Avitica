@@ -1,35 +1,52 @@
 import { useLocation } from 'react-router-dom';
-// import { useSelector, useDispatch } from 'react-redux;
+import { useSelector, useDispatch } from 'react-redux';
 import { useEffect, useState, useRef } from 'react';
 // import { thunkLoadStats } from '../../store/stats';
 import './UserProfile.css';
 import { one, two, three, four, five } from '../../clips';
 import { useContext } from 'react';
 import { LoggedContext } from '../../context/LoggedProvider';
+import { thunkGetMaxStats, thunkLoadUserStats } from '../../store/userStats';
 
 function UserProfile() {
+	const dispatch = useDispatch();
 
-	// console.log("%c 🚀 ~ file: UserProfile.jsx:11 ~ UserProfile ~ user: ", "color: blueviolet; font-size: 25px", profileUser) // no longer inheriting as prop, but using context instead
 	const { user } = useContext(LoggedContext);
-	console.log("%c 🚀 ~ file: UserProfile.jsx:14 ~ UserProfile ~ user: ", "color: blueviolet; font-size: 25px", user)
+	console.log("%c 🚀 ~ file: UserProfile.jsx:15 ~ UserProfile ~ user: ", "color: blueviolet; font-size: 25px", user)
 
 
 	const location = useLocation();
-	const userInfo = user.userStats; // this is an array containing an object, to ensure always object we select the first and only index..but sometimes, thats not needed...
-	console.log("%c 🚀 ~ file: UserProfile.jsx:12 ~ UserProfile ~ userInfo: ", "color: hotpink; font-size: 25px", userInfo, userInfo?.gold)
-	//ensure userInfo is an object only:
+	let rawUserStats = useSelector(state => state.userStats)
+
+
+	const userInfo = user.userStats; // this is an array containing an object, to ensure always object we select the first and only index
+
+	console.log("%c 🚀 ~ file: UserProfile.jsx:24 ~ UserProfile ~ userInfo: ", "color: blueviolet; font-size: 25px", userInfo)
+
+
+	//re-write userStat's raw state
+	rawUserStats = userInfo
+
+	// console.log("%c 🚀 ~ file: UserProfile.jsx:25 ~ UserProfile ~ rawUserStats: ", "color: cadetblue; font-size: 25px", rawUserStats)
 
 	// * -------------GOLD SECTION------------- *
-	const goldenHour = userInfo?.gold || 0;
-	// console.log("%c 🚀 ~ file: UserProfile.jsx:19 ~ UserProfile ~ goldenHour: ", "color: hotpink; font-size: 25px", goldenHour, "and just in case ..., ", userInfo.gold)
+	const goldenHour = rawUserStats?.gold || 0;
+	// console.log("%c 🚀 ~ file: UserProfile.jsx:19 ~ UserProfile ~ goldenHour: ", "color: hotpink; font-size: 25px", goldenHour, "and just in case ..., ", rawUserStats.gold);
 
+	localStorage.setItem('gold', goldenHour.toString())
 	const storedGold = parseInt(localStorage.getItem('gold'), 10) || goldenHour;
-	console.log("%c 🚀 ~ file: UserProfile.jsx:20 ~ UserProfile ~ storedGold: ", "color: darkgoldenrod; font-size: 25px", storedGold)
+	// console.log("%c 🚀 ~ file: UserProfile.jsx:34 ~ UserProfile ~ storedGold: ", "color: darkgoldenrod; font-size: 25px", storedGold)
 
 	const [gold, setGold] = useState(storedGold);
-	const goldRef = useRef(gold);
+	const goldRef = useRef(storedGold);
 	// console.log("%c 🚀 ~ file: UserProfile.jsx:25 ~ UserProfile ~ goldRef: ", "color: red; font-size: 25px", goldRef)
+	//!! Ensure gold in userStat is the same is inside the memory
 
+	useEffect(() => {
+		setGold(storedGold);
+		// also reflect it on userStats.gold
+		userInfo.gold = gold;
+	}, [userInfo.gold, gold, location, user])
 	useEffect(() => {
 		goldRef.current = gold
 	}, [gold])
@@ -49,6 +66,7 @@ function UserProfile() {
 			console.log("%c 🚀 ~ file: UserProfile.jsx:48 ~ goldSetFunction ~ updatedGold: ", "color: pink; font-size: 25px", updatedGold)
 
 			setGold(updatedGold)
+
 			localStorage.setItem('gold', updatedGold.toString())
 			return updatedGold
 		})
@@ -56,149 +74,62 @@ function UserProfile() {
 
 	useEffect(() => {
 		getGoldFxn()
-	}, [])
+	}, [gold])
 
 	useEffect(() => {
 		storeGoldFxn()
-	}, [])
+	}, [gold])
 
-	// useEffect(() => {
-		// fill out form
-		// button to test look: generate avatar
-		// finalize look: submit avatar
-		// setCurrStat(userStat) // this will always result to undefined
+	// * -------------LEVEL SECTION------------- *
+	const level = userInfo.level;
 
-	// })
+	console.log("%c 🚀 ~ file: UserProfile.jsx:91 ~ UserProfile ~ level: ", "color: tomato; font-size: 25px", level);
 
-	useEffect(() => {
-		const storedGold = parseInt(localStorage.getItem('gold'), 10) || 0;
-
-		setGold(storedGold);
-
-		// ___  OTHER WAY  ___
-
-		// const updatedStoredGold = parseInt(localStorage.getItem('gold'), 10);
-
-		// if (updatedStoredGold) {
-		// 	setGold(updatedStoredGold)
-		// }
-
-		// const handleEventGoldStorage = (event) => {
-		// 	if (event.key === 'gold') {
-		// 		setGold(parseInt(event.newValue, 10))
-		// 	}
-		// }
-
-		// // Listen for changes to localStorage
-		// window.addEventListener('storage', handleEventGoldStorage(event));
-
-		// return () => {
-		// 	// Cleanup the event listener when component unmounts
-		// 	window.removeEventListener('storage', handleEventGoldStorage);
-		// };
-
-	}, [gold, location])
+	const [currLevel, currSetLevel] = useState(level);
 	// * -------------HEALTH SECTION------------- *
-
+	//!! Fix initial render, then check the math
 	const healthBar = userInfo.health ? userInfo.health : 100;
 
-	console.log("%c 🚀 ~ file: UserProfile.jsx:97 ~ UserProfile ~ healthBar: ", "color: crimson; font-size: 25px", healthBar)
+	// console.log("%c 🚀 ~ file: UserProfile.jsx:97 ~ UserProfile ~ healthBar: ", "color: crimson; font-size: 25px", healthBar, userInfo)
 
 	// console.log("%c 🚀 ~ file: UserProfile.jsx:100 ~ UserProfile ~ storedHealth: ", "color: crimson; font-size: 25px", storedHealth)
 
-	const [health, setHealth] = useState('');
-	const [currHealth, setCurrHealth] = useState('');
-	const healthRef = useRef(health);
+	const [health, setHealth] = useState(healthBar);
+	const [totalHealth, setTotalHealth] = useState(0);
+	// const healthRef = useRef(health);
 
-	useEffect(() => {
-		healthRef.current = health;
-		const storedHealth = parseInt(localStorage.getItem('health'), 10) || healthBar;
-		setHealth(storedHealth);
-	}, [health, location])
+	// useEffect(async () => {
+	// 	const data = await dispatch(thunkGetMaxStats(level))
 
-	// const getHealth = () => {
+	// 	console.log("%c 🚀 ~ file: UserProfile.jsx:109 ~ useEffect ~ data: ", "color: red; font-size: 25px", data)
 
+	// 	//set health
 
-	// 	console.log("%c 🚀 ~ file: UserProfile.jsx:112 ~ getHealth ~ storedHealth: ", "color: red; font-size: 25px", storedHealth) // yields 215
-
-	// 	setHealth(storedHealth)
-	// 	return storedHealth
-	// };
-
-	const storeHealth = () => {
-		setHealth(prevHealth => {
-			prevHealth = health || prevHealth;
-			const updatedHealth = prevHealth;
-
-			console.log("%c 🚀 ~ file: UserProfile.jsx:113 ~ goldSetFunction ~ updatedGold: ", "color: pink; font-size: 25px", updatedHealth)
-
-			setHealth(updatedHealth)
-			localStorage.setItem('health', updatedHealth.toString())
-			return updatedHealth
-		})
-	}
-	// useEffect(() => {
-	// 	getHealth()
-	// }, [])
-
-	useEffect(() => {
-		storeHealth()
-	}, [healthBar])
+	// }, [dispatch])
 
 	// * -------------EXP SECTION------------- *
+	//!! Fix initial render, then check the math
+
 	const expBar = userInfo.experience ? userInfo.experience : 0;
 
 	console.log("%c 🚀 ~ file: UserProfile.jsx:144 ~ UserProfile ~ expBar: ", "color: crimson; font-size: 25px", expBar)
 
-	const [exp, setExp] = useState('');
-	const [currExp, setCurrExp] = useState('');
-	const expRef = useRef(exp);
+	const [exp, setExp] = useState(expBar);
+	const [totalExp, setTotalExp] = useState(0);
+	// const expRef = useRef(exp);
+
+
+	const { maxHp, maxExp } = useSelector(state => state.userStats);
+
 
 	useEffect(() => {
-		expRef.current = exp;
-		const storedExp = parseInt(localStorage.getItem('exp'), 10) || expBar;
-		setExp(storedExp);
-	}, [exp, location])
-
-	// const getExp = () => {
-
-	// 	setExp(storedExp)
-	// 	return storedExp
-	// };
-
-	const storeExp = () => {
-		setExp(prevXP => {
-			prevXP = exp || prevXP;
-			const updatedExp = prevXP;
-
-			console.log("%c 🚀 ~ file: UserProfile.jsx:167 ~ goldSetFunction ~ updatedExp: ", "color: pink; font-size: 25px", updatedExp)
-
-			setExp(updatedExp)
-			localStorage.setItem('exp', updatedExp.toString())
-			return updatedExp
-		})
-	}
-
-	// useEffect(() => {
-	// 	getHealth()
-	// }, [])
-
-	useEffect(() => {
-		storeExp()
-	}, [])
+		setExp(userInfo.experience)
+		dispatch(thunkGetMaxStats(level))
+		setTotalHealth(maxHp)
+		setTotalExp(maxExp)
+	}, [dispatch, level, maxHp, maxExp, userInfo.experience])
 
 
-
-
-	// userStats[0].gold = storedGold
-	// const userStat = userStats[0];
-	// const taskObj = useSelector(state => state.task)
-	// const tasks = Object.values(taskObj);
-
-
-	// const [healthPercent, setHealthPercent] = useState(0);
-	// const [expPercent, setExpPercent] = useState(0);
-	// const [currStat, setCurrStat] = useState(null)
 	// //________________________________________________
 	//images
 	const imgStyle = {
@@ -229,9 +160,7 @@ function UserProfile() {
 			</>
 		)
 	}
-	//________________________________________________
 
-	//TODO: Create interactive buttons to complete and incomplete task causing dynamic changes in user's stats
 	//________________________________________________
 
 
@@ -245,18 +174,21 @@ function UserProfile() {
 							{thumbNailImg()}
 							<div className="user-stats">
 								<div className="user-lvl">
-
+									LEVEL:
+									<div className='lvl-value'>
+										{currLevel}
+									</div>
 								</div>
 								<div className="user-health stat-user">
 									<div className='user-label'>
 										HP:
 									</div>
 									<div className='user-fill'>
-										<progress id="health" value={health} max={health}>
-											{health} / {health}
+										<progress id="health" value={health} max={totalHealth}>
+											{health} / {totalHealth}
 										</progress>
 										<div className='fill-text'>
-											{health} / {health}
+											{health} / {totalHealth}
 										</div>
 									</div>
 								</div>
@@ -265,11 +197,11 @@ function UserProfile() {
 										EXP:
 									</div>
 									<div className='user-fill'>
-										<progress id="experience" value={exp} max={exp}>
-											{exp} / {exp}
+										<progress id="experience" value={exp} max={totalExp}>
+											{exp} / {totalExp}
 										</progress>
 										<div className='fill-text'>
-											{exp} / {exp}
+											{exp} / {totalExp}
 										</div>
 									</div>
 								</div>

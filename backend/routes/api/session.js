@@ -42,15 +42,7 @@ router.post(
 					email: credential
 				}
 			},
-			// include: [userStat, Stat]
-			include: [
-				{
-					model: userStat,
-				},
-				{
-					model: Stat
-				}
-			]
+			include: [userStat, Stat]
 		});
 
 
@@ -62,17 +54,15 @@ router.post(
 			err.errors = { credential: 'The provided credentials were invalid.' };
 			return next(err);
 		}
-		console.log("%c 🚀 ~ file: session.js:65 ~ user ~ user: ", "color: red; font-size: 25px", user, user.userStats)
+		// console.log("%c 🚀 ~ file: session.js:65 ~ user ~ user: ", "color: red; font-size: 25px", user, user.userStats)
 
-		const userInfo = await userStat.findByPk(user.id)
-		const statUser = await Stat.findByPk(user.id)
-
-		//! we need to change the userStats and Stats to just an object rather than an array so that it's data type doesnt change
+		// const userInfo = await userStat.findByPk(user.id)
+		// const statUser = await Stat.findByPk(user.id)
 
 
 		// Checking if userInfo and statUser are arrays and contain elements
-		user.userStats = Array.isArray(userInfo) && userInfo.length > 0 ? userInfo[0] : userInfo;
-		user.Stats = Array.isArray(statUser) && statUser.length > 0 ? statUser[0] : statUser;
+		const userStats = Array.isArray(user.userStats) && user.userStats.length > 0 ? user.userStats[0] : user.userStats;
+		const Stats = Array.isArray(user.Stats) && user.Stats.length > 0 ? user.Stats[0] : user.Stats;
 
 		const safeUser = {
 			id: user.id,
@@ -80,8 +70,8 @@ router.post(
 			displayName: user.displayName,
 			email: user.email,
 			heroClass: user.heroClass,
-			userStats: user.userStats,
-			Stats: user.Stats
+			userStats,
+			Stats
 		};
 
 		await setTokenCookie(res, safeUser);
@@ -116,10 +106,10 @@ router.get(
 			const statUser = await Stat.findByPk(user.id)
 
 
-			console.log("%c 🚀 ~ file: session.js:106 ~ userInfo: ", "color: red; font-size: 25px", userInfo)
+			// console.log("%c 🚀 ~ file: session.js:106 ~ userInfo: ", "color: red; font-size: 25px", userInfo)
 
 
-			console.log("%c 🚀 ~ file: session.js:110 ~ statUser: ", "color: red; font-size: 25px", statUser)
+			// console.log("%c 🚀 ~ file: session.js:110 ~ statUser: ", "color: red; font-size: 25px", statUser)
 
 
 			// Checking if userInfo and statUser are arrays and contain elements

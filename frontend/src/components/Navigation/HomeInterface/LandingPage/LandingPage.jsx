@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import LoginFormModal from '../../../LoginFormModal';
 import OpenModalButton from '../../../OpenModalButton';
@@ -6,7 +6,7 @@ import './LandingPage.css';
 import OpenModalMenuItem from '../../OpenModalMenuItem';
 import SignupFormModal from '../../../SignupFormModal';
 
-function LandingPage({ toggleMenu, showMenu, setShowMenu, onModalOpen, onModalClosed }) {
+function LandingPage({ onModalOpen, onModalClosed }) {
 
 	// console.log("%c 🚀 ~ file: LandingPage.jsx:11 ~ LandingPage ~ setAllowFlip: ", "color: red; font-size: 25px", setAllowFlip)
 
@@ -19,26 +19,9 @@ function LandingPage({ toggleMenu, showMenu, setShowMenu, onModalOpen, onModalCl
 	// TRYING TO ATTEMPT WHEN A USER HOVERS OUTSIDE OF MODAL, THE HTML FLIP BOOK SHOULD NOT ACTIVATE!
 
 
-	// enter useEffect to make flipbook changes
-
-	// // Effect to disable flipbook interaction when modal is open
-	// useEffect(() => {
-	// 	const disableFlipBook = (e) => {
-	// 		if (modalOpen) {
-	// 			e.preventDefault();
-	// 			e.stopPropagation();
-	// 		}
-	// 	};
-
-	// 	// Add event listener to disable interaction when modal is open; questionable necessity
-	// 	document.addEventListener('click', disableFlipBook);
-
-
-	// 	// Clean up event listener
-	// 	return () => {
-	// 		document.removeEventListener('click', disableFlipBook);
-	// 	};
-	// }, [modalOpen]);
+	useEffect(() => {
+		handleModalOpen()
+	}, [modalOpen])
 
 	// Function to handle modal open
 	const handleModalOpen = () => {
@@ -47,10 +30,10 @@ function LandingPage({ toggleMenu, showMenu, setShowMenu, onModalOpen, onModalCl
 	};
 
 
-	const closeMenu = () => {
-		setShowMenu(false)
-		setModalOpen(false)
-	}
+	// const closeMenu = () => {
+	// 	setShowMenu(false)
+	// 	setModalOpen(false)
+	// }
 
 	return (
 		<>

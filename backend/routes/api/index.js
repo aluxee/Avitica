@@ -60,7 +60,7 @@ router.use('/tasks', tasksRouter);
 
 router.use('/inv', inventoryRouter);
 
-router.use('/stats', userStatRouter);
+router.use('/info', userStatRouter);
 
 router.use('/shop', shopRouter);
 

@@ -1,10 +1,6 @@
-import { useState, useEffect, useRef } from 'react';
 import { NavLink } from 'react-router-dom';
-import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import ProfileButton from './ProfileButton';
-import OpenModalButton from '../OpenModalButton';
-import LoginFormModal from '../LoginFormModal';
 import UserProfile from '../UserProfile/UserProfile';
 import { useContext } from 'react';
 import { LoggedContext } from '../../context/LoggedProvider';
@@ -14,38 +10,6 @@ function Navigation({ isLoaded }) {
 
 	const navigate = useNavigate();
 	const { user } = useContext(LoggedContext);
-	const [modalOpen, setModalOpen] = useState(false); // State to track if any modal is open
-
-
-	// Function to handle modal open
-	const handleModalOpen = () => {
-		setModalOpen(true);
-		// closeMenu(); // Close menu when modal opens
-	};
-
-	// Function to handle modal close
-	const handleModalClose = () => {
-		setModalOpen(false);
-	};
-
-	// Effect to disable flipbook interaction when modal is open
-	// useEffect(() => {
-	// 	const disableFlipBook = (e) => {
-	// 		if (modalOpen) {
-	// 			e.preventDefault();
-	// 			e.stopPropagation();
-	// 		}
-	// 	};
-
-	// 	// Add event listener to disable interaction when modal is open; questionable necessity
-	// 	document.addEventListener('click', disableFlipBook);
-
-
-	// 	// Clean up event listener
-	// 	return () => {
-	// 		document.removeEventListener('click', disableFlipBook);
-	// 	};
-	// }, [modalOpen]);
 
 	const otherRedirect = async () => {
 
@@ -62,35 +26,26 @@ function Navigation({ isLoaded }) {
 				</li>
 			</div>
 			<div className='yes-session user-stats'>
-				<UserProfile  />
+				<UserProfile />
 			</div>
 		</div>
 	) : (
 		<>
 			<div className="no-session-outer-container">
-				<div className="no-session-inner-container">
+
+				{/* <div className="no-session-inner-container">
 					<li>
-						{/* <OpenModalButton
-							buttonText="Log In"
-							modalComponent={<LoginFormModal
-								onModalOpen={handleModalOpen}
-								onModalClosed={handleModalClose}
-								navModalOpen={modalOpen}
-
-
-							/>}
-						/> */}
 							<NavLink to="/login">Log In</NavLink>
 					</li>
 					<li>
 						<NavLink to="/signup">Sign Up</NavLink>
 					</li>
-				</div>
+					</div> */}
 				<div>
 
 				</div>
 				{/* <footer>github: @aluxee</footer> */}
-			</div>
+			</div >
 		</>
 	);
 
@@ -165,7 +120,9 @@ function Navigation({ isLoaded }) {
 							</NavLink>
 							{isLoaded && (
 								<li className='nav_list' id='nav_profile'>
-									<ProfileButton user={user} />
+									{/* <ProfileButton user={user} />
+									NOTE: no nav pro buttons if not logged in
+									*/}
 								</li>)}
 						</div>
 					}

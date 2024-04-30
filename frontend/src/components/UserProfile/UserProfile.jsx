@@ -45,7 +45,7 @@ function UserProfile() {
 		setGold(storedGold);
 		// also reflect it on userStats.gold
 		userInfo.gold = gold;
-	}, [userInfo, gold, location, user])
+	}, [userInfo, userInfo.gold, gold, location, user])
 
 	useEffect(() => {
 		goldRef.current = gold
@@ -129,7 +129,7 @@ function UserProfile() {
 		setCurrLevel(level)
 		setTotalHealth(maxHp)
 		setTotalExp(maxExp)
-	}, [dispatch, level, maxHp, maxExp, userInfo.experience])
+	}, [dispatch, level, maxHp, maxExp, userInfo.experience, userInfo.health])
 
 
 	// //________________________________________________

@@ -27,7 +27,7 @@ function LandingHome() {
 		}
 	}
 
-	// Function to handle page navigation when next button is clicked
+	// // Function to handle page navigation when next button is clicked
 	function handleNext() {
 		if (page === 0) {
 			navigate('/about');
@@ -108,8 +108,8 @@ function LandingHome() {
 				}
 
 				<div className="navigation-buttons">
-					{/* <button onClick={handlePrev} disabled={page === 0}>Prev</button> */}
-					{/* <button onClick={handleNext} disabled={page === 2}>Next</button> */}
+					<button onClick={handlePrev} disabled={page === 0}>Prev</button>
+					<button onClick={handleNext} disabled={page === 2}>Next</button>
 				</div>
 			</div>
 		</div>

@@ -53,6 +53,7 @@ div.user-container {
 	font-size: larger;
 	font-weight: bold;
 	color: fuchsia;
+	gap: 5px;
 }
 
 .lvl-value{

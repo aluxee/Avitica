@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import LandingPage from "../LandingPage/LandingPage";
 import About from "../About/About";
 import Features from "../Features/Features";

@@ -26,9 +26,9 @@ module.exports = (sequelize, DataTypes) => {
     }
 
     // Method to calculate level dynamically based on amt of exp points
-    static getLevel(experience) {
+    static getLevel(experience, currLevel) {
       // Calculate level based on total experience
-      let level = 1;
+      let level = currLevel;
       let totalExp = experience;
 
       while (totalExp >= Math.round(Math.max(((level - 1) * 25)) * ((level - 1) * 1.25)) && level < 5) {
@@ -70,7 +70,7 @@ module.exports = (sequelize, DataTypes) => {
 
       // Increase gained exp points per task per level
       if (completed) {
-        expGain = Math.max(10, 50 - (currLevel - 1) * 5);
+        expGain = Math.max(10, 200 + (currLevel - 1) * 75);
         goldGain = Math.max(10, 85 + (currLevel - 1) * 12);
         this.experience += expGain;
         this.gold += goldGain;

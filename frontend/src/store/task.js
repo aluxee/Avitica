@@ -174,7 +174,7 @@ const taskReducer = (state = initialState, action) => {
 		case LOAD_TASKS: {
 			const allTasksState = {};
 
-			console.log("%c 🚀 ~ file: task.js:182 ~ taskReducer ~ allTasksState: ", "color: red; font-size: 25px", allTasksState)
+			console.log("%c 🚀 ~ file: task.js:182 ~ taskReducer ~ allTasksState: ", "color: yellow; font-size: 25px", allTasksState)
 
 			action.tasks.Task.forEach(task => {
 				allTasksState[task.id] = task;
@@ -182,19 +182,7 @@ const taskReducer = (state = initialState, action) => {
 			return allTasksState;
 		}
 
-
 		case LOAD_CURRENT_TASK: {
-			// const currentTaskState = { ...state };
-
-			// action.tasks.Task.forEach(task => {
-			// 	const newTaskState = { ...task }
-
-			// 	currentTaskState[task.id] = { ...state[task.id], ...newTaskState };
-
-			// })
-			// return currentTaskState;
-			// console.log("%c 🚀 ~ file: Checklist.jsx:198 ~ state ~ state inside load curr: ", "color: crimson; font-size: 25px", state)
-
 			return { ...state, [action.task.id]: action.task };
 		}
 

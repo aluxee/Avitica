@@ -29,7 +29,7 @@ function AllTasks() {
 
 	const allTasks = Object.values(taskObj); //an array of all the tasks
 
-	// console.log("%c 🚀 ~ file: AllTasks.jsx:24 ~ AllTasks ~ allTasks: ", "color: orange; font-size: 25px", allTasks)
+	console.log("%c 🚀 ~ file: AllTasks.jsx:24 ~ AllTasks ~ allTasks: ", "color: orange; font-size: 25px", allTasks)
 
 
 	// * -------------GOLD SECTION------------- *
@@ -84,53 +84,55 @@ function AllTasks() {
 		// setTaskComplete(task.completed)
 		if (taskId) {
 
-		await dispatch(thunkEditTask(task, taskId))
+			await dispatch(thunkEditTask(task, taskId))
 
-		// console.log("HEY THERE")
-		// //task handle gold and exp
+			// console.log("HEY THERE")
+			// //task handle gold and exp
 
-		const updatedUserStats = await dispatch(thunkUpdateTaskStatus(taskId))
-		// console.log("HEY WORLD!")
+			const updatedUserStats = await dispatch(thunkUpdateTaskStatus(taskId))
+			// console.log("HEY WORLD!")
 
-		if (updatedUserStats && updatedUserStats.userStats) {
-			const results = await dispatch(thunkLoadUserStats())
+			if (updatedUserStats && updatedUserStats.userStats) {
+				const results = await dispatch(thunkLoadUserStats())
 
-			// console.log("%c 🚀 ~ file: AllTasks.jsx:94 ~ handleTaskComplete ~ results: ", "color: hotpink; font-size: 25px", results)
-			user.userStats = results.userStats
+				// console.log("%c 🚀 ~ file: AllTasks.jsx:94 ~ handleTaskComplete ~ results: ", "color: hotpink; font-size: 25px", results)
+				user.userStats = results.userStats
 
-			// console.log("%c 🚀 ~ file: AllTasks.jsx:97 ~ handleTaskComplete ~ user.userStats: ", "color: orange; font-size: 25px", user.userStats, user.userStats)
-			const newGold = user.userStats.gold
+				// console.log("%c 🚀 ~ file: AllTasks.jsx:97 ~ handleTaskComplete ~ user.userStats: ", "color: orange; font-size: 25px", user.userStats, user.userStats)
+				const newGold = user.userStats.gold
 
-			// console.log("%c 🚀 ~ file: AllTasks.jsx:99 ~ handleTaskComplete ~ newGold: ", "color: red; font-size: 25px", newGold)
+				// console.log("%c 🚀 ~ file: AllTasks.jsx:99 ~ handleTaskComplete ~ newGold: ", "color: red; font-size: 25px", newGold)
 
-			setGold(newGold)
-			localStorage.setItem('gold', newGold.toString())
-
-
-		}
-
-		// //remove task after its been updated
-		await dispatch(thunkRemoveTask(taskId))
-
-		// Remove the completed task from the list of tasks
-		const filteredTasks = allTasks.filter(task => task.id !== taskId);
-		setTasks(filteredTasks);
+				setGold(newGold)
+				localStorage.setItem('gold', newGold.toString())
 
 
-		// // loads current list of tasks
-		await dispatch(thunkLoadTasks()) // effectively deleting live with this catch-all thunk
+			}
+
+			// //remove task after its been updated
+			await dispatch(thunkRemoveTask(taskId))
+
+			// Remove the completed task from the list of tasks
+			const filteredTasks = allTasks.filter(task => task.id !== taskId);
+			setTasks(filteredTasks);
+
+
+			// // loads current list of tasks
+			await dispatch(thunkLoadTasks()) // effectively deleting live with this catch-all thunk
 		}
 
 	}
 
+	// const handleTaskIncomplete = async (task, taskId) => {
 
+	// }
 
 	//* useEffect handling
 
 	useEffect(() => {
 		setTasks(allTasks)
 
-	}, []) // do not put allTasks in dependency-- do not change
+	}, [currTask]) // do not put allTasks in dependency-- do not change
 
 	const completionHandler = (taskId) => {
 		const handleTask = allTasks.filter(task => task.id === taskId)
@@ -158,7 +160,7 @@ function AllTasks() {
 		setShowMenu(!showMenu)
 	};
 
-console.log('tasks', tasks)
+	// console.log('tasks', tasks)
 
 	return (
 		<>
@@ -175,16 +177,16 @@ console.log('tasks', tasks)
 					<div className='all-task-container'
 					// key={tasks.id}
 					>
-						{tasks.length && tasks ? tasks.map((task, index) => (
+						{allTasks.length && allTasks ? allTasks.map((task, index) => (
 							<div className='at-tasks'
 								key={index}
 							>
 								<div className='task-mark complete'
-									// onClick={() => alert('Points feature coming soon!')}
-									onClick={() => handleTaskComplete(task, task.id)}
+								// onClick={() => alert('Points feature coming soon!')}
+
 								>
 									<i className="fa-solid fa-check"
-
+										onClick={() => handleTaskComplete(task, task.id)}
 									/>
 								</div>
 								<div className='task-div'>

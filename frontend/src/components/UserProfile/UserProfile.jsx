@@ -1,12 +1,11 @@
 import { useLocation } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { useEffect, useState, useRef } from 'react';
-// import { thunkLoadStats } from '../../store/stats';
 import './UserProfile.css';
 import { one, two, three, four, five } from '../../clips';
 import { useContext } from 'react';
 import { LoggedContext } from '../../context/LoggedProvider';
-import { thunkGetMaxStats, thunkLoadUserStats } from '../../store/userStats';
+import { thunkGetMaxStats } from '../../store/userStats';
 
 function UserProfile() {
 	const dispatch = useDispatch();
@@ -46,7 +45,8 @@ function UserProfile() {
 		setGold(storedGold);
 		// also reflect it on userStats.gold
 		userInfo.gold = gold;
-	}, [userInfo.gold, gold, location, user])
+	}, [userInfo, gold, location, user])
+
 	useEffect(() => {
 		goldRef.current = gold
 	}, [gold])
@@ -85,7 +85,7 @@ function UserProfile() {
 
 	console.log("%c 🚀 ~ file: UserProfile.jsx:91 ~ UserProfile ~ level: ", "color: tomato; font-size: 25px", level);
 
-	const [currLevel, currSetLevel] = useState(level);
+	const [currLevel, setCurrLevel] = useState(level);
 	// * -------------HEALTH SECTION------------- *
 	//!! Fix initial render, then check the math
 	const healthBar = userInfo.health ? userInfo.health : 100;
@@ -124,7 +124,9 @@ function UserProfile() {
 
 	useEffect(() => {
 		setExp(userInfo.experience)
+		setHealth(userInfo.health)
 		dispatch(thunkGetMaxStats(level))
+		setCurrLevel(level)
 		setTotalHealth(maxHp)
 		setTotalExp(maxExp)
 	}, [dispatch, level, maxHp, maxExp, userInfo.experience])

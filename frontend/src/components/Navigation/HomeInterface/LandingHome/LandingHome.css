@@ -1,26 +1,27 @@
 .home-outer {
 	display: flex;
 	position: relative;
-	/* top: 0rem; */
-	max-width: 100%;
-	max-height: 100%;
-	width: 400vh;
-	height: 400vh;
+	top: 4rem;
+	max-width: 400vh;
+	max-height: 400vh;
+	width: 100%;
+	height: 100%;
 	/* flex-direction: column; */
 	/* flex-wrap: wrap; */
 	background-color: black;
 	align-content: center;
-
+	overflow-y: overlay;
 }
 
 .home-inner {
+	position: relative;
+	top: 12rem;
 	display: flex;
 	flex-direction: row;
 	flex-wrap: wrap;
 	justify-content: center;
 	align-items: center;
 	width: 100%;
-	height: 50%;
+	height: 100%;
 	align-content: center;
-	position: relative;
 }

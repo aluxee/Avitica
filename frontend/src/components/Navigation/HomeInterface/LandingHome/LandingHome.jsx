@@ -27,7 +27,7 @@ function LandingHome() {
 		}
 	}
 
-	// Function to handle page navigation when next button is clicked
+	// // Function to handle page navigation when next button is clicked
 	function handleNext() {
 		if (page === 0) {
 			navigate('/about');
@@ -89,7 +89,7 @@ function LandingHome() {
 				{
 					modalOpen ? null : (
 
-						<HTMLFlipBook width={800} height={800} minWidth={315} maxWidth={1150} minHeight={400} maxHeight={1533} showCover={true} currentPage={page}>
+						<HTMLFlipBook width={800} height={800} minWidth={315} maxWidth={1150} minHeight={400} maxHeight={1200} showCover={true} currentPage={page}>
 
 							<div className="demoPage">
 								<LandingPage closeMenu={closeMenu} toggleMenu={toggleMenu} showMenu={showMenu} setShowMenu={setShowMenu}

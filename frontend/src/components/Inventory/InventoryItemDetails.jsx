@@ -75,7 +75,7 @@ function InventoryItemDetails({ item, index, removeItem }) {
 			alert('You do not have to use this item, you are already full health!');
 			closeModal();
 		} else {
-			if (user.userStats.health + 50 > maxHp) {
+			if (user.userStats.health + 50 >= maxHp) {
 				user.userStats.health = maxHp
 			} else {
 				user.userStats.health += 50

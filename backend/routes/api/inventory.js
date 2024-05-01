@@ -80,12 +80,14 @@ router.post('/new', requireAuth, async (req, res) => {
 
 	const invArr = [];
 	let newStatUser;
+	let confirmItem;
 	for (let item of cartItems) {
 
 		console.log("%c 🚀 ~ file: inventory.js:85 ~ router.post ~ item: ", "color: red; font-size: 25px", item)
 		let currHealthBoost;
 		if (item.itemName === 'Red Potion') {
 			currHealthBoost = true
+			confirmItem = true
 
 
 		}
@@ -133,7 +135,7 @@ router.post('/new', requireAuth, async (req, res) => {
 			userId: req.user.id,
 			shopId: shopItem.id,
 			itemName: item.itemName,
-			itemType: item.itemType,
+			itemType: item.itemType || item.itemName === 'Red Potion' ? confirmItem : item.itemType,
 			healthBoost: item.healthBoost || item.itemName === 'Red Potion' ? currHealthBoost : item.healthBoost,
 			statBoost: item.statBoost,
 			gear: item.gear,

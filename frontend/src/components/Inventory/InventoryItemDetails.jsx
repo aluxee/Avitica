@@ -36,6 +36,7 @@ function InventoryItemDetails({ item, index, itemId, removeItem }) {
 
 	console.log("%c 🚀 ~ file: InventoryItemDetails.jsx:26 ~ InventoryItemDetails ~ currInv: ", "color: deepskyblue; font-size: 25px", currInv);
 	const [des, setDes] = useState(invItem.Shop.description || "");
+	const { maxHp, maxExp } = useSelector(state => state.userStats);
 
 	//grab inventory in storage and set it to currInv state
 	useEffect(() => {
@@ -56,7 +57,9 @@ function InventoryItemDetails({ item, index, itemId, removeItem }) {
 
 	}, [invItem.Shop.description, invItem])
 
+	useEffect(() => {
 
+	}, [maxHp, user.userStats.health])
 
 	//TODO: click equip changes invItem.equipped to true
 	//TODO: click useItem for health potion if health is less than max
@@ -67,6 +70,18 @@ function InventoryItemDetails({ item, index, itemId, removeItem }) {
 		//if user's health is less than max, add + 50 to the user's health(check first)
 		await dispatch(thunkGetMaxStats(level))
 		// either use the backend route or frontend wise calculate for the new hp and set that to the most current userStat
+		if (user.userStats.health === maxHp) {
+			alert('You do not have to use this item, you are already full health!');
+			closeModal();
+		} else {
+			if (user.userStats.health += 50 > maxHp) {
+				user.userStats.health = maxHp
+			} else {
+				user.userStats.health += 50
+			}
+			removeItem(item, item.id)
+			return user.userStats
+		}
 
 		//remove selected item from inventory
 
@@ -110,21 +125,15 @@ function InventoryItemDetails({ item, index, itemId, removeItem }) {
 							disabled={invItem.equipped}
 						>
 							{
-								(invItem.itemName === "Red Potion") || ((!invItem.gear || !invItem.wep) && invItem.statBoost) && (<div
+								(invItem.itemType) && (<div
 									onClick={() => handleItemUsage(invItem)}
 								>
 									Use Item
 								</div>)
 							}
-							{/* {
-								(!invItem.gear || !invItem.wep) && invItem.statBoost && (<div
-									onClick={() => handleItemUsage(invItem)}
-								>
-									Use Item
-								</div>)
-							} */}
+
 							{
-								(!invItem.healthBoost) && (invItem.gear || invItem.wep) && (<div>
+								(!invItem.itemType) && (<div>
 									Equip
 								</div>)
 							}

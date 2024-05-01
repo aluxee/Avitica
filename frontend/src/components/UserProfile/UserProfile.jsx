@@ -83,6 +83,9 @@ function UserProfile() {
 	console.log("%c 🚀 ~ file: UserProfile.jsx:91 ~ UserProfile ~ level: ", "color: tomato; font-size: 25px", level);
 
 	const [currLevel, setCurrLevel] = useState(level);
+
+	console.log("%c 🚀 ~ file: UserProfile.jsx:87 ~ UserProfile ~ currLevel: ", "color: red; font-size: 25px", currLevel)
+
 	// * -------------HEALTH SECTION------------- *
 	//!! Fix initial render, then check the math
 	const healthBar = userInfo.health ? userInfo.health : 100;

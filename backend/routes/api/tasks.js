@@ -200,24 +200,15 @@ function calcDefaultHealth(level) {
 function calcDefaultExperience(level) {
 	return level === 1 ? 100 : Math.max(Math.round(((level - 1) * 25) * ((level - 1) * 1.25)), 0); // 2 = 125, 3 = 187, 5 = 500
 }
-function getLevel(experience, currLevel) {
-	let level = currLevel;
-	let totalExp = experience;
 
-	while (totalExp >= Math.round(Math.max(((level - 1) * 25)) * ((level - 1) * 1.25)) && level < 10) {
-		level++;
-		totalExp -= Math.round(Math.max(((level - 1) * 25) * ((level - 1) * 1.25)))
-	}
-	return level;
-}
-Math.max(((2 - 1) * 25)) * ((2 - 1) * 1.25)
+// Math.max(((2 - 1) * 25)) * ((2 - 1) * 1.25)
 function calculateExperienceThreshold(currentLevel) {
-	// Define base experience and experience increment
-	const baseExperience = 100; // Adjust this value as needed
-	const experienceIncrement = 50; // Adjust this value as needed
 
 	// Calculate the experience threshold for the next level
-	const threshold = baseExperience + (currentLevel - 1) * experienceIncrement;
+
+	const threshold = Math.max(Math.round(((parseInt(currentLevel) - 1) * 25) * ((parseInt(currentLevel) - 1) * 1.25)) + 100, 0);
+
+	console.log("%c 🚀 ~ file: tasks.js:214 ~ calculateExperienceThreshold ~ threshold: ", "color: red; font-size: 25px", threshold)
 
 	return threshold;
 }
@@ -230,6 +221,9 @@ function calcHpAndExp(completed, level) {
 	// Increase gained exp points per task per level
 	if (completed) {
 		expGain = Math.max(10, 50 - (currLevel - 1) * 5);
+
+		// console.log("%c 🚀 ~ file: tasks.js:228 ~ calcHpAndExp ~ expGain: ", "color: red; font-size: 25px", expGain)
+
 		goldGain = Math.max(10, 85 + (currLevel - 1) * 12);
 		this.experience += expGain;
 		this.gold += goldGain;
@@ -279,7 +273,13 @@ router.put('/:taskId/status', requireAuth, async (req, res) => {
 
 	// retrieve user's current level
 	const currLevel = userStatus.level;
+
+	console.log("%c 🚀 ~ file: tasks.js:283 ~ router.put ~ currLevel: ", "color: red; font-size: 25px", currLevel)
+
 	const expThreshold = calculateExperienceThreshold(currLevel)
+
+	console.log("%c 🚀 ~ file: tasks.js:287 ~ router.put ~ expThreshold: ", "color: red; font-size: 25px", expThreshold)
+
 	// initialize experience gain variable
 	// let expGain = 0;
 	//initialize gold gain variable
@@ -290,7 +290,13 @@ router.put('/:taskId/status', requireAuth, async (req, res) => {
 		let expGain;
 		let goldGain;
 		expGain = Math.max(10, 50 - (currLevel - 1) * 5);
+
+		console.log("%c 🚀 ~ file: tasks.js:300 ~ router.put ~ expGain: ", "color: red; font-size: 25px", expGain)
+
 		goldGain = Math.max(10, 85 + (currLevel - 1) * 12);
+
+		console.log("%c 🚀 ~ file: tasks.js:304 ~ router.put ~ goldGain: ", "color: red; font-size: 25px", goldGain)
+
 
 		userStatus.experience += expGain;
 

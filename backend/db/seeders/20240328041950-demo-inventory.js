@@ -39,6 +39,7 @@ module.exports = {
       {
         userId: 1,
         shopId: 2,
+        itemType: true,
         itemName: `Power Muffin's ${dataOtherPotion.name}`,
         statBoost: true,
         gear: false,
@@ -47,6 +48,7 @@ module.exports = {
       {
         userId: 1,
         shopId: 3,
+        itemType: true,
         itemName: `Magic Jello's ${dataOtherPotion.name}`,
         statBoost: true,
         gear: false,
@@ -73,6 +75,7 @@ module.exports = {
       {
         userId: 2,
         shopId: 4,
+        itemType: true,
         itemName: `Lucky Farms: ${dataOtherPotion.name}`,
         statBoost: true,
         gear: false,
@@ -89,6 +92,7 @@ module.exports = {
       {
         userId: 2,
         shopId: 1,
+        itemType: true,
         itemName: `${dataHpPotion.name}`,
         healthBoost: true,
         gear: false,
@@ -115,6 +119,7 @@ module.exports = {
       {
         userId: 3,
         shopId: 1,
+        itemType: true,
         itemName: `${dataHpPotion.name}`,
         healthBoost: true,
         gear: false,

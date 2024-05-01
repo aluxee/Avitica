@@ -181,7 +181,6 @@ router.get('/:userId/potion', requireAuth, async (req, res) => {
 
 
 
-
 // Get userStats max stats (exp and health) for a user upon task completion
 
 router.get('/max-stats/:level', requireAuth, async (req, res) => {
@@ -205,7 +204,7 @@ router.get('/max-stats/:level', requireAuth, async (req, res) => {
 
 	} else {
 		maxHp = Math.max(Math.round(50 * (parseInt(level) - 1) * 2.5), 0);
-		maxExp = Math.max(Math.round(((parseInt(level) - 1) * 25) * ((parseInt(level) - 1) * 1.25)), 0);
+		maxExp = Math.max(Math.round(((parseInt(level) - 1) * 25) * ((parseInt(level) - 1) * 1.25)) + 100, 0);
 
 		userStatus.maxHp = maxHp
 		userStatus.maxExp = maxExp

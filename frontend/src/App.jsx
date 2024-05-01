@@ -15,8 +15,9 @@ import About from './components/Navigation/HomeInterface/About/About';
 import Features from './components/Navigation/HomeInterface/Features/Features';
 import * as sessionActions from './store/session';
 import Home from './components/Home/Home';
-import ShopDetails from './components/Shop/ShopDetails';
+import Avatar from './components/Avatar/Avatar';
 import Inventory from './components/Inventory/Inventory';
+import ShopDetails from './components/Shop/ShopDetails';
 // import
 
 
@@ -99,6 +100,10 @@ const router = createBrowserRouter([
       {
         path: '/tasks',
         element: <Home />
+      },
+      {
+        path: '/avatar',
+        element: <Avatar />
       },
       {
         path: '/stats',

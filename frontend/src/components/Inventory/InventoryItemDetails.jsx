@@ -1,13 +1,12 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { useEffect, useState, useRef, useContext } from 'react';
-// import { useLocation } from 'react-router-dom';
+import { useEffect, useState, useContext } from 'react';
+
 import { LoggedContext } from '../../context/LoggedProvider';
 import { useModal } from '../../context/Modal';
 import './InventoryItemDetails.css';
-import { thunkLoadInventory, thunkRemoveInventoryItem } from '../../store/inventory';
 import { thunkGetMaxStats } from '../../store/userStats';
 
-function InventoryItemDetails({ item, index, itemId, removeItem }) {
+function InventoryItemDetails({ item, index, removeItem }) {
 
 	console.log("%c 🚀 ~ file: InventoryItemDetails.jsx:9 ~ InventoryItemDetails ~ item: ", "color: blueviolet; font-size: 25px", item)
 
@@ -36,7 +35,9 @@ function InventoryItemDetails({ item, index, itemId, removeItem }) {
 
 	console.log("%c 🚀 ~ file: InventoryItemDetails.jsx:26 ~ InventoryItemDetails ~ currInv: ", "color: deepskyblue; font-size: 25px", currInv);
 	const [des, setDes] = useState(invItem.Shop.description || "");
-	const { maxHp, maxExp } = useSelector(state => state.userStats);
+	const { maxHp } = useSelector(state => state.userStats);
+
+
 
 	//grab inventory in storage and set it to currInv state
 	useEffect(() => {
@@ -74,7 +75,7 @@ function InventoryItemDetails({ item, index, itemId, removeItem }) {
 			alert('You do not have to use this item, you are already full health!');
 			closeModal();
 		} else {
-			if (user.userStats.health += 50 > maxHp) {
+			if (user.userStats.health + 50 > maxHp) {
 				user.userStats.health = maxHp
 			} else {
 				user.userStats.health += 50
@@ -87,13 +88,13 @@ function InventoryItemDetails({ item, index, itemId, removeItem }) {
 
 	}
 
-	const handleWepOrGearUsage = (gear) => {
+	// const handleWepOrGearUsage = (gear) => {
 
-	}
+	// }
 
-	const itemFunctionHandler = () => {
+	// const itemFunctionHandler = () => {
 
-	}
+	// }
 	return (
 		<>
 			<div className='outer-inv-item-container'>

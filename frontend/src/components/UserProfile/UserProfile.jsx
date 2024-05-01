@@ -42,7 +42,7 @@ function UserProfile() {
 		setGold(storedGold);
 		// also reflect it on userStats.gold
 		userInfo.gold = gold;
-	}, [userInfo, userInfo.gold, gold, location, user])
+	}, [userInfo, userInfo.gold, gold, location, user, storedGold])
 
 	useEffect(() => {
 		goldRef.current = gold

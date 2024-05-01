@@ -61,7 +61,7 @@ function ShopDetails() {
 	useEffect(() => {
 		goldRef.current = gold
 		setGold(goldRef.current)
-	}, [gold, location, goldRef.current])
+	}, [gold, location, goldRef])
 
 
 

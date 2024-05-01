@@ -240,9 +240,11 @@ function AllTasks() {
 
 								</div>
 								<div className='task-mark incomplete'
-									onClick={() => handleTaskIncomplete(task, task.id)}
+
 								>
-									<i className="fa-solid fa-xmark" />
+									<i className="fa-solid fa-xmark"
+										onClick={() => handleTaskIncomplete(task, task.id)}
+									/>
 								</div>
 							</div>
 						))

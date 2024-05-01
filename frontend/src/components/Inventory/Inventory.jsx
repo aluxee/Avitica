@@ -36,11 +36,11 @@ function Inventory() {
 			//grab inventory array in LS
 			const inventory = JSON.parse(localStorage.getItem('inventory'))
 
-			console.log("%c 🚀 ~ file: InventoryItemDetails.jsx:44 ~ removeItem ~ inventory: ", "color: deepskyblue; font-size: 25px", inventory)
+			// console.log("%c 🚀 ~ file: InventoryItemDetails.jsx:44 ~ removeItem ~ inventory: ", "color: deepskyblue; font-size: 25px", inventory)
 			// updated inventory array in LS to be array without selected item
 			const updatedInventory = inventory.filter(i => i.id !== itemId)
 			await dispatch(thunkRemoveInventoryItem(itemId))
-			console.log("%c 🚀 ~ file: Inventory.jsx:46 ~ removeItem ~ item: ", "color: blue; font-size: 25px", item, item.id, itemId)
+			// console.log("%c 🚀 ~ file: Inventory.jsx:46 ~ removeItem ~ item: ", "color: blue; font-size: 25px", item, item.id, itemId)
 			localStorage.setItem('inventory', JSON.stringify(updatedInventory))
 			setInv(updatedInventory)
 			closeModal();

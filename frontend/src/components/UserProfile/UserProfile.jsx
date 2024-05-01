@@ -10,18 +10,15 @@ function UserProfile() {
 	const dispatch = useDispatch();
 	const location = useLocation();
 	const { user } = useContext(LoggedContext);
-	let rawUserStats = useSelector(state => state.userStats)
+	let rawUserStats = useSelector(state => state.userStats);
 
 
 	const userInfo = user.userStats; // this is an array containing an object, to ensure always object we select the first and only index
 
 	console.log("%c 🚀 ~ file: UserProfile.jsx:24 ~ UserProfile ~ userInfo: ", "color: blueviolet; font-size: 25px", userInfo)
 
-
 	//re-write userStat's raw state
 	rawUserStats = userInfo
-
-	// console.log("%c 🚀 ~ file: UserProfile.jsx:25 ~ UserProfile ~ rawUserStats: ", "color: cadetblue; font-size: 25px", rawUserStats)
 
 	// * -------------GOLD SECTION------------- *
 	const storedGold = parseInt(localStorage?.getItem('gold'), 10);
@@ -79,7 +76,6 @@ function UserProfile() {
 
 	// * -------------LEVEL SECTION------------- *
 	const level = userInfo.level;
-//TODO: AFTER LEVEL 2 ON DEMO, EXP BAR NO LONGER STARTS OVER EVEN WHEN NUMBER SURPASSES MAX, AND EXP POINTS PER LEVEL SHOULD BE SMALLER ESP FOR EARLIER LEVELS
 	console.log("%c 🚀 ~ file: UserProfile.jsx:91 ~ UserProfile ~ level: ", "color: tomato; font-size: 25px", level);
 
 	const [currLevel, setCurrLevel] = useState(level);
@@ -88,19 +84,33 @@ function UserProfile() {
 
 	// * -------------HEALTH SECTION------------- *
 	//!! Fix initial render, then check the math
-	const healthBar = userInfo.health ? userInfo.health : 100;
+	const healthBar = userInfo?.health;
 
-	// console.log("%c 🚀 ~ file: UserProfile.jsx:97 ~ UserProfile ~ healthBar: ", "color: crimson; font-size: 25px", healthBar, userInfo)
+	console.log("%c 🚀 ~ file: UserProfile.jsx:97 ~ UserProfile ~ healthBar: ", "color: crimson; font-size: 25px", healthBar, userInfo) // 50
 
 	// console.log("%c 🚀 ~ file: UserProfile.jsx:100 ~ UserProfile ~ storedHealth: ", "color: crimson; font-size: 25px", storedHealth)
-
 	const [health, setHealth] = useState(healthBar);
+
+	console.log("%c 🚀 ~ file: UserProfile.jsx:98 ~ UserProfile ~ health: ", "color: red; font-size: 25px", health)
+//TODO: An issue with the health, where if a user uses a potion, their health is changed on the db but it is not reflected upon refresh
 	const [totalHealth, setTotalHealth] = useState(0);
-	// const healthRef = useRef(health);
+	const healthRef = useRef(healthBar);
+
+	console.log("%c 🚀 ~ file: UserProfile.jsx:103 ~ UserProfile ~ healthRef: ", "color: red; font-size: 25px", healthRef)
+
+	useEffect(() => {
+		setHealth(healthRef.current)
+		console.log("%c 🚀 ~ file: UserProfile.jsx:109 ~ useEffect ~ healthRef: ", "color: red; font-size: 25px", healthRef)
+	}, [healthBar, healthRef])
+
+
+	console.log("%c 🚀 ~ file: UserProfile.jsx:99 ~ UserProfile ~ healthRef: ", "color: magenta; font-size: 28px", healthRef); //14
+
+
+
+
 
 	// * -------------EXP SECTION------------- *
-	//!! Fix initial render, then check the math
-
 	const expBar = userInfo.experience ? userInfo.experience : 0;
 
 	console.log("%c 🚀 ~ file: UserProfile.jsx:144 ~ UserProfile ~ expBar: ", "color: crimson; font-size: 25px", expBar)
@@ -120,7 +130,7 @@ function UserProfile() {
 		setCurrLevel(level)
 		setTotalHealth(maxHp)
 		setTotalExp(maxExp)
-	}, [dispatch, level, maxHp, maxExp, userInfo.experience, userInfo.health])
+	}, [dispatch, level, maxHp, maxExp, userInfo.experience, userInfo.health, healthBar, healthRef])
 
 
 	// //________________________________________________

@@ -1,10 +1,11 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { useEffect, useState, useContext } from 'react';
+import { useEffect, useState, useContext, useRef } from 'react';
 
 import { LoggedContext } from '../../context/LoggedProvider';
 import { useModal } from '../../context/Modal';
 import './InventoryItemDetails.css';
 import { thunkGetMaxStats } from '../../store/userStats';
+import { thunkLoadInventory } from '../../store/inventory';
 
 function InventoryItemDetails({ item, index, removeItem }) {
 
@@ -32,9 +33,13 @@ function InventoryItemDetails({ item, index, removeItem }) {
 	console.log("%c 🚀 ~ file: InventoryItemDetails.jsx:18 ~ InventoryItemDetails ~ invItem: ", "color: pink; font-size: 25px", invItem)
 
 	const [currInv, setCurrInv] = useState(invArr);
-
-	console.log("%c 🚀 ~ file: InventoryItemDetails.jsx:26 ~ InventoryItemDetails ~ currInv: ", "color: deepskyblue; font-size: 25px", currInv);
+	// console.log("%c 🚀 ~ file: InventoryItemDetails.jsx:26 ~ InventoryItemDetails ~ currInv: ", "color: deepskyblue; font-size: 25px", currInv);
 	const [des, setDes] = useState(invItem.Shop.description || "");
+	const healthRef = useRef(user.userStats.health);
+	const [health, setHealth] = useState(healthRef.current);
+
+	// console.log("%c 🚀 ~ file: InventoryItemDetails.jsx:41 ~ InventoryItemDetails ~ health: ", "color: red; font-size: 25px", health)
+
 	const { maxHp } = useSelector(state => state.userStats);
 
 
@@ -43,7 +48,7 @@ function InventoryItemDetails({ item, index, removeItem }) {
 	useEffect(() => {
 		const storedInventory = JSON.parse(localStorage.getItem('inventory'))
 		setCurrInv(storedInventory)
-	}, [invItem, index, invItem.id])
+	}, [invItem, index, invItem.id, currInv])
 
 
 	//WATCH ITEM DESCRIPTION DETAILS
@@ -58,35 +63,43 @@ function InventoryItemDetails({ item, index, removeItem }) {
 
 	}, [invItem.Shop.description, invItem])
 
-	useEffect(() => {
 
-	}, [maxHp, user.userStats.health])
 
-	//TODO: click equip changes invItem.equipped to true
 	//TODO: click useItem for health potion if health is less than max
 	//TODO: click useItem for other potion
 
 	const handleItemUsage = async (item) => {
 
-		//if user's health is less than max, add + 50 to the user's health(check first)
 		await dispatch(thunkGetMaxStats(level))
-		// either use the backend route or frontend wise calculate for the new hp and set that to the most current userStat
+		// the user's health is full, but upon refresh it is displayed as the old health
 		if (user.userStats.health === maxHp) {
 			alert('You do not have to use this item, you are already full health!');
 			closeModal();
+			//!! if there's an error with the health being restored in db but resetting per refresh, the alert appears twice
 		} else {
 			if (user.userStats.health + 50 >= maxHp) {
-				user.userStats.health = maxHp
+				healthRef.current = maxHp
+				user.userStats.health = healthRef.current
+				setHealth(healthRef.current)
 			} else {
-				user.userStats.health += 50
+				//if user's health is less than max, add + 50 to the user's health(check first)
+				healthRef.current = user.userStats.health += 50
+				setHealth(healthRef.current)
+				// setHealth(user.userStats.health)
+
+				console.log("%c 🚀 ~ file: InventoryItemDetails.jsx:83 ~ handleItemUsage ~ user.userStats: ", "color: red; font-size: 25px", user.userStats)
+
 			}
+			//remove selected item from inventory
 			removeItem(item, item.id)
-			return user.userStats
 		}
-
-		//remove selected item from inventory
-
+		return user.userStats
 	}
+
+	useEffect(() => {
+		// handleItemUsage()
+		// dispatch(thunkLoadInventory())
+	}, [maxHp, user.userStats.health, user.userStats, health,])
 
 	// const handleWepOrGearUsage = (gear) => {
 
@@ -140,12 +153,6 @@ function InventoryItemDetails({ item, index, removeItem }) {
 							}
 						</button>
 					</div>
-					<button
-						onClick={() => removeItem(invItem, invItem.id)}
-					>
-						Delete Test
-					</button>
-
 				</div>
 
 			</div>

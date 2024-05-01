@@ -274,7 +274,9 @@ function Task({ task, taskId }) {
 					</h4>
 					{checklist && checklist.length > 0 ?
 
-						<Checklist taskId={taskId} checklist={checklist} setChecklist={setChecklist} />
+						<Checklist taskId={taskId} checklist={checklist} setChecklist={setChecklist}
+						task={task}
+						/>
 						:
 						<>
 							<OpenModalMenuItem

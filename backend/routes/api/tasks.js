@@ -291,11 +291,11 @@ router.put('/:taskId/status', requireAuth, async (req, res) => {
 		let goldGain;
 		expGain = Math.max(10, 50 - (currLevel - 1) * 5);
 
-		console.log("%c 🚀 ~ file: tasks.js:300 ~ router.put ~ expGain: ", "color: red; font-size: 25px", expGain)
+		// console.log("%c 🚀 ~ file: tasks.js:300 ~ router.put ~ expGain: ", "color: red; font-size: 25px", expGain)
 
 		goldGain = Math.max(10, 85 + (currLevel - 1) * 12);
 
-		console.log("%c 🚀 ~ file: tasks.js:304 ~ router.put ~ goldGain: ", "color: red; font-size: 25px", goldGain)
+		// console.log("%c 🚀 ~ file: tasks.js:304 ~ router.put ~ goldGain: ", "color: red; font-size: 25px", goldGain)
 
 
 		userStatus.experience += expGain;

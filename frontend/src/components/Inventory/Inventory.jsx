@@ -36,11 +36,11 @@ function Inventory() {
 			//grab inventory array in LS
 			const inventory = JSON.parse(localStorage.getItem('inventory'))
 
-			// console.log("%c 🚀 ~ file: InventoryItemDetails.jsx:44 ~ removeItem ~ inventory: ", "color: deepskyblue; font-size: 25px", inventory)
+			console.log("%c 🚀 ~ file: InventoryItemDetails.jsx:44 ~ removeItem ~ inventory: ", "color: deepskyblue; font-size: 25px", inventory)
 			// updated inventory array in LS to be array without selected item
 			const updatedInventory = inventory.filter(i => i.id !== itemId)
 			await dispatch(thunkRemoveInventoryItem(itemId))
-			// console.log("%c 🚀 ~ file: Inventory.jsx:46 ~ removeItem ~ item: ", "color: blue; font-size: 25px", item, item.id, itemId)
+			console.log("%c 🚀 ~ file: Inventory.jsx:46 ~ removeItem ~ item: ", "color: blue; font-size: 25px", item, item.id, itemId)
 			localStorage.setItem('inventory', JSON.stringify(updatedInventory))
 			setInv(updatedInventory)
 			closeModal();
@@ -62,7 +62,6 @@ function Inventory() {
 	useEffect(() => {
 		// Move items from cart to inventory when the component mounts
 		moveItemsToInventory(); //* removing dependency array or adding this function to dependency array, or solely putting it outside of the useEffect causes repeats
-		removeItem();
 	}, [location, invObj]);
 
 
@@ -98,11 +97,12 @@ function Inventory() {
 												alt={item.itemName} className='shop-img'
 											/>
 										}
-										modalComponent={<InventoryItemDetails item={item} index={index}
-											itemId={item.id}
+										modalComponent={<InventoryItemDetails
+											item={item}
+											// index={index}
+										// 	itemId={item.id}
 											removeItem={removeItem}
 										/>}
-									// key={index}
 									/>
 
 									{itemCounts[item.itemName] > 1 &&

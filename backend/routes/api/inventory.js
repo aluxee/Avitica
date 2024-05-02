@@ -27,44 +27,113 @@ router.delete('/:itemId', requireAuth, authorization, async (req, res) => {
 
 })
 
+function calcDefaultHealth(level) {
+	return level === 1 ? 50 : Math.max(Math.round(50 * (level - 1) * 2.5));
+}
+
 //for utilization of an item
-router.post('/use-item', requireAuth, async (req, res) => {
+router.put('/:itemId/red-potion', requireAuth, async (req, res) => {
 	try {
-		const { itemId, userId } = req.body;
+		const { userId } = req.body;
+		const { itemId } = req.params;		// Retrieve the inventory item with its associated stat
+		const redPotion = "Red Potion";
+		const invItemRedPotion = await Inventory.findByPk(itemId, {
+			where: {
+				itemName: redPotion
+			}
+		})
 
-		// Retrieve the inventory item with its associated stat
-		const inventoryItem = await Inventory.findOne({
-			where: { id: itemId },
-			include: { association: 'Stat' }
-		});
-
-		if (!inventoryItem) {
-			return res.status(404).json({ message: 'Inventory item not found' });
-		}
-
-		// Extract the stat value from the inventory item
-		const { hp } = inventoryItem.Stat;
-
-		// Add the extracted stat value to the user's stats
-		const user = await User.findByPk(userId);
-		if (!user) {
+		if (!userId) {
 			return res.status(404).json({ message: 'User not found' });
 		}
 
-		// Assuming the user has a stats association
-		user.Stats.hp += hp; // Add the hp stat to the user's existing hp
+		if (!invItemRedPotion) {
+			return res.status(404).json({ message: 'Inventory item not found' });
+		}
+
+		console.log("%c 🚀 ~ file: inventory.js:46 ~ router.put ~ invItemRedPotion: ", "color: red; font-size: 25px", invItemRedPotion);
+		if (invItemRedPotion) {
+
+			invItemRedPotion.gear = false
+			invItemRedPotion.wep = false;
+			await invItemRedPotion.save();
+			res
+				.status(201)
+				.json({
+					invItemRedPotion
+				})
+		}
+		console.log("%c 🚀 ~ file: inventory.js:59 ~ router.put ~ invItemRedPotion: ", "color: red; font-size: 25px", "CODE 526291", invItemRedPotion)
+
+		const userStatus = await userStat.findByPk(userId, {
+			where: {
+				userId
+			}
+		})
+
+		console.log("%c 🚀 ~ file: inventory.js:53 ~ router.put ~ userStat: ", "color: red; font-size: 25px", userStat)
+		// if (invItemRedPotion.itemName === redPotion) {
+
+		// invItemRedPotion.userStat = userStatus
+		// await invItemRedPotion.save();
+		// console.log("%c 🚀 ~ file: inventory.js:57 ~ router.put ~ invItemRedPotion: ", "color: red; font-size: 25px", invItemRedPotion)
+		console.log("%c 🚀 ~ file: inventory.js:80 ~ router.post ~ invItemRedPotion: ", "color: red; font-size: 25px", invItemRedPotion)
+
+
+		const { health } = userStatus;
+		let userHealth = health;
+
+		console.log("%c 🚀 ~ file: inventory.js:57 ~ router.post ~ health: ", "color: red; font-size: 25px", userHealth)
+
+
+		// Add the hp stat value to the user's stats
+		if (invItemRedPotion.itemName === "Red Potion") {
+			const currLevel = userStatus.level;
+			const maximumHealth = calcDefaultHealth(currLevel)
+
+			if (userHealth + 50 > maximumHealth) {
+				userHealth = maximumHealth
+			} else if (userHealth === maximumHealth) {
+				return res
+					.status(400)
+					.json({
+						message: "Health is already full"
+					})
+			} else {
+
+				userHealth += maximumHealth
+			}
+			await userStatus.save();
+			// check to ensure that the userStatus has been updated under Inventory, otherwise add userStatus directly to invItemRedPotion
+			invItemRedPotion.userStat = userStatus
+			await invItemRedPotion.save();
+
+			return res
+				.status(200)
+				.json({
+					message: "Health replenishment successful",
+					userStat: {
+						health: userStatus.health,
+						level: currLevel,
+						experience: userStatus.experience,
+						gold: userStatus.health
+					}
+				})
+		}
 
 		// Save the updated user
-		await user.save();
 
-		return res.status(200).json({ message: 'Item used successfully' });
+		return res.status(200).json({
+			message: 'Item used successfully',
+			inv: invItemRedPotion
+		});
+		// }
+
 	} catch (error) {
 		console.error(error);
 		return res.status(500).json({ message: 'Internal server error' });
 	}
 });
-
-
 
 
 

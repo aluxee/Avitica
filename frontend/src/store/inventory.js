@@ -60,13 +60,13 @@ export const thunkAddInventoryItem = (invArr) => async dispatch => {
 
 	const data = await response.json();
 
-	console.log("%c 🚀 ~ file: inventory.js:57 ~ thunkAddInventoryItem ~ data: ", "color: red; font-size: 25px", data)
+	console.log("%c 🚀 ~ file: inventory.js:57 ~ thunkAddInventoryItem ~ data: ", "color: turquoise; font-size: 25px", data)
 
 	if (response.ok) {
 
 		const newData = await dispatch(addInventoryItem(data))
 
-		console.log("%c 🚀 ~ file: inventory.js:63 ~ thunkAddInventoryItem ~ newData: ", "color: red; font-size: 25px", newData)
+		// console.log("%c 🚀 ~ file: inventory.js:63 ~ thunkAddInventoryItem ~ newData: ", "color: turquoise; font-size: 25px", newData, "data inside response.ok: ", data, "the item again: ")
 
 
 		return newData
@@ -78,19 +78,20 @@ export const thunkAddInventoryItem = (invArr) => async dispatch => {
 }
 export const thunkUseRedPotion = (item, itemId) => async dispatch => {
 
+	console.log("%c 🚀 ~ file: inventory.js:81 ~ thunkUseRedPotion ~ itemId: ", "color: red; font-size: 25px", itemId)
+
+
 	const response = await csrfFetch(`/api/inv/${itemId}/red-potion`, {
 		method: 'PUT',
-
-
 		headers: {
 			"Content-Type": "application/json"
 		},
 		body: JSON.stringify(item)
 	})
-	console.log("%c 🚀 ~ file: inventory.js:84 ~ thunkUseRedPotion ~ response: ", "color: magenta; font-size: 25px", response)
+	console.log("%c 🚀 ~ file: inventory.js:84 ~ thunkUseRedPotion ~ response: ", "color: magenta; font-size: 25px", response, "then the item:", item)
 
 	if (response.ok) {
-		const data = await response.json()
+		const data = await response.json();
 		dispatch(useInventoryItemRP(data))
 		return data
 	} else {
@@ -143,12 +144,30 @@ const invReducer = (state = initialState, action) => {
 		}
 		case USE_RED_POTION: {
 			console.log("%c 🚀 ~ file: inventory.js:144 ~ invReducer ~ action: ", "color: yellow; font-size: 25px", action)
-			const useState = {...state};
-			useState[action.item.invItemRedPotion.id] = action.item.invItemRedPotion
+			const useState = { ...state };
 
-			return useState;
-			// return {...state, [action.id]: action.Inventory}
+			console.log("%c 🚀 ~ file: inventory.js:146 ~ invReducer ~ useState: ", "color: gold; font-size: 25px", useState)
 
+			if (action.item && action.item.userStats) {
+				//update the health property of userStats with the new health value received from the action
+				return {
+					...state,
+					userStats: {
+						...state.userStats,
+						health: action.item.userStats.health
+					}
+
+				}
+
+			} else {
+				return useState
+			}
+
+			// useState[action.item.id] = action.item.currHealth
+			// console.log("%c 🚀 ~ file: inventory.js:148 ~ invReducer ~ useState: ", "color: red; font-size: 25px", useState)
+
+			// return useState;
+			// return {health: action.item.currHealth}
 		}
 
 		case REMOVE_INV_ITEM: {

@@ -31,6 +31,20 @@ function calcDefaultHealth(level) {
 	return level === 1 ? 50 : Math.max(Math.round(50 * (level - 1) * 2.5));
 }
 
+function useHealthPotion(health, level) {
+	const maxHealth = calcDefaultHealth(level)
+
+	// if health is >= maxHealth, handle logic inside route handler
+	// Otherwise:
+	if (health + 50 <= maxHealth) {
+		health += 50;
+	} else {
+		health = maxHealth;
+	}
+	return health;
+}
+
+
 //for utilization of an item
 router.put('/:itemId/red-potion', requireAuth, async (req, res) => {
 	try {
@@ -48,86 +62,52 @@ router.put('/:itemId/red-potion', requireAuth, async (req, res) => {
 		}
 
 		if (!invItemRedPotion) {
-			return res.status(404).json({ message: 'Inventory item not found' });
+			return res.status(404).json({ message: 'Inventory item "Red Potion" not found' });
 		}
 
 		console.log("%c 🚀 ~ file: inventory.js:46 ~ router.put ~ invItemRedPotion: ", "color: red; font-size: 25px", invItemRedPotion);
-		if (invItemRedPotion) {
 
-			invItemRedPotion.gear = false
-			invItemRedPotion.wep = false;
-			await invItemRedPotion.save();
-			res
-				.status(201)
-				.json({
-					invItemRedPotion
-				})
-		}
-		console.log("%c 🚀 ~ file: inventory.js:59 ~ router.put ~ invItemRedPotion: ", "color: red; font-size: 25px", "CODE 526291", invItemRedPotion)
-
-		const userStatus = await userStat.findByPk(userId, {
-			where: {
-				userId
-			}
-		})
+		const userStatus = await userStat.findByPk(userId)
 
 		console.log("%c 🚀 ~ file: inventory.js:53 ~ router.put ~ userStat: ", "color: red; font-size: 25px", userStat)
-		// if (invItemRedPotion.itemName === redPotion) {
 
-		// invItemRedPotion.userStat = userStatus
-		// await invItemRedPotion.save();
-		// console.log("%c 🚀 ~ file: inventory.js:57 ~ router.put ~ invItemRedPotion: ", "color: red; font-size: 25px", invItemRedPotion)
-		console.log("%c 🚀 ~ file: inventory.js:80 ~ router.post ~ invItemRedPotion: ", "color: red; font-size: 25px", invItemRedPotion)
+		console.log("%c 🚀 ~ file: inventory.js:80 ~ router.post ~ invItemRedPotion: ", "color: red; font-size: 25px", "CODE 526291", invItemRedPotion, invItemRedPotion.itemName)
 
+		//* insert helper function logic instead:
+		// const { health } = userStatus;
 
-		const { health } = userStatus;
-		let userHealth = health;
+		let currHealth = userStatus.health;
+		// build helper function for red potion usage
+		console.log("%c 🚀 ~ file: inventory.js:96 ~ router.post ~ health: ", "color: red; font-size: 25px", currHealth) //* 14
 
-		console.log("%c 🚀 ~ file: inventory.js:57 ~ router.post ~ health: ", "color: red; font-size: 25px", userHealth)
-
+		const currLevel = userStatus.level;
+		const maximumHealth = calcDefaultHealth(currLevel)
 
 		// Add the hp stat value to the user's stats
-		if (invItemRedPotion.itemName === "Red Potion") {
-			const currLevel = userStatus.level;
-			const maximumHealth = calcDefaultHealth(currLevel)
-
-			if (userHealth + 50 > maximumHealth) {
-				userHealth = maximumHealth
-			} else if (userHealth === maximumHealth) {
-				return res
-					.status(400)
-					.json({
-						message: "Health is already full"
-					})
+		if (invItemRedPotion.itemName == "Red Potion") {
+			if (currHealth + 50 > maximumHealth) {
+				currHealth = maximumHealth;
 			} else {
-
-				userHealth += maximumHealth
+				currHealth += 50;
 			}
-			await userStatus.save();
-			// check to ensure that the userStatus has been updated under Inventory, otherwise add userStatus directly to invItemRedPotion
-			invItemRedPotion.userStat = userStatus
-			await invItemRedPotion.save();
-
+			await userStatus.update({ health: currHealth });
+			await invItemRedPotion.update({ userStatId: userStatus.id, gear: false, wep: false });
+			// Return updated user stats in the response
 			return res
 				.status(200)
 				.json({
-					message: "Health replenishment successful",
-					userStat: {
-						health: userStatus.health,
-						level: currLevel,
-						experience: userStatus.experience,
-						gold: userStatus.health
-					}
-				})
+				message: "Health replenishment successful",
+				userStats: {
+					userId,
+					level: userStatus.level,
+					experience: userStatus.experience,
+					gold: userStatus.gold,
+					health: currHealth // Return the updated health
+				}
+			});
 		}
 
-		// Save the updated user
-
-		return res.status(200).json({
-			message: 'Item used successfully',
-			inv: invItemRedPotion
-		});
-		// }
+		res.json({invItemRedPotion: {userStats: userStatus}})
 
 	} catch (error) {
 		console.error(error);

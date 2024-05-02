@@ -5,6 +5,7 @@ import './UserProfile.css';
 import { one, two, three, four, five } from '../../clips';
 import { LoggedContext } from '../../context/LoggedProvider';
 import { thunkGetMaxStats } from '../../store/userStats';
+import { thunkUseRedPotion } from '../../store/inventory';
 
 function UserProfile() {
 	const dispatch = useDispatch();
@@ -22,13 +23,7 @@ function UserProfile() {
 
 	// * -------------GOLD SECTION------------- *
 	const storedGold = parseInt(localStorage?.getItem('gold'), 10);
-
-	console.log("%c 🚀 ~ file: UserProfile.jsx:33 ~ UserProfile ~ storedGold: ", "color: tomato; font-size: 25px", storedGold, "prior to setting the amount")
-	// if accurate, set userInfo's gold to above number
-
 	const goldenHour = rawUserStats?.gold || 0;
-	// console.log("%c 🚀 ~ file: UserProfile.jsx:19 ~ UserProfile ~ goldenHour: ", "color: hotpink; font-size: 25px", goldenHour, "and just in case ..., ", rawUserStats.gold);
-
 	// localStorage.setItem('gold', goldenHour.toString())
 
 	const [gold, setGold] = useState(storedGold || goldenHour);
@@ -57,7 +52,7 @@ function UserProfile() {
 			prevGold = gold || prevGold;
 			const updatedGold = prevGold;
 
-			console.log("%c 🚀 ~ file: UserProfile.jsx:48 ~ goldSetFunction ~ updatedGold: ", "color: pink; font-size: 25px", updatedGold)
+			// console.log("%c 🚀 ~ file: UserProfile.jsx:48 ~ goldSetFunction ~ updatedGold: ", "color: pink; font-size: 25px", updatedGold)
 
 			setGold(updatedGold)
 
@@ -83,32 +78,33 @@ function UserProfile() {
 	console.log("%c 🚀 ~ file: UserProfile.jsx:87 ~ UserProfile ~ currLevel: ", "color: red; font-size: 25px", currLevel)
 
 	// * -------------HEALTH SECTION------------- *
-	//!! Fix initial render, then check the math
 	const healthBar = userInfo?.health;
 
-	console.log("%c 🚀 ~ file: UserProfile.jsx:97 ~ UserProfile ~ healthBar: ", "color: crimson; font-size: 25px", healthBar, userInfo) // 50
-
-	// console.log("%c 🚀 ~ file: UserProfile.jsx:100 ~ UserProfile ~ storedHealth: ", "color: crimson; font-size: 25px", storedHealth)
+	console.log("%c 🚀 ~ file: UserProfile.jsx:97 ~ UserProfile ~ healthBar: ", "color: crimson; font-size: 25px", healthBar, userInfo)
 	const [health, setHealth] = useState(healthBar);
-
-	console.log("%c 🚀 ~ file: UserProfile.jsx:98 ~ UserProfile ~ health: ", "color: red; font-size: 25px", health)
-//TODO: An issue with the health, where if a user uses a potion, their health is changed on the db but it is not reflected upon refresh
 	const [totalHealth, setTotalHealth] = useState(0);
 	const healthRef = useRef(healthBar);
 
-	console.log("%c 🚀 ~ file: UserProfile.jsx:103 ~ UserProfile ~ healthRef: ", "color: red; font-size: 25px", healthRef)
-
 	useEffect(() => {
-		setHealth(healthRef.current)
-		console.log("%c 🚀 ~ file: UserProfile.jsx:109 ~ useEffect ~ healthRef: ", "color: red; font-size: 25px", healthRef)
-	}, [healthBar, healthRef])
 
+		if (health !== healthBar) {
+			if (healthBar < health) {
+				// if user health is depleted from incompletion of task
 
-	console.log("%c 🚀 ~ file: UserProfile.jsx:99 ~ UserProfile ~ healthRef: ", "color: magenta; font-size: 28px", healthRef); //14
+				//health is replenished
+				setHealth(healthBar)
+				healthRef.current = healthBar
+				// } else if(health < healthBar) {
+			} else {
+				setHealth(healthBar)
+				healthRef.current = healthBar
+			}
 
+		}
 
+	}, [location, healthBar, health])
 
-
+	// console.log("%c 🚀 ~ file: UserProfile.jsx:99 ~ UserProfile ~ healthRef: ", "color: magenta; font-size: 28px", healthRef);
 
 	// * -------------EXP SECTION------------- *
 	const expBar = userInfo.experience ? userInfo.experience : 0;
@@ -125,12 +121,12 @@ function UserProfile() {
 
 	useEffect(() => {
 		setExp(userInfo.experience)
-		setHealth(userInfo.health)
+		// setHealth(userInfo.health)
 		dispatch(thunkGetMaxStats(level))
 		setCurrLevel(level)
 		setTotalHealth(maxHp)
 		setTotalExp(maxExp)
-	}, [dispatch, level, maxHp, maxExp, userInfo.experience, userInfo.health, healthBar, healthRef])
+	}, [dispatch, level, maxHp, maxExp, userInfo.experience, healthBar, healthRef])
 
 
 	// //________________________________________________

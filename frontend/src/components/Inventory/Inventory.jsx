@@ -27,7 +27,7 @@ function Inventory() {
 			setInv(invObj.Inventory)
 		}) //PRIME EXAMPLE OF REFRESH
 
-	}, [dispatch, location]) //w/o this, list appears (without recently purchased items almost infinitely)
+	}, [dispatch, location]) //w/o this, list appears (without recently purchased items stacked)
 
 
 	const removeItem = async (item, itemId) => {

@@ -8,6 +8,8 @@ import './Navigation.css';
 
 function Navigation({ isLoaded }) {
 
+
+
 	const navigate = useNavigate();
 	const { user } = useContext(LoggedContext);
 

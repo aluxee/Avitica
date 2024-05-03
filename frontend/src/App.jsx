@@ -15,7 +15,8 @@ import About from './components/Navigation/HomeInterface/About/About';
 import Features from './components/Navigation/HomeInterface/Features/Features';
 import * as sessionActions from './store/session';
 import Home from './components/Home/Home';
-import Avatar from './components/Avatar/Avatar';
+import { Avatar } from './components/Avatar';
+
 import Inventory from './components/Inventory/Inventory';
 import ShopDetails from './components/Shop/ShopDetails';
 // import
@@ -25,6 +26,8 @@ import ShopDetails from './components/Shop/ShopDetails';
 function Layout() {
   const dispatch = useDispatch();
   const [isLoaded, setIsLoaded] = useState(false);
+  const [avatarState, setAvatarState] = useState('');
+
   // to see css, set the value to true, use in main component
   const sessionUser = useSelector(state => state.session.user)
   const { loggedIn, setLoggedIn } = useContext(LoggedContext)

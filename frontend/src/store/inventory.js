@@ -127,8 +127,6 @@ const invReducer = (state = initialState, action) => {
 	switch (action.type) {
 
 		case LOAD_INV: {
-			// console.log("%c 🚀 ~ file: inventory.js:44 ~ invReducer ~ action: ", "color: orange; font-size: 25px", action)
-
 			const invState = {}
 			action.inv.Inventory.forEach(item => {
 				invState[item.id] = item;
@@ -143,11 +141,7 @@ const invReducer = (state = initialState, action) => {
 			return postState;
 		}
 		case USE_RED_POTION: {
-			console.log("%c 🚀 ~ file: inventory.js:144 ~ invReducer ~ action: ", "color: yellow; font-size: 25px", action)
 			const useState = { ...state };
-
-			console.log("%c 🚀 ~ file: inventory.js:146 ~ invReducer ~ useState: ", "color: gold; font-size: 25px", useState)
-
 			if (action.item && action.item.userStats) {
 				//update the health property of userStats with the new health value received from the action
 				return {
@@ -156,27 +150,17 @@ const invReducer = (state = initialState, action) => {
 						...state.userStats,
 						health: action.item.userStats.health
 					}
-
 				}
-
 			} else {
 				return useState
 			}
-
-			// useState[action.item.id] = action.item.currHealth
-			// console.log("%c 🚀 ~ file: inventory.js:148 ~ invReducer ~ useState: ", "color: red; font-size: 25px", useState)
-
-			// return useState;
-			// return {health: action.item.currHealth}
 		}
-
+		
 		case REMOVE_INV_ITEM: {
 			const removeState = { ...state };
-
 			delete removeState[action.id];
 			return removeState;
 		}
-
 
 		default:
 			return state;

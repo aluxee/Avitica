@@ -5,9 +5,9 @@ import './UserProfile.css';
 import { one, two, three, four, five } from '../../clips';
 import { LoggedContext } from '../../context/LoggedProvider';
 import { thunkGetMaxStats } from '../../store/userStats';
-import { thunkUseRedPotion } from '../../store/inventory';
 
-function UserProfile() {
+
+function UserProfile({avatarImage}) {
 	const dispatch = useDispatch();
 	const location = useLocation();
 	const { user } = useContext(LoggedContext);
@@ -90,7 +90,6 @@ function UserProfile() {
 		if (health !== healthBar) {
 			if (healthBar < health) {
 				// if user health is depleted from incompletion of task
-
 				//health is replenished
 				setHealth(healthBar)
 				healthRef.current = healthBar
@@ -143,19 +142,19 @@ function UserProfile() {
 	}
 	const thumbNailImg = () => {
 
-		const mpThumbNails = [
-			one, two, three, four, five
-		]
-		// Generate a random index to select a photo
-		const randomIndex = Math.floor(Math.random() * mpThumbNails.length);
+		// const mpThumbNails = [
+		// 	one, two, three, four, five
+		// ]
+		// // Generate a random index to select a photo
+		// const randomIndex = Math.floor(Math.random() * mpThumbNails.length);
 
-		// Select the photo using the random index
-		const randomThumbNail = mpThumbNails[randomIndex] || null;
+		// // Select the photo using the random index
+		// const randomThumbNail = mpThumbNails[randomIndex] || null;
 
 
 		return (
 			<>
-				<img src={randomThumbNail} alt={user.displayName} className="spot-image-box" style={imgStyle} />
+				{/* <img src={randomThumbNail} alt={user.displayName} className="spot-image-box" style={imgStyle} /> */}
 			</>
 		)
 	}

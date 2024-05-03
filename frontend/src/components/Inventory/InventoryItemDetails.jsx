@@ -1,11 +1,10 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { useEffect, useState, useContext, useMemo, useRef } from 'react';
-
+import { useEffect, useState, useContext, useMemo } from 'react';
 import { LoggedContext } from '../../context/LoggedProvider';
 import { useModal } from '../../context/Modal';
 import './InventoryItemDetails.css';
 import { thunkGetMaxStats } from '../../store/userStats';
-import { thunkLoadInventory, thunkUseRedPotion } from '../../store/inventory';
+import { thunkUseRedPotion } from '../../store/inventory';
 
 function InventoryItemDetails({ item, removeItem }) {
 
@@ -20,7 +19,7 @@ function InventoryItemDetails({ item, removeItem }) {
 
 
 	const [health, setHealth] = useState(user.userStats.health);
-	const healthRef = useRef(health);
+
 	console.log("%c 🚀 ~ file: InventoryItemDetails.jsx:24 ~ InventoryItemDetails ~ health: ", "color: lavender; font-size: 25px", health)
 
 	const replenishHealth = useSelector(state => state.inventory.userStats?.health)
@@ -44,19 +43,13 @@ function InventoryItemDetails({ item, removeItem }) {
 	useEffect(() => {
 		const updatedDes = item.Shop.description.replaceAll(/\\n/g, " ");
 		setDes(updatedDes)
-	}, [invItem.Shop.description, invItem])
+	}, [invItem, item.Shop.description])
 
-	// useEffect(() => {
-	// 	if (replenishHealth && health < replenishHealth) {
-	// 		setHealth(replenishHealth)
-	// 	}
-
-	// }, [replenishHealth])
 
 	const handleItemUsage = async (item) => {
 		// e.stopPropagation();
 		// e.preventDefault();
-		if (!invItem.id) return;
+		if (!invItem.id || item.id) return;
 		console.log("%c 🚀 ~ file: InventoryItemDetails.jsx:55 ~ handleItemUsage ~ item: ", "color: pink; font-size: 25px", invItem, invItem.id)
 
 		await dispatch(thunkGetMaxStats(level))
@@ -77,11 +70,6 @@ function InventoryItemDetails({ item, removeItem }) {
 			}
 		}
 	}
-
-
-		console.log("%c 🚀 ~ file: InventoryItemDetails.jsx:72 ~ handleItemUsage ~ replenishHealth: ", "color: skyblue; font-size: 25px", replenishHealth, user.userStats.health, healthRef.current)
-
-
 
 		// const handleWepOrGearUsage = (gear) => {
 

@@ -14,10 +14,116 @@ router.put('/edit', requireAuth, authorization, async (req, res) => {
 // post avatar(display)
 router.post('/create', requireAuth, authorization, async (req, res) => {
 	try {
+		const { user } = req;
 		const { skinType, faceType, expression, earType, hairType } = req.body;
 
+		let hairNum;
+		let faceNum;
+
+		if (hairType) {
+			if (hairType == 'Cecelia Twist') {
+				hairNum = 31490
+			} else if (hairType == 'Unkempt Hair') {
+				hairNum = 30025
+			} else if (hairType == ['Fantasy Hair']) {
+				hairNum = 30100
+			}
+			return hairNum
+		};
+		if (faceType) {
+			if (faceType == 'Motivated') {
+				faceNum = 20000
+			} else if (faceType == 'Distant') {
+				faceNum = 20035
+			} else if (faceType == 'Shut Eyes') {
+				faceNum = 20026
+			} else if (faceType == 'Piercing') {
+				faceNum = 20040
+			}
+			return faceNum
+		}
+
+		const faceIdNumber = Number(faceNum);
+		const hairIdNumber = Number(hairNum);
+
 		// Example: Fetching avatar image URL from a third-party API
-		const response = await fetch('https://api.maplestory.net/character/render', {
+		const resPost = await fetch('https://api.maplestory.net/character/render', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify({
+				skin: skinType,
+				faceId: faceIdNumber,
+				hairId: hairIdNumber,
+				"pose": "walkingOneHanded",
+				"poseFrame": 1,
+				faceEmote: expression,
+				"faceFrame": 0,
+				earType,
+				"itemIds": [
+					1060002,
+					1040193
+				],
+				"effectFrame": 0
+				// Include other parameters as needed
+			}),
+		});
+
+		if (!resPost.ok) {
+			throw new Error('Failed to fetch avatar image');
+		}
+		const imageData = await resPost.blob();
+		const imageUrl = URL.createObjectURL(imageData)// Assuming the response structure includes the URL of the avatar image
+
+		//import the instance of the avatar
+		const userAvatar = await Avatar.create({
+			userId: user.id,
+			skin: skinType,
+			faceId: faceType,
+			hairId: hairType,
+			faceEmote: expression,
+			earType,
+			imageUrl
+		})
+		await userAvatar.save();
+
+		// Here you might save the avatar data to your database or do other processing
+		return res
+			.status(201)
+			.json({ userAvatar, imageUrl });
+		//alternative: send the blob
+
+	} catch (error) {
+		res.status(500).json({ error: 'Failed to create avatar' });
+	}
+})
+
+// get avatar(display): send request to third party api to get that image
+router.get('/', requireAuth, authorization, async (req, res) => {
+
+	const { user } = req;
+	const userCharacter = await Avatar.findOne({
+		where: {
+			userId: user.id
+		},
+		include: [Stat]
+	});
+
+const imageUrl = await fetchAvatarImageUrl(userCharacter)
+
+	return res.json({
+		avatar: userCharacter,
+		imageUrl
+	})
+});
+
+
+async function fetchAvatarImageUrl(avatarData) {
+	try {
+		const { skinType, faceType, expression, earType, hairType } = avatarData;
+
+		const resPost = await fetch('https://api.maplestory.net/character/render', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',
@@ -25,50 +131,29 @@ router.post('/create', requireAuth, authorization, async (req, res) => {
 			body: JSON.stringify({
 				skin: skinType,
 				faceId: faceType,
-				expression,
+				hairId: hairType,
+				pose: 'walkingOneHanded',
+				poseFrame: 1,
+				faceEmote: expression,
+				faceFrame: 0,
 				earType,
-				hairType
+				itemIds: [1060002, 1040193],
+				effectFrame: 0
 				// Include other parameters as needed
 			}),
 		});
 
-		if (!response.ok) {
+		if (!resPost.ok) {
 			throw new Error('Failed to fetch avatar image');
 		}
 
-		const imageData = await response.json();
-		const imageUrl = imageData.url; // Assuming the response structure includes the URL of the avatar image
-
-		// Here you might save the avatar data to your database or do other processing
-
-		res.json({ imageUrl });
+		const imageData = await resPost.blob();
+		return URL.createObjectURL(imageData);
 	} catch (error) {
-		res.status(500).json({ error: 'Failed to create avatar' });
+		console.error('Error fetching avatar image:', error);
+		return null;
 	}
-
-})
-
-// get avatar(display)
-router.get('/', requireAuth, authorization, async (req, res) => {
-
-	const { user } = req;
-	const userCharacter = await Avatar.findByPk(user.id, {
-		include: [Stat]
-	});
-
-	console.log("%c 🚀 ~ file: avatar.js:19 ~ router.get ~ userCharacter: ", "color: red; font-size: 25px", userCharacter)
-
-
-	return res.json({
-		avatar: userCharacter
-	})
-});
-
-
-
-
-
-// create avatar
+}
 
 
 

@@ -250,7 +250,7 @@ function calcHpAndExp(completed, level) {
 router.put('/:taskId/status', requireAuth, async (req, res) => {
 	const { taskId } = req.params;
 	//find userStat information
-	const userStatus = await userStat.findByPk(req.user.id, {
+	const userStatus = await userStat.findOne({
 		where: {
 			userId: req.user.id
 		}
@@ -300,11 +300,6 @@ router.put('/:taskId/status', requireAuth, async (req, res) => {
 
 		userStatus.experience += expGain;
 
-		// console.log("%c 🚀 ~ file: tasks.js:301 ~ router.put ~ expGain: ", "color: red; font-size: 25px", expGain)
-
-
-		// console.log("%c 🚀 ~ file: tasks.js:301 ~ router.put ~ userStatus.experience: ", "color: red; font-size: 25px", userStatus.experience)
-
 		userStatus.gold += goldGain;
 		await userStatus.save();
 
@@ -313,10 +308,12 @@ router.put('/:taskId/status', requireAuth, async (req, res) => {
 			userStatus.level++;
 			userStatus.experience = 0;
 
+			console.log("%c 🚀 ~ file: tasks.js:311 ~ router.put ~ userStatus: ", "color: red; font-size: 25px", userStatus)
+
+
 			// Reset health and experience to default values for the new level
 			userStatus.health = calcDefaultHealth(userStatus.level);
-			// userStatus.experience = calcDefaultExperience(userStatus.level);
-
+		
 			await userStatus.save();
 			return res
 				.status(200)

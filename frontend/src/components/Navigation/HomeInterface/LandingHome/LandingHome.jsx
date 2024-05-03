@@ -8,7 +8,7 @@ import HTMLFlipBook from 'react-pageflip';
 
 function LandingHome() {
 	const location = useLocation();
-	const navigate = useNavigate();
+	// const navigate = useNavigate();
 	const [page, setPage] = useState(getPageIndex(location.pathname));
 	const [showMenu, setShowMenu] = useState(false);
 	const [modalOpen, setModalOpen] = useState(false); // State to track if any modal is open
@@ -28,26 +28,26 @@ function LandingHome() {
 	}
 
 	// // Function to handle page navigation when next button is clicked
-	function handleNext() {
-		if (page === 0) {
-			navigate('/about');
-			setPage(1);
-		} else if (page === 1) {
-			navigate('/features');
-			setPage(2);
-		}
-	}
+	// function handleNext() {
+	// 	if (page === 0) {
+	// 		navigate('/about');
+	// 		setPage(1);
+	// 	} else if (page === 1) {
+	// 		navigate('/features');
+	// 		setPage(2);
+	// 	}
+	// }
 
 	// Function to handle page navigation when previous button is clicked
-	function handlePrev() {
-		if (page === 1) {
-			navigate('/');
-			setPage(0);
-		} else if (page === 2) {
-			navigate('/about');
-			setPage(1);
-		}
-	}
+	// function handlePrev() {
+	// 	if (page === 1) {
+	// 		navigate('/');
+	// 		setPage(0);
+	// 	} else if (page === 2) {
+	// 		navigate('/about');
+	// 		setPage(1);
+	// 	}
+	// }
 
 
 	// Function to handle modal open
@@ -76,6 +76,7 @@ function LandingHome() {
 
 		return () => document.removeEventListener("click", closeMenu);
 
+		setPage(page)
 	}, [showMenu])
 
 	const closeMenu = () => {
@@ -107,10 +108,10 @@ function LandingHome() {
 					)
 				}
 
-				<div className="navigation-buttons">
+				{/* <div className="navigation-buttons">
 					<button onClick={handlePrev} disabled={page === 0}>Prev</button>
 					<button onClick={handleNext} disabled={page === 2}>Next</button>
-				</div>
+				</div> */}
 			</div>
 		</div>
 	);

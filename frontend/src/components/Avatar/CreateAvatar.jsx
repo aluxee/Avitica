@@ -27,6 +27,8 @@ function CreateAvatar() {
 	const [message, setMessage] = useState("");
 	const [errors, setErrors] = useState({});
 
+	//TODO: finish hair section
+	//TODO: ensure this is pullable and put thru database to load up as an image
 	useEffect(() => {
 		const errorsObject = {};
 		faceType.length === 0 ? errorsObject.faceType = 'Select a face type' : faceType;

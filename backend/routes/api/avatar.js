@@ -10,6 +10,7 @@ router.put('/edit', requireAuth, authorization, async (req, res) => {
 
 
 })
+// TODO: double check and ensure this route will work for the frontend 2) also may need to redo it's database section
 // post avatar(display)
 router.post('/create', requireAuth, authorization, async (req, res) => {
 	try {

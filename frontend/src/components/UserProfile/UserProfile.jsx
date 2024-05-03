@@ -11,6 +11,9 @@ function UserProfile({avatarImage}) {
 	const dispatch = useDispatch();
 	const location = useLocation();
 	const { user } = useContext(LoggedContext);
+
+	console.log("%c 🚀 ~ file: UserProfile.jsx:15 ~ UserProfile ~ user: ", "color: blueviolet; font-size: 28px", user)
+
 	let rawUserStats = useSelector(state => state.userStats);
 
 
@@ -33,8 +36,11 @@ function UserProfile({avatarImage}) {
 	useEffect(() => {
 		setGold(storedGold);
 		// also reflect it on userStats.gold
-		userInfo.gold = gold;
-	}, [userInfo, userInfo.gold, gold, location, user, storedGold])
+		// userInfo.gold = gold;
+
+	}, [userInfo,
+		// userInfo.gold,
+		gold, location, user, storedGold])
 
 	useEffect(() => {
 		goldRef.current = gold
@@ -70,7 +76,7 @@ function UserProfile({avatarImage}) {
 	}, [gold])
 
 	// * -------------LEVEL SECTION------------- *
-	const level = userInfo.level;
+	const level = userInfo?.level;
 	console.log("%c 🚀 ~ file: UserProfile.jsx:91 ~ UserProfile ~ level: ", "color: tomato; font-size: 25px", level);
 
 	const [currLevel, setCurrLevel] = useState(level);
@@ -106,11 +112,14 @@ function UserProfile({avatarImage}) {
 	// console.log("%c 🚀 ~ file: UserProfile.jsx:99 ~ UserProfile ~ healthRef: ", "color: magenta; font-size: 28px", healthRef);
 
 	// * -------------EXP SECTION------------- *
-	const expBar = userInfo.experience ? userInfo.experience : 0;
+	const expBar = userInfo?.experience;
 
 	console.log("%c 🚀 ~ file: UserProfile.jsx:144 ~ UserProfile ~ expBar: ", "color: crimson; font-size: 25px", expBar)
 
 	const [exp, setExp] = useState(expBar);
+
+	console.log("%c 🚀 ~ file: UserProfile.jsx:121 ~ UserProfile ~ exp: ", "color: red; font-size: 25px", exp)
+
 	const [totalExp, setTotalExp] = useState(0);
 	// const expRef = useRef(exp);
 
@@ -119,13 +128,16 @@ function UserProfile({avatarImage}) {
 
 
 	useEffect(() => {
-		setExp(userInfo.experience)
-		// setHealth(userInfo.health)
+		// if (userInfo.experience) {
+			setExp(userInfo.experience)
+		// }
+
+		setHealth(userInfo.health)
 		dispatch(thunkGetMaxStats(level))
 		setCurrLevel(level)
 		setTotalHealth(maxHp)
 		setTotalExp(maxExp)
-	}, [dispatch, level, maxHp, maxExp, userInfo.experience, healthBar, healthRef])
+	}, [dispatch, level, maxHp, maxExp, healthBar, healthRef, userInfo.experience ])
 
 
 	// //________________________________________________

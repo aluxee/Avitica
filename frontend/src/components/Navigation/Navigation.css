@@ -41,6 +41,7 @@ pointer-events: none;
 	padding: 4px;
 	position: relative;
 	z-index: 5;
+	justify-content: center;
 	/* height: 100px; */
 }
 
@@ -61,7 +62,7 @@ ul.nav-avatar-list {
 
 .nav-main-list {
 	max-width: 100%;
-	width: 100%;
+	width: 85%;
 	max-height: 100%;
 	padding: 1.5%;
 	display: flex;

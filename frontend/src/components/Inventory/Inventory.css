@@ -1,6 +1,7 @@
 .inv-container {
 	display: flex;
-	background-color: #42B8C1;
+	background-color: #a3b0cee3;
+	border-radius: 15px;
 	margin: 2% 5%;
 	flex-direction: row;
 	flex-wrap: wrap;

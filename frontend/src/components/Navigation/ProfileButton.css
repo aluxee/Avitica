@@ -5,6 +5,18 @@
 
 
 /* *profile */
+i.fa-solid.fa-house {
+	color: #436FB5;
+}
+
+i.fa-solid.fa-user {
+	color: #D1D6EC;
+}
+
+i.fa-solid.fa-user:hover {
+	color: #AAB7DC;
+}
+
 .outer-profile-container {
 	display: flex;
 	height: 20px;
@@ -48,7 +60,7 @@ ul.profile-dropdownlogin {
 	/* width: fit-content; */
 	padding-left: 0px;
 	flex-wrap: wrap;
-	background-color: skyblue;
+	background-color: #b5d0ec;
 	z-index: 1;
 	right: 6.5rem;
 	justify-content: center;
@@ -65,7 +77,7 @@ ul.profile-dropdown {
 	/* width: fit-content; */
 	padding: 10% 11%;
 	flex-wrap: wrap;
-	background-color: skyblue;
+	background-color: #b5d0ec;
 	z-index: 1;
 	right: 4.5rem;
 	justify-content: center;
@@ -107,6 +119,7 @@ button.button-profile-dropdown {
 	font-size: 18px;
 	background-color: transparent;
 	border: none;
+	box-shadow: none;
 }
 
 button.button-profile-dropdown:hover {
@@ -153,12 +166,21 @@ button.button-profile-dropdown>ul.profile-dropdownlogin {
 	display: flex;
 }
 
-button.button-profile-dropdown:after {
+button.button-profile-dropdown:hover::after {
 	background: transparent;
 }
 
 button.button-profile-dropdown {
 	font-size: 8px;
+}
+
+button.button-profile-dropdown:hover::before {
+	background: transparent;
+}
+
+button.button-profile-dropdown:hover {
+	background: transparent;
+	border: none;
 }
 
 /* *HIDDEN ELEMENTS */
@@ -195,11 +217,12 @@ ul.profile-dropdownlogin {
 	/* width: fit-content; */
 	padding-left: 0px;
 	flex-wrap: wrap;
-	background-color: skyblue;
+	background-color: #b5d0ec;
 	z-index: 8;
 	right: 6.5rem;
 	justify-content: center;
 	top: 7rem;
+	border-radius: 15px;
 }
 
 ul.profile-dropdownlogin>.only-login>li {
@@ -237,3 +260,18 @@ li.profile_dropdown_logout {
 li.profile_dropdown_name {}
 
 li.profile_dropdown_name:hover {}
+
+button.user_logout_button {
+	padding: 11px;
+}
+button.user_logout_button:hover {
+	background: #656363;
+
+}
+button.user_logout_button:hover::before {
+	background: transparent;
+}
+
+button.user_logout_button:hover::after {
+	background: transparent;
+}

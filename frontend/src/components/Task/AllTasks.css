@@ -48,14 +48,15 @@
 
 .at-tasks {
 	border: 2px solid black;
+	border-radius: 15px;
 	max-height: min-content;
 	display: flex;
 	flex-direction: row;
 	align-items: center;
 	flex-wrap: nowrap;
-	background-color: #42B8C1;
+	background-color: #a8bdd9f2;
 	width: 220px;
-	height: 100px;
+	height: 110px;
 	justify-content: space-between;
 }
 

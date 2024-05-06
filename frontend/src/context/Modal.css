@@ -23,7 +23,8 @@
 
 #modal-content {
 	position: absolute;
-	top: 5.5rem;
+	top: 2.5rem;
+	border-radius: 15px;
 	background-color: white;
 	display: flex;
 	flex-direction: column;

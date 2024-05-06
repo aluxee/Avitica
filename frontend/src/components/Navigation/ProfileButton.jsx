@@ -76,9 +76,7 @@ function ProfileButton() {
 		<>
 			{<div className="outer-profile-container">
 				<NavLink to="/tasks" className="no-user-nav">
-					<i
-						style={{ color: "green" }}
-						className="fa-solid fa-house" />
+					<i className="fa-solid fa-house" />
 				</NavLink>
 				<div className="inner-profile-container">
 					<div className="profile-container">

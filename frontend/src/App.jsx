@@ -26,13 +26,13 @@ import ShopDetails from './components/Shop/ShopDetails';
 function Layout() {
   const dispatch = useDispatch();
   const [isLoaded, setIsLoaded] = useState(false);
-  const [avatarState, setAvatarState] = useState('');
+  // const [avatarState, setAvatarState] = useState('');
 
   // to see css, set the value to true, use in main component
   const sessionUser = useSelector(state => state.session.user)
   const { loggedIn, setLoggedIn } = useContext(LoggedContext)
 
-  console.log("%c 🚀 ~ file: App.jsx:19 ~ Layout ~ sessionUser: ", "color: orange; font-size: 25px", sessionUser)
+  // console.log("%c 🚀 ~ file: App.jsx:19 ~ Layout ~ sessionUser: ", "color: orange; font-size: 25px", sessionUser)
 
 
   useEffect(() => {

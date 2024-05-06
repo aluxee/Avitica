@@ -7,7 +7,7 @@ import { LoggedContext } from '../../context/LoggedProvider';
 import { thunkGetMaxStats } from '../../store/userStats';
 
 
-function UserProfile({avatarImage}) {
+function UserProfile() {
 	const dispatch = useDispatch();
 	const location = useLocation();
 	const { user } = useContext(LoggedContext);
@@ -137,7 +137,7 @@ function UserProfile({avatarImage}) {
 		setCurrLevel(level)
 		setTotalHealth(maxHp)
 		setTotalExp(maxExp)
-	}, [dispatch, level, maxHp, maxExp, healthBar, healthRef, userInfo.experience ])
+	}, [dispatch, level, maxHp, maxExp, healthBar, healthRef, userInfo.experience, userInfo.health ])
 
 
 	// //________________________________________________

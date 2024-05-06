@@ -1,8 +1,8 @@
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { thunkCreateChecklist, thunkLoadChecklist } from "../../../store/checklist";
 import { useState } from "react";
-import { useModal } from '../../context/Modal';
-const { closeModal } = useModal();
+// import { useModal } from '../../context/Modal';
+// const { closeModal } = useModal();
 
 
 
@@ -42,7 +42,7 @@ function CreateChecklist({taskId}) {
 							className="pt-task-input"
 							type="text"
 							value={checklistItem}
-							onChange={() => setChecklistItem(e.target.value)}
+							onChange={(e) => setChecklistItem(e.target.value)}
 							placeholder="Enter Mini-ToDo"
 						/>
 						{/* <p className="p-error">{errors?.checklistItem}</p> */}

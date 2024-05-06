@@ -11,7 +11,7 @@ export const UPDATE_AVATAR_STATUS = 'avatar/UPDATE_AVATAR_STATUS';
 
 // /**  Action Creators: */
 
-export const loadAvatar = () => ({
+export const loadAvatar = (avatar) => ({
 	type: LOAD_AVATAR,
 	avatar
 });
@@ -24,9 +24,9 @@ export const createAvatar = (data) => ({
 });
 
 
-export const editAvatar = (task) => ({
+export const editAvatar = (taskId, task) => ({
 	type: UPDATE_AVATAR,
-	task
+	taskId, task
 });
 
 
@@ -47,7 +47,7 @@ export const thunkLoadAvatar = () => async dispatch => {
 		console.log("%c 🚀 ~ file: avatar.js:44 ~ thunkLoadAvatar ~ avatar: ", "color: red; font-size: 25px", avatar)
 
 
-		dispatch(loadAvatar())
+		dispatch(loadAvatar(avatar))
 		return avatar
 
 	} else {
@@ -56,7 +56,7 @@ export const thunkLoadAvatar = () => async dispatch => {
 	}
 }
 
-// //* create / post a task
+// //* create / post avatar
 export const thunkCreateAvatar = (avatarData) => async (dispatch) => {
 
 
@@ -78,8 +78,8 @@ export const thunkCreateAvatar = (avatarData) => async (dispatch) => {
 	}
 }
 
-// edit a task
-export const thunkEditAvatar = () => async (dispatch) => {
+// edit avatar
+export const thunkEditAvatar = (taskId, task) => async (dispatch) => {
 
 
 	const response = await csrfFetch(`/api/avatar/${taskId}`, {
@@ -93,34 +93,13 @@ export const thunkEditAvatar = () => async (dispatch) => {
 
 	if (response.ok) {
 		const data = await response.json();
-		dispatch(editTask(data));
+		dispatch(editAvatar(data));
 		return data
 	} else {
 		const errorResponse = await response.json();
 		return errorResponse;
 	}
 }
-
-// //* delete/remove a task
-export const thunkRemoveTask = (taskId) => async dispatch => {
-
-	// console.log("%c 🚀 ~ file: task.js:174 ~ thunkRemoveTask ~ taskId: ", "color: cyan; font-size: 25px", taskId)
-
-
-	const response = await csrfFetch(`/api/avatar/${taskId}`, {
-		method: 'DELETE',
-		headers: {
-			"Content-Type": "application/json"
-		}
-	});
-
-	if (response.ok) { // removed data and replaced it with id
-
-		dispatch(removeTask(taskId))
-		// return taskId
-	}
-}
-
 
 
 // __________________________________________reducer________________________________________

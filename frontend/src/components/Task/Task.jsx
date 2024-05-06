@@ -12,7 +12,7 @@ function Task({ task, taskId }) {
 	const dispatch = useDispatch();
 	const { closeModal } = useModal();
 
-	let taskState = useSelector(state => state.task[taskId]);
+	// let taskState = useSelector(state => state.task[taskId]);
 	const checklistState = useSelector(state => state.checklist)
 
 	const [title, setTitle] = useState(task.title);
@@ -32,7 +32,7 @@ function Task({ task, taskId }) {
 	const [editDifficulty, setEditDifficulty] = useState(false);
 	const [editDueDate, setEditDueDate] = useState(false);
 	const [editChecklistItem, setEditChecklistItem] = useState(false);
-	const [addChecklistItem, setAddChecklistItem] = useState(false);
+	// const [addChecklistItem, setAddChecklistItem] = useState(false);
 
 	useEffect(() => {
 		const errorsObject = {};

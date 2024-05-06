@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
-import { loadChecklist, thunkEditChecklist, thunkLoadChecklist, thunkRemoveChecklist } from "../../../store/checklist";
+import { thunkEditChecklist, thunkLoadChecklist, thunkRemoveChecklist } from "../../../store/checklist";
 import { useEffect, useState, useRef } from "react";
 import './Checklist.css'
 
@@ -9,9 +9,9 @@ function Checklist({ taskId, checklist, setChecklist }) {
 	// console.log("%c 🚀 ~ file: Checklist.jsx:9 ~ Checklist ~ taskId: ", "color: red; font-size: 25px", taskId)
 	useEffect(() => {
 		// dispatch(thunkLoadChecklist(taskId))
-		if (checklist.length > 0) {
-			setChecklist(checklist)
-		}
+		// if (checklist.length > 0) {
+		// 	setChecklist(checklist)
+		// }
 	}, [checklist, taskId])
 
 	// console.log("%c 🚀 ~ file: Checklist.jsx:9 ~ Checklist ~ checklist: ", "color: red; font-size: 25px", checklist)
@@ -118,7 +118,7 @@ function Checklist({ taskId, checklist, setChecklist }) {
 	}
 
 	useEffect(() => {
-		handleCheckboxChanges()
+		// handleCheckboxChanges()
 	}, [taskId, checklist.id])
 
 	if (!checkItem) {

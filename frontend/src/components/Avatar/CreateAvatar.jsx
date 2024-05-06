@@ -1,12 +1,12 @@
 import { useState, useEffect } from 'react';
-import { useDispatch } from "react-redux";
-import { thunkCreateAvatar, thunkLoadAvatar } from '../../store/avatar';
+// import { useDispatch } from "react-redux";
+// import { thunkCreateAvatar, thunkLoadAvatar } from '../../store/avatar';
 
 
 import './CreateAvatar.css';
 
 function CreateAvatar() {
-	const dispatch = useDispatch();
+	// const dispatch = useDispatch();
 	const [avatarState, setAvatarState] = useState("");
 
 
@@ -46,7 +46,7 @@ function CreateAvatar() {
 		} else {
 			setMessage(""); // Reset message if change is not confirmed
 		}
-	}, [changeConfirmed]);
+	}, [changeConfirmed, faceType, hairType]);
 
 	const handleAvatarSubmit = async (e) => {
 		e.preventDefault();

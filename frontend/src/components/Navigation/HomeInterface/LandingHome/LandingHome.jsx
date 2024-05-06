@@ -2,7 +2,10 @@ import { useState, useEffect } from "react";
 import LandingPage from "../LandingPage/LandingPage";
 import About from "../About/About";
 import Features from "../Features/Features";
-import { useLocation, useNavigate } from 'react-router-dom';
+import {
+	useLocation,
+	// useNavigate
+} from 'react-router-dom';
 import './LandingHome.css';
 import HTMLFlipBook from 'react-pageflip';
 
@@ -15,6 +18,7 @@ function LandingHome() {
 
 	// Function to get the page index based on the current route
 	function getPageIndex(pathname) {
+		// setPage(pathname)
 		switch (pathname) {
 			case '/':
 				return 0;
@@ -76,8 +80,8 @@ function LandingHome() {
 
 		return () => document.removeEventListener("click", closeMenu);
 
-		setPage(page)
-	}, [showMenu])
+		// setPage(page)
+	}, [showMenu, setPage])
 
 	const closeMenu = () => {
 		setShowMenu(false)

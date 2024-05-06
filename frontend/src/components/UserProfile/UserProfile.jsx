@@ -154,19 +154,19 @@ function UserProfile({avatarImage}) {
 	}
 	const thumbNailImg = () => {
 
-		// const mpThumbNails = [
-		// 	one, two, three, four, five
-		// ]
-		// // Generate a random index to select a photo
-		// const randomIndex = Math.floor(Math.random() * mpThumbNails.length);
+		const mpThumbNails = [
+			one, two, three, four, five
+		]
+		// Generate a random index to select a photo
+		const randomIndex = Math.floor(Math.random() * mpThumbNails.length);
 
-		// // Select the photo using the random index
-		// const randomThumbNail = mpThumbNails[randomIndex] || null;
+		// Select the photo using the random index
+		const randomThumbNail = mpThumbNails[randomIndex] || null;
 
 
 		return (
 			<>
-				{/* <img src={randomThumbNail} alt={user.displayName} className="spot-image-box" style={imgStyle} /> */}
+				<img src={randomThumbNail} alt={user.displayName} className="spot-image-box" style={imgStyle} />
 			</>
 		)
 	}

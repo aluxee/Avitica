@@ -103,7 +103,7 @@ router.post('/:taskId/checklist/new', requireAuth, async (req, res) => {
 		}
 	})
 
-	if (listAmount > 1) {
+	if (listAmount > 5) {
 		return res
 			.status(400)
 			.json({
@@ -118,6 +118,7 @@ router.post('/:taskId/checklist/new', requireAuth, async (req, res) => {
 			checklistItem
 		})
 
+		await checklist.save();
 		return res
 			.status(201)
 			.json(checklist)
@@ -187,7 +188,9 @@ router.get('/:taskId/checklist', requireAuth, async (req, res) => {
 
 
 
-	return res.json(checklistsArray)
+	return res
+		.status(200)
+		.json(checklistsArray)
 });
 
 
@@ -313,7 +316,7 @@ router.put('/:taskId/status', requireAuth, async (req, res) => {
 
 			// Reset health and experience to default values for the new level
 			userStatus.health = calcDefaultHealth(userStatus.level);
-		
+
 			await userStatus.save();
 			return res
 				.status(200)

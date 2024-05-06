@@ -93,18 +93,6 @@ export const thunkLoadCurrentTask = (taskId) => async dispatch => {
 		const errorResponse = await response.json()
 		return errorResponse
 	}
-	// if (response.ok) {
-
-
-
-	// 	await dispatch(loadCurrentTask(tasksCurrentData))
-	// 	return tasksCurrentData;
-
-	// } else {
-	// 	const errorResponse = await response.json();
-	// 	return errorResponse;
-	// }
-
 }
 
 // //* create / post a task

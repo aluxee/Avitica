@@ -8,6 +8,8 @@ import './CreateAvatar.css';
 function CreateAvatar() {
 	const dispatch = useDispatch();
 	const [avatarState, setAvatarState] = useState("");
+
+
 	const [expression, setExpression] = useState("");
 	const [faceType, setFaceType] = useState(0);
 	const [earType, setEarType] = useState("");
@@ -50,52 +52,48 @@ function CreateAvatar() {
 		e.preventDefault();
 
 		//!! fetch from backend once its complete
-		const createAvatar =  await dispatch(thunkCreateAvatar({
-			skinType, faceIdNumber, hairIdNumber, earType, expression
-		}));
-		setAvatarState(createAvatar)
-		// const submissionResults = await dispatch(thunkCreateAvatar(createAvatar));
 
-		// if (submissionResults?.errors) {
-		// 	return submissionResults.errors
-		// } else {
+		// const createAvatar =  await dispatch(thunkCreateAvatar({
+		// 	skinType, faceIdNumber, hairIdNumber, earType, expression
+		// }));
+		// setAvatarState(createAvatar)
 
-		// 	console.log("%c 🚀 ~ file: CreateAvatar.jsx:65 ~ handleAvatarSubmit ~ submissionResults: ", "color: red; font-size: 30px", "SUCCESSFUL CREATION!", submissionResults)
-		// }
-		// setAvatarState(submissionResults);
-		await dispatch(thunkLoadAvatar());
+		// await dispatch(thunkLoadAvatar());
 
 
-		// const resPost = await fetch('https://api.maplestory.net/character/render', {
-		// 	method: 'POST',
-		// 	headers: {
-		// 		"Content-Type": "application/json",
-		// 	},
-		// 	body: JSON.stringify({
-		// 		"skin": `${skinType}`,
-		// 		"faceId": faceIdNumber,
-		// 		"hairId": hairIdNumber,
-		// 		"pose": "walkingOneHanded",
-		// 		"poseFrame": 1,
-		// 		"faceEmote": `${expression}`,
-		// 		"faceFrame": 0,
-		// 		"ears": `${earType}`,
-		// 		"itemIds": [
-		// 			1060002,
-		// 			1040193
-		// 		],
-		// 		"effectFrame": 0
-		// 	})
-		// })
+		const resPost = await fetch('https://api.maplestory.net/character/render', {
+			method: 'POST',
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify({
+				"skin": `${skinType}`,
+				"faceId": faceIdNumber,
+				"hairId": hairIdNumber,
+				"pose": "walkingOneHanded",
+				"poseFrame": 1,
+				"faceEmote": `${expression}`,
+				"faceFrame": 0,
+				"ears": `${earType}`,
+				"itemIds": [
+					1060002,
+					1040193
+				],
+				"effectFrame": 0
+			})
+		})
 
-		// const blob = await resPost.blob();
-		// const imageUrl = URL.createObjectURL(blob); // Create a URL for the blob object
+		const blob = await resPost.blob();
+		const imageUrl = URL.createObjectURL(blob); // Create a URL for the blob object
 
-		// setAvatarState(imageUrl)
+		setAvatarState(imageUrl)
 
 
 		//TODO: figure out a way after submitting the avatar, to close the modal and have it be reflected on the nav
+
+
 	}
+	console.log("%c 🚀 ~ file: CreateAvatar.jsx:96 ~ CreateAvatar ~ avatarState: ", "color: orange; font-size: 28px", avatarState)
 
 
 	const renderFaceOptions = () => {
@@ -160,8 +158,8 @@ function CreateAvatar() {
 						<label htmlFor="piercingGazeColor">Select Piercing Gaze Color:</label>
 						<select name="piercingGazeColor" id="piercingGazeColor">
 							<option value="20040">Black</option>
-							<option value="20140">Blue</option>
-							<option value="20240">Red</option>
+							<option value="21138">Blue</option>
+							<option value="21238">Red</option>
 							<option value="20340">Green</option>
 							<option value="20440">Hazel</option>
 							<option value="20540">Sapphire</option>
@@ -264,7 +262,7 @@ function CreateAvatar() {
 							backgroundImage: `url(${avatarState})`,
 							backgroundSize: "cover",
 							backgroundRepeat: "no-repeat",
-							width: "17.5rem",
+							width: "13.5rem",
 							height: 320,
 						}}
 					></div>

@@ -52,23 +52,23 @@ div.user-container {
 	display: flex;
 	font-size: larger;
 	font-weight: bold;
-	color: fuchsia;
+	color: burlywood;
 	gap: 5px;
 }
 
 .lvl-value{
-	color: #555;
+	color: salmon;
 	font-weight: lighter;
 }
 
 .user-label {
-	color: fuchsia;
+	color: tan;
 	font-weight: bold;
 	font-size: larger;
 }
 
 .gold-amt {
-	color: lawngreen;
+	color: salmon;
 	font-size: large;
 	font-weight: bold;
 	;
@@ -87,11 +87,14 @@ div.user-container {
 	flex-wrap: wrap;
 	align-items: baseline;
 	height: 25px;
+	margin-bottom: 3%;
 }
 
 
 .fill-text {
 	font-size: 12px;
+	color: darksalmon;
+	font-weight: bold;
 }
 
 .currency {

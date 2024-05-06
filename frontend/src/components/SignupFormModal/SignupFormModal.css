@@ -33,5 +33,9 @@
 }
 
 button.signup-submit-button {
-	margin: 12%;
+	padding: 8px 16px;
+	margin-top: 12%;
+	box-shadow: 7px 5px 25px -2px #b4bef7;
+	border: 2px solid #481d5a4f;
+	background-color: dimgrey;
 }

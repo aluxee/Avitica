@@ -46,7 +46,7 @@ html {
 	background-position: center;
 	background-repeat: no-repeat;
 	background-size: cover;
-overflow-y: overlay;
+	overflow-y: overlay;
 	height: max-content;
 	width: 100%;
 	height: 100%;
@@ -65,6 +65,7 @@ body {
 	overflow-y: scroll;
 	height: 100vh;
 	background-clip: text;
+	font-size: 1rem;
 }
 
 div#root {
@@ -175,29 +176,131 @@ h4 {
 	top: 0rem;
 }
 
-/* BUTTON */
-button {
-	padding: 6px;
-	margin: 4px;
+/* OTHER */
+.caption {
+	position: absolute;
+	top: 1.5rem;
+	right: 1.5rem;
+	font-family: 'Space Grotesk', sans-serif;
+	border: 1px solid #597098;
+	border-radius: 15px;
+	background-color: #FEF2D4;
+	color: #597098;
+	padding: 2px 8px;
+	font-size: small;
+	font-style: italic;
+	width: min-content;
+	text-align: center;
 }
 
-/*
+/* BUTTON */
+
 button {
-	padding: 0.6em 2em;
-	border: none;
+	cursor: pointer;
+	box-shadow: none;
+	padding: 8px 18px;
+	font-size: 16px;
+	appearance: none;
+	border: 2px solid #597098;
+	border-radius: 15px;
+	box-sizing: border-box;
+	/* opacity: 1; */
+	color: #9e9e9e;
+	display: inline-block;
+	font-family: 'Space Grotesk', sans-serif;
+	font-weight: 400;
+	line-height: normal;
+	margin: 0;
+	min-height: 45px;
+	min-width: 0;
+	outline: none;
+	padding: 16px 24px;
+	text-align: center;
+	text-decoration: none;
+	transition: all 300ms cubic-bezier(.23, 1, 0.32, 1);
+	user-select: none;
+	-webkit-user-select: none;
+	touch-action: manipulation;
+	width: 100%;
+	will-change: transform;
+
+	box-shadow: -10px -10px 30px 0, 10px 10px 30px 0 #60a1e28a;
+	font-size: 1rem;
+	position: relative;
+	text-align: left;
+	user-select: none;
+	-webkit-user-select: none;
+	touch-action: manipulation;
+	white-space: pre;
+	width: max-content;
+	word-break: normal;
+	word-spacing: normal;
+}
+
+/* * DISABLED */
+*:disabled {
+	background-color: dimgrey;
+	color: linen;
+	opacity: 1;
+	box-shadow: none;
+	border: 4px solid darkgray;
+	padding: 8px 18px;
+	font-size: 16px;
+	/* CSS */
+	appearance: none;
+	border: 2px solid #1A1A1A;
+	border-radius: 15px;
+	box-sizing: border-box;
+	color: #9e9e9e;
+	display: inline-block;
+	font-family: 'Space Grotesk', sans-serif;
+	/* font-size: 16px; */
+	font-weight: 400;
+	line-height: normal;
+	margin: 0;
+	min-height: 60px;
+	min-width: 0;
+	outline: none;
+	padding: 16px 24px;
+	text-align: center;
+	text-decoration: none;
+	transition: all 300ms cubic-bezier(.23, 1, 0.32, 1);
+	user-select: none;
+	-webkit-user-select: none;
+	touch-action: manipulation;
+	width: 100%;
+	will-change: transform;
+	pointer-events: none;
+}
+
+
+/* *LABELS */
+label {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	padding: 2px;
+}
+
+/* *BUTTONS */
+
+
+/* CSS */
+button:hover {
+	border: 2px solid #597098;
 	outline: none;
 	color: rgb(255, 255, 255);
 	background: #111;
 	cursor: pointer;
 	position: relative;
 	z-index: 0;
-	border-radius: 10px;
+	border-radius: 15px;
 	user-select: none;
 	-webkit-user-select: none;
 	touch-action: manipulation;
 }
 
-button:before {
+button:hover::before {
 	content: "";
 	background: linear-gradient(45deg,
 			#ff0000,
@@ -212,18 +315,19 @@ button:before {
 	position: absolute;
 	top: -2px;
 	left: -2px;
+	border: 2px solid #597098;
 	background-size: 400%;
 	z-index: -1;
 	filter: blur(5px);
 	-webkit-filter: blur(5px);
 	width: calc(100% + 4px);
 	height: calc(100% + 4px);
-	animation: glowing-button-85 20s linear infinite;
+	animation: glowing-button 20s linear infinite;
 	transition: opacity 0.3s ease-in-out;
-	border-radius: 10px;
+	/* border-radius: 10px; */
 }
 
-@keyframes glowing-button-85 {
+@keyframes glowing-button {
 	0% {
 		background-position: 0 0;
 	}
@@ -237,68 +341,14 @@ button:before {
 	}
 }
 
-button:after {
+button:hover::after {
 	z-index: -1;
 	content: "";
 	position: absolute;
 	width: 100%;
 	height: 100%;
-	background: #222;
+	background: #3d3c3c;
 	left: 0;
 	top: 0;
 	border-radius: 10px;
-} */
-
-
-
-button:hover {
-	cursor: pointer;
-	background-color: darkolivegreen;
 }
-
-/* OTHER */
-.caption {
-	position: absolute;
-	top: 0.5rem;
-	right: 4.5rem;
-	font-family: 'Space Grotesk', sans-serif;
-	border: 1px solid dimgray;
-	background-color: white;
-	padding: 2px 8px;
-	font-size: small;
-	font-style: italic;
-	width: min-content;
-	text-align: center;
-}
-
-/* * DISABLED */
-*:disabled {
-	background-color: dimgrey;
-	color: linen;
-	opacity: 1;
-	box-shadow: none;
-	border: 4px solid darkgray;
-	padding: 8px 18px;
-	font-size: 16px;
-}
-
-*:disabled:hover {
-	background-color: dimgray;
-	box-shadow: none;
-}
-
-*:disabled:active {
-	background-color: none;
-	box-shadow: none;
-	color: linen;
-}
-
-/* *LABELS */
-label {
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	padding: 2px;
-}
-
-/* *BUTTONS */

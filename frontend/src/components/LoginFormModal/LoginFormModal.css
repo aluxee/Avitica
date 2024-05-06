@@ -1,11 +1,12 @@
 .login-modal {
-	width: 280px;
+	width: 20rem;
+	border-radius: 15px;
 	display: flex;
 	flex-wrap: wrap;
 	flex-direction: column;
 	align-content: center;
 	align-items: center;
-	height: 300px;
+	height: 21rem;
 	justify-content: center;
 }
 
@@ -17,4 +18,16 @@
 	align-items: center;
 	margin-top: 20%;
 	align-content: flex-end;
+}
+
+
+div.login-buttons>button {
+	padding: 8px 16px;
+	margin-bottom: 3%;
+	box-shadow: 7px 5px 25px -2px #b4bef7;
+	border: 2px solid #481d5a4f;
+		background-color: #c3d6f38f;
+}
+div.login-buttons>button:disabled{
+	background-color: #b05bb04f;
 }

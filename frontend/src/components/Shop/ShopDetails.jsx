@@ -39,11 +39,11 @@ function ShopDetails() {
 	const [cart, setCart] = useState([]);
 	const [gold, setGold] = useState(storedGold);
 
-	console.log("%c 🚀 ~ file: ShopDetails.jsx:32 ~ ShopDetails ~ gold: ", "color: yellow; font-size: 25px", gold) // needs to be changed in order to reflect live
+	// console.log("%c 🚀 ~ file: ShopDetails.jsx:32 ~ ShopDetails ~ gold: ", "color: yellow; font-size: 25px", gold) // needs to be changed in order to reflect live
 
 	const goldRef = useRef(gold);
 
-	console.log("%c 🚀 ~ file: ShopDetails.jsx:33 ~ ShopDetails ~ goldRef: ", "color: magenta; font-size: 25px", goldRef)
+	// console.log("%c 🚀 ~ file: ShopDetails.jsx:33 ~ ShopDetails ~ goldRef: ", "color: magenta; font-size: 25px", goldRef)
 	//* suspect the issue with sustaining gold default in storage is on this component, the userProfile seems fine
 	useEffect(() => {
 
@@ -116,7 +116,7 @@ function ShopDetails() {
 
 		// Get cart items from localStorage, an array
 		const cartItems = JSON.parse(localStorage.getItem('cartItems') || '[]');
-		console.log("%c 🚀 ~ file: ShopDetails.jsx:178 ~ moveItemsToInventory ~ cartItems: ", "color: red; font-size: 25px", cartItems, "After dispatch of adding an inventory item")
+		// console.log("%c 🚀 ~ file: ShopDetails.jsx:178 ~ moveItemsToInventory ~ cartItems: ", "color: red; font-size: 25px", cartItems, "After dispatch of adding an inventory item")
 
 		// Calculate total cost of items in the cart
 		const totalCost = cartItems.reduce((total, item) => {
@@ -171,9 +171,9 @@ function ShopDetails() {
 		// console.log("%c 🚀 ~ file: ShopDetails.jsx:170 ~ moveItemsToInventory ~ transaction: ", "color: green; font-size: 25px", transaction, goldRef.current, "console after setting localStorage");
 
 		// const storedGoldVersionTwo = localStorage.setItem('gold', JSON.stringify(transaction))
-		const storedGold = parseInt(localStorage.getItem('gold'), 10)
+		parseInt(localStorage.getItem('gold'), 10)
 
-		console.log("%c 🚀 ~ file: ShopDetails.jsx:175 ~ moveItemsToInventory ~ storedGold: ", "color: red; font-size: 25px", storedGold)
+		// console.log("%c 🚀 ~ file: ShopDetails.jsx:175 ~ moveItemsToInventory ~ storedGold: ", "color: red; font-size: 25px", storedGold)
 
 
 

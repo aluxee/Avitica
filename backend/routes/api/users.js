@@ -71,7 +71,7 @@ router.post(
 		if (user.heroClass === 'Warrior') {
 			newUserStats = await userStat.create({
 				userId: user.id,
-				health: 100,
+				health: 50,
 				experience: 0,
 				gold: 500,
 				level: 1
@@ -86,10 +86,12 @@ router.post(
 				magicDefense: 50,
 				luck: 50
 			})
+			await newUserStats.save();
+			await newStat.save();
 		} else if (user.heroClass === 'Mage') {
 			newUserStats = await userStat.create({
 				userId: user.id,
-				health: 100,
+				health: 50,
 				experience: 0,
 				gold: 500,
 				level: 1
@@ -104,25 +106,39 @@ router.post(
 				magicDefense: 100,
 				luck: 50
 			});
+			await newUserStats.save();
+			await newStat.save();
 		}
 
-		// Associate userStat and Stat with the user
-		// await user.setUserStat(newUserStats);
-		// await user.setStat(newStat);
 		user.userStat = newUserStats;
 		user.Stat = newStat;
+		
+		await Promise.all([user.save(), newUserStats.save(), newStat.save()]);
+
 		await user.userStat.save();
 		await user.Stat.save();
 
+		await newUserStats.update({userId: user.id})
+		await newStat.update({ userId: user.id })
+
+
+		// Associate userStat and Stat with the user
+		// Fetch the associated userStat and Stat to ensure they are properly populated
+		const populatedUser = await User.findByPk(user.id, {
+			include: [{ model: userStat, as: 'userStats' }, { model: Stat, as: 'Stats' }]
+		});
+		// Select the first element if userStats or Stats is an array
+		const userStats = Array.isArray(populatedUser.userStats) ? populatedUser.userStats[0] : populatedUser.userStats;
+		const Stats = Array.isArray(populatedUser.Stats) ? populatedUser.Stats[0] : populatedUser.Stats;
 		// Construct the response object
 		const safeUser = {
-			id: user.id,
-			username: user.username,
-			displayName: user.displayName,
-			email: user.email,
-			heroClass: user.heroClass,
-			userStats: newUserStats,
-			Stats: newStat
+			id: populatedUser.id,
+			username: populatedUser.username,
+			displayName: populatedUser.displayName,
+			email: populatedUser.email,
+			heroClass: populatedUser.heroClass,
+			userStats,
+			Stats
 		};
 
 		await setTokenCookie(res, safeUser);

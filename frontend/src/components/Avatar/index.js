@@ -1,5 +1,5 @@
 import Avatar from "./Avatar";
+import CreateAvatar from "./CreateAvatar";
+import AvatarImage from "./AvatarImage";
 
-
-
-export { Avatar };
+export { Avatar, CreateAvatar, AvatarImage };

@@ -58,17 +58,15 @@ export const thunkLoadTasks = () => async dispatch => {
 
 	const response = await csrfFetch('/api/tasks');
 
-	console.log("%c 🚀 ~ file: task.js:61 ~ thunkLoadTasks ~ response: ", "color: red; font-size: 25px", response)
-
-
+	// console.log("%c 🚀 ~ file: task.js:61 ~ thunkLoadTasks ~ response: ", "color: red; font-size: 25px", response)
 
 	if (response.ok) {
 		const tasks = await response.json();
 
-		console.log("%c 🚀 ~ file: task.js:65 ~ thunkLoadTasks ~ tasks: ", "color: red; font-size: 25px", tasks)
+		// console.log("%c 🚀 ~ file: task.js:65 ~ thunkLoadTasks ~ tasks: ", "color: red; font-size: 25px", tasks)
 
 		dispatch(loadTasks(tasks))
-		
+
 	} else {
 		const errorResponse = await response.json()
 		return errorResponse
@@ -84,7 +82,7 @@ export const thunkLoadCurrentTask = (taskId) => async dispatch => {
 
 	const tasksCurrentData = await response.json();
 
-	console.log("%c 🚀 ~ file: task.js:76 ~ thunkLoadCurrentTasks ~ tasksCurrentData: ", "color: cyan; font-size: 25px", tasksCurrentData)
+	// console.log("%c 🚀 ~ file: task.js:76 ~ thunkLoadCurrentTasks ~ tasksCurrentData: ", "color: cyan; font-size: 25px", tasksCurrentData)
 	if (response.ok) {
 
 		if (!tasksCurrentData.errors) {
@@ -95,18 +93,6 @@ export const thunkLoadCurrentTask = (taskId) => async dispatch => {
 		const errorResponse = await response.json()
 		return errorResponse
 	}
-	// if (response.ok) {
-
-
-
-	// 	await dispatch(loadCurrentTask(tasksCurrentData))
-	// 	return tasksCurrentData;
-
-	// } else {
-	// 	const errorResponse = await response.json();
-	// 	return errorResponse;
-	// }
-
 }
 
 // //* create / post a task
@@ -134,7 +120,7 @@ export const thunkCreateTask = (task) => async (dispatch) => {
 // edit a task
 export const thunkEditTask = (task, taskId) => async (dispatch) => {
 
-	console.log("%c 🚀 ~ file: task.js:132 ~ thunkEditTask ~ task: ", "color: yellow; font-size: 25px", task, "followed by task Id", taskId)
+	// console.log("%c 🚀 ~ file: task.js:132 ~ thunkEditTask ~ task: ", "color: yellow; font-size: 25px", task, "followed by task Id", taskId)
 
 
 
@@ -147,7 +133,7 @@ export const thunkEditTask = (task, taskId) => async (dispatch) => {
 	})
 	// body passing task[taskId] => 400, task => 500, taskId => 400
 
-	console.log("%c 🚀 ~ file: task.js:133 ~ thunkEditTask ~ response: ", "color: red; font-size: 25px", response)
+	// console.log("%c 🚀 ~ file: task.js:133 ~ thunkEditTask ~ response: ", "color: red; font-size: 25px", response)
 
 
 	// console.log("%c 🚀 ~ file: task.js:164 ~ thunkEditTask ~ data: ", "color: blue; font-size: 25px", data)
@@ -165,7 +151,7 @@ export const thunkEditTask = (task, taskId) => async (dispatch) => {
 // //* delete/remove a task
 export const thunkRemoveTask = (taskId) => async dispatch => {
 
-	console.log("%c 🚀 ~ file: task.js:174 ~ thunkRemoveTask ~ taskId: ", "color: cyan; font-size: 25px", taskId)
+	// console.log("%c 🚀 ~ file: task.js:174 ~ thunkRemoveTask ~ taskId: ", "color: cyan; font-size: 25px", taskId)
 
 
 	const response = await csrfFetch(`/api/tasks/${taskId}`, {
@@ -222,7 +208,7 @@ const taskReducer = (state = initialState, action) => {
 		case LOAD_TASKS: {
 			const allTasksState = {};
 
-			console.log("%c 🚀 ~ file: task.js:182 ~ taskReducer ~ allTasksState: ", "color: red; font-size: 25px", allTasksState)
+			// console.log("%c 🚀 ~ file: task.js:182 ~ taskReducer ~ allTasksState: ", "color: red; font-size: 25px", allTasksState)
 
 			action.tasks.Task.forEach(task => {
 				allTasksState[task.id] = task;
@@ -233,7 +219,7 @@ const taskReducer = (state = initialState, action) => {
 
 		case LOAD_CURRENT_TASK: {
 
-			console.log("%c 🚀 ~ file: Checklist.jsx:198 ~ state ~ state inside load curr: ", "color: crimson; font-size: 25px", state)
+			// console.log("%c 🚀 ~ file: Checklist.jsx:198 ~ state ~ state inside load curr: ", "color: crimson; font-size: 25px", state)
 
 			return { ...state, [action.task.id]: action.task };
 		}

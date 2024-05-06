@@ -27,44 +27,93 @@ router.delete('/:itemId', requireAuth, authorization, async (req, res) => {
 
 })
 
+function calcDefaultHealth(level) {
+	return level === 1 ? 50 : Math.max(Math.round(50 * (level - 1) * 2.5));
+}
+
+function useHealthPotion(health, level) {
+	const maxHealth = calcDefaultHealth(level)
+
+	// if health is >= maxHealth, handle logic inside route handler
+	// Otherwise:
+	if (health + 50 <= maxHealth) {
+		health += 50;
+	} else {
+		health = maxHealth;
+	}
+	return health;
+}
+
+
 //for utilization of an item
-router.post('/use-item', requireAuth, async (req, res) => {
+router.put('/:itemId/red-potion', requireAuth, async (req, res) => {
 	try {
-		const { itemId, userId } = req.body;
+		const { userId } = req.body;
+		const { itemId } = req.params;		// Retrieve the inventory item with its associated stat
+		const redPotion = "Red Potion";
+		const invItemRedPotion = await Inventory.findByPk(itemId, {
+			where: {
+				itemName: redPotion
+			}
+		})
 
-		// Retrieve the inventory item with its associated stat
-		const inventoryItem = await Inventory.findOne({
-			where: { id: itemId },
-			include: { association: 'Stat' }
-		});
-
-		if (!inventoryItem) {
-			return res.status(404).json({ message: 'Inventory item not found' });
-		}
-
-		// Extract the stat value from the inventory item
-		const { hp } = inventoryItem.Stat;
-
-		// Add the extracted stat value to the user's stats
-		const user = await User.findByPk(userId);
-		if (!user) {
+		if (!userId) {
 			return res.status(404).json({ message: 'User not found' });
 		}
 
-		// Assuming the user has a stats association
-		user.Stats.hp += hp; // Add the hp stat to the user's existing hp
+		if (!invItemRedPotion) {
+			return res.status(404).json({ message: 'Inventory item "Red Potion" not found' });
+		}
 
-		// Save the updated user
-		await user.save();
+		console.log("%c 🚀 ~ file: inventory.js:46 ~ router.put ~ invItemRedPotion: ", "color: red; font-size: 25px", invItemRedPotion);
 
-		return res.status(200).json({ message: 'Item used successfully' });
+		const userStatus = await userStat.findByPk(userId)
+
+		console.log("%c 🚀 ~ file: inventory.js:53 ~ router.put ~ userStat: ", "color: red; font-size: 25px", userStat)
+
+		console.log("%c 🚀 ~ file: inventory.js:80 ~ router.post ~ invItemRedPotion: ", "color: red; font-size: 25px", "CODE 526291", invItemRedPotion, invItemRedPotion.itemName)
+
+		//* insert helper function logic instead:
+		// const { health } = userStatus;
+
+		let currHealth = userStatus.health;
+		// build helper function for red potion usage
+		console.log("%c 🚀 ~ file: inventory.js:96 ~ router.post ~ health: ", "color: red; font-size: 25px", currHealth) //* 14
+
+		const currLevel = userStatus.level;
+		const maximumHealth = calcDefaultHealth(currLevel)
+
+		// Add the hp stat value to the user's stats
+		if (invItemRedPotion.itemName == "Red Potion") {
+			if (currHealth + 50 > maximumHealth) {
+				currHealth = maximumHealth;
+			} else {
+				currHealth += 50;
+			}
+			await userStatus.update({ health: currHealth });
+			await invItemRedPotion.update({ userStatId: userStatus.id, gear: false, wep: false });
+			// Return updated user stats in the response
+			return res
+				.status(200)
+				.json({
+				message: "Health replenishment successful",
+				userStats: {
+					userId,
+					level: userStatus.level,
+					experience: userStatus.experience,
+					gold: userStatus.gold,
+					health: currHealth // Return the updated health
+				}
+			});
+		}
+
+		res.json({invItemRedPotion: {userStats: userStatus}})
+
 	} catch (error) {
 		console.error(error);
 		return res.status(500).json({ message: 'Internal server error' });
 	}
 });
-
-
 
 
 

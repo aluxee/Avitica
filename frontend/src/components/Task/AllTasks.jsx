@@ -42,7 +42,7 @@ function AllTasks() {
 
 	const goldRef = useRef(gold);
 
-	console.log("%c 🚀 ~ file: AllTasks.jsx:53 ~ AllTasks ~ goldRef: ", "color: red; font-size: 25px", goldRef)
+	// console.log("%c 🚀 ~ file: AllTasks.jsx:53 ~ AllTasks ~ goldRef: ", "color: red; font-size: 25px", goldRef)
 
 	useEffect(() => {
 		goldRef.current = gold
@@ -240,7 +240,6 @@ function AllTasks() {
 
 								</div>
 								<div className='task-mark incomplete'
-
 								>
 									<i className="fa-solid fa-xmark"
 										onClick={() => handleTaskIncomplete(task, task.id)}

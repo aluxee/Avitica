@@ -15,34 +15,30 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      faceName: {
+      faceType: {
         type: Sequelize.STRING
       },
       userId: {
         type: Sequelize.INTEGER,
         allowNull: false
       },
-      ears: {
+      earType: {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      skin: {
+      skinType: {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      hairName: {
+      hairType: {
         type: Sequelize.STRING
       },
-      hairId: {
+      expression: {
         type: Sequelize.STRING,
-        allowNull: false
       },
-      faceId: {
+      imageUrl: {
         type: Sequelize.STRING,
-        allowNull: false
-      },
-      character: {
-        type: Sequelize.TEXT(1000)
+        allowNull: true
       },
       createdAt: {
         allowNull: false,

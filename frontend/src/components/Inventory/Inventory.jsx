@@ -27,7 +27,7 @@ function Inventory() {
 			setInv(invObj.Inventory)
 		}) //PRIME EXAMPLE OF REFRESH
 
-	}, [dispatch, location]) //w/o this, list appears (without recently purchased items almost infinitely)
+	}, [dispatch, location]) //w/o this, list appears (without recently purchased items stacked)
 
 
 	const removeItem = async (item, itemId) => {
@@ -62,7 +62,6 @@ function Inventory() {
 	useEffect(() => {
 		// Move items from cart to inventory when the component mounts
 		moveItemsToInventory(); //* removing dependency array or adding this function to dependency array, or solely putting it outside of the useEffect causes repeats
-		removeItem();
 	}, [location, invObj]);
 
 
@@ -98,11 +97,12 @@ function Inventory() {
 												alt={item.itemName} className='shop-img'
 											/>
 										}
-										modalComponent={<InventoryItemDetails item={item} index={index}
-											itemId={item.id}
+										modalComponent={<InventoryItemDetails
+											item={item}
+											// index={index}
+										// 	itemId={item.id}
 											removeItem={removeItem}
 										/>}
-									// key={index}
 									/>
 
 									{itemCounts[item.itemName] > 1 &&

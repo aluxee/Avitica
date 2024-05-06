@@ -7,7 +7,6 @@ import { thunkCreateTask, thunkLoadTasks } from '../../store/task';
 
 function CreateTask() {
 
-
 	const dispatch = useDispatch();
 	const [title, setTitle] = useState('');
 	const [notes, setNotes] = useState('');
@@ -28,17 +27,13 @@ function CreateTask() {
 		notes.length >= 100 ? errorsObject.notes = 'Mayhap consider shortening this?' : notes
 
 		const currentDate = new Date();
-
-
 		currentDate.setHours(0, 0, 0, 0);
-		// console.log("%c 🚀 ~ file: CreateTask.jsx:32 ~ useEffect ~ currentDate: ", "color: red; font-size: 25px", currentDate)
-
 		// Parse the selected date without considering the time
 		const selectedDate = dueDate ? new Date(dueDate) : null;
 
 
 		if (selectedDate) selectedDate.setHours(24, 0, 0, 0); // must resync selectedDate
-		// console.log("%c 🚀 ~ file: CreateTask.jsx:39 ~ useEffect ~ selectedDate: ", "color: red; font-size: 25px", selectedDate)
+
 
 		if (selectedDate) {
 			// Check if selected date is before the current date

@@ -2,19 +2,23 @@ import { useState, useEffect } from "react";
 import LandingPage from "../LandingPage/LandingPage";
 import About from "../About/About";
 import Features from "../Features/Features";
-import { useLocation, useNavigate } from 'react-router-dom';
+import {
+	useLocation,
+	// useNavigate
+} from 'react-router-dom';
 import './LandingHome.css';
 import HTMLFlipBook from 'react-pageflip';
 
 function LandingHome() {
 	const location = useLocation();
-	const navigate = useNavigate();
+	// const navigate = useNavigate();
 	const [page, setPage] = useState(getPageIndex(location.pathname));
 	const [showMenu, setShowMenu] = useState(false);
 	const [modalOpen, setModalOpen] = useState(false); // State to track if any modal is open
 
 	// Function to get the page index based on the current route
 	function getPageIndex(pathname) {
+		// setPage(pathname)
 		switch (pathname) {
 			case '/':
 				return 0;
@@ -28,26 +32,26 @@ function LandingHome() {
 	}
 
 	// // Function to handle page navigation when next button is clicked
-	function handleNext() {
-		if (page === 0) {
-			navigate('/about');
-			setPage(1);
-		} else if (page === 1) {
-			navigate('/features');
-			setPage(2);
-		}
-	}
+	// function handleNext() {
+	// 	if (page === 0) {
+	// 		navigate('/about');
+	// 		setPage(1);
+	// 	} else if (page === 1) {
+	// 		navigate('/features');
+	// 		setPage(2);
+	// 	}
+	// }
 
 	// Function to handle page navigation when previous button is clicked
-	function handlePrev() {
-		if (page === 1) {
-			navigate('/');
-			setPage(0);
-		} else if (page === 2) {
-			navigate('/about');
-			setPage(1);
-		}
-	}
+	// function handlePrev() {
+	// 	if (page === 1) {
+	// 		navigate('/');
+	// 		setPage(0);
+	// 	} else if (page === 2) {
+	// 		navigate('/about');
+	// 		setPage(1);
+	// 	}
+	// }
 
 
 	// Function to handle modal open
@@ -76,7 +80,8 @@ function LandingHome() {
 
 		return () => document.removeEventListener("click", closeMenu);
 
-	}, [showMenu])
+		// setPage(page)
+	}, [showMenu, setPage])
 
 	const closeMenu = () => {
 		setShowMenu(false)
@@ -107,10 +112,10 @@ function LandingHome() {
 					)
 				}
 
-				<div className="navigation-buttons">
+				{/* <div className="navigation-buttons">
 					<button onClick={handlePrev} disabled={page === 0}>Prev</button>
 					<button onClick={handleNext} disabled={page === 2}>Next</button>
-				</div>
+				</div> */}
 			</div>
 		</div>
 	);

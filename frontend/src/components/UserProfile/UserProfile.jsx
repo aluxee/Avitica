@@ -6,32 +6,27 @@ import { one, two, three, four, five } from '../../clips';
 import { LoggedContext } from '../../context/LoggedProvider';
 import { thunkGetMaxStats } from '../../store/userStats';
 
+
 function UserProfile() {
 	const dispatch = useDispatch();
 	const location = useLocation();
 	const { user } = useContext(LoggedContext);
-	let rawUserStats = useSelector(state => state.userStats)
+
+	console.log("%c 🚀 ~ file: UserProfile.jsx:15 ~ UserProfile ~ user: ", "color: blueviolet; font-size: 28px", user)
+
+	let rawUserStats = useSelector(state => state.userStats);
 
 
 	const userInfo = user.userStats; // this is an array containing an object, to ensure always object we select the first and only index
 
 	console.log("%c 🚀 ~ file: UserProfile.jsx:24 ~ UserProfile ~ userInfo: ", "color: blueviolet; font-size: 25px", userInfo)
 
-
 	//re-write userStat's raw state
 	rawUserStats = userInfo
 
-	// console.log("%c 🚀 ~ file: UserProfile.jsx:25 ~ UserProfile ~ rawUserStats: ", "color: cadetblue; font-size: 25px", rawUserStats)
-
 	// * -------------GOLD SECTION------------- *
 	const storedGold = parseInt(localStorage?.getItem('gold'), 10);
-
-	console.log("%c 🚀 ~ file: UserProfile.jsx:33 ~ UserProfile ~ storedGold: ", "color: tomato; font-size: 25px", storedGold, "prior to setting the amount")
-	// if accurate, set userInfo's gold to above number
-
 	const goldenHour = rawUserStats?.gold || 0;
-	// console.log("%c 🚀 ~ file: UserProfile.jsx:19 ~ UserProfile ~ goldenHour: ", "color: hotpink; font-size: 25px", goldenHour, "and just in case ..., ", rawUserStats.gold);
-
 	// localStorage.setItem('gold', goldenHour.toString())
 
 	const [gold, setGold] = useState(storedGold || goldenHour);
@@ -41,8 +36,11 @@ function UserProfile() {
 	useEffect(() => {
 		setGold(storedGold);
 		// also reflect it on userStats.gold
-		userInfo.gold = gold;
-	}, [userInfo, userInfo.gold, gold, location, user, storedGold])
+		// userInfo.gold = gold;
+
+	}, [userInfo,
+		// userInfo.gold,
+		gold, location, user, storedGold])
 
 	useEffect(() => {
 		goldRef.current = gold
@@ -60,7 +58,7 @@ function UserProfile() {
 			prevGold = gold || prevGold;
 			const updatedGold = prevGold;
 
-			console.log("%c 🚀 ~ file: UserProfile.jsx:48 ~ goldSetFunction ~ updatedGold: ", "color: pink; font-size: 25px", updatedGold)
+			// console.log("%c 🚀 ~ file: UserProfile.jsx:48 ~ goldSetFunction ~ updatedGold: ", "color: pink; font-size: 25px", updatedGold)
 
 			setGold(updatedGold)
 
@@ -78,8 +76,7 @@ function UserProfile() {
 	}, [gold])
 
 	// * -------------LEVEL SECTION------------- *
-	const level = userInfo.level;
-//TODO: AFTER LEVEL 2 ON DEMO, EXP BAR NO LONGER STARTS OVER EVEN WHEN NUMBER SURPASSES MAX, AND EXP POINTS PER LEVEL SHOULD BE SMALLER ESP FOR EARLIER LEVELS
+	const level = userInfo?.level;
 	console.log("%c 🚀 ~ file: UserProfile.jsx:91 ~ UserProfile ~ level: ", "color: tomato; font-size: 25px", level);
 
 	const [currLevel, setCurrLevel] = useState(level);
@@ -87,25 +84,42 @@ function UserProfile() {
 	console.log("%c 🚀 ~ file: UserProfile.jsx:87 ~ UserProfile ~ currLevel: ", "color: red; font-size: 25px", currLevel)
 
 	// * -------------HEALTH SECTION------------- *
-	//!! Fix initial render, then check the math
-	const healthBar = userInfo.health ? userInfo.health : 100;
+	const healthBar = userInfo?.health;
 
-	// console.log("%c 🚀 ~ file: UserProfile.jsx:97 ~ UserProfile ~ healthBar: ", "color: crimson; font-size: 25px", healthBar, userInfo)
-
-	// console.log("%c 🚀 ~ file: UserProfile.jsx:100 ~ UserProfile ~ storedHealth: ", "color: crimson; font-size: 25px", storedHealth)
-
+	console.log("%c 🚀 ~ file: UserProfile.jsx:97 ~ UserProfile ~ healthBar: ", "color: crimson; font-size: 25px", healthBar, userInfo)
 	const [health, setHealth] = useState(healthBar);
 	const [totalHealth, setTotalHealth] = useState(0);
-	// const healthRef = useRef(health);
+	const healthRef = useRef(healthBar);
+
+	useEffect(() => {
+
+		if (health !== healthBar) {
+			if (healthBar < health) {
+				// if user health is depleted from incompletion of task
+				//health is replenished
+				setHealth(healthBar)
+				healthRef.current = healthBar
+				// } else if(health < healthBar) {
+			} else {
+				setHealth(healthBar)
+				healthRef.current = healthBar
+			}
+
+		}
+
+	}, [location, healthBar, health])
+
+	// console.log("%c 🚀 ~ file: UserProfile.jsx:99 ~ UserProfile ~ healthRef: ", "color: magenta; font-size: 28px", healthRef);
 
 	// * -------------EXP SECTION------------- *
-	//!! Fix initial render, then check the math
-
-	const expBar = userInfo.experience ? userInfo.experience : 0;
+	const expBar = userInfo?.experience;
 
 	console.log("%c 🚀 ~ file: UserProfile.jsx:144 ~ UserProfile ~ expBar: ", "color: crimson; font-size: 25px", expBar)
 
 	const [exp, setExp] = useState(expBar);
+
+	console.log("%c 🚀 ~ file: UserProfile.jsx:121 ~ UserProfile ~ exp: ", "color: red; font-size: 25px", exp)
+
 	const [totalExp, setTotalExp] = useState(0);
 	// const expRef = useRef(exp);
 
@@ -114,13 +128,16 @@ function UserProfile() {
 
 
 	useEffect(() => {
-		setExp(userInfo.experience)
+		// if (userInfo.experience) {
+			setExp(userInfo.experience)
+		// }
+
 		setHealth(userInfo.health)
 		dispatch(thunkGetMaxStats(level))
 		setCurrLevel(level)
 		setTotalHealth(maxHp)
 		setTotalExp(maxExp)
-	}, [dispatch, level, maxHp, maxExp, userInfo.experience, userInfo.health])
+	}, [dispatch, level, maxHp, maxExp, healthBar, healthRef, userInfo.experience, userInfo.health ])
 
 
 	// //________________________________________________

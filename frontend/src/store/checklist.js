@@ -9,9 +9,9 @@ export const REMOVE_CHECKLIST = 'checklist/REMOVE_CHECKLIST';
 
 //? checklist:
 
-export const loadChecklist = (taskId, checklist) => ({
+export const loadChecklist = (checklist) => ({
 	type: LOAD_CHECKLIST,
-	taskId, checklist
+	checklist
 });
 
 
@@ -19,7 +19,6 @@ export const createChecklist = (item) => ({
 	type: POST_CHECKLIST,
 	item
 });
-
 
 
 export const editChecklist = (taskId, checklistId, checked) => ({
@@ -50,12 +49,9 @@ export const thunkLoadChecklist = (taskId) => async dispatch => {
 
 	if (response.ok) {
 		const data = await response.json();
-
-		console.log("%c 🚀 ~ file: checklist.js:54 ~ thunkLoadChecklist ~ data: ", "color: red; font-size: 25px", data)
-
-
-
-		dispatch(loadChecklist(taskId, data))
+		dispatch(loadChecklist(data))
+		console.log("%c 🚀 ~ file: checklist.js:53 ~ thunkLoadChecklist ~ data: ", "color: cornflowerblue; font-size: 25px", data)
+		return data
 	} else {
 		const errorResponse = await response.json()
 		return errorResponse
@@ -63,27 +59,27 @@ export const thunkLoadChecklist = (taskId) => async dispatch => {
 }
 
 
-// //* create / post a listItem
-// export const thunkCreateChecklist = (listItem) => async (dispatch) => {
+//* create / post a listItem
+export const thunkCreateChecklist = (taskId, item) => async (dispatch) => {
 
-// 	const response = await csrfFetch('/api/checklist', {
-// 		method: 'POST',
-// 		headers: {
-// 			"Content-Type": "application/json",
-// 		},
-// 		body: JSON.stringify(checklist.listItem)
-// 	})
+	const response = await csrfFetch(`/api/tasks/${taskId}/checklist/new`, {
+		method: 'POST',
+		headers: {
+			"Content-Type": "application/json",
+		},
+		body: JSON.stringify(item)
+	})
 
-// 	if (response.ok) {
+	if (response.ok) {
+		const data = await response.json();
+		await dispatch(createChecklist(data))
+		return data
 
-// 		await dispatch(createChecklist(listItem))
-// 		return listItem
-
-// 	} else {
-// 		const errorResponse = await response.json()
-// 		return errorResponse
-// 	}
-// }
+	} else {
+		const errorResponse = await response.json()
+		return errorResponse
+	}
+}
 
 // edit a listItem
 export const thunkEditChecklist = (taskId, checklistId, checked) => async (dispatch) => {
@@ -93,12 +89,10 @@ export const thunkEditChecklist = (taskId, checklistId, checked) => async (dispa
 
 	console.log("%c 🚀 ~ file: task.js:264 ~ thunkEditChecklist ~ checklistId: ", "color: white; font-size: 25px", checklistId)
 
-
 	const id = Number(checklistId);
-
-
+	const taskPostId = Number(taskId);
 	// see sc for mdn times and sorts
-	const response = await csrfFetch(`/api/tasks/${taskId}/checklist/${id}`, {
+	const response = await csrfFetch(`/api/tasks/${taskPostId}/checklist/${id}`, {
 		method: 'PUT',
 		headers: {
 			"Content-Type": "application/json",
@@ -108,11 +102,17 @@ export const thunkEditChecklist = (taskId, checklistId, checked) => async (dispa
 
 
 	if (response.ok) {
-		// const updateList = await response.json();
+		const updateList = await response.json();
 
-		dispatch(editChecklist(taskId, id, checked))
+		console.log("%c 🚀 ~ file: checklist.js:107 ~ thunkEditChecklist ~ updateList: ", "color: white; font-size: 25px", updateList)
 
-		// return updateList
+
+		const List = dispatch(editChecklist(taskId, id, checked))
+
+		console.log("%c 🚀 ~ file: checklist.js:109 ~ thunkEditChecklist ~ List: ", "color: white; font-size: 25px", List)
+
+
+		return updateList
 
 	} else {
 		const errorResponse = await response.json();
@@ -123,27 +123,29 @@ export const thunkEditChecklist = (taskId, checklistId, checked) => async (dispa
 
 
 // //* delete/remove a listItem
-// export const thunkRemoveChecklist = (checklistId) => async dispatch => {
+export const thunkRemoveChecklist = (taskId, checklistId) => async dispatch => {
 
-// 	const response = await csrfFetch(`/api/checklist/${checklistId}`, {
-// 		method: 'DELETE',
-// 		headers: {
-// 			"Content-Type": "application/json"
-// 		}
-// 	});
+	const response = await csrfFetch(`/api/tasks/${taskId}/checklist/${checklistId}`, {
+		method: 'DELETE',
+		headers: {
+			"Content-Type": "application/json"
+		}
+	});
 
-// 	if (response.ok) { // removed data and replaced it with id
+	if (response.ok) { // removed data and replaced it with id
+		const data = await response.json();
+		dispatch(removeChecklist(checklistId))
+		return data
+	}
+}
 
-// 		dispatch(removeTask(listItem.id))
 
-// 		return listItem.id
-// 	}
-// }
 //  __________________________________________reducer________________________________________
-const initialState = {}
+
+const initialState = [];
 const listReducer = (state = initialState, action) => {
 
-console.log("%c 🚀 ~ file: checklist.js:143 ~ listReducer ~ state: ", "color: red; font-size: 25px", state)
+	console.log("%c 🚀 ~ file: checklist.js:143 ~ listReducer ~ state: ", "color: red; font-size: 25px", state)
 
 
 	// checklist are an object of array of objects
@@ -151,33 +153,57 @@ console.log("%c 🚀 ~ file: checklist.js:143 ~ listReducer ~ state: ", "color: 
 	switch (action.type) {
 
 		case LOAD_CHECKLIST: {
-			const newState = { ...state };
+			const newState = [{...state}]
 
-			console.log("%c 🚀 ~ file: task.js:346 ~ taskReducer ~ newState: ", "color: red; font-size: 25px", newState)
+			console.log("%c 🚀 ~ file: task.js:346 ~ taskReducer ~ newState: ", "color: green; font-size: 25px", newState)
 
+			if (action.checklist.message) {
+				return newState
+			} else {
 
-			action.checklist.forEach(item => {
-				newState[item.id] = item;
-			});
+				action.checklist.forEach(item => {
+					newState[item.id] = item;
+				});
 
-			console.log("%c 🚀 ~ file: task.js:353 ~ taskReducer ~ action: ", "color: green; font-size: 25px", newState)
+				console.log("%c 🚀 ~ file: task.js:353 ~ taskReducer ~ action: ", "color: green; font-size: 25px", newState)
 
-			return newState;
+				return [...action.checklist];
+			}
 		}
 
 		case POST_CHECKLIST: {
-			return {
-				...state,
-				[action.listItem.id]: { ...action.listItem }
-			};
+			const newState = [...state];
+			const checklist = [{ [action.item.id]: { ...action.item } }, newState]
+			// return {
+			// 	...state,
+			// 	[action.listItem.id]: { ...action.listItem }
+			// };
+			return checklist
 		}
 
 		case UPDATE_CHECKLIST: {
-			const newState = { ...state }
+			const newState = [...state]
 
+			const index = newState.findIndex(item => item.id === action.checklistId);
 
-			newState[action.checklistId].checked = action.checked
+			// If the checklist item is found
+			if (index !== -1) {
+				// Create a new checklist item object with updated properties
+				const updatedChecklistItem = {
+					...newState[index], //spread state normalized
+					checked: action.checked // Update the checked property
+				};
 
+				// Create a new updated state arr with the updated checklist item
+				const updatedState = [
+					...newState.slice(0, index), // spread non-updated items
+					updatedChecklistItem, // Insert updated item
+					...newState.slice(index + 1) // Keep any items after the updated item unchanged
+				];
+
+				// Return the new updated state arr
+				return updatedState;
+			}
 			return newState;
 		}
 

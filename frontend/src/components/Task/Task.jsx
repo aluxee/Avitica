@@ -1,27 +1,29 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { useModal } from '../../context/Modal';
 import { useState, useEffect } from 'react';
-import Checklist from './Checklist/Checklist';
+// import Checklist from './Checklist/Checklist';
 import { thunkEditTask, thunkLoadCurrentTask, thunkRemoveTask, thunkLoadTasks } from '../../store/task';
-import OpenModalMenuItem from '../Navigation/OpenModalMenuItem';
+// import OpenModalMenuItem from '../Navigation/OpenModalMenuItem';
 
 import './Task.css';
+
+import { thunkLoadChecklist, thunkCreateChecklist } from '../../store/checklist';
 function Task({ task, taskId }) {
 	const dispatch = useDispatch();
 	const { closeModal } = useModal();
 
-	const taskState = useSelector(state => state.task[taskId]);
-
-	console.log("%c 🚀 ~ file: Task.jsx:13 ~ Task ~ taskState: ", "color: limegreen; font-size: 25px", taskState)
+	// let taskState = useSelector(state => state.task[taskId]);
+	const checklistState = useSelector(state => state.checklist)
 
 	const [title, setTitle] = useState(task.title);
 
-	console.log("%c 🚀 ~ file: Task.jsx:20 ~ Task ~ task: ", "color: red; font-size: 25px", task)
+	console.log("%c 🚀 ~ file: Task.jsx:20 ~ Task ~ task: ", "color: red; font-size: 25px", task, "(task has been passed down)", checklistState, task.Checklist)
 
 	const [notes, setNotes] = useState(task.notes); // Initialize with task.notes
 	const [difficulty, setDifficulty] = useState(task.difficulty);
 	const [dueDate, setDueDate] = useState(task.dueDate);
-	const [checklist, setChecklist] = useState(task.Checklist)
+	const [checklist, setChecklist] = useState(task.Checklist); // array
+	const [checklistItem, setChecklistItem] = useState(''); // individual items
 
 	const [errors, setErrors] = useState({});
 	const [showMenu, setShowMenu] = useState(false);
@@ -29,6 +31,8 @@ function Task({ task, taskId }) {
 	const [editNotes, setEditNotes] = useState(false);
 	const [editDifficulty, setEditDifficulty] = useState(false);
 	const [editDueDate, setEditDueDate] = useState(false);
+	const [editChecklistItem, setEditChecklistItem] = useState(false);
+	// const [addChecklistItem, setAddChecklistItem] = useState(false);
 
 	useEffect(() => {
 		const errorsObject = {};
@@ -46,12 +50,32 @@ function Task({ task, taskId }) {
 
 		setErrors(errorsObject);
 	}, [title, dueDate, notes]);
-	// Update the notes state when editNotes becomes true
+
 
 	useEffect(() => {
-		dispatch(thunkLoadCurrentTask(taskId))
+		// dispatch(thunkLoadCurrentTask(taskId))
+		dispatch(thunkLoadChecklist(taskId))
+	}, [dispatch, taskId]);
 
-	}, [dispatch, taskId])
+	useEffect(() => {
+
+		if (task && checklistState !== null && task.Checklist !== checklistState) {
+			if (JSON.stringify(checklistState) !== JSON.stringify(task.Checklist)) {
+				// Compare the current checklistState with the local state
+				if (!Array.isArray(checklistState)) {
+					const checklistArrState = Object.values(checklistState)
+					setChecklist(checklistArrState)
+				}
+				setChecklist(checklistState);
+
+			} else {
+				setChecklist(task.Checklist)
+			}
+		}
+	}, [task, task.Checklist, checklistState]);
+
+	// console.log("%c 🚀 ~ file: Task.jsx:368 ~ Task ~ checklist: ", "color: magenta; font-size: 30px", "code 30291", checklist)
+
 
 	const prevTask = task;
 	useEffect(() => {
@@ -79,9 +103,6 @@ function Task({ task, taskId }) {
 
 		const submissionResults = await dispatch(thunkEditTask(editUserTask, taskId));
 
-		// console.log("%c 🚀 ~ file: Task.jsx:85 ~ handleSubmit ~ submissionResults: ", "color: magenta; font-size: 25px", submissionResults)
-
-
 		if (submissionResults.errors) {
 			setErrors(submissionResults.errors)
 			return setErrors(submissionResults.errors)
@@ -91,10 +112,11 @@ function Task({ task, taskId }) {
 			setEditNotes(false)
 			setEditDifficulty(false)
 			setEditDueDate(false)
+			setChecklistItem(false)
 		}
 
-		dispatch(thunkLoadCurrentTask(taskId))
-
+		await dispatch(thunkLoadCurrentTask(taskId))
+		// await dispatch(thunkLoadChecklist(taskId))
 	}
 
 
@@ -109,6 +131,22 @@ function Task({ task, taskId }) {
 			setErrors({ title: '' });
 		}
 	};
+
+	const handleAddChecklistItem = async (e) => {
+		e.preventDefault();
+
+		const newToDoItem = {
+			checklistItem
+		}
+
+		const submissionResults = await dispatch(thunkCreateChecklist(taskId, newToDoItem));
+
+		if (submissionResults.errors) {
+			return submissionResults.errors
+		}
+
+		await dispatch(thunkLoadChecklist())
+	}
 
 	const handleDelete = async () => {
 		const confirmDelete = window.confirm("Are you sure you want to delete this task?");
@@ -128,6 +166,7 @@ function Task({ task, taskId }) {
 		e.stopPropagation();
 		setShowMenu(!showMenu)
 	};
+
 	return (
 		<>
 			<div className='task-container'>
@@ -240,7 +279,7 @@ function Task({ task, taskId }) {
 					<div className='dueDate'>
 						{editDueDate === false ?
 							<div
-								onDoubleClick={() => setEditDueDate(true)}
+								onDoubleClick={() => editDueDate(true)}
 							>
 								{dueDate}
 							</div>
@@ -269,23 +308,81 @@ function Task({ task, taskId }) {
 				<label htmlFor="checklist"
 					className='et-checklist'
 				>
-					<h4>
+					<h4
+						// onDoubleClick={() => handleAddChecklistItem}
+						onClick={() => alert('Feature coming soon!')}
+					>
 						Checklist
 					</h4>
-					{checklist && checklist.length > 0 ?
+					{checklist && editChecklistItem === false && checklist.length > 0 ? (
+						<div>
+							{
+								checklist.map((item, index) => (
 
-						<Checklist taskId={taskId} checklist={checklist} setChecklist={setChecklist} />
-						:
+									<div
+
+										onClick={toggleMenu}
+										key={index}
+									>{
+											// item =
+										//* need to edit each portion to make individual items
+											// <Checklist taskId={taskId} checklist={checklist} setChecklist={setChecklist}
+											// 	task={task}
+											// />
+										}
+										{editChecklistItem === true && (
+											<>
+												<form onSubmit={handleAddChecklistItem}
+													onClick={toggleMenu}
+												>
+													<label htmlFor="checklistItem">
+														<input
+															value={checklistItem}
+															type='text'
+															onChange={(e) => setChecklistItem(e.target.value)}
+															// onBlur={handleSubmit}
+															placeholder="Enter Title for Task"
+														/>
+														<p className="p-error">{errors?.checklistItem}</p>
+													</label>
+													<button type="submit">Save</button>
+												</form>
+											</>
+										)}
+									</div>
+								))
+							}
+						</div>
+					) : (
 						<>
-							<OpenModalMenuItem
-								className="checklist-modal"
-								itemText={"Create a Checklist!"}
-								onItemClick={toggleMenu}
-							// modalComponent={}
-							//TODO: ADD MODAL COMPONENT TO CREATE CHECKLIST
-							/>
+							<div className='checklist'>
+								{editChecklistItem === false ?
+									(
+										<div className='checklist'>
+											<div onDoubleClick={() => setEditChecklistItem(true)}>Create a Checklist!</div>
+										</div>
+									) :
 
+									<form onSubmit={handleAddChecklistItem}
+										onClick={toggleMenu}
+									>
+										<label htmlFor="checklistItem">
+											<input
+												value={checklistItem}
+												type='text'
+												onChange={(e) => setChecklistItem(e.target.value)}
+												// onBlur={handleSubmit}
+												placeholder="Enter Title for Task"
+											/>
+											<p className="p-error">{errors?.checklistItem}</p>
+										</label>
+										<button type="submit">Save</button>
+									</form>}
+							</div>
 						</>
+					)
+						// :
+
 					}
 				</label>
 			</div>

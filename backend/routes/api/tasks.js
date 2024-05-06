@@ -103,7 +103,7 @@ router.post('/:taskId/checklist/new', requireAuth, async (req, res) => {
 		}
 	})
 
-	if (listAmount > 1) {
+	if (listAmount > 5) {
 		return res
 			.status(400)
 			.json({
@@ -118,6 +118,7 @@ router.post('/:taskId/checklist/new', requireAuth, async (req, res) => {
 			checklistItem
 		})
 
+		await checklist.save();
 		return res
 			.status(201)
 			.json(checklist)
@@ -187,7 +188,9 @@ router.get('/:taskId/checklist', requireAuth, async (req, res) => {
 
 
 
-	return res.json(checklistsArray)
+	return res
+		.status(200)
+		.json(checklistsArray)
 });
 
 
@@ -250,7 +253,7 @@ function calcHpAndExp(completed, level) {
 router.put('/:taskId/status', requireAuth, async (req, res) => {
 	const { taskId } = req.params;
 	//find userStat information
-	const userStatus = await userStat.findByPk(req.user.id, {
+	const userStatus = await userStat.findOne({
 		where: {
 			userId: req.user.id
 		}
@@ -291,19 +294,14 @@ router.put('/:taskId/status', requireAuth, async (req, res) => {
 		let goldGain;
 		expGain = Math.max(10, 50 - (currLevel - 1) * 5);
 
-		console.log("%c 🚀 ~ file: tasks.js:300 ~ router.put ~ expGain: ", "color: red; font-size: 25px", expGain)
+		// console.log("%c 🚀 ~ file: tasks.js:300 ~ router.put ~ expGain: ", "color: red; font-size: 25px", expGain)
 
 		goldGain = Math.max(10, 85 + (currLevel - 1) * 12);
 
-		console.log("%c 🚀 ~ file: tasks.js:304 ~ router.put ~ goldGain: ", "color: red; font-size: 25px", goldGain)
+		// console.log("%c 🚀 ~ file: tasks.js:304 ~ router.put ~ goldGain: ", "color: red; font-size: 25px", goldGain)
 
 
 		userStatus.experience += expGain;
-
-		// console.log("%c 🚀 ~ file: tasks.js:301 ~ router.put ~ expGain: ", "color: red; font-size: 25px", expGain)
-
-
-		// console.log("%c 🚀 ~ file: tasks.js:301 ~ router.put ~ userStatus.experience: ", "color: red; font-size: 25px", userStatus.experience)
 
 		userStatus.gold += goldGain;
 		await userStatus.save();
@@ -313,9 +311,11 @@ router.put('/:taskId/status', requireAuth, async (req, res) => {
 			userStatus.level++;
 			userStatus.experience = 0;
 
+			console.log("%c 🚀 ~ file: tasks.js:311 ~ router.put ~ userStatus: ", "color: red; font-size: 25px", userStatus)
+
+
 			// Reset health and experience to default values for the new level
 			userStatus.health = calcDefaultHealth(userStatus.level);
-			// userStatus.experience = calcDefaultExperience(userStatus.level);
 
 			await userStatus.save();
 			return res

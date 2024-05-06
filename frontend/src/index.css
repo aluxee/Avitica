@@ -223,6 +223,7 @@ button {
 	touch-action: manipulation;
 	width: 100%;
 	will-change: transform;
+	margin-top: 15%;
 
 	box-shadow: -10px -10px 30px 0, 10px 10px 30px 0 #60a1e28a;
 	font-size: 1rem;

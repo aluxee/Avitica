@@ -263,6 +263,7 @@ li.profile_dropdown_name:hover {}
 
 button.user_logout_button {
 	padding: 11px;
+	margin-top: 5%;
 }
 button.user_logout_button:hover {
 	background: #656363;

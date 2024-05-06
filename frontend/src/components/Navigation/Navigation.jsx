@@ -72,7 +72,7 @@ function Navigation({ isLoaded }) {
 											</NavLink>
 											<NavLink to="/tasks" className="yes-user-nav">To-Do&apos;s</NavLink>
 											<NavLink to="/avatar" className="avatar-profile"
-											onClick={otherRedirect}
+											onClick={() => otherRedirect()}
 											>Avatar</NavLink>
 											<NavLink to='/inv'>Inventory</NavLink>
 											<NavLink to='/shop'>Shop</NavLink>

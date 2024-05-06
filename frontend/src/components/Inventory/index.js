@@ -1,5 +1,5 @@
 import Inventory from "./Inventory";
+import InventoryItemDetails from "./InventoryItemDetails";
 
 
-
-export default Inventory;
+export {Inventory, InventoryItemDetails};

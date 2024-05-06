@@ -35,31 +35,24 @@ module.exports = {
         healthBoost: true,
         gear: false,
         wep: false,
-        Stat: {
-          hp: 40
-        },
       },
       {
         userId: 1,
         shopId: 2,
+        itemType: true,
         itemName: `Power Muffin's ${dataOtherPotion.name}`,
         statBoost: true,
         gear: false,
         wep: false,
-        Stat: {
-          strength: 0.1
-        },
       },
       {
         userId: 1,
         shopId: 3,
+        itemType: true,
         itemName: `Magic Jello's ${dataOtherPotion.name}`,
         statBoost: true,
         gear: false,
         wep: false,
-        Stat: {
-          magic: 0.1
-        },
       },
       {
         userId: 1,
@@ -69,32 +62,24 @@ module.exports = {
         gear: true,
         wep: false,
         equipped: true,
-        Stat: {
-          physicalDefense: 0.2
-        },
       },
       {
         userId: 1,
         shopId: 7,
-        itemName: 'Dragon`s Fury',
+        itemName: `${dataDrgRg.name}`,
         statBoost: true,
         gear: false,
         wep: true,
         equipped: true,
-        Stat: {
-          strength: 0.2
-        },
       },
       {
         userId: 2,
         shopId: 4,
+        itemType: true,
         itemName: `Lucky Farms: ${dataOtherPotion.name}`,
         statBoost: true,
         gear: false,
         wep: false,
-        Stat: {
-          luck: 0.1
-        },
       },
       {
         userId: 2,
@@ -103,20 +88,15 @@ module.exports = {
         statBoost: true,
         gear: true,
         wep: false,
-        Stat: {
-          magicDefense: 0.2
-        },
       },
       {
         userId: 2,
         shopId: 1,
+        itemType: true,
         itemName: `${dataHpPotion.name}`,
         healthBoost: true,
         gear: false,
         wep: false,
-        Stat: {
-          hp: 40
-        },
       },
       {
         userId: 2,
@@ -126,9 +106,6 @@ module.exports = {
         gear: false,
         wep: true,
         equipped: true,
-        Stat: {
-          magic: 0.2
-        },
       },
       {
         userId: 2,
@@ -138,20 +115,15 @@ module.exports = {
         gear: false,
         wep: true,
         equipped: false,
-        Stat: {
-          magic: 0.2
-        },
       },
       {
         userId: 3,
         shopId: 1,
+        itemType: true,
         itemName: `${dataHpPotion.name}`,
         healthBoost: true,
         gear: false,
         wep: false,
-        Stat: {
-          hp: 40
-        },
       },
       {
         userId: 3,
@@ -160,9 +132,6 @@ module.exports = {
         statBoost: true,
         gear: true,
         wep: false,
-        Stat: {
-          physicalDefense: 0.2
-        },
       },
       {
         userId: 3,
@@ -172,9 +141,6 @@ module.exports = {
         gear: false,
         wep: true,
         equipped: true,
-        Stat: {
-          strength: 0.2
-        },
       },
       {
         userId: 3,
@@ -184,9 +150,6 @@ module.exports = {
         gear: false,
         wep: true,
         equipped: false,
-        Stat: {
-          physicalDefense: 0.2
-        },
       },
       {
         userId: 3,
@@ -196,9 +159,6 @@ module.exports = {
         gear: false,
         wep: true,
         equipped: true,
-        Stat: {
-          magicDefense: 0.2
-        },
       },
       {
         userId: 2,
@@ -208,9 +168,6 @@ module.exports = {
         gear: false,
         wep: true,
         equipped: true,
-        Stat: {
-          magicDefense: 0.2
-        },
       },
       {
         userId: 1,
@@ -220,9 +177,6 @@ module.exports = {
         gear: false,
         wep: true,
         equipped: false,
-        Stat: {
-          magicDefense: 0.2
-        },
       },
     ], options, { validate: true }, { include: [Inventory.Stat] })
   },

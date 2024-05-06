@@ -40,11 +40,11 @@ export const thunkLoadCurrentItem = (id) => async dispatch => {
 
 	const response = await csrfFetch(`/api/shop/details/${id}`);
 
-	console.log("%c 🚀 ~ file: shop.js:43 ~ thunkLoadCurrentItem ~ response: ", "color: magenta; font-size: 25px", response)
+	// console.log("%c 🚀 ~ file: shop.js:43 ~ thunkLoadCurrentItem ~ response: ", "color: magenta; font-size: 25px", response)
 
 	const itemData = await response.json();
 
-	console.log("%c 🚀 ~ file: shop.js:44 ~ thunkLoadCurrentItem ~ itemData: ", "color: magenta; font-size: 25px", itemData)
+	// console.log("%c 🚀 ~ file: shop.js:44 ~ thunkLoadCurrentItem ~ itemData: ", "color: magenta; font-size: 25px", itemData)
 
 
 	if (!itemData.errors) {
@@ -67,7 +67,7 @@ const shopReducer = (state = initialState, action) => {
 
 	switch (action.type) {
 		case LOAD_SHOP: {
-			console.log("%c 🚀 ~ file: shop.js:29 ~ shopReducer ~ action: ", "color: red; font-size: 25px", action, "then state", state,)
+			// console.log("%c 🚀 ~ file: shop.js:29 ~ shopReducer ~ action: ", "color: red; font-size: 25px", action, "then state", state,)
 
 			const shopState = {}
 			action.shop.Shop.forEach(item => {

@@ -16,8 +16,9 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   Avatar.init({
-    faceName: {
-      type: DataTypes.STRING
+    faceType: {
+      type: DataTypes.STRING,
+      allowNull: false
     },
     userId: {
       type: DataTypes.INTEGER,
@@ -28,33 +29,31 @@ module.exports = (sequelize, DataTypes) => {
       },
       onDelete: 'CASCADE'
     },
-    ears: {
+    earType: {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
-        isIn: [['humanEars', 'bigEars']]
-
+        isIn: [['Human', 'Elven']]
       }
     },
-    skin: {
+    skinType: {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
-        isIn: [['dark', 'tanned', 'clay', 'light', 'ashen']]
+        isIn: [['Dark', 'Tanned', 'Clay', 'Light', 'Ashen']]
       }
     },
-    hairName: {
-      type: DataTypes.STRING
-    },
-    hairId: {
+    hairType: {
       type: DataTypes.STRING,
       allowNull: false
     },
-    faceId: {
+    expression: {
       type: DataTypes.STRING,
-      allowNull: false
     },
-    character: DataTypes.TEXT
+    imageUrl: {
+      type: DataTypes.STRING,
+      allowNull: true
+    }
   }, {
     sequelize,
     modelName: 'Avatar',

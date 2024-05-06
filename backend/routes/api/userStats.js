@@ -129,7 +129,7 @@ router.get('/:userId/equipped', requireAuth, async (req, res) => {
 //route where an inventory item potion is used it will apply to the depleted health
 router.get('/:userId/potion', requireAuth, async (req, res) => {
 	const { userId } = req.params;
-	const potionItem = await Inventory.findAll({
+	const potionItems = await Inventory.findAll({
 		where: {
 			userId,
 			healthBoost: true
@@ -138,7 +138,7 @@ router.get('/:userId/potion', requireAuth, async (req, res) => {
 			exclude: ['gear', 'wep', 'statBoost', 'equipped']
 		}
 	})
-	if (potionItem.length === 0) {
+	if (potionItems.length === 0) {
 		return res
 			.status(404)
 			.json({
@@ -181,17 +181,22 @@ router.get('/:userId/potion', requireAuth, async (req, res) => {
 
 
 
-
 // Get userStats max stats (exp and health) for a user upon task completion
 
 router.get('/max-stats/:level', requireAuth, async (req, res) => {
 	const { level } = req.params;
 
-	const userStatus = await userStat.findByPk(req.user.id, {
+	console.log("%c 🚀 ~ file: userStats.js:189 ~ router.get ~ level: ", "color: red; font-size: 25px", level)
+
+
+	const userStatus = await userStat.findOne({
 		where: {
 			userId: req.user.id
 		}
 	})
+
+	console.log("%c 🚀 ~ file: userStats.js:198 ~ router.get ~ userStatus: ", "color: red; font-size: 25px", userStatus)
+
 
 	let maxHp;
 	let maxExp;
@@ -199,17 +204,17 @@ router.get('/max-stats/:level', requireAuth, async (req, res) => {
 
 		maxHp = 50;
 		maxExp = 100;
-		userStatus.maxHp = maxHp
-		userStatus.maxExp = maxExp
-		await userStatus.save()
+		userStatus.maxHp = maxHp;
+		userStatus.maxExp = maxExp;
+		await userStatus.save();
 
 	} else {
 		maxHp = Math.max(Math.round(50 * (parseInt(level) - 1) * 2.5), 0);
-		maxExp = Math.max(Math.round(((parseInt(level) - 1) * 25) * ((parseInt(level) - 1) * 1.25)), 0);
+		maxExp = Math.max(Math.round(((parseInt(level) - 1) * 25) * ((parseInt(level) - 1) * 1.25)) + 100, 0);
 
-		userStatus.maxHp = maxHp
-		userStatus.maxExp = maxExp
-		await userStatus.save()
+		userStatus.maxHp = maxHp;
+		userStatus.maxExp = maxExp;
+		await userStatus.save();
 
 	}
 	console.log("%c 🚀 ~ file: userStats.js:220 ~ router.get ~ userStatus: ", "color: red; font-size: 25px", userStatus)
@@ -225,8 +230,6 @@ router.get('/max-stats/:level', requireAuth, async (req, res) => {
 });
 
 
-
-
 //get all user stat (without gear or skill additions [from userStats])
 
 router.get('/', requireAuth, async (req, res) => {
@@ -240,7 +243,7 @@ router.get('/', requireAuth, async (req, res) => {
 		// all the userStats of a user (health, exp)
 
 		//	fetch the stats after making the default
-		const userStats = await userStat.findByPk(user.id, {
+		const userStats = await userStat.findOne({
 			where: {
 				userId: user.id
 			},
@@ -250,6 +253,20 @@ router.get('/', requireAuth, async (req, res) => {
 				]
 			}
 		})
+
+		console.log("%c 🚀 ~ file: userStats.js:266 ~ router.get ~ userStats: ", "color: red; font-size: 25px", userStats)
+
+
+		if (!userStats) {
+			const currUser = await User.findByPk(user.id)
+
+			console.log("%c 🚀 ~ file: userStats.js:259 ~ router.get ~ currUser: ", "color: red; font-size: 25px", currUser)
+			return res
+				.status(400)
+				.json({
+					error: `Error fetching user stats: ${err}`
+				})
+		}
 
 		return res
 			.json({ userStats })

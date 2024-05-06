@@ -7,6 +7,7 @@ import statsReducer from "./stats";
 import shopReducer from "./shop";
 import invReducer from "./inventory";
 import userStatsReducer from "./userStats";
+import avatarReducer from "./avatar";
 
 const rootReducer = combineReducers({
 	session: sessionReducer,
@@ -16,6 +17,7 @@ const rootReducer = combineReducers({
 	shop: shopReducer,
 	inventory: invReducer,
 	userStats: userStatsReducer,
+	avatar: avatarReducer,
 });
 
 let enhancer;

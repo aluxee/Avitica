@@ -3,10 +3,11 @@ import { useState, useEffect, useRef } from 'react';
 // import OpenModalButton from '../OpenModalButton/OpenModalButton';
 import './ItemCart.css';
 
-function ItemCart({ cart, clearCart, removeItemFromCart, location }) {
+function ItemCart({ cart, clearCart, removeItemFromCart, location, item }) {
 
 
 	const [cartBasket, setCartBasket] = useState([]);
+	const [currItem, setCurrItem] = useState(item);
 
 	//useRef works with objects, an array of objects but not just an array
 	//store cart in useRef to use overtime, and keep mutable value in the .current property
@@ -23,8 +24,9 @@ function ItemCart({ cart, clearCart, removeItemFromCart, location }) {
 	}, [cart])
 
 	useEffect(() => {
-		localStorage.setItem(`${cartRef.current}`, "item")
-	}, [location])
+		const storedItem = localStorage.setItem(`${cartRef.current}`, "item")
+		setCurrItem(storedItem)
+	}, [location, item, currItem])
 
 	//changed cart to cartRef
 	const countCartItems = (cartRef) => {

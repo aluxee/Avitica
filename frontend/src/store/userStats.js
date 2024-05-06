@@ -54,11 +54,15 @@ export const thunkGetMaxStats = (level) => async (dispatch) => {
 
 	const response = await csrfFetch(`/api/info/max-stats/${level}`)
 	if (response.ok) {
+		console.log("%c 🚀 ~ file: userStats.js:59 ~ thunkGetMaxStats ~ response: ", "color: yellow; font-size: 25px", response)
 		const data = await response.json();
 
-		// console.log("%c 🚀 ~ file: userStats.js:36 ~ thunkGetMaxStats ~ maxHp: ", "color: yellow; font-size: 25px", data)
+		console.log("%c 🚀 ~ file: userStats.js:36 ~ thunkGetMaxStats ~ maxHp: ", "color: yellow; font-size: 25px", data)
 
-		dispatch(loadMaxStats(data))
+		const resData = dispatch(loadMaxStats(data))
+
+		console.log("%c 🚀 ~ file: userStats.js:64 ~ thunkGetMaxStats ~ resData: ", "color: yellow; font-size: 25px", resData)
+
 	} else {
 		const errResponse = await response.json()
 		return errResponse
@@ -86,7 +90,10 @@ export const thunkUpdateTaskStatus = (taskId) => async (dispatch) => {
 		// console.log("%c 🚀 ~ file: userStats.js:48 ~ thunkUpdateTaskStatus ~ taskData: ", "color: red; font-size: 25px", taskData)
 
 
-		await dispatch(updateTaskStatus(taskId, data))
+		const resData = await dispatch(updateTaskStatus(taskId, data))
+
+		console.log("%c 🚀 ~ file: userStats.js:95 ~ thunkUpdateTaskStatus ~ resData: ", "color: blue; font-size: 25px", resData)
+
 
 		return data
 	}
@@ -95,7 +102,15 @@ export const thunkUpdateTaskStatus = (taskId) => async (dispatch) => {
 
 // __________________________________________reducer________________________________________
 
-const initialState = { userStats: {}, maxHp: null, maxExp: null }
+const initialState = {
+	userStats: {
+		id: null,
+		health: null,
+		experience: null,
+		gold: null,
+		level: null
+	},
+	maxHp: null, maxExp: null }
 const userStatsReducer = (state = initialState, action) => {
 
 	// stats are an object of array of objects
@@ -104,11 +119,24 @@ const userStatsReducer = (state = initialState, action) => {
 
 		case LOAD_USER_STATS: {
 			console.log("%c 🚀 ~ file: userStats.js:105 ~ userStatsReducer ~ action: ", "color: aqua; font-size: 25px", action)
-			const userStatState = {}
-			// return { ...state, [action.data.userStats.id]: action.data.userStats }
-			userStatState[action.data.userStats.id] = action.data.userStats
 
-			return userStatState
+
+			// const userStatState = {}
+			// return { ...state, [action.data.userStats.id]: action.data.userStats }
+			// userStatState[action.data.userStats.id] = action.data.userStats
+
+			// return userStatState
+
+			return {
+				...state,
+				userStats: {
+					id: action.data.userStats.id,
+					health: action.data.userStats.health,
+					experience: action.data.userStats.experience,
+					gold: action.data.userStats.gold,
+					level: action.data.userStats.level
+				}
+			};
 		}
 		case LOAD_MAX_STATS: {
 			// console.log("%c 🚀 ~ file: userStats.js:83 ~ userStatsReducer ~ action: ", "color: red; font-size: 25px", action)

@@ -14,11 +14,9 @@ import { LoggedContext } from '../../context/LoggedProvider';
 
 
 function AllTasks() {
-	console.log("START FUNCTION COMPONENT ALLTASKS")
+
 	const location = useLocation();
 	const dispatch = useDispatch();
-	// console.log("%c 🚀 ~ file: AllTasks.jsx:17 ~ AllTasks ~ tasks: ", "color: red; font-size: 25px", tasks)
-	// const [hover, setHover] = useState(null);
 	const [showMenu, setShowMenu] = useState(false);
 	const { user } = useContext(LoggedContext);
 
@@ -34,12 +32,6 @@ function AllTasks() {
 
 	// * -------------GOLD SECTION------------- *
 
-	// retrieve curr gold amount
-	// const storedGold = parseInt(localStorage.getItem('gold'), 10);
-
-	// console.log("%c 🚀 ~ file: AllTasks.jsx:40 ~ AllTasks ~ storedGold: ", "color: red; font-size: 25px", storedGold)
-
-
 	// save the local storage amt to state
 	const [gold, setGold] = useState('');
 
@@ -50,7 +42,7 @@ function AllTasks() {
 
 	const goldRef = useRef(gold);
 
-	console.log("%c 🚀 ~ file: AllTasks.jsx:53 ~ AllTasks ~ goldRef: ", "color: red; font-size: 25px", goldRef)
+	// console.log("%c 🚀 ~ file: AllTasks.jsx:53 ~ AllTasks ~ goldRef: ", "color: red; font-size: 25px", goldRef)
 
 	useEffect(() => {
 		goldRef.current = gold
@@ -94,14 +86,9 @@ function AllTasks() {
 
 			if (updatedUserStats && updatedUserStats.userStats) {
 				const results = await dispatch(thunkLoadUserStats())
-
-				// console.log("%c 🚀 ~ file: AllTasks.jsx:94 ~ handleTaskComplete ~ results: ", "color: hotpink; font-size: 25px", results)
 				user.userStats = results.userStats
 
-				// console.log("%c 🚀 ~ file: AllTasks.jsx:97 ~ handleTaskComplete ~ user.userStats: ", "color: orange; font-size: 25px", user.userStats, user.userStats)
 				const newGold = user.userStats.gold
-
-				// console.log("%c 🚀 ~ file: AllTasks.jsx:99 ~ handleTaskComplete ~ newGold: ", "color: red; font-size: 25px", newGold)
 
 				setGold(newGold)
 				localStorage.setItem('gold', newGold.toString())
@@ -123,9 +110,39 @@ function AllTasks() {
 
 	}
 
-	// const handleTaskIncomplete = async (task, taskId) => {
+	const handleTaskIncomplete = async (task, taskId) => {
 
-	// }
+		// //task completion useState
+		task.completed = false
+		// setTaskComplete(task.completed)
+		if (taskId) {
+
+			await dispatch(thunkEditTask(task, taskId))
+
+			// console.log("HEY THERE")
+			// //task handle gold and exp
+
+			const updatedUserStats = await dispatch(thunkUpdateTaskStatus(taskId))
+			// console.log("HEY WORLD!")
+
+			if (updatedUserStats && updatedUserStats.userStats) {
+				const results = await dispatch(thunkLoadUserStats())
+				user.userStats = results.userStats
+
+			}
+
+			// //remove task after its been updated
+			await dispatch(thunkRemoveTask(taskId))
+
+			// Remove the completed task from the list of tasks
+			const filteredTasks = allTasks.filter(task => task.id !== taskId);
+			setTasks(filteredTasks);
+
+
+			// // loads current list of tasks
+			await dispatch(thunkLoadTasks()) // effectively deleting live with this catch-all thunk
+		}
+	}
 
 	//* useEffect handling
 
@@ -147,9 +164,28 @@ function AllTasks() {
 		return filteredTasks
 	}
 
+	const incompletionHandler = (taskId) => {
+		const handleTask = allTasks.filter(task => task.id === taskId)
+
+		setCurrTask(handleTask)
+
+		handleTaskIncomplete(handleTask, taskId)
+		const filteredTasks = allTasks.filter(task => (task.id !== taskId) || (task.id !== handleTask.id))
+
+		setTasks(filteredTasks)
+
+		return filteredTasks
+	}
+
 	//need to have refresh upon handleTask
 	useEffect(() => {
 		completionHandler(); // no need to pass in anything, do not pass in dep array
+		dispatch(thunkLoadTasks())
+
+	}, [dispatch, location, gold, user.userStats, user])
+
+	useEffect(() => {
+		incompletionHandler(); // no need to pass in anything, do not pass in dep array
 		dispatch(thunkLoadTasks())
 
 	}, [dispatch, location, gold, user.userStats, user])
@@ -204,9 +240,10 @@ function AllTasks() {
 
 								</div>
 								<div className='task-mark incomplete'
-									onClick={() => alert('Points feature coming soon!')}
 								>
-									<i className="fa-solid fa-xmark" />
+									<i className="fa-solid fa-xmark"
+										onClick={() => handleTaskIncomplete(task, task.id)}
+									/>
 								</div>
 							</div>
 						))

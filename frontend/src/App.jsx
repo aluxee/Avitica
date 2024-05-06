@@ -15,8 +15,10 @@ import About from './components/Navigation/HomeInterface/About/About';
 import Features from './components/Navigation/HomeInterface/Features/Features';
 import * as sessionActions from './store/session';
 import Home from './components/Home/Home';
-import ShopDetails from './components/Shop/ShopDetails';
+import { Avatar } from './components/Avatar';
+
 import Inventory from './components/Inventory/Inventory';
+import ShopDetails from './components/Shop/ShopDetails';
 // import
 
 
@@ -24,10 +26,13 @@ import Inventory from './components/Inventory/Inventory';
 function Layout() {
   const dispatch = useDispatch();
   const [isLoaded, setIsLoaded] = useState(false);
+  // const [avatarState, setAvatarState] = useState('');
+
+  // to see css, set the value to true, use in main component
   const sessionUser = useSelector(state => state.session.user)
   const { loggedIn, setLoggedIn } = useContext(LoggedContext)
 
-  console.log("%c 🚀 ~ file: App.jsx:19 ~ Layout ~ sessionUser: ", "color: orange; font-size: 25px", sessionUser)
+  // console.log("%c 🚀 ~ file: App.jsx:19 ~ Layout ~ sessionUser: ", "color: orange; font-size: 25px", sessionUser)
 
 
   useEffect(() => {
@@ -98,6 +103,10 @@ const router = createBrowserRouter([
       {
         path: '/tasks',
         element: <Home />
+      },
+      {
+        path: '/avatar',
+        element: <Avatar />
       },
       {
         path: '/stats',

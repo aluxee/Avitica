@@ -7,7 +7,6 @@ import { thunkCreateTask, thunkLoadTasks } from '../../store/task';
 
 function CreateTask() {
 
-
 	const dispatch = useDispatch();
 	const [title, setTitle] = useState('');
 	const [notes, setNotes] = useState('');
@@ -28,13 +27,23 @@ function CreateTask() {
 		notes.length >= 100 ? errorsObject.notes = 'Mayhap consider shortening this?' : notes
 
 		const currentDate = new Date();
-		const selectedDate = new Date(dueDate);
-		if (selectedDate < currentDate) {
-			errorsObject.dueDate = 'Due date must be on or after the current date'
+		currentDate.setHours(0, 0, 0, 0);
+		// Parse the selected date without considering the time
+		const selectedDate = dueDate ? new Date(dueDate) : null;
+
+
+		if (selectedDate) selectedDate.setHours(24, 0, 0, 0); // must resync selectedDate
+
+
+		if (selectedDate) {
+			// Check if selected date is before the current date
+			if (selectedDate < currentDate) {
+				errorsObject.dueDate = 'Due date must be on or after the current date';
+			}
 		}
 
 		setErrors(errorsObject);
-	}, [title, dueDate, notes])
+	}, [title, notes, dueDate])
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
@@ -143,7 +152,9 @@ function CreateTask() {
 					/>
 					<p className="p-error">{errors?.dueDate}</p>
 				</label>
-				<button type="submit" className="pt-task-submit-button submit">
+				<button type="submit" className="pt-task-submit-button submit"
+					disabled={Object.values(errors).length > 0}
+				>
 					Save
 				</button>
 			</form>

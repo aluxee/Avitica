@@ -12,6 +12,9 @@ const isProduction = environment === 'production';
 const app = express();
 const routes = require('./routes');
 
+// Load environment variables from .env file
+require('dotenv').config();
+
 app.use(morgan('dev'));
 app.use(cookieParser());
 app.use(express.json());
@@ -31,6 +34,7 @@ app.use(
 );
 
 // Set the _csrf token and create req.csrfToken method
+//also personally added token for third-party api
 app.use(
 	csurf({
 		cookie: {
@@ -40,6 +44,17 @@ app.use(
 		}
 	})
 );
+
+
+// Middleware to add MapleStory API token to request headers
+app.use((req, _res, next) => {
+	// Add MapleStory API token to headers
+	req.headers['Authorization'] = `Bearer ${process.env.MAPLESTORY_API_TOKEN}`;
+	console.log("%c 🚀 ~ file: app.js:55 ~ app.use ~ process.env.MAPLESTORY_API_TOKEN: ", "color: red; font-size: 25px", process.env.MAPLESTORY_API_TOKEN)
+	next();
+
+
+});
 
 app.use(routes); // Connect all the routes
 

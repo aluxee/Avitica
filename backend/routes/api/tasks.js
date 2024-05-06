@@ -103,7 +103,7 @@ router.post('/:taskId/checklist/new', requireAuth, async (req, res) => {
 		}
 	})
 
-	if (listAmount > 1) {
+	if (listAmount > 5) {
 		return res
 			.status(400)
 			.json({
@@ -118,6 +118,7 @@ router.post('/:taskId/checklist/new', requireAuth, async (req, res) => {
 			checklistItem
 		})
 
+		await checklist.save();
 		return res
 			.status(201)
 			.json(checklist)
@@ -187,7 +188,9 @@ router.get('/:taskId/checklist', requireAuth, async (req, res) => {
 
 
 
-	return res.json(checklistsArray)
+	return res
+		.status(200)
+		.json(checklistsArray)
 });
 
 
@@ -200,24 +203,15 @@ function calcDefaultHealth(level) {
 function calcDefaultExperience(level) {
 	return level === 1 ? 100 : Math.max(Math.round(((level - 1) * 25) * ((level - 1) * 1.25)), 0); // 2 = 125, 3 = 187, 5 = 500
 }
-function getLevel(experience, currLevel) {
-	let level = currLevel;
-	let totalExp = experience;
 
-	while (totalExp >= Math.round(Math.max(((level - 1) * 25)) * ((level - 1) * 1.25)) && level < 10) {
-		level++;
-		totalExp -= Math.round(Math.max(((level - 1) * 25) * ((level - 1) * 1.25)))
-	}
-	return level;
-}
-Math.max(((2 - 1) * 25)) * ((2 - 1) * 1.25)
+// Math.max(((2 - 1) * 25)) * ((2 - 1) * 1.25)
 function calculateExperienceThreshold(currentLevel) {
-	// Define base experience and experience increment
-	const baseExperience = 100; // Adjust this value as needed
-	const experienceIncrement = 50; // Adjust this value as needed
 
 	// Calculate the experience threshold for the next level
-	const threshold = baseExperience + (currentLevel - 1) * experienceIncrement;
+
+	const threshold = Math.max(Math.round(((parseInt(currentLevel) - 1) * 25) * ((parseInt(currentLevel) - 1) * 1.25)) + 100, 0);
+
+	console.log("%c 🚀 ~ file: tasks.js:214 ~ calculateExperienceThreshold ~ threshold: ", "color: red; font-size: 25px", threshold)
 
 	return threshold;
 }
@@ -230,6 +224,9 @@ function calcHpAndExp(completed, level) {
 	// Increase gained exp points per task per level
 	if (completed) {
 		expGain = Math.max(10, 50 - (currLevel - 1) * 5);
+
+		// console.log("%c 🚀 ~ file: tasks.js:228 ~ calcHpAndExp ~ expGain: ", "color: red; font-size: 25px", expGain)
+
 		goldGain = Math.max(10, 85 + (currLevel - 1) * 12);
 		this.experience += expGain;
 		this.gold += goldGain;
@@ -251,15 +248,12 @@ function calcHpAndExp(completed, level) {
 }
 
 
-
-
-
 // * Keep in mind there are two types of task edits: one will edit the task itself, the other updates the task when a task is marked as complete or incomplete -- this one is the latter
-//TODO: re-eval update of exp and gold
+
 router.put('/:taskId/status', requireAuth, async (req, res) => {
 	const { taskId } = req.params;
 	//find userStat information
-	const userStatus = await userStat.findByPk(req.user.id, {
+	const userStatus = await userStat.findOne({
 		where: {
 			userId: req.user.id
 		}
@@ -282,7 +276,13 @@ router.put('/:taskId/status', requireAuth, async (req, res) => {
 
 	// retrieve user's current level
 	const currLevel = userStatus.level;
+
+	console.log("%c 🚀 ~ file: tasks.js:283 ~ router.put ~ currLevel: ", "color: red; font-size: 25px", currLevel)
+
 	const expThreshold = calculateExperienceThreshold(currLevel)
+
+	console.log("%c 🚀 ~ file: tasks.js:287 ~ router.put ~ expThreshold: ", "color: red; font-size: 25px", expThreshold)
+
 	// initialize experience gain variable
 	// let expGain = 0;
 	//initialize gold gain variable
@@ -293,14 +293,15 @@ router.put('/:taskId/status', requireAuth, async (req, res) => {
 		let expGain;
 		let goldGain;
 		expGain = Math.max(10, 50 - (currLevel - 1) * 5);
+
+		// console.log("%c 🚀 ~ file: tasks.js:300 ~ router.put ~ expGain: ", "color: red; font-size: 25px", expGain)
+
 		goldGain = Math.max(10, 85 + (currLevel - 1) * 12);
 
+		// console.log("%c 🚀 ~ file: tasks.js:304 ~ router.put ~ goldGain: ", "color: red; font-size: 25px", goldGain)
+
+
 		userStatus.experience += expGain;
-
-		// console.log("%c 🚀 ~ file: tasks.js:301 ~ router.put ~ expGain: ", "color: red; font-size: 25px", expGain)
-
-
-		// console.log("%c 🚀 ~ file: tasks.js:301 ~ router.put ~ userStatus.experience: ", "color: red; font-size: 25px", userStatus.experience)
 
 		userStatus.gold += goldGain;
 		await userStatus.save();
@@ -310,9 +311,11 @@ router.put('/:taskId/status', requireAuth, async (req, res) => {
 			userStatus.level++;
 			userStatus.experience = 0;
 
+			console.log("%c 🚀 ~ file: tasks.js:311 ~ router.put ~ userStatus: ", "color: red; font-size: 25px", userStatus)
+
+
 			// Reset health and experience to default values for the new level
 			userStatus.health = calcDefaultHealth(userStatus.level);
-			// userStatus.experience = calcDefaultExperience(userStatus.level);
 
 			await userStatus.save();
 			return res
@@ -367,10 +370,18 @@ router.put('/:taskId/status', requireAuth, async (req, res) => {
 				},
 				)
 		}
+		// save the updated userStatus
+		await userStatus.save();
+
 		return res
-			.status(200)
+			.status(201)
 			.json({
-				userStat: userStatus
+				userStats: {
+					level: userStatus.level,
+					experience: userStatus.experience,
+					gold: userStatus.gold,
+					health: userStatus.health // Include any other relevant user stats
+				}
 			})
 	}
 })
@@ -507,7 +518,7 @@ router.delete('/:taskId', requireAuth, async (req, res) => {
 			})
 
 	}
-	console.log("%c 🚀 ~ file: tasks.js:386 ~ router.delete ~ task: ", "color: red; font-size: 25px", "HELLO THIS IS DELETING A TASK !!!!!!! \n", task)
+
 
 	await task.destroy();
 
@@ -524,6 +535,7 @@ router.delete('/:taskId', requireAuth, async (req, res) => {
 router.post('/new', requireAuth, async (req, res) => {
 	// const { title, notes, difficulty, dueDate } = req.body;
 	const { title, notes, difficulty, dueDate } = req.body;
+
 	const thisDate = Date.now();
 	let currentDate = new Date(thisDate);
 
@@ -655,5 +667,6 @@ router.get('/', requireAuth, authorization, async (req, res) => {
 		Task: tasksList
 	})
 });
+
 
 module.exports = router;

@@ -152,13 +152,15 @@ button.button-profile-dropdown>ul.profile-dropdownlogin {
 	width: 100px;
 	display: flex;
 }
+
 button.button-profile-dropdown:after {
 	background: transparent;
 }
 
-button.button-profile-dropdown{
+button.button-profile-dropdown {
 	font-size: 8px;
 }
+
 /* *HIDDEN ELEMENTS */
 
 ul.profile-dropdownhidden {
@@ -182,13 +184,14 @@ ul.profile-dropdownhiddenlogin {
 	overflow: hidden;
 	visibility: collapse;
 }
+
 ul.profile-dropdownlogin {
 	display: flex;
 	position: relative;
 	padding: 8% 15%;
 	flex-direction: column;
-	/* width: 100%; */
-	/* width: 100px; */
+	max-width: 400px;
+	width: 200px;
 	/* width: fit-content; */
 	padding-left: 0px;
 	flex-wrap: wrap;
@@ -198,6 +201,7 @@ ul.profile-dropdownlogin {
 	justify-content: center;
 	top: 7rem;
 }
+
 ul.profile-dropdownlogin>.only-login>li {
 	border: none;
 	box-shadow: none;

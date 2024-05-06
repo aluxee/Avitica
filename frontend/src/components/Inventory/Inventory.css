@@ -1,13 +1,12 @@
 .inv-container {
-display: flex;
+	display: flex;
+	background-color: #42B8C1;
 	margin: 2% 5%;
 	flex-direction: row;
 	flex-wrap: wrap;
-	justify-content: center;
-	background-color: #42B8C1;
-	width: 800px;
-	height: fit-content;
-	max-height: 200vh;
+	justify-content: flex-start;
+	align-items: center;
+	align-content: flex-start;
 }
 
 .sd-inv-img {

@@ -6,7 +6,7 @@ router = express.Router();
 
 
 // edit a specific checklist, this also includes being able to complete the checklist
-router.put('/:taskId/checklist/:checklistId', requireAuth, authorization, async (req, res) => {
+router.put('/:taskId/checklist/:checklistId/checked', requireAuth, authorization, async (req, res) => {
 	//* may require frontend testing
 	const { checklistId } = req.params;
 	const { checked } = req.body;
@@ -29,6 +29,47 @@ router.put('/:taskId/checklist/:checklistId', requireAuth, authorization, async 
 
 		await editCheckList.save();
 		res.json(editCheckList);
+	} catch (err) {
+
+		return res
+			.status(400)
+			.json({
+				"message": "Bad Request",
+				"errors": {
+					"checklistItem": "A checklist item is required"
+				}
+			});
+	}
+});
+
+// editing the item of checklist
+router.put('/:taskId/checklist/:checklistId', requireAuth, authorization, async (req, res) => {
+	//* may require frontend testing
+	const { checklistId } = req.params;
+	const { checklistItem } = req.body;
+
+	try {
+		const editCheckList = await Checklist.findByPk(checklistId, {
+			where: {
+				userId: req.user.id
+			}
+		})
+		if (!editCheckList) {
+			return res
+				.status(404)
+				.json({
+					message: "Checklist not found"
+				})
+		}
+		//update checklist item's value
+		editCheckList.checklistItem = checklistItem;
+		const array = [];
+		const checklistArr = Array.isArray(editCheckList) && editCheckList.length > 0 ? editCheckList : array.push(editCheckList);
+
+		await editCheckList.save();
+		return res
+			.status(200)
+			.json({ checklist: checklistArr });
 	} catch (err) {
 
 		return res
@@ -91,37 +132,41 @@ router.delete('/:taskId/checklist/:checklistId', requireAuth, authorization, asy
 		})
 })
 
-// post a new checklist
+// post a new checklist item to the checklist
 router.post('/:taskId/checklist/new', requireAuth, async (req, res) => {
 	const { taskId } = req.params;
 	const { checklistItem } = req.body;
 
 	const listAmount = await Checklist.count({
 		where: {
-			taskId, checklistItem,
+			taskId,
 			userId: req.user.id
 		}
 	})
 
-	if (listAmount > 5) {
+	if (listAmount >= 5) {
 		return res
 			.status(400)
 			.json({
-				"error": "You've reached the maximum amount of tasks with the same title name",
-				"message": "You can only have five tasks running at a time"
+				"error": "You've reached your maximum amount of checklist items",
+				"message": "You can only have five checklist items running at a time"
 			})
 	}
 	try {
-		const checklist = await Checklist.create({
+
+		const newChecklistItem = await Checklist.create({
 			taskId,
 			userId: req.user.id,
 			checklistItem
 		})
 
-		await checklist.save();
+		console.log("%c 🚀 ~ file: tasks.js:163 ~ router.post ~ newChecklistItem: ", "color: red; font-size: 25px", newChecklistItem)
+
+
+		await newChecklistItem.save();
 		return res
 			.status(201)
-			.json(checklist)
+			.json( newChecklistItem )
 	} catch (err) { // this code must be revisited; need to find better way to detect same name checklist items
 		res
 			.status(400)
@@ -564,18 +609,31 @@ router.post('/new', requireAuth, async (req, res) => {
 		}
 	});
 
-	const taskCounter = await Task.count({
+	const taskCounterTitle = await Task.count({
 		where: {
 			userId: req.user.id,
 			title
 		}
 	})
-	if (taskCounter > 1) {
+	const taskCounterGen = await Task.count({
+		where: {
+			userId: req.user.id
+		}
+	})
+	if (taskCounterTitle > 1) {
 		return res
 			.status(400)
 			.json({
-				"error": "You've reached the maximum amount of tasks with the same title name",
-				"message": "You can only have five tasks running at a time"
+				"error": "You cannot have any tasks with duplicated names",
+				"message": "Task title must be unique"
+			})
+	}
+	if (taskCounterGen > 7) {
+		return res
+			.status(400)
+			.json({
+				"error": "You've reached your maximum amount of tasks",
+				"message": "You can only have seven tasks running at a time"
 			})
 	}
 	const taskArray = []

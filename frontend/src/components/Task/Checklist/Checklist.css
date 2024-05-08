@@ -1,3 +1,17 @@
+div.checklist {
+	display: flex;
+	flex-direction: column;
+}
+
 .checklist-ind {
 	display: flex;
+}
+
+
+/* ICON */
+.fa-solid.fa-plus {}
+
+.fa-solid.fa-plus:hover {
+	cursor: pointer;
+	color: #738FC5;
 }

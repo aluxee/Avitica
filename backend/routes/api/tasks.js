@@ -130,12 +130,21 @@ router.delete('/:taskId/checklist/:checklistId', requireAuth, authorization, asy
 		.json({
 			"message": "Successfully deleted"
 		})
-})
+});
 
 // post a new checklist item to the checklist
 router.post('/:taskId/checklist/new', requireAuth, async (req, res) => {
 	const { taskId } = req.params;
 	const { checklistItem } = req.body;
+
+	if (checklistItem.length < 3 || checklistItem.length >= 50) {
+		return res
+			.status(400)
+			.json({
+				error: "Invalid checklist item",
+				message: "Title cannot be less than 3 characters or greater than 50 characters"
+			})
+	}
 
 	const listAmount = await Checklist.count({
 		where: {
@@ -159,9 +168,6 @@ router.post('/:taskId/checklist/new', requireAuth, async (req, res) => {
 			userId: req.user.id,
 			checklistItem
 		})
-
-		console.log("%c 🚀 ~ file: tasks.js:163 ~ router.post ~ newChecklistItem: ", "color: red; font-size: 25px", newChecklistItem)
-
 
 		await newChecklistItem.save();
 		return res

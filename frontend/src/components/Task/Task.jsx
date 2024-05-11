@@ -294,7 +294,7 @@ function Task({ task, taskId }) {
 
 					<div className='ind-checklist'>
 						{
-							taskId && 
+							taskId &&
 							<Checklist taskId={taskId}
 							// we loop through each item in the checklist within this component
 							checklist={checklist} setChecklist={setChecklist}
@@ -302,7 +302,8 @@ function Task({ task, taskId }) {
 							editChecklistItem={editChecklistItem}
 							setEditChecklistItem={setEditChecklistItem}
 							addChecklistItem={addChecklistItem}
-							setAddChecklistItem={setAddChecklistItem}
+								setAddChecklistItem={setAddChecklistItem}
+								toggleMenu={toggleMenu}
 							/>
 						}
 

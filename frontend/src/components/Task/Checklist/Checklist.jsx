@@ -4,7 +4,7 @@ import { useEffect, useState, useRef } from "react";
 import './Checklist.css'
 
 
-function Checklist({ task, taskId, checklist, setChecklist, editChecklistItem, setEditChecklistItem, addChecklistItem, setAddChecklistItem }) {
+function Checklist({ task, taskId, checklist, setChecklist, editChecklistItem, setEditChecklistItem, addChecklistItem, setAddChecklistItem, toggleMenu }) {
 
 	const dispatch = useDispatch();
 	const initialCheck = Object.values(checklist).reduce((obj, item) => {
@@ -26,44 +26,61 @@ function Checklist({ task, taskId, checklist, setChecklist, editChecklistItem, s
 	const checkRef = useRef(liveCheck);
 	const list = useSelector(state => state.checklist);
 	const checklistAllArr = Object.values(list);
-	const [checklistState, setChecklistState] = useState(task.Checklist); // array
 	const theChecklist = checklistAllArr.filter(item => item.taskId === taskId)
 	const [currItem, setCurrItem] = useState('');
 	const [checklistItem, setChecklistItem] = useState(''); // individual items
+	const [hover, setHover] = useState('');
+	const [showCaption, setShowCaption] = useState(false);
 
-	console.log("%c 🚀 ~ file: Checklist.jsx:44 ~ Checklist ~ theChecklist: ", "color: red; font-size: 25px", theChecklist)
 
-	// useEffect(() => {
-	// 	const errorsObject = {};
-	// 	checklist.length >= 5 ? errorsObject.checklist = 'You`ve reached your maximum amount of checklist items' : checklist.checklistItem
-	// 	checklist.length === 0 ? errorsObject.checklist = 'Title for the item is required' : checklist.checklistItem
+	// for caption
+	const onHover = () => {
+		setHover('checklist');
+	}
+	const offHover = () => {
+		setHover('');
+	}
+	const closeMenu = () => {
+		setShowCaption(false);
+	}
+	const hoverClassName = 'caption ' + (hover === 'checklist' ? '' : 'hidden');
 
-	// 	setErrors(errorsObject);
 
-	// }, [checklist])
 
-	const prevList = list
+	//* useEffect
+	useEffect(() => {
+		const errorsObject = {};
 
-	console.log("%c 🚀 ~ file: Checklist.jsx:47 ~ Checklist ~ list: ", "color: red; font-size: 25px", list)
+		checklistItem?.length < 3 ? errorsObject.checklist = 'Title must be greater than 3 characters' : checklistItem;
+
+		console.log("%c 🚀 ~ file: Checklist.jsx:56 ~ useEffect ~ checklistItem: ", "color: red; font-size: 25px", checklistItem)
+
+
+		checklistItem?.length >= 50 ? errorsObject.checklist = 'Title must be less than 50 characters' : checklistItem;
+
+		setErrors(errorsObject);
+	}, [checklistItem])
+
+	const prevList = list;
+
 	useEffect(() => {
 		if (prevList) {
 			setChecklistItem(prevList.checklistItem)
 		}
 	}, [prevList]);
 
-	useEffect(() => {
-		if (theChecklist.length === 0) {
-			setChecklist(theChecklist)
 
-		}
+	useEffect(() => {
+		// if (theChecklist.length === 0) {
+		// 	setChecklist(theChecklist)
+
+		// }
 		if (checklist && checklist.id && checklist.length > 0) { // need the length to ensure a checkbox does not appear
 			const updatedChecklist = checklist.filter(item => !checkItem[item.id])
 
-			console.log("%c 🚀 ~ file: Checklist.jsx:57 ~ useEffect ~ updatedChecklist: ", "color: red; font-size: 25px", updatedChecklist)
 			setChecklist(updatedChecklist)
 		}
-	}, [currItem, checkItem]) // recent change: removed taskId
-
+	}, [currItem, checkItem, theChecklist]) // recent change: removed taskId
 
 	const handleCheckboxChanges = async (id) => {
 
@@ -104,8 +121,6 @@ function Checklist({ task, taskId, checklist, setChecklist, editChecklistItem, s
 			clearSelectedChecklistItems(id)
 		}
 
-		console.log("%c 🚀 ~ file: Checklist.jsx:85 ~ handleCheckboxChanges ~ currItem: ", "color: lightblue; font-size: 25px", currItem)
-
 	};
 
 	const handleDoubleClickAdd = async () => {
@@ -135,12 +150,6 @@ function Checklist({ task, taskId, checklist, setChecklist, editChecklistItem, s
 
 	const handleAddChecklistItem = async (e) => {
 		e.preventDefault();
-		// setAddChecklistItem(true)
-		//* if the checklist item has no content inside the input, do not proceed with adding the item to the checklist
-		// adding a new checklist item
-		// if (!checklistItem.trim()) { // removes white space from string
-		// 	setErrors({ checklistItem: "Checklist item cannot be empty" })
-		// }
 
 		const newToDoItem = { checklistItem };
 
@@ -149,20 +158,12 @@ function Checklist({ task, taskId, checklist, setChecklist, editChecklistItem, s
 
 			const submissionResults = await dispatch(thunkCreateChecklist(taskId, newToDoItem))
 
-			console.log("%c 🚀 ~ file: Checklist.jsx:143 ~ handleAddChecklistItem ~ submissionResults: ", "color: magenta; font-size: 25px", submissionResults)
-
 			// return submissionResults.errors
 			if (!submissionResults?.errors) {
 				// if no errors, update the UI immediately with the new checklist item as a new addition to the checklist (ensure to update what was passed down and whats present)
-				// setChecklistItem(''); // clear input field after successful addition
 				setAddChecklistItem(false);
 				setChecklist([...checklist, submissionResults.checklistItem]);
-				setChecklistState([...checklist, submissionResults.checklistItem]);
-				console.log("%c 🚀 ~ file: Checklist.jsx:177 ~ handleAddChecklistItem ~ submissionResults: ", "color: red; font-size: 25px", submissionResults, submissionResults.id)
 
-				// after edit, revert the checklist add item state back to false
-
-				console.log("%c 🚀 ~ file: Checklist.jsx:137 ~ handleAddChecklistItem ~ checklistState: ", "color: skyblue; font-size: 25px", checklistState, "VERSUS", theChecklist, checklistItem); // if this does NOT match the checklist, also update the checklist
 				setCurrItem(submissionResults.checklistItem)
 			} else {
 				return submissionResults.errors
@@ -171,21 +172,15 @@ function Checklist({ task, taskId, checklist, setChecklist, editChecklistItem, s
 			// contingency checklist load
 			await dispatch(thunkLoadChecklist(taskId));
 		}
-
 	};
 
 	const clearSelectedChecklistItems = async (id) => {
-		console.log("code 2010", theChecklist, checklist, "checklist State: ", checklistState, "selectedITEM: ", currItem)
+
 		const selectedItem = checklist.find(item => item.id === id)
-
-		console.log("%c 🚀 ~ file: Checklist.jsx:96 ~ clearSelectedChecklistItems ~ selectedItem: ", "color: red; font-size: 25px", selectedItem, checkRef.current)
-
 		if (checkRef.current === true) {
 			selectedItem.checked = true
 			setCurrItem(selectedItem)
 		}
-
-		console.log("%c 🚀 ~ file: Checklist.jsx:103 ~ clearSelectedChecklistItems ~ selectedItem: ", "color: blue; font-size: 25px", selectedItem)
 
 		const filteredChecklist = checklist.filter(item => item.id !== id);
 
@@ -199,15 +194,13 @@ function Checklist({ task, taskId, checklist, setChecklist, editChecklistItem, s
 		}
 
 		setChecklist(filteredChecklist)
-		setChecklistState(filteredChecklist)
-		console.log("%c 🚀 ~ file: Checklist.jsx:118 ~ clearSelectedChecklistItems ~ filteredChecklist: ", "color: red; font-size: 25px", filteredChecklist, checklist)
-		// theChecklist = filteredChecklist
 
 	};
 
 	const handleEditItemSubmit = async (e, id) => {
 		e.preventDefault();
-
+		setAddChecklistItem(false)
+		setEditChecklistItem(true)
 		const editChecklistItem = {
 			checklistItem
 		}
@@ -233,27 +226,78 @@ function Checklist({ task, taskId, checklist, setChecklist, editChecklistItem, s
 		<>
 			<div className="cl-outer">
 				<div className="cl-inner">
-					<div className="checklist" onDoubleClick={handleDoubleClickAdd}>
-						<h4>Checklist</h4>
+					<div className="checklist"
+					>
+						<h4
+							onDoubleClick={handleDoubleClickAdd}
+							onClick={() => {
+								setAddChecklistItem(false)
+								toggleMenu
+							}}
+							onMouseOver={onHover}
+							onMouseOut={offHover}
+
+						>
+							Checklist
+							{hover === 'checklist' &&
+								<p className={hoverClassName + (showCaption ? (setHover('')) : 'hidden')}>
+									Double click &#34;Checklist&#34; to add item <br />
+									Single click to cancel out adding item
+								</p>
+							}
+						</h4>
 
 						{checklist?.length > 0 ? checklist?.map((item, index) => (
 							<div className="checklist-items" key={index}>
-								<div className="checklist-ind">
-									<label htmlFor={item.id}>
-										<input
-											type="checkbox"
-											value={item.id}
-											checked={checkItem[item.id]}
-											onChange={() => handleCheckboxChanges(item.id)}
-										/>
-										{item.checklistItem}
-									</label>
-								</div>
+								<div className="checklist-ind"
+									//! ensure that when double clicking the edit button its only that specific targetted input not all of them
+								>
 
-								<div className="edit-checklist">
-									{/* Add your edit checklist item UI here */}
+									{(
+										// editChecklistItem === false && addChecklistItem === false &&
+										<label htmlFor={item.id}>
+											<input
+												type="checkbox"
+												value={item.id}
+												checked={checkItem[item.id]}
+												onChange={() => handleCheckboxChanges(item.id)}
+												onDoubleClick={() => setEditChecklistItem(true)}
+
+											/>
+											{/* Attach double-click event to the checklist item text */}
+											<span onDoubleClick={() => {
+												setChecklistItem(item.checklistItem); // Set the input value to the current checklist item text
+												setEditChecklistItem(true); // Enable editing mode
+											}}>
+												{item.checklistItem}
+											</span>
+										</label>
+									)}
+									{(editChecklistItem === true && addChecklistItem === false &&
+										<div className="edit-checklist">
+											<form action="" onSubmit={() => {
+												handleEditItemSubmit()
+												setChecklistItem(item)
+											}}
+											// find a way to ensure that when a user clicks out, the input closes and the list reappears
+											>
+												<label>
+													<input
+														value={checklistItem}
+														type='text'
+														name="checklistItem"
+														onChange={(e) => setChecklistItem(e.target.value)}
+														onBlur={() => setEditChecklistItem(false)} // Handle onBlur event to save changes and exit editing mode
+														placeholder="Enter Checklist Item"
+													/>
+													<p className="p-error">{errors?.checklist}</p>
+												</label>
+											</form>
+										</div>
+									)}
 								</div>
 							</div>
+
 						))
 							: <>
 								{addChecklistItem === false &&
@@ -265,19 +309,27 @@ function Checklist({ task, taskId, checklist, setChecklist, editChecklistItem, s
 						}
 						{editChecklistItem === false && addChecklistItem === true && (
 							<div className="add-checklist">
-								<form onSubmit={handleAddAndSubmit}>
+								<form onSubmit={handleAddAndSubmit}
+
+								>
 									<label htmlFor="checklistItem">
 										<input
 											value={checklistItem}
 											type='text'
 											name="checklistItem"
 											onChange={(e) => setChecklistItem(e.target.value)}
+											onKeyDown={(e) => {
+												if (e.key === 'Enter') {
+													e.preventDefault();
+													handleAddAndSubmit(e);
+												}
+											}}
 											placeholder="Enter Checklist Item"
 										/>
 										<p className="p-error">{errors?.checklist}</p>
 									</label>
-									<button type="submit"
-									>Add Item</button>
+									{/* <button type="submit"
+									>Add Item</button> */}
 								</form>
 							</div>
 						)}
@@ -292,7 +344,7 @@ function Checklist({ task, taskId, checklist, setChecklist, editChecklistItem, s
 						</div>
 					}
 				</div>
-			</div>
+			</div >
 		</>
 	)
 }

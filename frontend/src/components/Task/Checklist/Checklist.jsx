@@ -250,7 +250,7 @@ function Checklist({ task, taskId, checklist, setChecklist, editChecklistItem, s
 						{checklist?.length > 0 ? checklist?.map((item, index) => (
 							<div className="checklist-items" key={index}>
 								<div className="checklist-ind"
-									//! ensure that when double clicking the edit button its only that specific targetted input not all of them
+								//! ensure that when double clicking the edit button its only that specific targetted input not all of them
 								>
 
 									{(
@@ -310,7 +310,7 @@ function Checklist({ task, taskId, checklist, setChecklist, editChecklistItem, s
 						{editChecklistItem === false && addChecklistItem === true && (
 							<div className="add-checklist">
 								<form onSubmit={handleAddAndSubmit}
-
+								//! ensure to add blur effect
 								>
 									<label htmlFor="checklistItem">
 										<input

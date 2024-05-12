@@ -175,8 +175,9 @@ function Task({ task, taskId }) {
 										value={title}
 										type='text'
 										onChange={handleChangeTitle}
-										// onBlur={handleSubmit}
 										placeholder="Enter Title for Task"
+										onBlur={() => setEditTitle(false)}
+										autoFocus
 									/>
 									<p className="p-error">{errors?.title}</p>
 								</label>
@@ -193,11 +194,6 @@ function Task({ task, taskId }) {
 								onDoubleClick={() => setEditNotes(true)}
 							>
 								{notes ? <>{notes}</> : <>Create some notes for this task!</>}
-								{/* <button
-									onClick={() => setEditNotes(true)}
-								>
-									Edit Notes
-								</button> */}
 							</div>
 							:
 							<form onSubmit={handleSubmit}>
@@ -208,17 +204,19 @@ function Task({ task, taskId }) {
 										type='text'
 										name="notes"
 										id="et-notes" cols="35" rows="8"
-										placeholder="Type notes here" />
+										placeholder="Type notes here"
+										onKeyDown={(e) => {
+											if (e.key === 'Enter') {
+												e.preventDefault();
+												handleSubmit(e);
+											}
+										}}
+										onBlur={() => setEditNotes(false)}
+										autoFocus
+									/>
 
 									<p className="p-error">{errors?.notes}</p>
 								</label>
-								<button type="submit">Save</button>
-								<button
-									onClick={() => setEditNotes(false)}
-									type="submit"
-								>
-									Cancel
-								</button>
 							</form>}
 					</div>
 				</div>
@@ -229,6 +227,7 @@ function Task({ task, taskId }) {
 					</h4>
 					{editDifficulty === false ?
 						<div
+							className='difficulty'
 							onDoubleClick={() => setEditDifficulty(true)}
 						>
 							{difficulty}
@@ -240,6 +239,14 @@ function Task({ task, taskId }) {
 									value={difficulty}
 									onChange={(e) => setDifficulty(e.target.value)}
 									id="difficulty-select"
+									onKeyDown={(e) => {
+										if (e.key === 'Enter') {
+											e.preventDefault();
+											handleSubmit(e);
+										}
+									}}
+									onBlur={() => setEditDifficulty(false)}
+									autoFocus
 								>
 									<option value="Trivial"
 									>Trivial</option>
@@ -249,8 +256,6 @@ function Task({ task, taskId }) {
 									<option value="Hard">Hard</option>
 								</select>
 							</label>
-							<button type="submit">Save</button>
-							<button onClick={() => setEditDifficulty(false)} type="submit">Cancel</button>
 						</form>}
 				</div>
 
@@ -261,7 +266,7 @@ function Task({ task, taskId }) {
 					<div className='dueDate'>
 						{editDueDate === false ?
 							<div
-								onDoubleClick={() => editDueDate(true)}
+								onDoubleClick={() => setEditDueDate(true)}
 							>
 								{dueDate}
 							</div>
@@ -275,10 +280,16 @@ function Task({ task, taskId }) {
 										value={dueDate}
 										onChange={(e) => setDueDate(e.target.value)}
 										type='date'
+										onKeyDown={(e) => {
+											if (e.key === 'Enter') {
+												e.preventDefault();
+												handleSubmit(e);
+											}
+										}}
+										onBlur={() => setEditDueDate(false)}
+										autoFocus
 									/>
 									<div className='dueDate-buttons'>
-										<button type="submit">Save</button>
-										<button onClick={() => setEditDueDate(false)} type="submit">Cancel</button>
 									</div>
 									<p className="p-error">{errors?.dueDate}</p>
 								</label>

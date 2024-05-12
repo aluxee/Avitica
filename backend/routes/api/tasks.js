@@ -1,7 +1,8 @@
 const express = require('express');
 const { Task, Checklist, userStat } = require('../../db/models');
 const { requireAuth, authorization } = require('../../utils/auth');
-
+// const Op = Sequelize.Op;
+const { Op } = require('sequelize');
 router = express.Router();
 
 
@@ -43,42 +44,65 @@ router.put('/:taskId/checklist/:checklistId/checked', requireAuth, authorization
 });
 
 // editing the item of checklist
-router.put('/:taskId/checklist/:checklistId', requireAuth, authorization, async (req, res) => {
+router.put('/:taskId/checklist/:checklistId', requireAuth, async (req, res) => {
 	//* may require frontend testing
 	const { checklistId } = req.params;
 	const { checklistItem } = req.body;
 
 	try {
-		const editCheckList = await Checklist.findByPk(checklistId, {
+		if (!checklistItem) {
+			return res
+				.status(400)
+				.json({
+					"message": "Item has not been entered/exists",
+					"errors": {
+						"checklistItem": "A checklist item is required"
+					}
+				});
+		}
+		const checklistDup = await Checklist.count({
+			where: {
+				userId: req.user.id,
+				checklistItem,
+				id: { [Op.not]: checklistId } // do not include the item being updated
+			}
+		})
+
+		console.log("%c 🚀 ~ file: tasks.js:70 ~ router.put ~ checklistDup: ", "color: red; font-size: 25px", checklistDup, "code1029")
+
+		if (checklistDup >= 1) {
+			return res
+				.status(400)
+				.json({
+					"error": "You cannot have any checklist items with duplicated names",
+					"message": "Checklist item title must be unique"
+				})
+		}
+		const checklistItemUpdate = await Checklist.findByPk(checklistId, {
 			where: {
 				userId: req.user.id
 			}
-		})
-		if (!editCheckList) {
-			return res
-				.status(404)
-				.json({
-					message: "Checklist not found"
-				})
+		});
+
+		if (!checklistItemUpdate) {
+			return res.status(404).json({
+				error: "Checklist item not found",
+				message: "Checklist item not found"
+			});
 		}
 		//update checklist item's value
-		editCheckList.checklistItem = checklistItem;
-		const array = [];
-		const checklistArr = Array.isArray(editCheckList) && editCheckList.length > 0 ? editCheckList : array.push(editCheckList);
+		checklistItemUpdate.checklistItem = checklistItem;
 
-		await editCheckList.save();
+		await checklistItemUpdate.save();
+
 		return res
-			.status(200)
-			.json({ checklist: checklistArr });
+			.json({ checklistItemUpdate });
 	} catch (err) {
 
 		return res
-			.status(400)
+			.status(500)
 			.json({
-				"message": "Bad Request",
-				"errors": {
-					"checklistItem": "A checklist item is required"
-				}
+				message: "Internal server error"
 			});
 	}
 });
@@ -151,7 +175,7 @@ router.post('/:taskId/checklist/new', requireAuth, async (req, res) => {
 			taskId,
 			userId: req.user.id
 		}
-	})
+	});
 
 	if (listAmount >= 5) {
 		return res
@@ -161,6 +185,26 @@ router.post('/:taskId/checklist/new', requireAuth, async (req, res) => {
 				"message": "You can only have five checklist items running at a time"
 			})
 	}
+	
+	const checklistDup = await Checklist.count({
+		where: {
+			userId: req.user.id,
+			taskId,
+			checklistItem,
+		}
+	})
+
+
+	if (checklistDup >= 1) {
+		return res
+			.status(400)
+			.json({
+				"error": "Duplicate Item",
+				"message": "Checklist item title must be unique"
+			})
+	}
+
+
 	try {
 
 		const newChecklistItem = await Checklist.create({
@@ -170,9 +214,11 @@ router.post('/:taskId/checklist/new', requireAuth, async (req, res) => {
 		})
 
 		await newChecklistItem.save();
+		console.log("%c 🚀 ~ file: tasks.js:204 ~ router.post ~ newChecklistItem: ", "color: red; font-size: 25px", newChecklistItem)
+
 		return res
 			.status(201)
-			.json( newChecklistItem )
+			.json(newChecklistItem)
 	} catch (err) { // this code must be revisited; need to find better way to detect same name checklist items
 		res
 			.status(400)
@@ -180,6 +226,8 @@ router.post('/:taskId/checklist/new', requireAuth, async (req, res) => {
 				message: "This item of the checklist already exists"
 			});
 	}
+
+
 
 });
 

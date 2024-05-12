@@ -18,12 +18,20 @@
 	color: #42B8C1;
 }
 
+.title:hover {
+	cursor: pointer;
+}
+
 .title-container {
 	display: flex;
 	flex-wrap: wrap;
 	flex-direction: column;
 	align-items: center;
 	width: 250px;
+}
+
+.notes:hover {
+	cursor: pointer;
 }
 
 .notes-container {
@@ -53,6 +61,10 @@ div.notes>form>button {
 	align-items: center;
 }
 
+.difficulty {
+	cursor: pointer;
+}
+
 .task-container>li.modal-menu-item {
 	border: 2px solid black;
 	width: fit-content;
@@ -73,6 +85,10 @@ li.modal-menu-item:hover {
 
 .dueDate-label {
 	display: flex;
+}
+
+.dueDate:hover{
+	cursor: pointer;
 }
 
 button.delete-task-button {

@@ -27,9 +27,9 @@ export const editCheckedChecklist = (taskId, checklistId, checked) => ({
 	taskId, checklistId, checked
 });
 
-export const editChecklistItem = (taskId, checklistId, checklist) => ({
+export const editChecklistItem = (taskId, checklistId, checklistItem) => ({
 	type: EDIT_CHECKLIST_ITEM,
-	taskId, checklistId, checklist
+	taskId, checklistId, checklistItem
 })
 
 export const removeChecklist = (checklistId) => {
@@ -65,7 +65,7 @@ export const thunkLoadChecklist = (taskId) => async dispatch => {
 //* create / post a listItem
 export const thunkCreateChecklist = (taskId, item) => async (dispatch) => {
 
-console.log("%c 🚀 ~ file: checklist.js:68 ~ thunkCreateChecklist ~ item: ", "color: purple; font-size: 25px", item, "taskID", taskId)
+	console.log("%c 🚀 ~ file: checklist.js:68 ~ thunkCreateChecklist ~ item: ", "color: purple; font-size: 25px", item, "taskID", taskId)
 
 
 	const response = await csrfFetch(`/api/tasks/${taskId}/checklist/new`, {
@@ -82,7 +82,7 @@ console.log("%c 🚀 ~ file: checklist.js:68 ~ thunkCreateChecklist ~ item: ", "
 	console.log("%c 🚀 ~ file: checklist.js:81 ~ thunkCreateChecklist ~ data: ", "color: red; font-size: 25px", data)
 
 	if (response.ok) {
-		 await dispatch(createChecklist(data))
+		await dispatch(createChecklist(data))
 		return data
 	} else {
 		const errorResponse = await response.json();
@@ -95,11 +95,6 @@ console.log("%c 🚀 ~ file: checklist.js:68 ~ thunkCreateChecklist ~ item: ", "
 
 // edit a listItem that is or is not checked
 export const thunkEditCheckedChecklist = (taskId, checklistId, checked) => async (dispatch) => {
-
-	console.log("%c 🚀 ~ file: task.js:264 ~ thunkEditChecklist ~ checked: ", "color: white; font-size: 25px", checked)
-
-
-	console.log("%c 🚀 ~ file: task.js:264 ~ thunkEditChecklist ~ checklistId: ", "color: white; font-size: 25px", checklistId)
 
 	const id = Number(checklistId);
 	const taskPostId = Number(taskId);
@@ -116,13 +111,7 @@ export const thunkEditCheckedChecklist = (taskId, checklistId, checked) => async
 	if (response.ok) {
 		const updateList = await response.json();
 
-		console.log("%c 🚀 ~ file: checklist.js:107 ~ thunkEditChecklist ~ updateList: ", "color: white; font-size: 25px", updateList)
-
-
-		const List = dispatch(editCheckedChecklist(taskId, id, checked))
-
-		console.log("%c 🚀 ~ file: checklist.js:109 ~ thunkEditChecklist ~ List: ", "color: white; font-size: 25px", List)
-
+		dispatch(editCheckedChecklist(taskId, id, checked))
 
 		return updateList
 
@@ -132,26 +121,29 @@ export const thunkEditCheckedChecklist = (taskId, checklistId, checked) => async
 		return errorResponse
 	}
 }
-export const thunkEditChecklistItem = (taskId, checklistId, checklist) => async (dispatch) => {
-	// console.log("%c 🚀 ~ file: task.js:264 ~ thunkEditChecklist ~ checklistId: ", "color: white; font-size: 25px", checklistId)
+
+
+export const thunkEditChecklistItem = (taskId, checklistId, checklistItem) => async (dispatch) => {
 
 	const id = Number(checklistId);
 	const taskPostId = Number(taskId);
+
 	// see sc for mdn times and sorts
 	const response = await csrfFetch(`/api/tasks/${taskPostId}/checklist/${id}`, {
 		method: 'PUT',
 		headers: {
 			"Content-Type": "application/json",
 		},
-		body: JSON.stringify({ checklist })
+		body: JSON.stringify({ checklistItem })
 	})
 
 
 	if (response.ok) {
+
 		const updateList = await response.json();
 
-		console.log("%c 🚀 ~ file: checklist.js:144 ~ thunkEditChecklist ~ updateList: ", "color: white; font-size: 25px", updateList)
 		dispatch(editCheckedChecklist(taskId, id, updateList))
+
 		return updateList
 	} else {
 		const errorResponse = await response.json();
@@ -250,7 +242,7 @@ const listReducer = (state = initialState, action) => {
 		}
 
 		case REMOVE_CHECKLIST: {
-			const removeState = [ ...state];
+			const removeState = [...state];
 
 			console.log("%c 🚀 ~ file: checklist.js:255 ~ listReducer ~ removeState: ", "color: red; font-size: 25px", "BEFORE", removeState)
 

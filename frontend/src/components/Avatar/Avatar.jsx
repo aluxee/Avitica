@@ -1,5 +1,3 @@
-
-
 import OpenModalButton from '../OpenModalButton/OpenModalButton';
 
 import './Avatar.css';

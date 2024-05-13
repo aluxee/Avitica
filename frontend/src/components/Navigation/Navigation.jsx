@@ -1,33 +1,22 @@
 import { NavLink } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
 import ProfileButton from './ProfileButton';
 import UserProfile from '../UserProfile/UserProfile';
 import { useContext } from 'react';
 import { LoggedContext } from '../../context/LoggedProvider';
-import * as sessionActions from "../../store/session";
 import './Navigation.css';
 
 function Navigation({ isLoaded }) {
 
 	const navigate = useNavigate();
 	// const { user } = useContext(LoggedContext);
-	const { user, setLoggedIn } = useContext(LoggedContext)
-	const dispatch = useDispatch();
+	const { user } = useContext(LoggedContext)
+
 
 	const otherRedirect = async () => {
 
 		await alert("Feature coming soon")
 		navigate('/tasks')
-	}
-
-	const logout = (e) => {
-		e.preventDefault();
-
-		dispatch(sessionActions.logout());
-		alert("You have logged out.")
-		navigate('/');
-		setLoggedIn(false);
 	}
 
 
@@ -90,8 +79,7 @@ function Navigation({ isLoaded }) {
 											<NavLink
 												onClick={() => otherRedirect()}
 											>Battle</NavLink>
-											{/* <NavLink></NavLink> */}
-											<button onClick={logout} className='logout'>Log out</button>
+
 										</div>
 									</>
 

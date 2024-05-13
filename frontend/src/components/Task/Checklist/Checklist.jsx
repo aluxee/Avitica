@@ -41,11 +41,8 @@ function Checklist({ task, taskId, checklist, setChecklist, editChecklistItem, s
 	const offHover = () => {
 		setHover('');
 	}
-	const closeMenu = () => {
-		setShowCaption(false);
-	}
-	const hoverClassName = 'caption ' + (hover === 'checklist' ? '' : 'hidden');
 
+	const hoverClassName = 'caption ' + (hover === 'checklist' ? '' : 'hidden');
 
 
 	//* useEffect
@@ -67,7 +64,7 @@ function Checklist({ task, taskId, checklist, setChecklist, editChecklistItem, s
 		if (prevList) {
 			setChecklistItem(prevList?.checklistItem || '')
 		}
-	}, [prevList]);
+	}, [prevList, setShowCaption]);
 
 
 	useEffect(() => {

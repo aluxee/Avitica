@@ -16,9 +16,6 @@ function Task({ task, taskId }) {
 	const checklistState = useSelector(state => state.checklist)
 
 	const [title, setTitle] = useState(task.title);
-
-	console.log("%c 🚀 ~ file: Task.jsx:20 ~ Task ~ task: ", "color: red; font-size: 25px", task, "(task has been passed down)", checklistState, task.Checklist)
-
 	const [notes, setNotes] = useState(task.notes); // Initialize with task.notes
 	const [difficulty, setDifficulty] = useState(task.difficulty);
 	const [dueDate, setDueDate] = useState(task.dueDate);

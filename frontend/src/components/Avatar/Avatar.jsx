@@ -17,8 +17,8 @@ function Avatar() {
 						<div className='for-testing'>
 							<OpenModalButton
 								className='avatar-creation-modal'
-							buttonText={"Create Avatar"}
-							modalComponent={<CreateAvatar />}
+								buttonText={"Create Avatar"}
+								modalComponent={<CreateAvatar />}
 							/>
 
 						</div>

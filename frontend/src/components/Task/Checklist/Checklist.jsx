@@ -4,7 +4,7 @@ import { useEffect, useState, useRef } from "react";
 import './Checklist.css'
 
 
-function Checklist({ task, taskId, checklist, setChecklist, editChecklistItem, setEditChecklistItem, addChecklistItem, setAddChecklistItem, toggleMenu }) {
+function Checklist({ task, taskId, checklist, setChecklist, editChecklistItem, setEditChecklistItem, addChecklistItem, setAddChecklistItem }) {
 
 
 	const dispatch = useDispatch();
@@ -244,14 +244,13 @@ function Checklist({ task, taskId, checklist, setChecklist, editChecklistItem, s
 							onDoubleClick={handleDoubleClickAdd}
 							onClick={() => {
 								setAddChecklistItem(false);
-								toggleMenu();
 							}}
 							onMouseOver={onHover}
 							onMouseOut={offHover}
 						>
 							Checklist
 							{hover === 'checklist' && (
-								<p className={hoverClassName + (showCaption ? '' : ' hidden')}>
+								<p className={hoverClassName + (showCaption ? '' : 'hidden')}>
 									Double click &#34;Checklist&#34; to add item <br />
 									Single click to cancel out adding item
 								</p>
@@ -312,7 +311,11 @@ function Checklist({ task, taskId, checklist, setChecklist, editChecklistItem, s
 							</div>
 						))}
 						{!checklist?.length && !addChecklistItem && (
-							<div onDoubleClick={handleAddAndSubmit}>Create a Checklist!</div>
+							<div
+								className="create-checklist"
+								onDoubleClick={handleDoubleClickAdd}>
+								Create a Checklist!
+							</div>
 						)}
 						{addChecklistItem && (
 							<div className="add-checklist">

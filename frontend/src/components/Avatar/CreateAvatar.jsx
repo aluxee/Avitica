@@ -1,12 +1,12 @@
 import { useState, useEffect } from 'react';
-// import { useDispatch } from "react-redux";
-// import { thunkCreateAvatar, thunkLoadAvatar } from '../../store/avatar';
+import { useDispatch } from "react-redux";
+import { thunkCreateAvatar, thunkLoadAvatar } from '../../store/avatar';
 
 
 import './CreateAvatar.css';
 
 function CreateAvatar() {
-	// const dispatch = useDispatch();
+	const dispatch = useDispatch();
 	const [avatarState, setAvatarState] = useState("");
 
 
@@ -51,49 +51,52 @@ function CreateAvatar() {
 	const handleAvatarSubmit = async (e) => {
 		e.preventDefault();
 
-		//!! fetch from backend once its complete
+		// !! fetch from backend once its complete
 
-		// const createAvatar =  await dispatch(thunkCreateAvatar({
-		// 	skinType, faceIdNumber, hairIdNumber, earType, expression
-		// }));
-		// setAvatarState(createAvatar)
+		const createAvatar =  await dispatch(thunkCreateAvatar({
+			skinType, faceIdNumber, hairIdNumber, earType, expression
+		}));
+		setAvatarState(createAvatar)
 
-		// await dispatch(thunkLoadAvatar());
+		await dispatch(thunkLoadAvatar());
+
+		// console.log("%c 🚀 ~ file: CreateAvatar.jsx:71 ~ handleAvatarSubmit ~ createAvatar: ", "color: red; font-size: 25px", createAvatar)
+
+		// const resPost = await fetch('https://api.maplestory.net/character/render', {
+		// 	method: 'POST',
+		// 	headers: {
+		// 		"Content-Type": "application/json",
+		// 	},
+		// 	body: JSON.stringify({
 
 
-		const resPost = await fetch('https://api.maplestory.net/character/render', {
-			method: 'POST',
-			headers: {
-				"Content-Type": "application/json",
-			},
-			body: JSON.stringify({
-				"skin": `${skinType}`,
-				"faceId": faceIdNumber,
-				"hairId": hairIdNumber,
-				"pose": "walkingOneHanded",
-				"poseFrame": 1,
-				"faceEmote": `${expression}`,
-				"faceFrame": 0,
-				"ears": `${earType}`,
-				"itemIds": [
-					1060002,
-					1040193
-				],
-				"effectFrame": 0
-			})
-		})
+		// 		"skin": `${skinType}`,
+		// 		"faceId": faceIdNumber,
+		// 		"hairId": hairIdNumber,
+		// 		"pose": "walkingOneHanded",
+		// 		"poseFrame": 1,
+		// 		"faceEmote": `${expression}`,
+		// 		"faceFrame": 0,
+		// 		"ears": `${earType}`,
+		// 		"itemIds": [
+		// 			1060002,
+		// 			1040193
+		// 		],
+		// 		"effectFrame": 0
+		// 	})
+		// })
 
-		const blob = await resPost.blob();
-		const imageUrl = URL.createObjectURL(blob); // Create a URL for the blob object
+		// const blob = await resPost.blob();
+		// const imageUrl = URL.createObjectURL(blob); // Create a URL for the blob object
 
-		setAvatarState(imageUrl)
+		// setAvatarState(imageUrl);
 
 
 		//TODO: figure out a way after submitting the avatar, to close the modal and have it be reflected on the nav
 
+		console.log("%c 🚀 ~ file: CreateAvatar.jsx:96 ~ CreateAvatar ~ avatarState: ", "color: orange; font-size: 28px", avatarState)
 
 	}
-	console.log("%c 🚀 ~ file: CreateAvatar.jsx:96 ~ CreateAvatar ~ avatarState: ", "color: orange; font-size: 28px", avatarState)
 
 
 	const renderFaceOptions = () => {
@@ -122,7 +125,13 @@ function CreateAvatar() {
 				return (
 					<div>
 						<label htmlFor="distantGazeColor">Select Distant Gaze Color:</label>
-						<select name="distantGazeColor" id="distantGazeColor">
+						<select name="distantGazeColor" id="distantGazeColor"
+							value={faceType}
+							onChange={(e) => {
+								setFaceType(e.target.value)
+								setChangeConfirmed(true)
+							}}
+						>
 							<option value="20035">Black</option>
 							<option value="20135">Blue</option>
 							<option value="20235">Red</option>
@@ -139,7 +148,13 @@ function CreateAvatar() {
 				return (
 					<div>
 						<label htmlFor="shutEyeColor">Select Shut Eye Color:</label>
-						<select name="shutEyeColor" id="shutEyeColor">
+						<select name="shutEyeColor" id="shutEyeColor"
+							value={faceType}
+							onChange={(e) => {
+								setFaceType(e.target.value)
+								setChangeConfirmed(true)
+							}}
+						>
 							<option value="20026">Black</option>
 							<option value="20126">Blue</option>
 							<option value="20226">Red</option>
@@ -156,7 +171,13 @@ function CreateAvatar() {
 				return (
 					<div>
 						<label htmlFor="piercingGazeColor">Select Piercing Gaze Color:</label>
-						<select name="piercingGazeColor" id="piercingGazeColor">
+						<select name="piercingGazeColor" id="piercingGazeColor"
+							value={faceType}
+							onChange={(e) => {
+								setFaceType(e.target.value)
+								setChangeConfirmed(true)
+							}}
+						>
 							<option value="20040">Black</option>
 							<option value="21138">Blue</option>
 							<option value="21238">Red</option>
@@ -206,7 +227,13 @@ function CreateAvatar() {
 				return (
 					<div>
 						<label htmlFor="ceceliaHairColor">Select Cecelia Twist Hair Color:</label>
-						<select name="ceceliaHairColor" id="ceceliaHairColor">
+						<select name="ceceliaHairColor" id="ceceliaHairColor"
+							value={hairType}
+							onChange={(e) => {
+								setHairType(e.target.value)
+								setChangeConfirmed(true)
+							}}
+						>
 							<option value="31490">Black</option>
 							<option value="31491">Red</option>
 							<option value="31492">Orange</option>
@@ -222,7 +249,13 @@ function CreateAvatar() {
 				return (
 					<div>
 						<label htmlFor="fantasyHairColor">Select Shut Eye Color:</label>
-						<select name="fantasyHairColor" id="fantasyHairColor">
+						<select name="fantasyHairColor" id="fantasyHairColor"
+							value={hairType}
+							onChange={(e) => {
+								setHairType(e.target.value)
+								setChangeConfirmed(true)
+							}}
+						>
 							<option value="30100">Black</option>
 							<option value="30101">Red</option>
 							<option value="30102">Orange</option>

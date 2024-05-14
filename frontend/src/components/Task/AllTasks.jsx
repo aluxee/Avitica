@@ -232,7 +232,6 @@ function AllTasks() {
 										itemText={task.title}
 										onItemClick={toggleMenu}
 										modalComponent={
-
 											<Task task={task} key={index} taskId={task.id} index={index}
 											/>
 										}

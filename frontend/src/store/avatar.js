@@ -36,7 +36,7 @@ export const editAvatar = (taskId, task) => ({
 //* load avatar
 export const thunkLoadAvatar = () => async dispatch => {
 
-	const response = await csrfFetch('/api/avatar');
+	const response = await fetch('/api/avatar');
 
 	if (response.ok) {
 		const avatar = await response.json();
@@ -59,22 +59,48 @@ export const thunkLoadAvatar = () => async dispatch => {
 // //* create / post avatar
 export const thunkCreateAvatar = (avatarData) => async (dispatch) => {
 
+console.log("%c 🚀 ~ file: avatar.js:62 ~ thunkCreateAvatar ~ avatarData: ", "color: red; font-size: 25px", avatarData)
 
-	const response = await csrfFetch('/api/avatar/create', {
+
+
+	const response = await fetch('/api/avatar/create', {
 		method: 'POST',
 		headers: {
 			"Content-Type": "application/json",
 		},
+		// body: JSON.stringify({
+		// 	"ears": avatarData.earType,
+		// 	"skin": avatarData.skinType,
+		// 	"faceId": avatarData.faceIdNumber,
+		// 	"hairId": avatarData.hairIdNumber,
+		// 	"pose": "walkingOneHanded",
+		// 	"poseFrame": 1,
+		// 	"faceEmote": avatarData.expression,
+		// 	"faceFrame": 0,
+		// 	"itemIds": [
+		// 			1060002,
+		// 			1040193
+		// 	],
+		// 	"effectFrame": 0
+		// })
 		body: JSON.stringify(avatarData)
 	})
 
+	console.log("%c 🚀 ~ file: avatar.js:76 ~ thunkCreateAvatar ~ response: ", "color: red; font-size: 25px", response)
+
 	if (!response.ok) {
 		const errResponse = await response.json()
+
+		console.log("%c 🚀 ~ file: avatar.js:97 ~ thunkCreateAvatar ~ errResponse: ", "color: red; font-size: 25px", errResponse)
+
 		return errResponse;
 	} else {
+
 		const data = await response.json();
-		dispatch(createAvatar(data))
-		return data
+
+		console.log("%c 🚀 ~ file: avatar.js:76 ~ thunkCreateAvatar ~ data: ", "color: red; font-size: 25px", data)
+		dispatch(createAvatar(data.avatar))
+		return data.avatar
 	}
 }
 
@@ -117,6 +143,7 @@ const avatarReducer = (state = initialState, action) => {
 			// action.avatar.Task.forEach(task => {
 			// 	avatarState[task.id] = task;
 			// });
+			avatarState[action.avatar.avatar.id] = action.avatar.avatar;
 			return avatarState;
 		}
 

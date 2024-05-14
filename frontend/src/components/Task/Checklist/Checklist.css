@@ -18,6 +18,10 @@ div.checklist {
 	display: flex;
 }
 
+.create-checklist {
+	cursor: pointer;
+}
+
 /* LABEL */
 label.item-label {
 	display: flex;

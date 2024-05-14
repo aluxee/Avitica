@@ -55,6 +55,9 @@ ul.sd-shop {
 .sd-shop>li {
 	list-style: none;
 	height: 37px;
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
 }
 
 .shop-img:hover {
@@ -63,4 +66,8 @@ ul.sd-shop {
 
 .ul.sd-shop {
 	width: 25%;
+}
+
+.sd-div {
+	margin-top: 10%;
 }

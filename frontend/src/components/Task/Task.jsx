@@ -304,75 +304,19 @@ function Task({ task, taskId }) {
 						{
 							taskId &&
 							<Checklist taskId={taskId}
-							// we loop through each item in the checklist within this component
-							checklist={checklist} setChecklist={setChecklist}
-							task={task}
-							editChecklistItem={editChecklistItem}
-							setEditChecklistItem={setEditChecklistItem}
-							addChecklistItem={addChecklistItem}
+								// we loop through each item in the checklist within this component
+								checklist={checklist} setChecklist={setChecklist}
+								task={task}
+								editChecklistItem={editChecklistItem}
+								setEditChecklistItem={setEditChecklistItem}
+								addChecklistItem={addChecklistItem}
 								setAddChecklistItem={setAddChecklistItem}
 								toggleMenu={toggleMenu}
 							/>
 						}
-
-						{/* {editChecklistItem === true && (
-									<>
-										<form onSubmit={handleAddChecklistItem}
-											onClick={toggleMenu}
-										>
-											<label htmlFor="checklistItem">
-												<input
-													value={checklistItem}
-													type='text'
-													onChange={(e) => setChecklistItem(e.target.value)}
-													// onBlur={handleSubmit}
-													placeholder="Enter Title for Task"
-												/>
-												<p className="p-error">{errors?.checklistItem}</p>
-											</label>
-											<button type="submit">Save</button>
-										</form>
-									</>
-								)} */}
 					</div>
 
-					{/* ) : (<></>) */}
-					{/* } */}
 				</div>
-
-				{/* // ) : ( */}
-				{/* // <></> */}
-				{/* // 		<div className='checklist'> */}
-				{/* // 	{editChecklistItem === false && addChecklistItem === false ?
-
-
-
-						// 		(
-						// 			<div className='ind-checklist'>
-						// 				<div onDoubleClick={() => setEditChecklistItem(true)}>Create a Checklist!</div>
-						// 			</div>
-						// 		) :
-
-						// 		<form onSubmit={handleAddChecklistItem}
-						// 			onClick={toggleMenu}
-						// 		>
-						// 			<label htmlFor="checklistItem">
-						// 				<input
-						// 					value={checklistItem}
-						// 					type='text'
-						// 					onChange={(e) => setChecklistItem(e.target.value)}
-						// 					// onBlur={handleSubmit}
-						// 					placeholder="Enter Title for Task"
-						// 				/>
-						// 				<p className="p-error">{errors?.checklistItem}</p>
-						// 			</label>
-						// 			<button type="submit">Save</button>
-						// 			</form>}
-
-						// </div>
-
-						// )}
-						// </div> */}
 
 				{/* TASK COMPONENT ENDS HERE*/}
 				< button

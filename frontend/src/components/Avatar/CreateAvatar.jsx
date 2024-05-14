@@ -26,8 +26,8 @@ function CreateAvatar() {
 	//TODO: fix bug of select dropdown reset upon color change
 	useEffect(() => {
 		const errorsObject = {};
-		faceType.length === 0 ? errorsObject.faceType = 'Select a face type' : faceType;
-		hairType.length === 0 ? errorsObject.hairType = 'Select a hair type' : hairType;
+		faceType.length === 0 || !faceIdNumber ? errorsObject.faceIdNumber = 'Select a face type' : faceType;
+		hairType.length === 0 || !hairIdNumber ? errorsObject.hairIdNumber = 'Select a hair type' : hairType;
 		earType.length === 0 ? errorsObject.earType = 'Select an ear type' : earType;
 		expression.length === 0 ? errorsObject.expression = 'Select an expression' : expression;
 		skinType.length === 0 ? errorsObject.skinType = 'Select a skin type' : skinType;
@@ -277,7 +277,6 @@ function CreateAvatar() {
 									<select name={faceType} id={faceType}
 										value={faceType}
 										onChange={(e) => {
-
 											setFaceType(e.target.value)
 											setChangeConfirmed(false)
 										}}
@@ -289,7 +288,8 @@ function CreateAvatar() {
 										<option value={"20026"}>Shut Eyes</option>
 										<option value={"20040"}>Piercing Gaze</option>
 									</select>
-									{errors?.faceType && (<p className='p-error'>{errors.faceType}</p>)}
+									{errors?.faceIdNumber && (<p className='p-error'>{errors.faceIdNumber}</p>)}
+									{/* find out why these errors for both face and hair type will not show up */}
 									{renderFaceOptions()}
 								</label>
 							</div>
@@ -350,7 +350,7 @@ function CreateAvatar() {
 									<option value={"31490"}>Cecelia Twist</option>
 									<option value={"30100"}>Fantasy Hair</option>
 								</select>
-								{errors?.hairType && (<p className='p-error'>{errors.hairType}</p>)}
+								{errors?.hairIdNumber && (<p className='p-error'>{errors.hairIdNumber}</p>)}
 								{renderHairOptions()}
 							</label>
 							<button

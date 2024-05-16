@@ -7,7 +7,7 @@ import './CreateAvatar.css';
 
 function CreateAvatar() {
 	const dispatch = useDispatch();
-	const avatarImg = useSelector(state => state.avatar)
+	const avatarImg = useSelector(state => state.avatar);
 
 	console.log("%c 🚀 ~ file: CreateAvatar.jsx:12 ~ CreateAvatar ~ avatarImg: ", "color: red; font-size: 25px", avatarImg)
 
@@ -77,13 +77,18 @@ function CreateAvatar() {
 
 	// Update avatarState when avatarImg changes
 	useEffect(() => {
-		if (avatarImg) {
+		if (Object.values(avatarImg).length > 0) {
 			// Convert the Blob URL to a data URL
 			convertBlobToDataURL(avatarImg).then(dataUrl => {
+				console.log("%c 🚀 ~ file: CreateAvatar.jsx:88 ~ convertBlobToDataURL ~ dataUrl: ", "color: magenta; font-size: 25px", dataUrl)
 				setAvatarState(dataUrl); // Set local state with the data URL
 			}).catch(error => {
+
+
 				console.error('Error converting blob to data URL:', error);
 			});
+
+
 		}
 	}, [avatarImg]);
 

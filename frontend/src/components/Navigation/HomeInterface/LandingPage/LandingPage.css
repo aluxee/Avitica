@@ -16,7 +16,8 @@
 	padding: 2%;
 	width: 85%;
 	display: flex;
-	background: #bcccf3bd;
+	/* background: #bcccf3bd; */
+	background: #1CA372;
 	border-radius: 15px;
 	flex-wrap: wrap;
 }
@@ -108,12 +109,16 @@
 }
 
 .signup>li.modal-menu-item:hover {
-	color: #4370B5;
+	color: #5ac34a;
 }
 
 div.login>button {
 	padding: 8px 16px;
 	margin-bottom: 3%;
+}
+
+div.login>button:hover {
+	cursor: pointer;
 }
 
 /* ____________________________________ */

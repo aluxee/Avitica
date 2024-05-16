@@ -28,7 +28,7 @@ a {
 .nav-main-outer {
 	display: flex;
 	width: 100%;
-	background-color: #6783c1e6;
+	background-color: #1ca372f5;
 	position: fixed;
 	z-index: 5;
 }
@@ -41,7 +41,7 @@ a {
 	padding: 4px;
 	position: relative;
 	z-index: 5;
-	justify-content: center;
+	justify-content: space-between;
 	/* height: 100px; */
 }
 
@@ -53,7 +53,7 @@ a {
 ul.nav-avatar-list {
 	display: flex;
 	width: 100%;
-	background-color: #436FB5;
+	background-color: #4ac387e0;
 	height: 100px;
 	margin-bottom: 0px;
 	margin-inline-end: -10px;
@@ -88,7 +88,8 @@ li.nav-home {
 }
 
 li#nav_profile {
-	width: 15%;
+	/* width: 15%; */
+	width: 8%;
 	height: min-content;
 	display: flex;
 	flex-wrap: wrap;
@@ -98,7 +99,7 @@ li#nav_profile {
 .nav-left {
 	display: flex;
 	flex-direction: row;
-	width: 36rem;
+	width: 40rem;
 	justify-content: space-around;
 	flex-wrap: wrap;
 	align-items: baseline;
@@ -108,6 +109,10 @@ li#nav_profile {
 	display: flex;
 	text-decoration: none;
 	color: #656363;
+}
+
+.nav-left>a:hover {
+	color: salmon;
 }
 
 /* button and links*/
@@ -128,7 +133,7 @@ li#nav_profile {
 
 .not-logged {
 	width: 100%;
-	height: fit-content;
+	height: 24px;
 	padding: 2%;
 	margin: 0.5% 0.2%;
 	display: flex;
@@ -147,7 +152,7 @@ li#nav_profile {
 	max-width: 100%;
 }
 
-button.logout{
+button.logout {
 	border: none;
 	outline: none;
 	box-shadow: none;
@@ -175,11 +180,11 @@ li.modal-menu-item {
 } */
 
 section {
-	background-color: #6783c1e6;
-	background-image: linear-gradient(335deg, #6783c1e6 23px, transparent 23px),
-		linear-gradient(155deg, #6783c1e6 23px, transparent 23px),
-		linear-gradient(335deg, #6783c1e6 23px, transparent 23px),
-		linear-gradient(155deg, #6783c1e6 23px, transparent 23px);
+	background-color: #1ca372f5;
+	background-image: linear-gradient(335deg, #1ca372f5 23px, transparent 23px),
+		linear-gradient(155deg, #1ca372f5 23px, transparent 23px),
+		linear-gradient(335deg, #1ca372f5 23px, transparent 23px),
+		linear-gradient(155deg, #1ca372f5 23px, transparent 23px);
 	background-size: 58px 58px;
 	background-position: 0px 2px, 4px 35px, 29px 31px, 34px 6px;
 }

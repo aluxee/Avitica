@@ -23,3 +23,7 @@ label>h4 {
 .et-checklist {
 	margin-top: 8px;
 }
+
+button.et-task-submit-button {
+	margin: 16px 0px;
+}

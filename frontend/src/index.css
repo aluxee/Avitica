@@ -1,5 +1,6 @@
 /* ? imports */
 
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100..700;1,100..700&family=Roboto+Serif:ital,opsz,wght@0,8..144,100..900;1,8..144,100..900&family=Roboto+Slab:wght@100..900&display=swap');
 
 /* *LOADING */
 .loading {
@@ -35,6 +36,9 @@
 }
 
 /* *MAIN */
+html, body {
+	font-family: 'Roboto Mono', 'Roboto Slab', 'Roboto Serif', 'monospace', 'serif'
+}
 html {
 	background-image:
 		/* url('https://i.pinimg.com/564x/71/23/74/71237438c371280321e47ade4d63e675.jpg'); */
@@ -181,11 +185,11 @@ h4 {
 	position: absolute;
 	top: 1.5rem;
 	right: 1.5rem;
-	font-family: 'Space Grotesk', sans-serif;
-	border: 1px solid #597098;
+	font-family: 'Space Grotesk', 'Roboto Serif', sans-serif, serif;
+	border: 1px solid #1d754c;
 	border-radius: 15px;
 	background-color: #FEF2D4;
-	color: #597098;
+	color: #1d754c;
 	padding: 2px 8px;
 	font-size: small;
 	font-style: italic;
@@ -201,7 +205,7 @@ button {
 	padding: 8px 18px;
 	font-size: 16px;
 	appearance: none;
-	border: 2px solid #597098;
+	border: 2px solid #1d754c;
 	border-radius: 15px;
 	box-sizing: border-box;
 	/* opacity: 1; */
@@ -225,7 +229,7 @@ button {
 	will-change: transform;
 	margin-top: 15%;
 
-	box-shadow: -10px -10px 30px 0, 10px 10px 30px 0 #60a1e28a;
+	box-shadow: -10px -10px 30px 0, 10px 10px 30px 0 #e260ce8a;
 	font-size: 1rem;
 	position: relative;
 	text-align: left;

@@ -5,6 +5,8 @@ div.user-container {
 	align-items: center;
 	/* margin-top: 2%; */
 	margin-inline-end: 2%;
+	font-family: 'Roboto Slab', 'Roboto Serif', 'serif';
+	font-weight: 400;
 }
 
 .user-info {
@@ -51,7 +53,7 @@ div.user-container {
 .user-lvl{
 	display: flex;
 	font-size: larger;
-	font-weight: bold;
+	font-weight: 400;
 	color: burlywood;
 	gap: 5px;
 }
@@ -70,10 +72,7 @@ div.user-container {
 .gold-amt {
 	color: salmon;
 	font-size: large;
-	font-weight: bold;
-	;
-	font-size: large;
-	font-weight: bold;
+	font-weight: 300;
 }
 
 .user-fill.curr {

@@ -148,8 +148,8 @@ const avatarReducer = (state = initialState, action) => {
 		}
 
 		case POST_AVATAR: {
-			console.log("%c 🚀 ~ file: avatar.js:139 ~ avatarReducer ~ action: ", "color: chocolate; font-size: 25px", "(POST)", action)
-			return { ...state, [action.avatar.id]: action.avatar };
+			console.log("%c 🚀 ~ file: avatar.js:139 ~ avatarReducer ~ action: ", "color: chocolate; font-size: 28px", "(POST)", action)
+			return action.data.imageUrl;
 		}
 
 		case UPDATE_AVATAR: {

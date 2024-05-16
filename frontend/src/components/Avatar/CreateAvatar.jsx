@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { thunkCreateAvatar, thunkLoadAvatar } from '../../store/avatar';
 
 
@@ -7,6 +7,10 @@ import './CreateAvatar.css';
 
 function CreateAvatar() {
 	const dispatch = useDispatch();
+	const avatarImg = useSelector(state => state.avatar)
+
+	console.log("%c 🚀 ~ file: CreateAvatar.jsx:12 ~ CreateAvatar ~ avatarImg: ", "color: red; font-size: 25px", avatarImg)
+
 	const [avatarState, setAvatarState] = useState("");
 
 
@@ -21,9 +25,7 @@ function CreateAvatar() {
 	const [message, setMessage] = useState("");
 	const [errors, setErrors] = useState({});
 
-	//TODO: finish hair section
 	//TODO: ensure this is pullable and put thru database to load up as an image
-	//TODO: fix bug of select dropdown reset upon color change
 	useEffect(() => {
 		const errorsObject = {};
 		faceType.length === 0 || !faceIdNumber ? errorsObject.faceIdNumber = 'Select a face type' : faceType;
@@ -33,7 +35,7 @@ function CreateAvatar() {
 		skinType.length === 0 ? errorsObject.skinType = 'Select a skin type' : skinType;
 
 		setErrors(errorsObject);
-	}, [skinType, faceType, hairType, expression, earType])
+	}, [skinType, faceType, hairType, expression, earType, faceIdNumber, hairIdNumber, avatarImg])
 
 	// Update message when a change is confirmed
 	useEffect(() => {
@@ -48,17 +50,56 @@ function CreateAvatar() {
 		}
 	}, [changeConfirmed, faceType, hairType]);
 
+	//! create a function that will convert blob images to jpeg/png data url
+
+	const convertBlobToDataURL = async (blobUrl) => {
+		return new Promise((resolve, reject) => {
+			const img = new Image();
+			img.crossOrigin = 'anonymous'; // Add this line to handle CORS
+			img.src = blobUrl;
+			img.onload = () => {
+				const canvas = document.createElement('canvas');
+				canvas.width = img.width;
+				canvas.height = img.height;
+				const ctx = canvas.getContext('2d');
+				ctx.drawImage(img, 0, 0);
+				try {
+					// Change 'image/png' to 'image/jpeg' for JPEG format if needed
+					const dataUrl = canvas.toDataURL('image/png');
+					resolve(dataUrl);
+				} catch (error) {
+					reject(error);
+				}
+			};
+			img.onerror = (error) => reject(error);
+		});
+	};
+
+	// Update avatarState when avatarImg changes
+	useEffect(() => {
+		if (avatarImg) {
+			// Convert the Blob URL to a data URL
+			convertBlobToDataURL(avatarImg).then(dataUrl => {
+				setAvatarState(dataUrl); // Set local state with the data URL
+			}).catch(error => {
+				console.error('Error converting blob to data URL:', error);
+			});
+		}
+	}, [avatarImg]);
+
 	const handleAvatarSubmit = async (e) => {
 		e.preventDefault();
 
 		// !! fetch from backend once its complete
-
-		const createAvatar =  await dispatch(thunkCreateAvatar({
+		const avatarData = {
 			skinType, faceIdNumber, hairIdNumber, earType, expression
-		}));
-		setAvatarState(createAvatar)
+		}
+		await dispatch(thunkLoadAvatar())
+		await dispatch(thunkCreateAvatar(avatarData));
 
-		await dispatch(thunkLoadAvatar());
+
+
+		// await dispatch(thunkLoadAvatar());
 
 		// console.log("%c 🚀 ~ file: CreateAvatar.jsx:71 ~ handleAvatarSubmit ~ createAvatar: ", "color: red; font-size: 25px", createAvatar)
 
@@ -316,10 +357,10 @@ function CreateAvatar() {
 										className='face-type'
 									>
 										<option value={""}>Select Face Type</option>
-										<option value={"20000"}>Motivated Eyes</option>
-										<option value={"20035"}>Distant Gaze</option>
-										<option value={"20026"}>Shut Eyes</option>
-										<option value={"20040"}>Piercing Gaze</option>
+										<option value="20000">Motivated Eyes</option>
+										<option value="20035">Distant Gaze</option>
+										<option value="20026">Shut Eyes</option>
+										<option value="20040">Piercing Gaze</option>
 									</select>
 									{errors?.faceIdNumber && (<p className='p-error'>{errors.faceIdNumber}</p>)}
 									{/* find out why these errors for both face and hair type will not show up */}

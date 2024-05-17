@@ -148,7 +148,7 @@ function Checklist({ task, taskId, checklist, setChecklist, editChecklistItem, s
 		const newToDoItem = { checklistItem };
 
 		checklist.forEach(item => {
-			console.log(item)
+			// console.log(item)
 			if (item.checklistItem === checklistItem) {
 				setErrors({ checklistItem: 'You cannot have duplicate items' })
 			}
@@ -208,7 +208,7 @@ function Checklist({ task, taskId, checklist, setChecklist, editChecklistItem, s
 		}
 
 		checklist.forEach(item => {
-			console.log(item)
+			// console.log(item)
 			if (item.checklistItem === checklistItem) {
 				setErrors({ checklistItem: 'You cannot have duplicate items' })
 			}

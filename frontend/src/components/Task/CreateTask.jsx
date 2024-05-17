@@ -64,7 +64,7 @@ function CreateTask() {
 
 		if (!submissionResults?.errors) {
 
-			console.log("%c 🚀 ~ file: CreateTask.jsx:58 ~ handleSubmit ~ submissionResults: ", "color: red; font-size: 25px", submissionResults)
+			// console.log("%c 🚀 ~ file: CreateTask.jsx:58 ~ handleSubmit ~ submissionResults: ", "color: red; font-size: 25px", submissionResults)
 
 			console.log("SUBMISSION ID: ", submissionResults.id)
 

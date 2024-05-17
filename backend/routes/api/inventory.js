@@ -15,7 +15,7 @@ router.delete('/:itemId', requireAuth, authorization, async (req, res) => {
 		}
 	})
 
-	console.log("%c 🚀 ~ file: inventory.js:18 ~ router.delete ~ item: ", "color: red; font-size: 25px", item)
+	// console.log("%c 🚀 ~ file: inventory.js:18 ~ router.delete ~ item: ", "color: red; font-size: 25px", item)
 
 	await item.destroy();
 	res
@@ -65,20 +65,20 @@ router.put('/:itemId/red-potion', requireAuth, async (req, res) => {
 			return res.status(404).json({ message: 'Inventory item "Red Potion" not found' });
 		}
 
-		console.log("%c 🚀 ~ file: inventory.js:46 ~ router.put ~ invItemRedPotion: ", "color: red; font-size: 25px", invItemRedPotion);
+		// console.log("%c 🚀 ~ file: inventory.js:46 ~ router.put ~ invItemRedPotion: ", "color: red; font-size: 25px", invItemRedPotion);
 
 		const userStatus = await userStat.findByPk(userId)
 
-		console.log("%c 🚀 ~ file: inventory.js:53 ~ router.put ~ userStat: ", "color: red; font-size: 25px", userStat)
+		// console.log("%c 🚀 ~ file: inventory.js:53 ~ router.put ~ userStat: ", "color: red; font-size: 25px", userStat)
 
-		console.log("%c 🚀 ~ file: inventory.js:80 ~ router.post ~ invItemRedPotion: ", "color: red; font-size: 25px", "CODE 526291", invItemRedPotion, invItemRedPotion.itemName)
+		// console.log("%c 🚀 ~ file: inventory.js:80 ~ router.post ~ invItemRedPotion: ", "color: red; font-size: 25px", "CODE 526291", invItemRedPotion, invItemRedPotion.itemName)
 
 		//* insert helper function logic instead:
 		// const { health } = userStatus;
 
 		let currHealth = userStatus.health;
 		// build helper function for red potion usage
-		console.log("%c 🚀 ~ file: inventory.js:96 ~ router.post ~ health: ", "color: red; font-size: 25px", currHealth) //* 14
+		// console.log("%c 🚀 ~ file: inventory.js:96 ~ router.post ~ health: ", "color: red; font-size: 25px", currHealth) //* 14
 
 		const currLevel = userStatus.level;
 		const maximumHealth = calcDefaultHealth(currLevel)
@@ -126,14 +126,14 @@ router.post('/new', requireAuth, async (req, res) => {
 
 	const { cartItems } = req.body;
 
-	console.log("%c 🚀 ~ file: inventory.js:79 ~ router.post ~ cartItems: ", "color: red; font-size: 25px", cartItems)
+	// console.log("%c 🚀 ~ file: inventory.js:79 ~ router.post ~ cartItems: ", "color: red; font-size: 25px", cartItems)
 
 	const invArr = [];
 	let newStatUser;
 	let confirmItem;
 	for (let item of cartItems) {
 
-		console.log("%c 🚀 ~ file: inventory.js:85 ~ router.post ~ item: ", "color: red; font-size: 25px", item)
+		// console.log("%c 🚀 ~ file: inventory.js:85 ~ router.post ~ item: ", "color: red; font-size: 25px", item)
 		let currHealthBoost;
 		if (item.itemName === 'Red Potion') {
 			currHealthBoost = true
@@ -141,7 +141,7 @@ router.post('/new', requireAuth, async (req, res) => {
 
 
 		}
-		console.log("%c 🚀 ~ file: inventory.js:90 ~ router.post ~ currHealthBoost: ", "color: red; font-size: 25px", currHealthBoost)
+		// console.log("%c 🚀 ~ file: inventory.js:90 ~ router.post ~ currHealthBoost: ", "color: red; font-size: 25px", currHealthBoost)
 
 		const shopItem = await Shop.findOne({
 			where: {
@@ -166,7 +166,7 @@ router.post('/new', requireAuth, async (req, res) => {
 		}
 		newStatUser = userStats.toJSON();
 
-		console.log("%c 🚀 ~ file: inventory.js:107 ~ router.post ~ newStatUser: ", "color: red; font-size: 25px", newStatUser)
+		// console.log("%c 🚀 ~ file: inventory.js:107 ~ router.post ~ newStatUser: ", "color: red; font-size: 25px", newStatUser)
 
 
 		if (newStatUser.gold < itemCost) {

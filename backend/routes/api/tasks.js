@@ -68,7 +68,7 @@ router.put('/:taskId/checklist/:checklistId', requireAuth, async (req, res) => {
 			}
 		})
 
-		console.log("%c 🚀 ~ file: tasks.js:70 ~ router.put ~ checklistDup: ", "color: red; font-size: 25px", checklistDup, "code1029")
+		// console.log("%c 🚀 ~ file: tasks.js:70 ~ router.put ~ checklistDup: ", "color: red; font-size: 25px", checklistDup, "code1029")
 
 		if (checklistDup >= 1) {
 			return res
@@ -185,7 +185,7 @@ router.post('/:taskId/checklist/new', requireAuth, async (req, res) => {
 				"message": "You can only have five checklist items running at a time"
 			})
 	}
-	
+
 	const checklistDup = await Checklist.count({
 		where: {
 			userId: req.user.id,
@@ -214,7 +214,7 @@ router.post('/:taskId/checklist/new', requireAuth, async (req, res) => {
 		})
 
 		await newChecklistItem.save();
-		console.log("%c 🚀 ~ file: tasks.js:204 ~ router.post ~ newChecklistItem: ", "color: red; font-size: 25px", newChecklistItem)
+		// console.log("%c 🚀 ~ file: tasks.js:204 ~ router.post ~ newChecklistItem: ", "color: red; font-size: 25px", newChecklistItem)
 
 		return res
 			.status(201)
@@ -279,11 +279,11 @@ router.get('/:taskId/checklist', requireAuth, async (req, res) => {
 				message: "No checklist has been made yet for this task"
 			});
 	};
-	console.log("%c 🚀 ~ file: tasks.js:191 ~ router.get ~ tasksList: ", "color: red; font-size: 25px", tasksList, tasksList.Checklist)
+	// console.log("%c 🚀 ~ file: tasks.js:191 ~ router.get ~ tasksList: ", "color: red; font-size: 25px", tasksList, tasksList.Checklist)
 
 	const checklistsArray = tasksList.map(task => task.Checklist).flat();
 
-	console.log("%c 🚀 ~ file: tasks.js:186 ~ router.get ~ checklistsArray: ", "color: red; font-size: 25px", checklistsArray)
+	// console.log("%c 🚀 ~ file: tasks.js:186 ~ router.get ~ checklistsArray: ", "color: red; font-size: 25px", checklistsArray)
 
 
 
@@ -310,7 +310,7 @@ function calculateExperienceThreshold(currentLevel) {
 
 	const threshold = Math.max(Math.round(((parseInt(currentLevel) - 1) * 25) * ((parseInt(currentLevel) - 1) * 1.25)) + 100, 0);
 
-	console.log("%c 🚀 ~ file: tasks.js:214 ~ calculateExperienceThreshold ~ threshold: ", "color: red; font-size: 25px", threshold)
+	// console.log("%c 🚀 ~ file: tasks.js:214 ~ calculateExperienceThreshold ~ threshold: ", "color: red; font-size: 25px", threshold)
 
 	return threshold;
 }
@@ -376,11 +376,11 @@ router.put('/:taskId/status', requireAuth, async (req, res) => {
 	// retrieve user's current level
 	const currLevel = userStatus.level;
 
-	console.log("%c 🚀 ~ file: tasks.js:283 ~ router.put ~ currLevel: ", "color: red; font-size: 25px", currLevel)
+	// console.log("%c 🚀 ~ file: tasks.js:283 ~ router.put ~ currLevel: ", "color: red; font-size: 25px", currLevel)
 
 	const expThreshold = calculateExperienceThreshold(currLevel)
 
-	console.log("%c 🚀 ~ file: tasks.js:287 ~ router.put ~ expThreshold: ", "color: red; font-size: 25px", expThreshold)
+	// console.log("%c 🚀 ~ file: tasks.js:287 ~ router.put ~ expThreshold: ", "color: red; font-size: 25px", expThreshold)
 
 	// initialize experience gain variable
 	// let expGain = 0;

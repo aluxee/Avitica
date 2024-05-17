@@ -65,7 +65,7 @@ router.post(
 
 
 
-		
+
 
 		// SUBMIT
 
@@ -112,10 +112,10 @@ router.get(
 			const statUser = await Stat.findOne({ where: { userId: user.id } })
 
 
-			console.log("%c 🚀 ~ file: session.js:106 ~ userInfo: ", "color: red; font-size: 25px", userInfo)
+			// console.log("%c 🚀 ~ file: session.js:106 ~ userInfo: ", "color: red; font-size: 25px", userInfo)
 
 
-			console.log("%c 🚀 ~ file: session.js:110 ~ statUser: ", "color: red; font-size: 25px", statUser)
+			// console.log("%c 🚀 ~ file: session.js:110 ~ statUser: ", "color: red; font-size: 25px", statUser)
 
 
 			// Checking if userInfo and statUser are arrays and contain elements

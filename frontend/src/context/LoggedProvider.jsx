@@ -13,10 +13,10 @@ export function LoggedProvider(props) {
 	useEffect(() => {
 		if (sessionUser) {
 			setLoggedIn(true)
-			console.log("%c 🚀 ~ file: LoggedProvider.jsx:11 ~ LoggedProvider ~ loggedIn: ", "color: aqua; font-size: 25px", loggedIn)
+			// console.log("%c 🚀 ~ file: LoggedProvider.jsx:11 ~ LoggedProvider ~ loggedIn: ", "color: aqua; font-size: 25px", loggedIn)
 		} else {
 			setLoggedIn(false)
-			console.log("%c 🚀 ~ file: LoggedProvider.jsx:11 ~ LoggedProvider ~ loggedIn: ", "color: aqua; font-size: 25px", loggedIn)
+			// console.log("%c 🚀 ~ file: LoggedProvider.jsx:11 ~ LoggedProvider ~ loggedIn: ", "color: aqua; font-size: 25px", loggedIn)
 
 		}
 	}, [loggedIn, sessionUser])
@@ -26,7 +26,7 @@ export function LoggedProvider(props) {
 		loggedIn, setLoggedIn
 	}
 
-	console.log("%c 🚀 ~ file: LoggedProvider.jsx:29 ~ LoggedProvider ~ contextValue: ", "color: red; font-size: 25px", contextValue)
+	// console.log("%c 🚀 ~ file: LoggedProvider.jsx:29 ~ LoggedProvider ~ contextValue: ", "color: red; font-size: 25px", contextValue)
 
 
 	return (

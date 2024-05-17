@@ -27,7 +27,7 @@ function AllTasks() {
 
 	const allTasks = Object.values(taskObj); //an array of all the tasks
 
-	console.log("%c 🚀 ~ file: AllTasks.jsx:24 ~ AllTasks ~ allTasks: ", "color: orange; font-size: 25px", allTasks)
+	// console.log("%c 🚀 ~ file: AllTasks.jsx:24 ~ AllTasks ~ allTasks: ", "color: orange; font-size: 25px", allTasks)
 
 
 	// * -------------GOLD SECTION------------- *
@@ -35,7 +35,7 @@ function AllTasks() {
 	// save the local storage amt to state
 	const [gold, setGold] = useState('');
 
-	console.log("%c 🚀 ~ file: AllTasks.jsx:43 ~ AllTasks ~ gold: ", "color: tomato; font-size: 25px", gold)
+	// console.log("%c 🚀 ~ file: AllTasks.jsx:43 ~ AllTasks ~ gold: ", "color: tomato; font-size: 25px", gold)
 
 	// console.log("%c 🚀 ~ file: AllTasks.jsx:45 ~ allStoredTasks: ", "color: orange; font-size: 25px", storedGold)
 	// useEffect handling

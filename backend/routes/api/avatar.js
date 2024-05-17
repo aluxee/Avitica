@@ -16,7 +16,7 @@ router.put('/edit', requireAuth, authorization, async (req, res) => {
 
 const fetchAvatarImageUrl = async (avatarData) => {
 
-	console.log("%c 🚀 ~ file: avatar.js:134 ~ fetchAvatarImageUrl ~ avatarData: ", "color: red; font-size: 25px", avatarData)
+	// console.log("%c 🚀 ~ file: avatar.js:134 ~ fetchAvatarImageUrl ~ avatarData: ", "color: red; font-size: 25px", avatarData)
 
 	try {
 		const { skinType, faceType, expression, earType, hairType } = avatarData;

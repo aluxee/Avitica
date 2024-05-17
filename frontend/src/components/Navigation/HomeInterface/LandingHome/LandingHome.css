@@ -64,6 +64,7 @@ textarea {
 	/* flex-direction: column; */
 	/* flex-wrap: wrap; */
 	background-color: black;
+	background-image: url('https://i.pinimg.com/564x/71/23/74/71237438c371280321e47ade4d63e675.jpg');
 	align-content: center;
 	overflow-y: overlay;
 	top: 0;

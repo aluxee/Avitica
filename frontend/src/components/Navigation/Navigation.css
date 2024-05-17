@@ -89,9 +89,9 @@ div.outer-profile-container {
 	position: relative;
 	z-index: 5;
 	justify-content: space-between;
-	/* height: 100px; */
+	height: 196px;
+	max-height: fit-content;
 }
-
 .nav-avatar-list {
 	background-image: url("https://i.pinimg.com/originals/b0/7b/a9/b07ba9441f17320a4d67f521a47fb045.gif");
 }

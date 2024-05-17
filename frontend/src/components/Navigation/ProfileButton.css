@@ -124,7 +124,7 @@ button.button-profile-dropdown {
 
 button.button-profile-dropdown:hover {
 	cursor: pointer;
-	color: lightblue;
+	color: #1ee9a2db;
 }
 
 ul.profile-dropdownlogin>li:hover {

@@ -4,7 +4,7 @@ const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
 
 const { setTokenCookie, requireAuth } = require('../../utils/auth');
-const { User, userStat, Stat } = require('../../db/models');
+const { User, userStat, Stat, Avatar } = require('../../db/models');
 
 
 
@@ -51,7 +51,12 @@ const validateSignup = [
 	handleValidationErrors
 ];
 
-
+// Helper function to convert blob to base64
+const blobToBase64 = async (blob) => {
+	const arrayBuffer = await blob.arrayBuffer();
+	const buffer = Buffer.from(arrayBuffer);
+	return buffer.toString('base64');
+};
 // Sign up
 router.post(
 	'/',
@@ -112,13 +117,13 @@ router.post(
 
 		user.userStat = newUserStats;
 		user.Stat = newStat;
-		
+
 		await Promise.all([user.save(), newUserStats.save(), newStat.save()]);
 
 		await user.userStat.save();
 		await user.Stat.save();
 
-		await newUserStats.update({userId: user.id})
+		await newUserStats.update({ userId: user.id })
 		await newStat.update({ userId: user.id })
 
 
@@ -130,6 +135,8 @@ router.post(
 		// Select the first element if userStats or Stats is an array
 		const userStats = Array.isArray(populatedUser.userStats) ? populatedUser.userStats[0] : populatedUser.userStats;
 		const Stats = Array.isArray(populatedUser.Stats) ? populatedUser.Stats[0] : populatedUser.Stats;
+
+
 		// Construct the response object
 		const safeUser = {
 			id: populatedUser.id,
@@ -138,7 +145,8 @@ router.post(
 			email: populatedUser.email,
 			heroClass: populatedUser.heroClass,
 			userStats,
-			Stats
+			Stats,
+
 		};
 
 		await setTokenCookie(res, safeUser);

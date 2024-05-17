@@ -76,13 +76,17 @@ function ItemCart({ cart, clearCart, removeItemFromCart, location, item }) {
 											{item.itemName}
 										</div>
 									</div>
-									{item.quantity > 1 && <div className='cart-item-quantity'>
+									{item.quantity > 1 ? <div className='cart-item-quantity'>
 										<p>Quantity:</p>
 										<p>{item.quantity}</p>
-									</div>}
+									</div>
+										: <div className='cart-item-quantity'>
+											<p></p>
+								</div>
+								}
 
 									<button onClick={() => removeItemFromCart(item.id)}>Remove</button>
-									<hr style={{ height: "1%", width: "100%", color: "black" }} />
+									{/* <hr style={{ height: "1%", width: "100%", color: "black" }} /> */}
 								</div>
 							))
 							:

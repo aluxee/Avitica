@@ -93,21 +93,28 @@
 }
 
 .task-mark.complete {
-	border-right: 2px black solid;
+	/* border-right: 2px black solid; */
 }
 
 .task-mark.incomplete {
-	border-left: 2px black solid;
+	/* border-left: 2px black solid; */
 }
 
 .task-mark.complete>.fa-solid:hover {
 	color: springgreen;
+	font-size: 30px;
 	cursor: pointer;
+	outline: none;
+	/* box-shadow: -10px -10px 30px , 10px 10px 30px 0 #e260ce8a; */
+	/* border-radius: 50%; */
+	/* border: none; */
 }
 
 .task-mark.incomplete>.fa-solid:hover {
 	color: red;
 	cursor: pointer;
+	font-size: 30px;
+	outline: none;
 }
 
 .no-task-no-class {
@@ -117,4 +124,36 @@
 	width: 350px;
 	align-self: center;
 	font-size: 36px;
+}
+
+.at-tasks:hover {
+	/* font-family: "Abril Fatface", sans-serif; */
+	background: linear-gradient(to right, crimson, pink, springgreen);
+	background-size: 200% 200%;
+	animation: rainbow 3.8s ease-in-out infinite;
+	/* background-clip: initial; */
+	/* -webkit-background-clip: text; */
+	color: rgba(0, 0, 0, 1);
+	/* font-size: 10rem; */
+	/* width: 80vw; */
+	/* margin: 30vh auto; */
+	/* display: block; */
+	text-align: center;
+	transition: color 2.5s ease-in-out;
+	text-transform: uppercase;
+	/* font-weight: 900; */
+}
+
+@keyframes rainbow {
+	0% {
+		background-position: left
+	}
+
+	50% {
+		background-position: right
+	}
+
+	100% {
+		background-position: left
+	}
 }

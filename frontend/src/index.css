@@ -197,6 +197,11 @@ h4 {
 	text-align: center;
 }
 
+/* FORMS */
+
+select:hover {
+	cursor: pointer;
+}
 /* BUTTON */
 
 button {
@@ -221,7 +226,7 @@ button {
 	padding: 16px 24px;
 	text-align: center;
 	text-decoration: none;
-	transition: all 300ms cubic-bezier(.23, 1, 0.32, 1);
+	transition: all 1.2s cubic-bezier(.23, 1, 0.32, 1);
 	user-select: none;
 	-webkit-user-select: none;
 	touch-action: manipulation;
@@ -278,6 +283,10 @@ button {
 	pointer-events: none;
 }
 
+*:disabled:hover{
+	box-shadow: none;
+	cursor: auto;
+}
 
 /* *LABELS */
 label {

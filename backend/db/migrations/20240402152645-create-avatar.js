@@ -16,7 +16,8 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       faceType: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull: false,
       },
       userId: {
         type: Sequelize.INTEGER,
@@ -31,14 +32,14 @@ module.exports = {
         allowNull: false,
       },
       hairType: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull: false,
       },
       expression: {
         type: Sequelize.STRING,
       },
       imageUrl: {
         type: Sequelize.STRING,
-        allowNull: true
       },
       createdAt: {
         allowNull: false,

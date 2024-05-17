@@ -16,8 +16,6 @@ function LandingPage({ onModalOpen, onModalClosed }) {
 
 	// const [modalHovered, setModalHovered] = useState(false);
 	const [modalOpen, setModalOpen] = useState(false); // State to track if any modal is open
-	// TRYING TO ATTEMPT WHEN A USER HOVERS OUTSIDE OF MODAL, THE HTML FLIP BOOK SHOULD NOT ACTIVATE!
-
 
 	useEffect(() => {
 		handleModalOpen()

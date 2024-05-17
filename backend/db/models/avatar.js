@@ -32,16 +32,12 @@ module.exports = (sequelize, DataTypes) => {
     earType: {
       type: DataTypes.STRING,
       allowNull: false,
-      validate: {
-        isIn: [['Human', 'Elven']]
-      }
+
     },
     skinType: {
       type: DataTypes.STRING,
       allowNull: false,
-      validate: {
-        isIn: [['Dark', 'Tanned', 'Clay', 'Light', 'Ashen']]
-      }
+      
     },
     hairType: {
       type: DataTypes.STRING,
@@ -52,7 +48,6 @@ module.exports = (sequelize, DataTypes) => {
     },
     imageUrl: {
       type: DataTypes.STRING,
-      allowNull: true
     }
   }, {
     sequelize,

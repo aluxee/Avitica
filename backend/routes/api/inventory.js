@@ -92,6 +92,7 @@ router.put('/:itemId/red-potion', requireAuth, async (req, res) => {
 			}
 			await userStatus.update({ health: currHealth });
 			await invItemRedPotion.update({ userStatId: userStatus.id, gear: false, wep: false });
+			await invItemRedPotion.save();
 			// Return updated user stats in the response
 			return res
 				.status(200)

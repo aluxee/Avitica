@@ -9,7 +9,7 @@ import './index.css';
 import { restoreCSRF, csrfFetch } from './store/csrf';
 import { Modal, ModalProvider } from './context/Modal';
 import { LoggedProvider } from './context/LoggedProvider';
-
+import { AvatarProvider } from './context/AvatarProvider';
 
 const store = configureStore();
 
@@ -35,8 +35,10 @@ ReactDOM.createRoot(document.getElementById('root')).render(
     <ModalProvider>
       <Provider store={store}>
         <LoggedProvider>
-          <App />
-          <Modal />
+          <AvatarProvider>
+            <App />
+            <Modal />
+          </AvatarProvider>
         </LoggedProvider>
       </Provider>
     </ModalProvider>

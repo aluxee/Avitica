@@ -7,7 +7,7 @@ import { LoggedContext } from '../../context/LoggedProvider';
 import './Navigation.css';
 
 function Navigation({ isLoaded }) {
-
+//TODO: fix the icons section to go a little further out to the side in the nav bar
 	const navigate = useNavigate();
 	const { user } = useContext(LoggedContext);
 

@@ -8,7 +8,9 @@ export const AvatarContext = createContext();
 export function AvatarProvider(props) {
 
 	const sessionUser = useSelector(state => state.session.user);
-	const avatarUrl = useSelector(state => state.avatar?.imageUrl)
+	const avatarUrl = useSelector(state => state.avatar?.imageUrl);
+	// const avatarState = useSelector(state => state.avatar);
+	//TODO: test this state, confirm the user id of the state is equal to the user before proceeding with saving the avatar url
 
 	// console.log("%c 🚀 ~ file: AvatarProvider.jsx:11 ~ AvatarProvider ~ avatarUrl: ", "color: red; font-size: 25px", avatarUrl)
 

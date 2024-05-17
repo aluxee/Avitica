@@ -21,7 +21,7 @@ a {
 div.outer-profile-container {
 	position: relative;
 	top: 0;
-	left: 4rem;
+	left: 6rem;
 }
 
 .no-session-outer-container {}
@@ -89,8 +89,8 @@ div.outer-profile-container {
 	position: relative;
 	z-index: 5;
 	justify-content: space-between;
-	height: 196px;
-	max-height: fit-content;
+	height: fit-content;
+	max-height: 196px;
 }
 .nav-avatar-list {
 	background-image: url("https://i.pinimg.com/originals/b0/7b/a9/b07ba9441f17320a4d67f521a47fb045.gif");

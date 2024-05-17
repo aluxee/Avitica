@@ -5,7 +5,7 @@ import './Checklist.css'
 
 
 function Checklist({ task, taskId, checklist, setChecklist, editChecklistItem, setEditChecklistItem, addChecklistItem, setAddChecklistItem }) {
-
+//TODO: fix bug where on double click of the edit and pressing save, the checklist box disappears
 
 	const dispatch = useDispatch();
 	const initialCheck = Object.values(checklist).reduce((obj, item) => {

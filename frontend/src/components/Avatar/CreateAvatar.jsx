@@ -1,12 +1,29 @@
-import { useState, useEffect } from 'react';
-// import { useDispatch } from "react-redux";
-// import { thunkCreateAvatar, thunkLoadAvatar } from '../../store/avatar';
-
-
+import { useState, useEffect, useContext } from 'react';
+import { useDispatch, useSelector } from "react-redux";
+import { thunkCreateAvatar, thunkLoadAvatar }
+	from '../../store/avatar';
+import { AvatarContext } from '../../context/AvatarProvider';
+import { LoggedContext } from '../../context/LoggedProvider';
 import './CreateAvatar.css';
+import { useModal } from '../../context/Modal';
 
 function CreateAvatar() {
-	// const dispatch = useDispatch();
+	const dispatch = useDispatch();
+	const { user } = useContext(LoggedContext);
+	const { avatarUrl, currAvatar, setCurrAvatar } = useContext(AvatarContext);
+
+	// console.log("%c 🚀 ~ file: CreateAvatar.jsx:17 ~ CreateAvatar ~ avatarUrl: ", "color: red; font-size: 25px", avatarUrl)
+
+	const { closeModal } = useModal();
+
+
+
+
+	const avatarImg = useSelector(state => state.avatar.imageUrl);
+
+
+	console.log("%c 🚀 ~ file: CreateAvatar.jsx:12 ~ CreateAvatar ~ avatarImg: ", "color: red; font-size: 25px", avatarImg)
+
 	const [avatarState, setAvatarState] = useState("");
 
 
@@ -18,22 +35,21 @@ function CreateAvatar() {
 	const faceIdNumber = Number(faceType);
 	const hairIdNumber = Number(hairType);
 	const [changeConfirmed, setChangeConfirmed] = useState(false);
+	const [updateAvatar, setUpdateAvatar] = useState(false);
 	const [message, setMessage] = useState("");
 	const [errors, setErrors] = useState({});
 
-	//TODO: finish hair section
 	//TODO: ensure this is pullable and put thru database to load up as an image
-	//TODO: fix bug of select dropdown reset upon color change
 	useEffect(() => {
 		const errorsObject = {};
-		faceType.length === 0 ? errorsObject.faceType = 'Select a face type' : faceType;
-		hairType.length === 0 ? errorsObject.hairType = 'Select a hair type' : hairType;
+		faceType.length === 0 || !faceIdNumber ? errorsObject.faceIdNumber = 'Select a face type' : faceType;
+		hairType.length === 0 || !hairIdNumber ? errorsObject.hairIdNumber = 'Select a hair type' : hairType;
 		earType.length === 0 ? errorsObject.earType = 'Select an ear type' : earType;
 		expression.length === 0 ? errorsObject.expression = 'Select an expression' : expression;
 		skinType.length === 0 ? errorsObject.skinType = 'Select a skin type' : skinType;
 
 		setErrors(errorsObject);
-	}, [skinType, faceType, hairType, expression, earType])
+	}, [skinType, faceType, hairType, expression, earType, faceIdNumber, hairIdNumber, avatarImg])
 
 	// Update message when a change is confirmed
 	useEffect(() => {
@@ -48,60 +64,46 @@ function CreateAvatar() {
 		}
 	}, [changeConfirmed, faceType, hairType]);
 
+	// //! create a function that will convert blob images to jpeg/png data url
+
+	useEffect(() => {
+		if (avatarImg && Object.values(avatarImg).length > 0) {
+			setAvatarState(avatarImg)
+			setCurrAvatar(avatarImg)
+		}
+	}, [avatarState, skinType, faceIdNumber, hairIdNumber, earType, expression, avatarImg, avatarUrl, currAvatar])
+
+
 	const handleAvatarSubmit = async (e) => {
 		e.preventDefault();
 
-		//!! fetch from backend once its complete
+		setUpdateAvatar(true);
 
-		// const createAvatar =  await dispatch(thunkCreateAvatar({
-		// 	skinType, faceIdNumber, hairIdNumber, earType, expression
-		// }));
-		// setAvatarState(createAvatar)
+		const avatarData = {
+			skinType, faceIdNumber, hairIdNumber, earType, expression,
+		}
 
-		// await dispatch(thunkLoadAvatar());
+		await dispatch(thunkCreateAvatar(avatarData));
+		await dispatch(thunkLoadAvatar(user.id, avatarData));
+		setChangeConfirmed(true)
 
+		setAvatarState(avatarImg)
 
-		const resPost = await fetch('https://api.maplestory.net/character/render', {
-			method: 'POST',
-			headers: {
-				"Content-Type": "application/json",
-			},
-			body: JSON.stringify({
-				"skin": `${skinType}`,
-				"faceId": faceIdNumber,
-				"hairId": hairIdNumber,
-				"pose": "walkingOneHanded",
-				"poseFrame": 1,
-				"faceEmote": `${expression}`,
-				"faceFrame": 0,
-				"ears": `${earType}`,
-				"itemIds": [
-					1060002,
-					1040193
-				],
-				"effectFrame": 0
-			})
-		})
-
-		const blob = await resPost.blob();
-		const imageUrl = URL.createObjectURL(blob); // Create a URL for the blob object
-
-		setAvatarState(imageUrl)
-
-
-		//TODO: figure out a way after submitting the avatar, to close the modal and have it be reflected on the nav
-
+		console.log("%c 🚀 ~ file: CreateAvatar.jsx:96 ~ CreateAvatar ~ avatarState: ", "color: orange; font-size: 28px", avatarState)
 
 	}
-	console.log("%c 🚀 ~ file: CreateAvatar.jsx:96 ~ CreateAvatar ~ avatarState: ", "color: orange; font-size: 28px", avatarState)
 
-
+	const handleUpdateSubmit = async (e) => {
+		e.preventDefault();
+		setUpdateAvatar(false);
+		closeModal();
+	}
 	const renderFaceOptions = () => {
 		// Check the selected face type and render additional options accordingly
 		switch (faceType) {
 			case "20000":
 				return (
-					<div>
+					<div className='change-face'>
 						<label htmlFor="motivatedEyeColor">Select Motivated Eye Color:</label>
 						<select name="motivatedEyeColor" id="motivatedEyeColor"
 							value={faceType}
@@ -114,15 +116,19 @@ function CreateAvatar() {
 							<option value="20800">White</option>
 							<option value="21700">Amethyst</option>
 						</select>
-						{message && <p>{message}</p>} {/* Display message */}
-
 					</div>
 				);
 			case "20035":
 				return (
-					<div>
+					<div className='change-face'>
 						<label htmlFor="distantGazeColor">Select Distant Gaze Color:</label>
-						<select name="distantGazeColor" id="distantGazeColor">
+						<select name="distantGazeColor" id="distantGazeColor"
+							value={faceType}
+							onChange={(e) => {
+								setFaceType(e.target.value)
+								setChangeConfirmed(true)
+							}}
+						>
 							<option value="20035">Black</option>
 							<option value="20135">Blue</option>
 							<option value="20235">Red</option>
@@ -137,9 +143,15 @@ function CreateAvatar() {
 				);
 			case "20026":
 				return (
-					<div>
+					<div className='change-face'>
 						<label htmlFor="shutEyeColor">Select Shut Eye Color:</label>
-						<select name="shutEyeColor" id="shutEyeColor">
+						<select name="shutEyeColor" id="shutEyeColor"
+							value={faceType}
+							onChange={(e) => {
+								setFaceType(e.target.value)
+								setChangeConfirmed(true)
+							}}
+						>
 							<option value="20026">Black</option>
 							<option value="20126">Blue</option>
 							<option value="20226">Red</option>
@@ -154,9 +166,15 @@ function CreateAvatar() {
 				);
 			case "20040":
 				return (
-					<div>
+					<div className='change-face'>
 						<label htmlFor="piercingGazeColor">Select Piercing Gaze Color:</label>
-						<select name="piercingGazeColor" id="piercingGazeColor">
+						<select name="piercingGazeColor" id="piercingGazeColor"
+							value={faceType}
+							onChange={(e) => {
+								setFaceType(e.target.value)
+								setChangeConfirmed(true)
+							}}
+						>
 							<option value="20040">Black</option>
 							<option value="21138">Blue</option>
 							<option value="21238">Red</option>
@@ -171,7 +189,7 @@ function CreateAvatar() {
 				);
 			default:
 				return <>
-					{changeConfirmed === true ? <>{message}</> : <></>}
+					{changeConfirmed === true && <p className='change-message'>{message}</p>}
 				</>
 		}
 	}
@@ -180,7 +198,7 @@ function CreateAvatar() {
 		switch (hairType) {
 			case "30025":
 				return (
-					<div>
+					<div className='change-hair'>
 						<label htmlFor="unkemptHairColor">Select Unkempt Hair Color:</label>
 						<select name="unkemptHairColor" id="unkemptHairColor"
 							value={hairType}
@@ -198,15 +216,19 @@ function CreateAvatar() {
 							<option value="30026">Purple</option>
 							<option value="30027">Brown</option>
 						</select>
-						{message && <p>{message}</p>}
-
 					</div>
 				);
 			case "31490":
 				return (
-					<div>
+					<div className='change-hair'>
 						<label htmlFor="ceceliaHairColor">Select Cecelia Twist Hair Color:</label>
-						<select name="ceceliaHairColor" id="ceceliaHairColor">
+						<select name="ceceliaHairColor" id="ceceliaHairColor"
+							value={hairType}
+							onChange={(e) => {
+								setHairType(e.target.value)
+								setChangeConfirmed(true)
+							}}
+						>
 							<option value="31490">Black</option>
 							<option value="31491">Red</option>
 							<option value="31492">Orange</option>
@@ -220,9 +242,15 @@ function CreateAvatar() {
 				);
 			case "30100":
 				return (
-					<div>
-						<label htmlFor="fantasyHairColor">Select Shut Eye Color:</label>
-						<select name="fantasyHairColor" id="fantasyHairColor">
+					<div className='change-hair'>
+						<label htmlFor="fantasyHairColor">Select Fantasy Hair Color:</label>
+						<select name="fantasyHairColor" id="fantasyHairColor"
+							value={hairType}
+							onChange={(e) => {
+								setHairType(e.target.value)
+								setChangeConfirmed(true)
+							}}
+						>
 							<option value="30100">Black</option>
 							<option value="30101">Red</option>
 							<option value="30102">Orange</option>
@@ -245,123 +273,132 @@ function CreateAvatar() {
 			// 	);
 			default:
 				return <>
-					{changeConfirmed === true ? <>{message}</> : <></>}
+					{changeConfirmed === true && <p className='change-message'>{message}</p>}
 				</>
 		}
 	}
-	// useEffect(() => {
-	// handleAvatarSubmit() // if this is used in the useEffect, a warning will appear for preventDefault
-	// }, [faceType])
 
 	return (
 		<>
 			<div className='outer-avatar-creator'>
 				<div className='inner-avatar-creator'>
-					<div className='avatar-depiction'
-						style={{
-							backgroundImage: `url(${avatarState})`,
-							backgroundSize: "cover",
-							backgroundRepeat: "no-repeat",
-							width: "13.5rem",
-							height: 320,
-						}}
-					></div>
-					<div className='avatar-div-form'>
-						<form onSubmit={(handleAvatarSubmit)}
-							className='avatar-form'
-						>
-							<div className='avatar-face-adv'>
+					<h4>Choose a Look:</h4>
+					<div className='avatar-container'>
 
-								<label className="avatar-label" htmlFor="faceType">
-									<h4>Face Type</h4>
-									<select name={faceType} id={faceType}
-										value={faceType}
-										onChange={(e) => {
+						<div className='avatar-depiction'
+							style={{
+								backgroundImage: `url(${avatarState})`,
+								backgroundSize: "cover",
+								backgroundRepeat: "no-repeat",
+								// width: "13.6rem",
+								height: 360,
+							}}
+						></div>
 
-											setFaceType(e.target.value)
-											setChangeConfirmed(false)
-										}}
-										className='face-type'
-									>
-										<option value={""}>Select Face Type</option>
-										<option value={"20000"}>Motivated Eyes</option>
-										<option value={"20035"}>Distant Gaze</option>
-										<option value={"20026"}>Shut Eyes</option>
-										<option value={"20040"}>Piercing Gaze</option>
-									</select>
-									{errors?.faceType && (<p className='p-error'>{errors.faceType}</p>)}
-									{renderFaceOptions()}
-								</label>
-							</div>
-							<label className="avatar-label" htmlFor="faceExp">
-								<h4>Facial Expression</h4>
-								<select name={expression} id={expression}
-									value={expression}
-									onChange={(e) => setExpression(e.target.value)}
-									className='face-exp'
-								>
-									<option value={""}>Select Expression</option>
-									<option value={"default"}>Default</option>
-									<option value={"smile"}>Smile</option>
-									<option value={"glitter"}>Glitter</option>
-									<option value={"shine"}>Shine</option>
-									<option value={"despair"}>Despair</option>
-								</select>
-								{errors?.expression && (<p className='p-error'>{errors.expression}</p>)}
-							</label>
-							<label className="avatar-label" htmlFor="earType">
-								<h4>Ears</h4>
-								<select name={earType} id={earType}
-									value={earType}
-									onChange={(e) => setEarType(e.target.value)}
-									className='ear-type'
-								>
-									<option value="">Select Ear Type</option>
-									<option value="humanEars">Human</option>
-									<option value="lefEars">Elven</option>
-								</select>
-								{errors?.earType && (<p className='p-error'>{errors.earType}</p>)}
-							</label>
-							<label className="avatar-label" htmlFor="skinType">
-								<h4>Skin Tone</h4>
-								<select name={skinType} id={skinType}
-									value={skinType}
-									onChange={(e) => setSkinType(e.target.value)}
-									className='skin-type'
-								>
-									<option value="">Select Skin Type</option>
-									<option value="tanned">Tanned</option>
-									<option value="dark">Dark</option>
-									<option value="clay">Clay</option>
-									<option value="light">Light</option>
-									<option value="ashen">Ashen</option>
-								</select>
-								{errors?.skinType && (<p className='p-error'>{errors.skinType}</p>)}
-							</label>
-							<label className="avatar-label" htmlFor="hairType">
-								<h4>Hair Style</h4>
-								<select name={hairType} id={hairType}
-									value={hairType}
-									onChange={(e) => setHairType(e.target.value)}
-									className='hair-type'
-								>
-									<option value="">Select Hair Type</option>
-									<option value={"30025"}>Unkempt Hair</option>
-									<option value={"31490"}>Cecelia Twist</option>
-									<option value={"30100"}>Fantasy Hair</option>
-								</select>
-								{errors?.hairType && (<p className='p-error'>{errors.hairType}</p>)}
-								{renderHairOptions()}
-							</label>
-							<button
-								// type='submit'
-								onClick={handleAvatarSubmit}
-								className='et-task-submit-button submit'
-								disabled={Object.values(errors).length > 0}
+						<div className='avatar-div-form'>
+							<form onSubmit={(handleAvatarSubmit)}
+								className='avatar-form'
 							>
-								Save
-							</button>
-						</form>
+								<div className='avatar-face-adv'>
+
+									<label className="avatar-label" htmlFor="faceType">
+										<h4>Face Type</h4>
+										<select name={faceType} id={faceType}
+											value={faceType}
+											onChange={(e) => {
+												setFaceType(e.target.value)
+												setChangeConfirmed(false)
+											}}
+											className='face-type'
+										>
+											<option value={""}>Select Face Type</option>
+											<option value="20000">Motivated Eyes</option>
+											<option value="20035">Distant Gaze</option>
+											<option value="20026">Shut Eyes</option>
+											<option value="20040">Piercing Gaze</option>
+										</select>
+										{errors?.faceIdNumber && (<p className='p-error'>{errors.faceIdNumber}</p>)}
+										{/* find out why these errors for both face and hair type will not show up */}
+										{renderFaceOptions()}
+									</label>
+								</div>
+								<label className="avatar-label" htmlFor="faceExp">
+									<h4>Facial Expression</h4>
+									<select name={expression} id={expression}
+										value={expression}
+										onChange={(e) => setExpression(e.target.value)}
+										className='face-exp'
+									>
+										<option value={""}>Select Expression</option>
+										<option value={"default"}>Default</option>
+										<option value={"smile"}>Smile</option>
+										<option value={"glitter"}>Glitter</option>
+										<option value={"shine"}>Shine</option>
+										<option value={"despair"}>Despair</option>
+									</select>
+									{errors?.expression && (<p className='p-error'>{errors.expression}</p>)}
+								</label>
+								<label className="avatar-label" htmlFor="earType">
+									<h4>Ears</h4>
+									<select name={earType} id={earType}
+										value={earType}
+										onChange={(e) => setEarType(e.target.value)}
+										className='ear-type'
+									>
+										<option value="">Select Ear Type</option>
+										<option value="humanEars">Human</option>
+										<option value="lefEars">Elven</option>
+									</select>
+									{errors?.earType && (<p className='p-error'>{errors.earType}</p>)}
+								</label>
+								<label className="avatar-label" htmlFor="skinType">
+									<h4>Skin Tone</h4>
+									<select name={skinType} id={skinType}
+										value={skinType}
+										onChange={(e) => setSkinType(e.target.value)}
+										className='skin-type'
+									>
+										<option value="">Select Skin Type</option>
+										<option value="tanned">Tanned</option>
+										<option value="dark">Dark</option>
+										<option value="clay">Clay</option>
+										<option value="light">Light</option>
+										<option value="ashen">Ashen</option>
+									</select>
+									{errors?.skinType && (<p className='p-error'>{errors.skinType}</p>)}
+								</label>
+								<label className="avatar-label" htmlFor="hairType">
+									<h4>Hair Style</h4>
+									<select name={hairType} id={hairType}
+										value={hairType}
+										onChange={(e) => setHairType(e.target.value)}
+										className='hair-type'
+									>
+										<option value="">Select Hair Type</option>
+										<option value={"30025"}>Unkempt Hair</option>
+										<option value={"31490"}>Cecelia Twist</option>
+										<option value={"30100"}>Fantasy Hair</option>
+									</select>
+									{errors?.hairIdNumber && (<p className='p-error'>{errors.hairIdNumber}</p>)}
+									{renderHairOptions()}
+								</label>
+								<button
+									// type='submit'
+									onClick={handleAvatarSubmit}
+									className='et-task-submit-button submit'
+									disabled={Object.values(errors).length > 0}
+								>
+									Save
+								</button>
+								{
+									updateAvatar === true &&
+									<button
+										className='et-task-submit-button submit'
+										onClick={handleUpdateSubmit}
+									>Confirm Look</button>
+								}
+							</form>
+						</div>
 					</div>
 				</div>
 			</div>

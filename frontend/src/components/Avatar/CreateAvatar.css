@@ -1,3 +1,68 @@
+/* GENERAL */
+
+label {
+	margin: 4px 0px;
+}
+
+.outer-avatar-creator {
+	display: flex;
+	width: 480px;
+	flex-wrap: wrap;
+	align-content: center;
+	justify-content: center;
+	align-items: center;
+}
+
 .inner-avatar-creator {
 	display: flex;
+	flex-direction: column;
+}
+
+.avatar-container {
+	display: flex;
+}
+
+.avatar-depiction {
+	display: flex;
+	width: 15.1rem;
+	flex-direction: row;
+	flex-wrap: wrap;
+	align-content: center;
+	justify-content: center;
+	align-items: center;
+}
+
+button.et-task-submit-button {
+	margin: 16px 0px;
+}
+
+/* CONDITIONALS */
+div.change-face {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	flex-wrap: wrap;
+}
+
+div.change-face>label {
+	font-size: small;
+}
+
+div.change-hair {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	flex-wrap: wrap;
+}
+
+div.change-hair>label {
+	font-size: small;
+}
+
+.change-message {
+	margin: 0;
+	font-size: 10px;
+	font-weight: 500;
+	color: green;
+	width: 75%;
 }

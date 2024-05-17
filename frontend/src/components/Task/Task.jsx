@@ -1,13 +1,13 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { useModal } from '../../context/Modal';
 import { useState, useEffect } from 'react';
-// import Checklist from './Checklist/Checklist';
+import Checklist from './Checklist/Checklist';
 import { thunkEditTask, thunkLoadCurrentTask, thunkRemoveTask, thunkLoadTasks } from '../../store/task';
 // import OpenModalMenuItem from '../Navigation/OpenModalMenuItem';
 
 import './Task.css';
 
-import { thunkLoadChecklist, thunkCreateChecklist } from '../../store/checklist';
+import { thunkLoadChecklist } from '../../store/checklist';
 function Task({ task, taskId }) {
 	const dispatch = useDispatch();
 	const { closeModal } = useModal();
@@ -16,15 +16,10 @@ function Task({ task, taskId }) {
 	const checklistState = useSelector(state => state.checklist)
 
 	const [title, setTitle] = useState(task.title);
-
-	console.log("%c 🚀 ~ file: Task.jsx:20 ~ Task ~ task: ", "color: red; font-size: 25px", task, "(task has been passed down)", checklistState, task.Checklist)
-
 	const [notes, setNotes] = useState(task.notes); // Initialize with task.notes
 	const [difficulty, setDifficulty] = useState(task.difficulty);
 	const [dueDate, setDueDate] = useState(task.dueDate);
 	const [checklist, setChecklist] = useState(task.Checklist); // array
-	const [checklistItem, setChecklistItem] = useState(''); // individual items
-
 	const [errors, setErrors] = useState({});
 	const [showMenu, setShowMenu] = useState(false);
 	const [editTitle, setEditTitle] = useState(false);
@@ -32,7 +27,7 @@ function Task({ task, taskId }) {
 	const [editDifficulty, setEditDifficulty] = useState(false);
 	const [editDueDate, setEditDueDate] = useState(false);
 	const [editChecklistItem, setEditChecklistItem] = useState(false);
-	// const [addChecklistItem, setAddChecklistItem] = useState(false);
+	const [addChecklistItem, setAddChecklistItem] = useState(false);
 
 	useEffect(() => {
 		const errorsObject = {};
@@ -53,7 +48,6 @@ function Task({ task, taskId }) {
 
 
 	useEffect(() => {
-		// dispatch(thunkLoadCurrentTask(taskId))
 		dispatch(thunkLoadChecklist(taskId))
 	}, [dispatch, taskId]);
 
@@ -112,7 +106,7 @@ function Task({ task, taskId }) {
 			setEditNotes(false)
 			setEditDifficulty(false)
 			setEditDueDate(false)
-			setChecklistItem(false)
+			// setChecklistItem(false)
 		}
 
 		await dispatch(thunkLoadCurrentTask(taskId))
@@ -132,21 +126,6 @@ function Task({ task, taskId }) {
 		}
 	};
 
-	const handleAddChecklistItem = async (e) => {
-		e.preventDefault();
-
-		const newToDoItem = {
-			checklistItem
-		}
-
-		const submissionResults = await dispatch(thunkCreateChecklist(taskId, newToDoItem));
-
-		if (submissionResults.errors) {
-			return submissionResults.errors
-		}
-
-		await dispatch(thunkLoadChecklist())
-	}
 
 	const handleDelete = async () => {
 		const confirmDelete = window.confirm("Are you sure you want to delete this task?");
@@ -193,8 +172,9 @@ function Task({ task, taskId }) {
 										value={title}
 										type='text'
 										onChange={handleChangeTitle}
-										// onBlur={handleSubmit}
 										placeholder="Enter Title for Task"
+										onBlur={() => setEditTitle(false)}
+										autoFocus
 									/>
 									<p className="p-error">{errors?.title}</p>
 								</label>
@@ -211,11 +191,6 @@ function Task({ task, taskId }) {
 								onDoubleClick={() => setEditNotes(true)}
 							>
 								{notes ? <>{notes}</> : <>Create some notes for this task!</>}
-								{/* <button
-									onClick={() => setEditNotes(true)}
-								>
-									Edit Notes
-								</button> */}
 							</div>
 							:
 							<form onSubmit={handleSubmit}>
@@ -225,18 +200,20 @@ function Task({ task, taskId }) {
 										onChange={(e) => setNotes(e.target.value)}
 										type='text'
 										name="notes"
-										id="et-notes" cols="35" rows="10"
-										placeholder="Type notes here" />
+										id="et-notes" cols="35" rows="8"
+										placeholder="Type notes here"
+										onKeyDown={(e) => {
+											if (e.key === 'Enter') {
+												e.preventDefault();
+												handleSubmit(e);
+											}
+										}}
+										onBlur={() => setEditNotes(false)}
+										autoFocus
+									/>
 
 									<p className="p-error">{errors?.notes}</p>
 								</label>
-								<button type="submit">Save</button>
-								<button
-									onClick={() => setEditNotes(false)}
-									type="submit"
-								>
-									Cancel
-								</button>
 							</form>}
 					</div>
 				</div>
@@ -247,6 +224,7 @@ function Task({ task, taskId }) {
 					</h4>
 					{editDifficulty === false ?
 						<div
+							className='difficulty'
 							onDoubleClick={() => setEditDifficulty(true)}
 						>
 							{difficulty}
@@ -258,6 +236,14 @@ function Task({ task, taskId }) {
 									value={difficulty}
 									onChange={(e) => setDifficulty(e.target.value)}
 									id="difficulty-select"
+									onKeyDown={(e) => {
+										if (e.key === 'Enter') {
+											e.preventDefault();
+											handleSubmit(e);
+										}
+									}}
+									onBlur={() => setEditDifficulty(false)}
+									autoFocus
 								>
 									<option value="Trivial"
 									>Trivial</option>
@@ -267,8 +253,6 @@ function Task({ task, taskId }) {
 									<option value="Hard">Hard</option>
 								</select>
 							</label>
-							<button type="submit">Save</button>
-							<button onClick={() => setEditDifficulty(false)} type="submit">Cancel</button>
 						</form>}
 				</div>
 
@@ -279,7 +263,7 @@ function Task({ task, taskId }) {
 					<div className='dueDate'>
 						{editDueDate === false ?
 							<div
-								onDoubleClick={() => editDueDate(true)}
+								onDoubleClick={() => setEditDueDate(true)}
 							>
 								{dueDate}
 							</div>
@@ -293,10 +277,16 @@ function Task({ task, taskId }) {
 										value={dueDate}
 										onChange={(e) => setDueDate(e.target.value)}
 										type='date'
+										onKeyDown={(e) => {
+											if (e.key === 'Enter') {
+												e.preventDefault();
+												handleSubmit(e);
+											}
+										}}
+										onBlur={() => setEditDueDate(false)}
+										autoFocus
 									/>
 									<div className='dueDate-buttons'>
-										<button type="submit">Save</button>
-										<button onClick={() => setEditDueDate(false)} type="submit">Cancel</button>
 									</div>
 									<p className="p-error">{errors?.dueDate}</p>
 								</label>
@@ -305,94 +295,37 @@ function Task({ task, taskId }) {
 					</div>
 				</div>
 
-				<label htmlFor="checklist"
-					className='et-checklist'
+
+
+
+				<div className='checklist-component'>
+
+					<div className='ind-checklist'>
+						{
+							taskId &&
+							<Checklist taskId={taskId}
+								// we loop through each item in the checklist within this component
+								checklist={checklist} setChecklist={setChecklist}
+								task={task}
+								editChecklistItem={editChecklistItem}
+								setEditChecklistItem={setEditChecklistItem}
+								addChecklistItem={addChecklistItem}
+								setAddChecklistItem={setAddChecklistItem}
+								toggleMenu={toggleMenu}
+							/>
+						}
+					</div>
+
+				</div>
+
+				{/* TASK COMPONENT ENDS HERE*/}
+				< button
+					onClick={handleDelete}
+					className='delete-task-button'
 				>
-					<h4
-						// onDoubleClick={() => handleAddChecklistItem}
-						onClick={() => alert('Feature coming soon!')}
-					>
-						Checklist
-					</h4>
-					{checklist && editChecklistItem === false && checklist.length > 0 ? (
-						<div>
-							{
-								checklist.map((item, index) => (
-
-									<div
-
-										onClick={toggleMenu}
-										key={index}
-									>{
-											// item =
-										//* need to edit each portion to make individual items
-											// <Checklist taskId={taskId} checklist={checklist} setChecklist={setChecklist}
-											// 	task={task}
-											// />
-										}
-										{editChecklistItem === true && (
-											<>
-												<form onSubmit={handleAddChecklistItem}
-													onClick={toggleMenu}
-												>
-													<label htmlFor="checklistItem">
-														<input
-															value={checklistItem}
-															type='text'
-															onChange={(e) => setChecklistItem(e.target.value)}
-															// onBlur={handleSubmit}
-															placeholder="Enter Title for Task"
-														/>
-														<p className="p-error">{errors?.checklistItem}</p>
-													</label>
-													<button type="submit">Save</button>
-												</form>
-											</>
-										)}
-									</div>
-								))
-							}
-						</div>
-					) : (
-						<>
-							<div className='checklist'>
-								{editChecklistItem === false ?
-									(
-										<div className='checklist'>
-											<div onDoubleClick={() => setEditChecklistItem(true)}>Create a Checklist!</div>
-										</div>
-									) :
-
-									<form onSubmit={handleAddChecklistItem}
-										onClick={toggleMenu}
-									>
-										<label htmlFor="checklistItem">
-											<input
-												value={checklistItem}
-												type='text'
-												onChange={(e) => setChecklistItem(e.target.value)}
-												// onBlur={handleSubmit}
-												placeholder="Enter Title for Task"
-											/>
-											<p className="p-error">{errors?.checklistItem}</p>
-										</label>
-										<button type="submit">Save</button>
-									</form>}
-							</div>
-						</>
-					)
-						// :
-
-					}
-				</label>
+					<i className="fa-solid fa-trash" />
+				</button>
 			</div>
-
-			{/* TASK COMPONENT ENDS HERE*/}
-			<button
-				onClick={handleDelete}
-			>
-				<i className="fa-solid fa-trash" />
-			</button>
 		</>
 	)
 }

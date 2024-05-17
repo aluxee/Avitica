@@ -1,13 +1,13 @@
-import { csrfFetch } from "./csrf";
+// import { csrfFetch } from "./csrf";
 
 /** Action Type Constants: */
 export const LOAD_AVATAR = 'avatar/LOAD_AVATAR';
-export const LOAD_CURRENT_AVATAR = 'avatar/LOAD_CURRENT_AVATAR';
+// export const LOAD_CURRENT_AVATAR = 'avatar/LOAD_CURRENT_AVATAR';
 export const POST_AVATAR = 'avatar/POST_AVATAR';
-export const UPDATE_AVATAR = 'avatar/UPDATE_AVATAR';
-export const REMOVE_AVATAR = 'avatar/REMOVE_AVATAR';
+// export const UPDATE_AVATAR = 'avatar/UPDATE_AVATAR';
+// export const REMOVE_AVATAR = 'avatar/REMOVE_AVATAR';
 // for task completion status
-export const UPDATE_AVATAR_STATUS = 'avatar/UPDATE_AVATAR_STATUS';
+// export const UPDATE_AVATAR_STATUS = 'avatar/UPDATE_AVATAR_STATUS';
 
 // /**  Action Creators: */
 
@@ -24,30 +24,35 @@ export const createAvatar = (data) => ({
 });
 
 
-export const editAvatar = (taskId, task) => ({
-	type: UPDATE_AVATAR,
-	taskId, task
-});
+// export const editAvatar = (taskId, task) => ({
+// 	type: UPDATE_AVATAR,
+// 	taskId, task
+// });
 
 
 
 // /** Thunk Action Creators: */
 
 //* load avatar
-export const thunkLoadAvatar = () => async dispatch => {
+export const thunkLoadAvatar = (id, avatarData) => async dispatch => {
 
-	const response = await csrfFetch('/api/avatar');
+console.log("%c 🚀 ~ file: avatar.js:39 ~ thunkLoadAvatar ~ id: ", "color: red; font-size: 25px", id)
+
+
+	console.log("%c 🚀 ~ file: avatar.js:39 ~ thunkLoadAvatar ~ avatar: ", "color: magenta; font-size: 30px", avatarData)
+
+
+	const response = await fetch(`/api/avatar/${id}`);
+
+
+	// console.log("%c 🚀 ~ file: avatar.js:44 ~ thunkLoadAvatar ~ response: ", "color: cyan; font-size: 25px", response)
+
 
 	if (response.ok) {
 		const avatar = await response.json();
 
-		console.log("%c 🚀 ~ file: avatar.js:44 ~ thunkLoadAvatar ~ response: ", "color: red; font-size: 25px", response)
+		await dispatch(loadAvatar(avatar))
 
-
-		console.log("%c 🚀 ~ file: avatar.js:44 ~ thunkLoadAvatar ~ avatar: ", "color: red; font-size: 25px", avatar)
-
-
-		dispatch(loadAvatar(avatar))
 		return avatar
 
 	} else {
@@ -59,8 +64,11 @@ export const thunkLoadAvatar = () => async dispatch => {
 // //* create / post avatar
 export const thunkCreateAvatar = (avatarData) => async (dispatch) => {
 
+	console.log("%c 🚀 ~ file: avatar.js:62 ~ thunkCreateAvatar ~ avatarData: ", "color: red; font-size: 25px", avatarData)
 
-	const response = await csrfFetch('/api/avatar/create', {
+
+
+	const response = await fetch('/api/avatar/create', {
 		method: 'POST',
 		headers: {
 			"Content-Type": "application/json",
@@ -68,38 +76,43 @@ export const thunkCreateAvatar = (avatarData) => async (dispatch) => {
 		body: JSON.stringify(avatarData)
 	})
 
+	console.log("%c 🚀 ~ file: avatar.js:76 ~ thunkCreateAvatar ~ response: ", "color: red; font-size: 25px", response)
+
 	if (!response.ok) {
-		const errResponse = await response.json()
+		const errResponse = await response.json();
 		return errResponse;
-	} else {
-		const data = await response.json();
-		dispatch(createAvatar(data))
-		return data
 	}
+
+	const data = await response.json();
+
+	console.log("%c 🚀 ~ file: avatar.js:76 ~ thunkCreateAvatar ~ data: ", "color: red; font-size: 25px", data)
+	dispatch(createAvatar(data.avatar))
+	return data.avatar.imageUrl;
+
 }
 
-// edit avatar
-export const thunkEditAvatar = (taskId, task) => async (dispatch) => {
+// // edit avatar
+// export const thunkEditAvatar = (taskId, task) => async (dispatch) => {
 
 
-	const response = await csrfFetch(`/api/avatar/${taskId}`, {
-		method: 'PUT',
-		headers: {
-			"Content-Type": "application/json",
-		},
-		body: JSON.stringify(task)
-	})
+// 	const response = await csrfFetch(`/api/avatar/${taskId}`, {
+// 		method: 'PUT',
+// 		headers: {
+// 			"Content-Type": "application/json",
+// 		},
+// 		body: JSON.stringify(task)
+// 	})
 
 
-	if (response.ok) {
-		const data = await response.json();
-		dispatch(editAvatar(data));
-		return data
-	} else {
-		const errorResponse = await response.json();
-		return errorResponse;
-	}
-}
+// 	if (response.ok) {
+// 		const data = await response.json();
+// 		dispatch(editAvatar(data));
+// 		return data
+// 	} else {
+// 		const errorResponse = await response.json();
+// 		return errorResponse;
+// 	}
+// }
 
 
 // __________________________________________reducer________________________________________
@@ -110,23 +123,25 @@ const avatarReducer = (state = initialState, action) => {
 	switch (action.type) {
 
 		case LOAD_AVATAR: {
-			console.log("%c 🚀 ~ file: avatar.js:128 ~ avatarReducer ~ action: ", "color: chocolate; font-size: 25px", "(LOAD)", action)
+			console.log("%c 🚀 ~ file: avatar.js:128 ~ avatarReducer ~ action: ", "color: tomato; font-size: 25px", "(LOAD)", action)
 
-			const avatarState = {};
+			const avatarState = { ...state };
 
 			// action.avatar.Task.forEach(task => {
 			// 	avatarState[task.id] = task;
 			// });
+			avatarState[action.avatar.id] = action.avatar;
 			return avatarState;
 		}
 
 		case POST_AVATAR: {
-			console.log("%c 🚀 ~ file: avatar.js:139 ~ avatarReducer ~ action: ", "color: chocolate; font-size: 25px", "(POST)", action)
-			return { ...state, [action.avatar.id]: action.avatar };
-		}
+			console.log("%c 🚀 ~ file: avatar.js:139 ~ avatarReducer ~ action: ", "color: chocolate; font-size: 28px", "(POST)", action)
+			const postState = { ...state, ...action.data };
 
-		case UPDATE_AVATAR: {
-			return { ...state, [action.avatar.id]: action.task };
+			console.log("%c 🚀 ~ file: avatar.js:136 ~ avatarReducer ~ postState: ", "color: red; font-size: 25px", postState)
+
+
+			return postState;
 		}
 
 		default:

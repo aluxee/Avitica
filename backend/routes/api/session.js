@@ -58,12 +58,16 @@ router.post(
 		// Checking if userInfo and statUser are arrays and contain elements
 		const userStats = Array.isArray(user.userStats) && user.userStats.length > 0 ? user.userStats[0] : user.userStats;
 
-		// console.log("%c 🚀 ~ file: session.js:66 ~ userStats: ", "color: red; font-size: 25px", userStats)
-
 		const Stats = Array.isArray(user.Stats) && user.Stats.length > 0 ? user.Stats[0] : user.Stats;
 
-		// console.log("%c 🚀 ~ file: session.js:70 ~ Stats: ", "color: red; font-size: 25px", Stats)
+		// AVATAR SECTION
 
+
+
+
+
+
+		// SUBMIT
 
 		const safeUser = {
 			id: user.id,
@@ -108,10 +112,10 @@ router.get(
 			const statUser = await Stat.findOne({ where: { userId: user.id } })
 
 
-			console.log("%c 🚀 ~ file: session.js:106 ~ userInfo: ", "color: red; font-size: 25px", userInfo)
+			// console.log("%c 🚀 ~ file: session.js:106 ~ userInfo: ", "color: red; font-size: 25px", userInfo)
 
 
-			console.log("%c 🚀 ~ file: session.js:110 ~ statUser: ", "color: red; font-size: 25px", statUser)
+			// console.log("%c 🚀 ~ file: session.js:110 ~ statUser: ", "color: red; font-size: 25px", statUser)
 
 
 			// Checking if userInfo and statUser are arrays and contain elements

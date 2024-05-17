@@ -4,6 +4,8 @@ import { useEffect, useState, useRef, useContext } from 'react';
 import './UserProfile.css';
 import { one, two, three, four, five } from '../../clips';
 import { LoggedContext } from '../../context/LoggedProvider';
+import { AvatarContext } from '../../context/AvatarProvider';
+
 import { thunkGetMaxStats } from '../../store/userStats';
 
 
@@ -11,6 +13,10 @@ function UserProfile() {
 	const dispatch = useDispatch();
 	const location = useLocation();
 	const { user } = useContext(LoggedContext);
+	const {  currAvatar } = useContext(AvatarContext);
+
+	console.log("%c 🚀 ~ file: UserProfile.jsx:16 ~ UserProfile ~ currAvatar: ", "color: pink; font-size: 25px", currAvatar)
+
 
 	console.log("%c 🚀 ~ file: UserProfile.jsx:15 ~ UserProfile ~ user: ", "color: blueviolet; font-size: 28px", user)
 
@@ -39,7 +45,7 @@ function UserProfile() {
 		// userInfo.gold = gold;
 
 	}, [userInfo,
-		// userInfo.gold,
+		currAvatar,
 		gold, location, user, storedGold])
 
 	useEffect(() => {
@@ -166,7 +172,14 @@ function UserProfile() {
 
 		return (
 			<>
-				<img src={randomThumbNail} alt={user.displayName} className="spot-image-box" style={imgStyle} />
+				{
+					currAvatar ?
+						<img src={currAvatar}
+							alt={user.displayName} className="spot-image-box"
+						/>
+						:
+					<img src={randomThumbNail} alt={user.displayName} className="spot-image-box" style={imgStyle} />
+				}
 			</>
 		)
 	}
@@ -195,7 +208,7 @@ function UserProfile() {
 										HP:
 									</div>
 									<div className='user-fill'>
-										<progress id="health" value={health} max={totalHealth}>
+										<progress className='progress-bar-container' id="health" value={health} max={totalHealth}>
 											{health} / {totalHealth}
 										</progress>
 										<div className='fill-text'>

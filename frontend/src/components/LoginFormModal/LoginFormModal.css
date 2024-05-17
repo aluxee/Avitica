@@ -27,8 +27,9 @@ div.login-buttons>button {
 	margin-top: 0%;
 	box-shadow: 7px 5px 25px -2px #b4bef7;
 	border: 2px solid #481d5a4f;
-		background-color: #c3d6f38f;
+	background-color: #b1e7b38f;
 }
-div.login-buttons>button:disabled{
+
+div.login-buttons>button:disabled {
 	background-color: #b05bb04f;
 }

@@ -6,15 +6,15 @@
 
 /* *profile */
 i.fa-solid.fa-house {
-	color: #436FB5;
+	color: #4ac352;
 }
 
 i.fa-solid.fa-user {
-	color: #D1D6EC;
+	color: #d1ece1;
 }
 
 i.fa-solid.fa-user:hover {
-	color: #AAB7DC;
+	color: #4ac352;
 }
 
 .outer-profile-container {
@@ -60,7 +60,7 @@ ul.profile-dropdownlogin {
 	/* width: fit-content; */
 	padding-left: 0px;
 	flex-wrap: wrap;
-	background-color: #b5d0ec;
+	background-color: #4ac385;
 	z-index: 1;
 	right: 6.5rem;
 	justify-content: center;
@@ -77,7 +77,7 @@ ul.profile-dropdown {
 	/* width: fit-content; */
 	padding: 10% 11%;
 	flex-wrap: wrap;
-	background-color: #b5d0ec;
+	background-color: #4ac385;
 	z-index: 1;
 	right: 4.5rem;
 	justify-content: center;
@@ -124,7 +124,7 @@ button.button-profile-dropdown {
 
 button.button-profile-dropdown:hover {
 	cursor: pointer;
-	color: lightblue;
+	color: #1ee9a2db;
 }
 
 ul.profile-dropdownlogin>li:hover {
@@ -217,7 +217,7 @@ ul.profile-dropdownlogin {
 	/* width: fit-content; */
 	padding-left: 0px;
 	flex-wrap: wrap;
-	background-color: #b5d0ec;
+	background-color: #4ac385;
 	z-index: 8;
 	right: 6.5rem;
 	justify-content: center;

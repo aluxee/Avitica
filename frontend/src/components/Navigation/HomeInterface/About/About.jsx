@@ -9,16 +9,23 @@ function About() {
 				<div className="about-inner">
 					<div className="title">
 						<h1>About</h1>
-						<h2>BLOOP BLEEP</h2>
 					</div>
 					<div className="thoughts">
-						Lorem, ipsum dolor sit amet consectetur adipisicing elit. Laboriosam illo, magni quidem eos obcaecati dignissimos amet corporis porro consequatur unde blanditiis! Quidem quis perferendis a labore, sunt corporis voluptates ipsum?
+						<h2>Design</h2>
+						<div>
+							A web application inspired by Habitica where users can organize their gameplay with a Maplestory feel to the website!
+						</div>
 					</div>
 					<div className="thoughts">
-						Lorem, ipsum dolor sit amet consectetur adipisicing elit. Laboriosam illo, magni quidem eos obcaecati dignissimos amet corporis porro consequatur unde blanditiis! Quidem quis perferendis a labore, sunt corporis voluptates ipsum?
+						<h2>Creator</h2>
+						<div>
+							Made by
+							<br />
+							<a href='https://github.com/aluxee'>Github: @aluxee</a>
+						</div>
 					</div>
 					<div className="thoughts">
-						Lorem, ipsum dolor sit amet consectetur adipisicing elit. Laboriosam illo, magni quidem eos obcaecati dignissimos amet corporis porro consequatur unde blanditiis! Quidem quis perferendis a labore, sunt corporis voluptates ipsum?
+					Turn the page to view more details in the Features section!
 					</div>
 				</div>
 			</div>

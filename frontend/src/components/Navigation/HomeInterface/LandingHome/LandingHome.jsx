@@ -91,6 +91,8 @@ function LandingHome() {
 		<div className="home-outer">
 			<div className="home-inner"
 			>
+				<div id="wrapper" className="divided">
+
 				{
 					modalOpen ? null : (
 
@@ -111,11 +113,14 @@ function LandingHome() {
 						</HTMLFlipBook>
 					)
 				}
-
 				{/* <div className="navigation-buttons">
 					<button onClick={handlePrev} disabled={page === 0}>Prev</button>
 					<button onClick={handleNext} disabled={page === 2}>Next</button>
+
+
 				</div> */}
+
+				</div>
 			</div>
 		</div>
 	);

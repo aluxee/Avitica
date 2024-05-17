@@ -1,12 +1,13 @@
 const express = require('express');
 const { Task, Checklist, userStat } = require('../../db/models');
 const { requireAuth, authorization } = require('../../utils/auth');
-
+// const Op = Sequelize.Op;
+const { Op } = require('sequelize');
 router = express.Router();
 
 
 // edit a specific checklist, this also includes being able to complete the checklist
-router.put('/:taskId/checklist/:checklistId', requireAuth, authorization, async (req, res) => {
+router.put('/:taskId/checklist/:checklistId/checked', requireAuth, authorization, async (req, res) => {
 	//* may require frontend testing
 	const { checklistId } = req.params;
 	const { checked } = req.body;
@@ -38,6 +39,70 @@ router.put('/:taskId/checklist/:checklistId', requireAuth, authorization, async 
 				"errors": {
 					"checklistItem": "A checklist item is required"
 				}
+			});
+	}
+});
+
+// editing the item of checklist
+router.put('/:taskId/checklist/:checklistId', requireAuth, async (req, res) => {
+	//* may require frontend testing
+	const { checklistId } = req.params;
+	const { checklistItem } = req.body;
+
+	try {
+		if (!checklistItem) {
+			return res
+				.status(400)
+				.json({
+					"message": "Item has not been entered/exists",
+					"errors": {
+						"checklistItem": "A checklist item is required"
+					}
+				});
+		}
+		const checklistDup = await Checklist.count({
+			where: {
+				userId: req.user.id,
+				checklistItem,
+				id: { [Op.not]: checklistId } // do not include the item being updated
+			}
+		})
+
+		// console.log("%c 🚀 ~ file: tasks.js:70 ~ router.put ~ checklistDup: ", "color: red; font-size: 25px", checklistDup, "code1029")
+
+		if (checklistDup >= 1) {
+			return res
+				.status(400)
+				.json({
+					"error": "You cannot have any checklist items with duplicated names",
+					"message": "Checklist item title must be unique"
+				})
+		}
+		const checklistItemUpdate = await Checklist.findByPk(checklistId, {
+			where: {
+				userId: req.user.id
+			}
+		});
+
+		if (!checklistItemUpdate) {
+			return res.status(404).json({
+				error: "Checklist item not found",
+				message: "Checklist item not found"
+			});
+		}
+		//update checklist item's value
+		checklistItemUpdate.checklistItem = checklistItem;
+
+		await checklistItemUpdate.save();
+
+		return res
+			.json({ checklistItemUpdate });
+	} catch (err) {
+
+		return res
+			.status(500)
+			.json({
+				message: "Internal server error"
 			});
 	}
 });
@@ -89,39 +154,71 @@ router.delete('/:taskId/checklist/:checklistId', requireAuth, authorization, asy
 		.json({
 			"message": "Successfully deleted"
 		})
-})
+});
 
-// post a new checklist
+// post a new checklist item to the checklist
 router.post('/:taskId/checklist/new', requireAuth, async (req, res) => {
 	const { taskId } = req.params;
 	const { checklistItem } = req.body;
 
-	const listAmount = await Checklist.count({
-		where: {
-			taskId, checklistItem,
-			userId: req.user.id
-		}
-	})
-
-	if (listAmount > 5) {
+	if (checklistItem.length < 3 || checklistItem.length >= 50) {
 		return res
 			.status(400)
 			.json({
-				"error": "You've reached the maximum amount of tasks with the same title name",
-				"message": "You can only have five tasks running at a time"
+				error: "Invalid checklist item",
+				message: "Title cannot be less than 3 characters or greater than 50 characters"
 			})
 	}
+
+	const listAmount = await Checklist.count({
+		where: {
+			taskId,
+			userId: req.user.id
+		}
+	});
+
+	if (listAmount >= 5) {
+		return res
+			.status(400)
+			.json({
+				"error": "You've reached your maximum amount of checklist items",
+				"message": "You can only have five checklist items running at a time"
+			})
+	}
+
+	const checklistDup = await Checklist.count({
+		where: {
+			userId: req.user.id,
+			taskId,
+			checklistItem,
+		}
+	})
+
+
+	if (checklistDup >= 1) {
+		return res
+			.status(400)
+			.json({
+				"error": "Duplicate Item",
+				"message": "Checklist item title must be unique"
+			})
+	}
+
+
 	try {
-		const checklist = await Checklist.create({
+
+		const newChecklistItem = await Checklist.create({
 			taskId,
 			userId: req.user.id,
 			checklistItem
 		})
 
-		await checklist.save();
+		await newChecklistItem.save();
+		// console.log("%c 🚀 ~ file: tasks.js:204 ~ router.post ~ newChecklistItem: ", "color: red; font-size: 25px", newChecklistItem)
+
 		return res
 			.status(201)
-			.json(checklist)
+			.json(newChecklistItem)
 	} catch (err) { // this code must be revisited; need to find better way to detect same name checklist items
 		res
 			.status(400)
@@ -129,6 +226,8 @@ router.post('/:taskId/checklist/new', requireAuth, async (req, res) => {
 				message: "This item of the checklist already exists"
 			});
 	}
+
+
 
 });
 
@@ -180,11 +279,11 @@ router.get('/:taskId/checklist', requireAuth, async (req, res) => {
 				message: "No checklist has been made yet for this task"
 			});
 	};
-	console.log("%c 🚀 ~ file: tasks.js:191 ~ router.get ~ tasksList: ", "color: red; font-size: 25px", tasksList, tasksList.Checklist)
+	// console.log("%c 🚀 ~ file: tasks.js:191 ~ router.get ~ tasksList: ", "color: red; font-size: 25px", tasksList, tasksList.Checklist)
 
 	const checklistsArray = tasksList.map(task => task.Checklist).flat();
 
-	console.log("%c 🚀 ~ file: tasks.js:186 ~ router.get ~ checklistsArray: ", "color: red; font-size: 25px", checklistsArray)
+	// console.log("%c 🚀 ~ file: tasks.js:186 ~ router.get ~ checklistsArray: ", "color: red; font-size: 25px", checklistsArray)
 
 
 
@@ -211,7 +310,7 @@ function calculateExperienceThreshold(currentLevel) {
 
 	const threshold = Math.max(Math.round(((parseInt(currentLevel) - 1) * 25) * ((parseInt(currentLevel) - 1) * 1.25)) + 100, 0);
 
-	console.log("%c 🚀 ~ file: tasks.js:214 ~ calculateExperienceThreshold ~ threshold: ", "color: red; font-size: 25px", threshold)
+	// console.log("%c 🚀 ~ file: tasks.js:214 ~ calculateExperienceThreshold ~ threshold: ", "color: red; font-size: 25px", threshold)
 
 	return threshold;
 }
@@ -277,11 +376,11 @@ router.put('/:taskId/status', requireAuth, async (req, res) => {
 	// retrieve user's current level
 	const currLevel = userStatus.level;
 
-	console.log("%c 🚀 ~ file: tasks.js:283 ~ router.put ~ currLevel: ", "color: red; font-size: 25px", currLevel)
+	// console.log("%c 🚀 ~ file: tasks.js:283 ~ router.put ~ currLevel: ", "color: red; font-size: 25px", currLevel)
 
 	const expThreshold = calculateExperienceThreshold(currLevel)
 
-	console.log("%c 🚀 ~ file: tasks.js:287 ~ router.put ~ expThreshold: ", "color: red; font-size: 25px", expThreshold)
+	// console.log("%c 🚀 ~ file: tasks.js:287 ~ router.put ~ expThreshold: ", "color: red; font-size: 25px", expThreshold)
 
 	// initialize experience gain variable
 	// let expGain = 0;
@@ -564,18 +663,31 @@ router.post('/new', requireAuth, async (req, res) => {
 		}
 	});
 
-	const taskCounter = await Task.count({
+	const taskCounterTitle = await Task.count({
 		where: {
 			userId: req.user.id,
 			title
 		}
 	})
-	if (taskCounter > 1) {
+	const taskCounterGen = await Task.count({
+		where: {
+			userId: req.user.id
+		}
+	})
+	if (taskCounterTitle > 1) {
 		return res
 			.status(400)
 			.json({
-				"error": "You've reached the maximum amount of tasks with the same title name",
-				"message": "You can only have five tasks running at a time"
+				"error": "You cannot have any tasks with duplicated names",
+				"message": "Task title must be unique"
+			})
+	}
+	if (taskCounterGen > 7) {
+		return res
+			.status(400)
+			.json({
+				"error": "You've reached your maximum amount of tasks",
+				"message": "You can only have seven tasks running at a time"
 			})
 	}
 	const taskArray = []

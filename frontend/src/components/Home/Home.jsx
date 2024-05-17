@@ -6,7 +6,7 @@ function Home() {
 
 	const user = useSelector(state => state.session.user)
 
-	console.log("%c 🚀 ~ file: Home.jsx:9 ~ Home ~ user: ", "color: red; font-size: 25px", user)
+	// console.log("%c 🚀 ~ file: Home.jsx:9 ~ Home ~ user: ", "color: red; font-size: 25px", user)
 
 	const switchUp = () => {
 		if (!user) {

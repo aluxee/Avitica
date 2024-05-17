@@ -17,10 +17,10 @@ import './ProfileButton.css';
 function ProfileButton() {
 	const { user, loggedIn, setLoggedIn } = useContext(LoggedContext)
 
-	console.log("%c 🚀 ~ file: ProfileButton.jsx:17 ~ ProfileButton ~ loggedIn: ", "color: aqua; font-size: 25px", loggedIn)
+	// console.log("%c 🚀 ~ file: ProfileButton.jsx:17 ~ ProfileButton ~ loggedIn: ", "color: aqua; font-size: 25px", loggedIn)
 
 
-	console.log("%c 🚀 ~ file: ProfileButton.jsx:17 ~ ProfileButton ~ setLoggedIn: ", "color: aqua; font-size: 25px", setLoggedIn)
+	// console.log("%c 🚀 ~ file: ProfileButton.jsx:17 ~ ProfileButton ~ setLoggedIn: ", "color: aqua; font-size: 25px", setLoggedIn)
 
 	const dispatch = useDispatch();
 	const navigate = useNavigate();

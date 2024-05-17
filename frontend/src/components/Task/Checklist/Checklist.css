@@ -1,3 +1,62 @@
+/* ICON */
+.fa-solid.fa-plus {}
+
+.fa-solid.fa-plus:hover {
+	cursor: pointer;
+	color: #738FC5;
+}
+
+
+/* MAIN */
+div.checklist {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
 .checklist-ind {
 	display: flex;
+}
+
+.create-checklist {
+	cursor: pointer;
+}
+
+/* LABEL */
+label.item-label {
+	display: flex;
+	flex-direction: row;
+}
+
+label.item-label:hover {
+	cursor: pointer;
+}
+
+label.edit-on {
+	display: flex;
+	flex-direction: column;
+}
+
+/* CAPTION */
+.checklist>h4:hover {
+	cursor: pointer;
+}
+
+p.caption.hidden {
+	top: 12.5rem;
+	right: -6rem;
+	width: fit-content;
+}
+
+/* DISABLE */
+input:disabled {
+	background-color: transparent;
+	width: 0;
+	background-color: initial;
+	cursor: default;
+	appearance: auto;
+	box-sizing: border-box;
+	margin: 3px 3px 3px 4px;
+	padding: initial;
+	border: initial;
 }

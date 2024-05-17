@@ -1,8 +1,58 @@
 .outer-avatar {
 	position: relative;
 	top: 12rem;
+	height: 100vh;
+	max-height: 400vh;
 }
+
 /*
 .avatar-creation-modal#modal {
 	display: flex;
 } */
+.avatar-component {
+	display: flex;
+	flex-wrap: wrap;
+	align-content: center;
+	justify-content: space-around;
+	padding-top: 2%;
+}
+.avatar {
+	display: flex;
+	flex-direction: column;
+}
+.theAvatar {
+	width: 150px;
+}
+
+.avatar-exists>h1 {
+	color: red;
+}
+
+.stats>h2 {
+	color: tan;
+}
+
+.stats {
+	color: darksalmon;
+	background: #1BA474;
+	border-radius: 4%;
+	padding: 2% 5%;
+	width: 50%;
+	display: flex;
+	flex-direction: column;
+	flex-wrap: wrap;
+}
+
+.stat-details {
+	display: flex;
+	flex-wrap: wrap;
+	flex-direction: row;
+	/* align-items: center; */
+	/* align-content: flex-start; */
+}
+
+div.stat-details>div {
+	display: flex;
+	width: 50%;
+	flex-direction: column;
+}

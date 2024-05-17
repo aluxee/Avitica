@@ -5,6 +5,7 @@ const cors = require('cors');
 const csurf = require('csurf');
 const helmet = require('helmet');
 const cookieParser = require('cookie-parser');
+const avatarRouter = require('./routes/api/avatar.js');
 
 const { environment } = require('./config');
 const isProduction = environment === 'production';
@@ -33,9 +34,36 @@ app.use(
 	})
 );
 
-// Set the _csrf token and create req.csrfToken method
-//also personally added token for third-party api
-app.use(
+
+const thirdPartyApiToken = process.env.MAPLESTORY_API_TOKEN;
+const thirdPartyApiSecretKey = process.env.CLIENT_SECRET;
+// Middleware to add MapleStory API token to request headers
+app.use((req, _res, next) => {
+	// Add MapleStory API token to headers
+	req.thirdPartyHeaders = {
+		'Authorization': `Bearer ${thirdPartyApiToken}`,
+		'X-Secret-Key': thirdPartyApiSecretKey
+	};
+	next();
+});
+
+
+// // Set the _csrf token and create req.csrfToken method
+// //also personally added token for third-party api
+// app.use(
+// 	csurf({
+// 		cookie: {
+// 			secure: isProduction,
+// 			sameSite: isProduction && "Lax",
+// 			httpOnly: true
+// 		}
+// 	})
+// );
+//! new adjustments:
+
+// Define a router for CSRF-protected routes
+const csrfProtectedRoutes = express.Router();
+csrfProtectedRoutes.use(
 	csurf({
 		cookie: {
 			secure: isProduction,
@@ -44,17 +72,18 @@ app.use(
 		}
 	})
 );
+csrfProtectedRoutes.use(routes);
+
+// Define a router for non-CSRF-protected routes (e.g., avatar creation)
+app.use('/api/avatar', avatarRouter);
+
+// Apply the CSRF-protected routes
+app.use(csrfProtectedRoutes);
 
 
-// Middleware to add MapleStory API token to request headers
-app.use((req, _res, next) => {
-	// Add MapleStory API token to headers
-	req.headers['Authorization'] = `Bearer ${process.env.MAPLESTORY_API_TOKEN}`;
-	console.log("%c 🚀 ~ file: app.js:55 ~ app.use ~ process.env.MAPLESTORY_API_TOKEN: ", "color: red; font-size: 25px", process.env.MAPLESTORY_API_TOKEN)
-	next();
 
 
-});
+
 
 app.use(routes); // Connect all the routes
 

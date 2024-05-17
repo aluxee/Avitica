@@ -3,7 +3,8 @@ import { csrfFetch } from "./csrf";
 /** Action Type Constants: */
 export const LOAD_CHECKLIST = 'checklist/LOAD_CHECKLIST';
 export const POST_CHECKLIST = 'checklist/POST_CHECKLIST';
-export const UPDATE_CHECKLIST = 'checklist/UPDATE_CHECKLIST';
+export const EDIT_CHECKLIST_ITEM = 'checklist.EDIT_CHECKLIST_ITEM';
+export const UPDATE_CHECKED_CHECKLIST = 'checklist/UPDATE_CHECKED_CHECKLIST';
 export const REMOVE_CHECKLIST = 'checklist/REMOVE_CHECKLIST';
 // /**  Action Creators: */
 
@@ -21,11 +22,15 @@ export const createChecklist = (item) => ({
 });
 
 
-export const editChecklist = (taskId, checklistId, checked) => ({
-	type: UPDATE_CHECKLIST,
+export const editCheckedChecklist = (taskId, checklistId, checked) => ({
+	type: UPDATE_CHECKED_CHECKLIST,
 	taskId, checklistId, checked
 });
 
+export const editChecklistItem = (taskId, checklistId, checklistItem) => ({
+	type: EDIT_CHECKLIST_ITEM,
+	taskId, checklistId, checklistItem
+})
 
 export const removeChecklist = (checklistId) => {
 	return {
@@ -42,15 +47,13 @@ export const removeChecklist = (checklistId) => {
 //* load checklist for specific task
 export const thunkLoadChecklist = (taskId) => async dispatch => {
 
-	console.log("%c 🚀 ~ file: checklist.js:44 ~ thunkLoadChecklist ~ checklist: ", "color: gold; font-size: 36px", taskId)
-
 	const response = await csrfFetch(`/api/tasks/${taskId}/checklist`);
 
 
 	if (response.ok) {
 		const data = await response.json();
 		dispatch(loadChecklist(data))
-		console.log("%c 🚀 ~ file: checklist.js:53 ~ thunkLoadChecklist ~ data: ", "color: cornflowerblue; font-size: 25px", data)
+		// console.log("%c 🚀 ~ file: checklist.js:53 ~ thunkLoadChecklist ~ data: ", "color: cornflowerblue; font-size: 25px", data)
 		return data
 	} else {
 		const errorResponse = await response.json()
@@ -62,6 +65,9 @@ export const thunkLoadChecklist = (taskId) => async dispatch => {
 //* create / post a listItem
 export const thunkCreateChecklist = (taskId, item) => async (dispatch) => {
 
+	console.log("%c 🚀 ~ file: checklist.js:68 ~ thunkCreateChecklist ~ item: ", "color: purple; font-size: 25px", item, "taskID", taskId)
+
+
 	const response = await csrfFetch(`/api/tasks/${taskId}/checklist/new`, {
 		method: 'POST',
 		headers: {
@@ -69,30 +75,31 @@ export const thunkCreateChecklist = (taskId, item) => async (dispatch) => {
 		},
 		body: JSON.stringify(item)
 	})
+	console.log("%c 🚀 ~ file: checklist.js:71 ~ thunkCreateChecklist ~ response: ", "color: red; font-size: 25px", response)
+
+	const data = await response.json();
+	data.taskId = taskId;
+	console.log("%c 🚀 ~ file: checklist.js:81 ~ thunkCreateChecklist ~ data: ", "color: red; font-size: 25px", data)
 
 	if (response.ok) {
-		const data = await response.json();
 		await dispatch(createChecklist(data))
 		return data
-
 	} else {
-		const errorResponse = await response.json()
+		const errorResponse = await response.json();
+
+		console.log("%c 🚀 ~ file: checklist.js:90 ~ thunkCreateChecklist ~ errorResponse: ", "color: red; font-size: 25px", errorResponse)
+
 		return errorResponse
 	}
 }
 
-// edit a listItem
-export const thunkEditChecklist = (taskId, checklistId, checked) => async (dispatch) => {
-
-	console.log("%c 🚀 ~ file: task.js:264 ~ thunkEditChecklist ~ checked: ", "color: white; font-size: 25px", checked)
-
-
-	console.log("%c 🚀 ~ file: task.js:264 ~ thunkEditChecklist ~ checklistId: ", "color: white; font-size: 25px", checklistId)
+// edit a listItem that is or is not checked
+export const thunkEditCheckedChecklist = (taskId, checklistId, checked) => async (dispatch) => {
 
 	const id = Number(checklistId);
 	const taskPostId = Number(taskId);
 	// see sc for mdn times and sorts
-	const response = await csrfFetch(`/api/tasks/${taskPostId}/checklist/${id}`, {
+	const response = await csrfFetch(`/api/tasks/${taskPostId}/checklist/${id}/checked`, {
 		method: 'PUT',
 		headers: {
 			"Content-Type": "application/json",
@@ -104,16 +111,40 @@ export const thunkEditChecklist = (taskId, checklistId, checked) => async (dispa
 	if (response.ok) {
 		const updateList = await response.json();
 
-		console.log("%c 🚀 ~ file: checklist.js:107 ~ thunkEditChecklist ~ updateList: ", "color: white; font-size: 25px", updateList)
-
-
-		const List = dispatch(editChecklist(taskId, id, checked))
-
-		console.log("%c 🚀 ~ file: checklist.js:109 ~ thunkEditChecklist ~ List: ", "color: white; font-size: 25px", List)
-
+		dispatch(editCheckedChecklist(taskId, id, checked))
 
 		return updateList
 
+	} else {
+		const errorResponse = await response.json();
+
+		return errorResponse
+	}
+}
+
+
+export const thunkEditChecklistItem = (taskId, checklistId, checklistItem) => async (dispatch) => {
+
+	const id = Number(checklistId);
+	const taskPostId = Number(taskId);
+
+	// see sc for mdn times and sorts
+	const response = await csrfFetch(`/api/tasks/${taskPostId}/checklist/${id}`, {
+		method: 'PUT',
+		headers: {
+			"Content-Type": "application/json",
+		},
+		body: JSON.stringify({ checklistItem })
+	})
+
+
+	if (response.ok) {
+
+		const updateList = await response.json();
+
+		dispatch(editCheckedChecklist(taskId, id, updateList))
+
+		return updateList
 	} else {
 		const errorResponse = await response.json();
 
@@ -134,7 +165,9 @@ export const thunkRemoveChecklist = (taskId, checklistId) => async dispatch => {
 
 	if (response.ok) { // removed data and replaced it with id
 		const data = await response.json();
+
 		dispatch(removeChecklist(checklistId))
+
 		return data
 	}
 }
@@ -153,19 +186,15 @@ const listReducer = (state = initialState, action) => {
 	switch (action.type) {
 
 		case LOAD_CHECKLIST: {
-			const newState = [{...state}]
-
-			console.log("%c 🚀 ~ file: task.js:346 ~ taskReducer ~ newState: ", "color: green; font-size: 25px", newState)
+			const newState = [{ ...state }]
 
 			if (action.checklist.message) {
-				return newState
+				return []
 			} else {
 
 				action.checklist.forEach(item => {
 					newState[item.id] = item;
 				});
-
-				console.log("%c 🚀 ~ file: task.js:353 ~ taskReducer ~ action: ", "color: green; font-size: 25px", newState)
 
 				return [...action.checklist];
 			}
@@ -180,8 +209,13 @@ const listReducer = (state = initialState, action) => {
 			// };
 			return checklist
 		}
+		case EDIT_CHECKLIST_ITEM: {
+			console.log("%c 🚀 ~ file: checklist.js:214 ~ taskReducer ~ action: ", "color: green; font-size: 25px", action)
 
-		case UPDATE_CHECKLIST: {
+			return { ...state, [action.checklist.id]: action.checklist }
+		}
+
+		case UPDATE_CHECKED_CHECKLIST: {
 			const newState = [...state]
 
 			const index = newState.findIndex(item => item.id === action.checklistId);
@@ -208,9 +242,13 @@ const listReducer = (state = initialState, action) => {
 		}
 
 		case REMOVE_CHECKLIST: {
-			const removeState = { ...state };
+			const removeState = [...state];
+
+			console.log("%c 🚀 ~ file: checklist.js:255 ~ listReducer ~ removeState: ", "color: red; font-size: 25px", "BEFORE", removeState)
+
 
 			delete removeState[action.id];
+			console.log("%c 🚀 ~ file: checklist.js:255 ~ listReducer ~ removeState: ", "color: red; font-size: 25px", "AFTER: ", removeState)
 			return removeState;
 		}
 		default:

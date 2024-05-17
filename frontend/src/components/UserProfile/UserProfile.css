@@ -5,6 +5,8 @@ div.user-container {
 	align-items: center;
 	/* margin-top: 2%; */
 	margin-inline-end: 2%;
+	font-family: 'Roboto Slab', 'Roboto Serif', 'serif';
+	font-weight: 400;
 }
 
 .user-info {
@@ -22,8 +24,11 @@ div.user-container {
 	justify-content: space-between;
 	align-items: flex-start;
 	flex-wrap: wrap;
+	/* padding: 5% 0%; */
+	/* margin: 5% 0; */
+	height: 6rem;
+	align-content: center;
 }
-
 
 .info-container {
 	display: flex;
@@ -51,29 +56,29 @@ div.user-container {
 .user-lvl{
 	display: flex;
 	font-size: larger;
-	font-weight: bold;
-	color: burlywood;
+	font-weight: 400;
+	color: palegreen;
 	gap: 5px;
 }
 
 .lvl-value{
-	color: salmon;
+	color: oldlace;
 	font-weight: lighter;
 }
 
 .user-label {
-	color: tan;
+	color: palegreen;
 	font-weight: bold;
 	font-size: larger;
 }
 
+.user-gold > .user-label {
+	color: initial;
+}
 .gold-amt {
-	color: salmon;
+	color: lightgreen;
 	font-size: large;
-	font-weight: bold;
-	;
-	font-size: large;
-	font-weight: bold;
+	font-weight: 300;
 }
 
 .user-fill.curr {
@@ -93,7 +98,7 @@ div.user-container {
 
 .fill-text {
 	font-size: 12px;
-	color: darksalmon;
+	color: #ed145a;
 	font-weight: bold;
 }
 
@@ -121,13 +126,9 @@ progress::before {
 	width: 100%;
 	text-align: center;
 	font-size: 18px;
-	color: green;
+	/* color: green; */
 }
 
-progress::-webkit-progress-bar {
-	background-color: green;
-}
-
-progress::-webkit-progress-value {
-	background-color: red;
-}
+/* progress#experience {
+	background-color: pink;
+} */

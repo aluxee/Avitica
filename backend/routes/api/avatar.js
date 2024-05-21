@@ -21,44 +21,6 @@ const fetchAvatarImageUrl = async (avatarData) => {
 	try {
 		const { skinType, faceType, expression, earType, hairType } = avatarData;
 
-		// let hairNum;
-		// let faceNum;
-
-		// if (hairType) {
-		// 	if (hairType && hairType.toLowerCase().includes('cecelia twist')) {
-		// 		hairNum = 31490;
-		// 	} else if (hairType && hairType.toLowerCase().includes('unkempt')) {
-		// 		hairNum = 30025;
-		// 	} else if ((hairType && hairType.toLowerCase().includes('fantasy hair'))) {
-		// 		hairNum = 30100;
-		// 	}
-		// 	console.log("%c 🚀 ~ file: avatar.js:127 ~ fetchAvatarImageUrl ~ hairType: ", "color: red; font-size: 25px", hairType, hairNum)
-
-		// }
-		// if (faceType) {
-
-
-		// 	if ((faceType && faceType.toLowerCase().includes('motivated'))) {
-		// 		faceNum = 20000;
-		// 	} else if ((faceType && faceType.toLowerCase().includes('distant'))) {
-		// 		faceNum = 20035;
-		// 	} else if ((faceType && faceType.toLowerCase().includes('shut eyes'))) {
-		// 		faceNum = 20026;
-		// 	} else if ((faceType && faceType.toLowerCase().includes('piercing'))) {
-		// 		faceNum = 20040;
-		// 	}
-		// 	console.log("%c 🚀 ~ file: avatar.js:139 ~ fetchAvatarImageUrl ~ faceType: ", "color: red; font-size: 25px", faceType, faceNum)
-		// }
-
-		// const faceIdNumber = Number(faceNum);
-
-		// console.log("%c 🚀 ~ file: avatar.js:142 ~ fetchAvatarImageUrl ~ faceIdNumber: ", "color: red; font-size: 25px", faceIdNumber)
-
-		// const hairIdNumber = Number(hairNum);
-
-		// console.log("%c 🚀 ~ file: avatar.js:146 ~ fetchAvatarImageUrl ~ hairIdNumber: ", "color: red; font-size: 25px", hairIdNumber)
-
-		// stops here
 		const resPost = await fetch('https://api.maplestory.net/character/render', {
 			method: 'POST',
 			headers: {
@@ -108,9 +70,11 @@ const blobToBase64 = async (blob) => {
 let userUrl;
 let theAvatar;
 // post avatar(display)
-router.post('/create', async (req, res) => {
+router.post('/create',  requireAuth, async (req, res) => {
+
 	try {
 		const { skinType, faceIdNumber, expression, earType, hairIdNumber } = req.body;
+		const userId = req.user.id;
 
 		const reqBody = {
 			"skin": skinType,
@@ -132,7 +96,8 @@ router.post('/create', async (req, res) => {
 			expression,
 			faceType: faceIdNumber,
 			hairType: hairIdNumber,
-			earType
+			earType,
+			userId
 		}
 		theAvatar = avatarData;
 		userUrl = fetchAvatarImageUrl(avatarData);
@@ -159,14 +124,12 @@ router.post('/create', async (req, res) => {
 
 		// console.log("%c 🚀 ~ file: avatar.js:70 ~ router.post ~ imageData: ", "color: red; font-size: 25px", imageData)
 
-
 		// Convert the blob to a base64-encoded string
 		const base64Image = await blobToBase64(imageData);
 
-
-
 		return res.status(200).json({
 			avatar: {
+				userId,
 				skinType,
 				faceIdNumber,
 				hairIdNumber,
@@ -182,12 +145,8 @@ router.post('/create', async (req, res) => {
 });
 
 
-// get avatar(display): send request to third party api to get that image
-//! see if can get out the imageUrl into it's key
-router.get('/:userId', async (req, res) => {
-	const { userId } = req.params;
-
-
+router.get('/', requireAuth, async (req, res) => {
+	const userId = req.user.id;
 
 	const imageUrl = `data:image/png;base64,${userUrl}`
 	const data = theAvatar;
@@ -204,8 +163,8 @@ router.get('/:userId', async (req, res) => {
 	})
 
 
-	await getAvatar.save();
 	await getAvatar.update();
+	await getAvatar.save();
 	return res.status(201).json(
 		getAvatar
 	)

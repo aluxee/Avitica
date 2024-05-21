@@ -15,17 +15,17 @@ function UserProfile() {
 	const { user } = useContext(LoggedContext);
 	const {  currAvatar } = useContext(AvatarContext);
 
-	console.log("%c 🚀 ~ file: UserProfile.jsx:16 ~ UserProfile ~ currAvatar: ", "color: pink; font-size: 25px", currAvatar)
+	// console.log("%c 🚀 ~ file: UserProfile.jsx:16 ~ UserProfile ~ currAvatar: ", "color: pink; font-size: 25px", currAvatar)
 
 
-	console.log("%c 🚀 ~ file: UserProfile.jsx:15 ~ UserProfile ~ user: ", "color: blueviolet; font-size: 28px", user)
+	// console.log("%c 🚀 ~ file: UserProfile.jsx:15 ~ UserProfile ~ user: ", "color: blueviolet; font-size: 28px", user)
 
 	let rawUserStats = useSelector(state => state.userStats);
 
 
 	const userInfo = user.userStats; // this is an array containing an object, to ensure always object we select the first and only index
 
-	console.log("%c 🚀 ~ file: UserProfile.jsx:24 ~ UserProfile ~ userInfo: ", "color: blueviolet; font-size: 25px", userInfo)
+	// console.log("%c 🚀 ~ file: UserProfile.jsx:24 ~ UserProfile ~ userInfo: ", "color: blueviolet; font-size: 25px", userInfo)
 
 	//re-write userStat's raw state
 	rawUserStats = userInfo
@@ -83,16 +83,16 @@ function UserProfile() {
 
 	// * -------------LEVEL SECTION------------- *
 	const level = userInfo?.level;
-	console.log("%c 🚀 ~ file: UserProfile.jsx:91 ~ UserProfile ~ level: ", "color: tomato; font-size: 25px", level);
+	// console.log("%c 🚀 ~ file: UserProfile.jsx:91 ~ UserProfile ~ level: ", "color: tomato; font-size: 25px", level);
 
 	const [currLevel, setCurrLevel] = useState(level);
 
-	console.log("%c 🚀 ~ file: UserProfile.jsx:87 ~ UserProfile ~ currLevel: ", "color: red; font-size: 25px", currLevel)
+	// console.log("%c 🚀 ~ file: UserProfile.jsx:87 ~ UserProfile ~ currLevel: ", "color: red; font-size: 25px", currLevel)
 
 	// * -------------HEALTH SECTION------------- *
 	const healthBar = userInfo?.health;
 
-	console.log("%c 🚀 ~ file: UserProfile.jsx:97 ~ UserProfile ~ healthBar: ", "color: crimson; font-size: 25px", healthBar, userInfo)
+	// console.log("%c 🚀 ~ file: UserProfile.jsx:97 ~ UserProfile ~ healthBar: ", "color: crimson; font-size: 25px", healthBar, userInfo)
 	const [health, setHealth] = useState(healthBar);
 	const [totalHealth, setTotalHealth] = useState(0);
 	const healthRef = useRef(healthBar);
@@ -120,11 +120,11 @@ function UserProfile() {
 	// * -------------EXP SECTION------------- *
 	const expBar = userInfo?.experience;
 
-	console.log("%c 🚀 ~ file: UserProfile.jsx:144 ~ UserProfile ~ expBar: ", "color: crimson; font-size: 25px", expBar)
+	// console.log("%c 🚀 ~ file: UserProfile.jsx:144 ~ UserProfile ~ expBar: ", "color: crimson; font-size: 25px", expBar)
 
 	const [exp, setExp] = useState(expBar);
 
-	console.log("%c 🚀 ~ file: UserProfile.jsx:121 ~ UserProfile ~ exp: ", "color: red; font-size: 25px", exp)
+	// console.log("%c 🚀 ~ file: UserProfile.jsx:121 ~ UserProfile ~ exp: ", "color: red; font-size: 25px", exp)
 
 	const [totalExp, setTotalExp] = useState(0);
 	// const expRef = useRef(exp);

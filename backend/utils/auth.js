@@ -64,8 +64,37 @@ const restoreUser = (req, res, next) => {
 };
 
 // If there is no current user, return an error
-const requireAuth = function (req, _res, next) {
+const requireAuth = async function (req, res, next) {
 	if (req.user) return next();
+
+
+	const { token } = req.cookies;
+
+
+
+	// //authorization check for unorthodox user verification
+	if (!token) {
+		return handleNotAuthorized(res)
+	}
+
+	try {
+		const decoded = jwt.verify(token, secret);
+
+		const user = await User.findByPk(decoded.data.id, {
+			attributes: {
+				include: ['id', 'username']
+			}
+		})
+
+		if (!user) {
+			return handleNotAuthorized(res)
+		};
+
+		req.user = user;
+		return next();
+	} catch (err) {
+		handleNotAuthorized(res);
+	}
 
 	const err = new Error('Authentication required');
 	err.title = 'Authentication required';
@@ -75,8 +104,10 @@ const requireAuth = function (req, _res, next) {
 };
 
 
+
 const authorization = async function (req, res, next) {
 	const { taskId, userId, checklistId, itemId } = req.params;
+
 
 
 	if (taskId) {
@@ -98,6 +129,8 @@ const authorization = async function (req, res, next) {
 		}
 		if (req.user.id !== task.userId) handleNotAuthorized(res)
 	}
+
+
 
 	next();
 };

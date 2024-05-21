@@ -15,14 +15,9 @@ function CreateAvatar() {
 	// console.log("%c 🚀 ~ file: CreateAvatar.jsx:17 ~ CreateAvatar ~ avatarUrl: ", "color: red; font-size: 25px", avatarUrl)
 
 	const { closeModal } = useModal();
-
-
-
-
 	const avatarImg = useSelector(state => state.avatar.imageUrl);
 
-
-	console.log("%c 🚀 ~ file: CreateAvatar.jsx:12 ~ CreateAvatar ~ avatarImg: ", "color: red; font-size: 25px", avatarImg)
+	// console.log("%c 🚀 ~ file: CreateAvatar.jsx:12  ~ CreateAvatar ~ avatarImg: ", "color: red; font-size: 25px", avatarImg)
 
 	const [avatarState, setAvatarState] = useState("");
 
@@ -39,7 +34,6 @@ function CreateAvatar() {
 	const [message, setMessage] = useState("");
 	const [errors, setErrors] = useState({});
 
-	//TODO: ensure this is pullable and put thru database to load up as an image
 	useEffect(() => {
 		const errorsObject = {};
 		faceType.length === 0 || !faceIdNumber ? errorsObject.faceIdNumber = 'Select a face type' : faceType;
@@ -64,7 +58,6 @@ function CreateAvatar() {
 		}
 	}, [changeConfirmed, faceType, hairType]);
 
-	// //! create a function that will convert blob images to jpeg/png data url
 
 	useEffect(() => {
 		if (avatarImg && Object.values(avatarImg).length > 0) {
@@ -84,7 +77,7 @@ function CreateAvatar() {
 		}
 
 		await dispatch(thunkCreateAvatar(avatarData));
-		await dispatch(thunkLoadAvatar(user.id, avatarData));
+		await dispatch(thunkLoadAvatar( avatarData));
 		setChangeConfirmed(true)
 
 		setAvatarState(avatarImg)
@@ -251,13 +244,12 @@ function CreateAvatar() {
 								setChangeConfirmed(true)
 							}}
 						>
-							<option value="30100">Black</option>
-							<option value="30101">Red</option>
+							<option value="30100">Blue</option>
+							<option value="30101">Magenta</option>
 							<option value="30102">Orange</option>
-							<option value="30103">Blonde</option>
-							<option value="30104">Green</option>
-							<option value="30105">Blue</option>
-							<option value="30106">Purple</option>
+							<option value="30103">Green</option>
+							<option value="30104">Aqua Blue</option>
+							<option value="30105">Royal Blue</option>
 							<option value="30107">Brown</option>
 						</select>
 					</div>
